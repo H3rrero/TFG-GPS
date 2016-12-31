@@ -1,0 +1,170 @@
+
+#body-wrapper{
+	height: 90%;
+	width: 98%;
+margin-left: auto;
+margin-right: auto;
+margin-top: auto;
+margin-bottom: auto;
+}
+#map{
+	height: 90%;
+	width: 98%;
+	position: relative;
+
+	    border-style: solid;
+	z-index: 1;
+}
+#datos{
+	background-color: #FFFFFF;
+opacity: 0.85;
+height: 80%;
+width: 50%;
+}
+#container{
+
+	height: 250px;
+clear: both;
+	width: 590px;
+	background-color: #FFFFFF;
+	opacity: 0.85;
+
+
+}
+#puntos{
+	float: left;
+	height: 48%;
+	width : 55%;
+	overflow: auto;
+}
+#dat{
+	float: left;
+	height: 45%;
+	width : 45%;
+	overflow: auto;
+}
+#funciones{
+	display: inline;
+	vertical-align:bottom;;
+	height: 73%;
+overflow: auto;
+}
+ #lista{
+	background-color: #FFFFFF;
+	opacity: 0.85;
+	margin: 0 auto;
+	width: 20%;
+	overflow: auto;
+}
+
+
+
+
+#footer{
+    height: 140px;
+    padding: 0px;
+    color: #FFF;
+	float: left;
+    border-top: 1px solid #FFF;
+    overflow: hidden;
+}
+
+
+.glyphicon{
+	font-size: 22px;
+}
+
+.btn-sm{
+	font-size: 13px;
+}
+
+.color{
+	width: 50px;
+}
+
+.btn-sm2{
+	  margin: 26px 1px;
+}
+
+.btn-sm3{
+	width: 31%;
+}
+.controls {
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#boton-t, #boton-r {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+
+  text-overflow: ellipsis;
+
+}
+#boton-w{
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-right: 12px;
+  text-overflow: ellipsis;
+
+}
+
+td{
+	text-align: right;
+}
+
+
+
+
+#importar,#botonCrear,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos{
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-right: 12px;
+  text-overflow: ellipsis;
+	margin-top: 4px;
+}
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 20%;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+.pac-container {
+  font-family: Roboto;
+}
+p{
+	 font-family: "comic sans";
+	 font-size: 100%;
+}
+#type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}

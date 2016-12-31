@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>GPS Proyect</title>
+    <script src="angular.min.js"></script>
+    <script src="prueba.js"></script>
+    <link href="main.css" rel="stylesheet" type="text/css">
+		<!-- CSS de Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<!-- Librería jQuery requerida por los plugins de JavaScript -->
+    <script src="http://code.jquery.com/jquery.js"></script>
+		<!-- Todos los plugins JavaScript de Bootstrap  -->
+	 <script src="js/bootstrap.min.js"></script>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<style>
+		  html, body{
+			height: 100%;
+			margin: 0px;
+			padding: 0px
+		  }
+		</style>
+			<script src="jquery-3.1.1.min.js"></script>
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ5GI9TFx8kPwL8dyViS5UUDIybpH36IE&libraries=places"
+			async defer></script>
+		</head>
+	<body ng-app = 'Prueba'>
+
+
+		<div id="body-wrapper" ng-controller='PruebaController as list1'>
+
+				<input id="pac-input" class="controls" type="text"
+			 placeholder="Enter a location">
+			<my-map></my-map>
+
+			<div id="datos" ng-hide="!list1.mostrarDatos">
+
+				<div id="puntos">
+
+
+				<table  class="table table-condensed">
+					<tbody>
+
+				<tr>
+					<td>Punto</td>
+					<td>Latitud y Longitud</td>
+					<td>Elevación</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>43.083333, -5.804077</td>
+					<td>850m</td>
+
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>43.207578, -6.474243</td>
+					<td>900m</td>
+
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>42.982951, -5.957886</td>
+					<td>950m</td>
+
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>42.950794, -6.419312</td>
+					<td>1030m</td>
+
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>42.932951, -5.957886</td>
+					<td>1050m</td>
+
+				</tr>
+</tbody>
+
+				</table>
+				</div>
+				<div id="dat">
+
+
+				<ul >
+					<h6>Datos del track</h6>
+				<li><p>Desnivel positivo:  1268 metros</p></li>
+				<li><p>Desnivel negativo: 1256 metros</p></li>
+				<li><p>Elevación máxima: 1100 metros</p></li>
+				<li><p>Elevación mínima: 250 metros</p></li>
+				<li><p>Distancia: 10457 metros</p></li>
+			</ul>
+			</div>
+
+<div id="container"  ng-hide="!list1.mostrarDatos"></div>
+			</div>
+
+
+			<div id="lista" class="radio">
+				<ul ng-if="list1.activarLista">
+				<li><input type="radio" name="track" value="track1" >Track 1</li>
+				<li><input type="radio" name="track" value="track2" >Track 2</li>
+				<li><input type="radio" name="track" value="track3" >Track 3</li>
+			</ul>
+			<ul ng-if="list1.activarListaR">
+			<li><input type="radio" name="ruta" value="ruta1" >Ruta 1</li>
+			<li><input type="radio" name="ruta" value="ruta2" >Ruta 2</li>
+			<li><input type="radio" name="ruta" value="ruta3" >Ruta 3</li>
+			</ul>
+			<ul ng-if="list1.activarListaW">
+		<li><input type="radio" name="wayp" value="wayp1" >Waypoint 1</li>
+		<li><input type="radio" name="wayp" value="wayp2" >Waypoint 2</li>
+		<li><input type="radio" name="wayp" value="wayp3" >Waypoint 3</li>
+		</ul>
+			</div>
+			<div id="botones">
+				<button id="boton-t"type="button" ng-click="list1.listarFunciones();">T</button>
+				<button id="boton-r"type="button" ng-click="list1.listarFuncionesR();">R</button>
+				<button id="boton-w"type="button" ng-click="list1.listarFuncionesW();">W</button>
+			</div>
+      <div id="funciones" >
+        <table ng-if="list1.funcionesW">
+
+        <tr>  <td ><button id="botonCrear" type="button" ng-click="list1.listaActivaW();">Crear</button></td></tr>
+  				<tr><td><button id="botonBor" type="button">Borrar</button></td></tr>
+  				<tr><td><button id="botonRen" type="button">Renombrar</button></td></tr>
+					<tr><td><button id="botonDes" type="button">Descargar</button></td></tr>
+					<tr><td><button id="importar"type="button">Importar</button></td></tr>
+        <tr>  <td><button id="botonEli" type="button">Cambiar ubicación</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaT();">Ver/Ocultar lista</button></td></tr>
+        </table>
+        <table ng-if="list1.funcionesR">
+
+        <tr>  <td ><button id="botonCrear" type="button" ng-click="list1.listaActivaR();">Crear</button></td></tr>
+  				<tr><td><button id="botonBor" type="button">Borrar</button></td></tr>
+  				<tr><td><button id="botonRen" type="button">Renombrar</button></td></tr>
+					<tr><td><button id="botonDes" type="button">Descargar</button></td></tr>
+					<tr><td><button id="importar"type="button">Importar</button></td></tr>
+        <tr>  <td><button id="botonEli" type="button">Eliminar Punto</button></td></tr>
+          <tr><td><button id="botonIns" type="button">Insertar Punto</button></td></tr>
+        <tr><td><button id="botonRec" type="button">Recortar</button></td></tr>
+          <tr><td><button id="botonUnir" type="button">Unir</button></td></tr>
+          <tr><td><button id="botonInv" type="button">Invertir</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaT();">Ver/Ocultar lista</button></td></tr>
+          <tr><td><button id="botonDatos"type="button" ng-click="list1.verDatos();">Ver/Ocultar datos</button></td></tr>
+        </table>
+        <table ng-if="list1.funciones">
+
+        <tr>  <td ><button id="botonCrear" type="button" ng-click="list1.listaActiva();">Crear</button></td></tr>
+  				<tr><td><button id="botonBor" type="button">Borrar</button></td></tr>
+  				<tr><td><button id="botonRen" type="button">Renombrar</button></td></tr>
+					<tr><td><button id="botonDes" type="button">Descargar</button></td></tr>
+					<tr><td><button id="importar"type="button">Importar</button></td></tr>
+        <tr>  <td><button id="botonEli" type="button">Eliminar Punto</button></td></tr>
+          <tr><td><button id="botonIns" type="button">Insertar Punto</button></td></tr>
+        <tr><td><button id="botonRec" type="button">Recortar</button></td></tr>
+          <tr><td><button id="botonUnir" type="button">Unir</button></td></tr>
+          <tr><td><button id="botonInv" type="button">Invertir</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaT();">Ver/Ocultar lista</button></td></tr>
+					<tr><td><button id="botonDatos"type="button" ng-click="list1.verDatos();">Ver/Ocultar datos</button></td></tr>
+          <tr><td>  <button id="botonTim" type="button">Tiempos</button></td></tr>
+
+        </table>
+
+			</div>
+</div>
+
+<script>
+			$(function () {
+    Highcharts.chart('container', {
+			chart: {
+			 backgroundColor: null,
+					 type: 'line'
+			 },
+        title: {
+            text: 'Altitud',
+            x: -20 //center
+        },
+
+        xAxis: {
+					title:{
+						text: 'Distancia (m)'
+					},
+            categories: ['1000', '2000', '3000', '4000', '5000', '6000',
+                '7000', '8000', '9000', '10000', '11000', '12000']
+        },
+        yAxis: {
+            title: {
+                text: 'Altitud (m)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '°C'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Track',
+            data: [200, 233, 250, 280, 310, 400, 420, 455, 483, 512, 534, 550]
+        }]
+    });
+});
+			</script>
+
+
+
+
+
+
+
+
+			<div id="footer"></div>
+
+		</div>
+			</body>
+</html>

@@ -1,0 +1,11 @@
+cambios:
+
+*se ha ajustado el tamaño del mapa para que se ajuste al tamaño del navegador
+*Se ha ajustado el tamaño de los elemento internos del mapa para que se ajusten al tamaño del navegador
+*Se ha echo parcialmente transparente el contenedor de los datos
+
+Falta por hacer:
+
+*Ordenar los botones por funcionalidad
+*Arreglar error en la grafica que ocurre al cambiar el tamaño del navegador
+*Hacer el modificable el tamaño de la grafica
