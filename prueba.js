@@ -1,7 +1,11 @@
 (function () {
   'use strict'
-angular.module('Prueba',[])
+angular.module('Prueba',["chart.js"])
 .controller('PruebaController',PruebaController)
+.controller("DoughnutCtrl", function ($scope) {
+  $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+  $scope.data = [300, 500, 100];
+})
 .directive('myMap', function() {
     // directive link function
     var link = function(scope, element, attrs) {

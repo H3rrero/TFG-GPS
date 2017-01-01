@@ -23,8 +23,10 @@
 			<script src="jquery-3.1.1.min.js"></script>
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="node_modules\chart.js\dist\Chart.min.js"></script>
+<script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ5GI9TFx8kPwL8dyViS5UUDIybpH36IE&libraries=places"
-			async defer></script>
+			></script>
 		</head>
 	<body ng-app = 'Prueba'>
 
@@ -95,7 +97,10 @@
 			</ul>
 			</div>
 
-<div id="container"  ng-hide="!list1.mostrarDatos"></div>
+<div id="container" ng-controller= "DoughnutCtrl" ng-hide="!list1.mostrarDatos">
+	<canvas id="doughnut" class="chart chart-doughnut"
+	chart-data="data" chart-labels="labels">
+	</canvas></div>
 			</div>
 
 
@@ -168,51 +173,7 @@
 			</div>
 </div>
 
-<script>
-			$(function () {
-    Highcharts.chart('container', {
-			chart: {
-			 backgroundColor: null,
-					 type: 'line'
-			 },
-        title: {
-            text: 'Altitud',
-            x: -20 //center
-        },
 
-        xAxis: {
-					title:{
-						text: 'Distancia (m)'
-					},
-            categories: ['1000', '2000', '3000', '4000', '5000', '6000',
-                '7000', '8000', '9000', '10000', '11000', '12000']
-        },
-        yAxis: {
-            title: {
-                text: 'Altitud (m)'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
-        },
-        tooltip: {
-            valueSuffix: '°C'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle',
-            borderWidth: 0
-        },
-        series: [{
-            name: 'Track',
-            data: [200, 233, 250, 280, 310, 400, 420, 455, 483, 512, 534, 550]
-        }]
-    });
-});
-			</script>
 
 
 
