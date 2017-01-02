@@ -107,18 +107,17 @@ overflow: auto;
 }
 
 #boton-t, #boton-r {
-  background-color: #fff;
-  font-family: Roboto;
-  font-size: 15px;
-  font-weight: 300;
 
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
   text-overflow: ellipsis;
 
 }
 #boton-w{
-  background-color: #fff;
+
   font-family: Roboto;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 300;
   margin-right: 12px;
   text-overflow: ellipsis;
@@ -135,7 +134,7 @@ td{
 #importar,#botonCrear,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos{
   background-color: #fff;
   font-family: Roboto;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 300;
   margin-right: 12px;
   text-overflow: ellipsis;
