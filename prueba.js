@@ -33,21 +33,30 @@ angular.module('Prueba',["chart.js"])
 
         // init the map
         function initMap() {
-          map = new google.maps.Map(element[0], {
+          var mapOptions = {
             center: {lat: 40.41, lng: -3.70},
             zoom: 8,
             disableDefaultUI: true,
             mapTypeControl: true,
-          mapTypeControlOptions: {
-          position: google.maps.ControlPosition.TOP_RIGHT,
-          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-          mapTypeIds: [
-            google.maps.MapTypeId.ROADMAP,
+          };
+          map = new google.maps.Map(element[0],mapOptions);
 
-            google.maps.MapTypeId.SATELLITE
-          ]
-          }
-          });
+          
+
+
+          map.setOptions(
+            {
+              mapTypeControlOptions: {
+              position: google.maps.ControlPosition.TOP_RIGHT,
+              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+              mapTypeIds: [
+                google.maps.MapTypeId.ROADMAP,
+
+                google.maps.MapTypeId.SATELLITE
+              ]
+              }
+            }
+          );
           var botont = /** @type {!HTMLDivElement} */(
           document.getElementById('botones'));
           var funciones = /** @type {!HTMLDivElement} */(
