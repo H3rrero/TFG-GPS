@@ -22,7 +22,8 @@ margin-bottom: auto;
 	background-color: #FFFFFF;
 opacity: 0.85;
 height: 80%;
-width: 50%;
+width: 45%;
+overflow: auto;
 }
 #container{
 
@@ -39,12 +40,14 @@ clear: both;
 	height: 48%;
 	width : 55%;
 	overflow: auto;
+
 }
 #dat{
 	float: left;
 	height: 45%;
 	width : 45%;
 	overflow: auto;
+
 }
 #funciones{
 	display: inline;

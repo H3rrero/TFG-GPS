@@ -21,17 +21,76 @@
 		  }
 		</style>
 			<script src="jquery-3.1.1.min.js"></script>
-      <script src="node_modules\chart.js\dist\Chart.min.js"></script>
-  <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+      <script src="chart.js/dist/Chart.min.js"></script>
+  <script src="angular-chart.js/dist/angular-chart.min.js"></script>
 		</head>
 	<body ng-app = 'app'>
 
-<div id="pr" ng-controller= "DoughnutCtrl" >
+		<div id="datos" >
+
+			<div id="puntos">
 
 
-    <canvas id="doughnut" class="chart chart-doughnut"
-  chart-data="data" chart-labels="labels">
-</canvas>
-</div>
+			<table  class="table table-condensed">
+				<tbody>
+
+			<tr>
+				<td>Punto</td>
+				<td>Latitud y Longitud</td>
+				<td>Elevación</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>43.083333, -5.804077</td>
+				<td>850m</td>
+
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>43.207578, -6.474243</td>
+				<td>900m</td>
+
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>42.982951, -5.957886</td>
+				<td>950m</td>
+
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>42.950794, -6.419312</td>
+				<td>1030m</td>
+
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>42.932951, -5.957886</td>
+				<td>1050m</td>
+
+			</tr>
+	</tbody>
+
+			</table>
+			</div>
+			<div id="dat">
+
+
+			<ul >
+				<h6>Datos del track</h6>
+			<li><p>Desnivel positivo:  1268 metros</p></li>
+			<li><p>Desnivel negativo: 1256 metros</p></li>
+			<li><p>Elevación máxima: 1100 metros</p></li>
+			<li><p>Elevación mínima: 250 metros</p></li>
+			<li><p>Distancia: 10457 metros</p></li>
+		</ul>
+		</div>
+
+	<div id="container" ng-controller="LineCtrl" >
+	<canvas id="line" class="chart chart-line" chart-data="data"
+	chart-labels="labels" chart-series="series" chart-options="options"
+	chart-dataset-override="datasetOverride" chart-click="onClick">
+	</canvas></div>
+		</div>
 			</body>
 </html>
