@@ -41,7 +41,7 @@ angular.module('Prueba',["chart.js"])
           };
           map = new google.maps.Map(element[0],mapOptions);
 
-          
+
 
 
           map.setOptions(
@@ -65,6 +65,8 @@ angular.module('Prueba',["chart.js"])
           document.getElementById('pac-input'));
           var datos = /** @type {!HTMLDivElement} */(
           document.getElementById('datos'));
+          var grafica = /** @type {!HTMLDivElement} */(
+          document.getElementById('grafica'));
           var lista = /** @type {!HTMLDivElement} */(
           document.getElementById('lista'));
 
@@ -75,7 +77,8 @@ angular.module('Prueba',["chart.js"])
           map.controls[google.maps.ControlPosition.RIGHT_TOP].push(botones);
           map.controls[google.maps.ControlPosition.RIGHT_TOP].push(funciones);
           map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(datos);
-          map.controls[google.maps.ControlPosition.TOP_LEFT].push(lista);
+          map.controls[google.maps.ControlPosition.TOP_CENTER].push(lista);
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(grafica);
           var autocomplete = new google.maps.places.Autocomplete(input);
           autocomplete.bindTo('bounds', map);
 

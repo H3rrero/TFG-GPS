@@ -50,45 +50,130 @@
 
 				<table  class="table table-condensed">
 					<tbody>
-
 				<tr>
-					<td>Punto</td>
-					<td>Latitud y Longitud</td>
+					<td>Punto nº</td>
+					<td>Latitud</td>
+					<td>Longitud</td>
 					<td>Elevación</td>
+					<td>Hora</td>
+					<td>Desnivel</td>
+					<td>Distancia</td>
+					<td>Velocidad</td>
 				</tr>
 				<tr>
 					<td>1</td>
-					<td>43.083333, -5.804077</td>
-					<td>850m</td>
+					<td>43.083333</td>
+					<td>-5.804077</td>
+					<td>600m</td>
+					<td>09:07</td>
+					<td>0</td>
+					<td>0</td>
+					<td>4km/h</td>
 
 				</tr>
 				<tr>
 					<td>2</td>
-					<td>43.207578, -6.474243</td>
-					<td>900m</td>
+					<td>43.207578</td>
+					<td>-6.474243</td>
+					<td>650m</td>
+					<td>09:25</td>
+					<td>50m</td>
+					<td>1km</td>
+					<td>4km/h</td>
 
 				</tr>
 				<tr>
 					<td>3</td>
-					<td>42.982951, -5.957886</td>
-					<td>950m</td>
+					<td>42.982951</td>
+					<td>-5.957886</td>
+					<td>630m</td>
+					<td>09:50</td>
+					<td>-20m</td>
+					<td>1.5km</td>
+					<td>4km/h</td>
 
 				</tr>
 				<tr>
 					<td>4</td>
-					<td>42.950794, -6.419312</td>
-					<td>1030m</td>
+					<td>42.950794</td>
+					<td>-6.419312</td>
+					<td>733m</td>
+					<td>10:45</td>
+					<td>103m</td>
+					<td>2.1km</td>
+					<td>4km/h</td>
 
 				</tr>
 				<tr>
 					<td>5</td>
-					<td>42.932951, -5.957886</td>
-					<td>1050m</td>
+					<td>42.932951</td>
+					<td>-5.957886</td>
+					<td>690m</td>
+					<td>11:05</td>
+					<td>-43m</td>
+					<td>1.9km</td>
+					<td>4km/h</td>
+
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>42.942951</td>
+					<td>-6.957886</td>
+					<td>790m</td>
+					<td>11:35</td>
+					<td>100m</td>
+					<td>2.9km</td>
+					<td>4km/h</td>
+
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>42.962901</td>
+					<td>-5.970986</td>
+					<td>850m</td>
+					<td>12:05</td>
+					<td>60m</td>
+					<td>2.3km</td>
+					<td>4km/h</td>
+
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>42.972371</td>
+					<td>-6.943886</td>
+					<td>830m</td>
+					<td>12:43</td>
+					<td>-20m</td>
+					<td>1.6km</td>
+					<td>4km/h</td>
+
+				</tr>
+				<tr>
+					<td>9</td>
+					<td>42.926851</td>
+					<td>-6.967446</td>
+					<td>900m</td>
+					<td>13:15</td>
+					<td>70m</td>
+					<td>2.7km</td>
+					<td>4km/h</td>
+
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>42.980051</td>
+					<td>-5.927456</td>
+					<td>950m</td>
+					<td>13:45</td>
+					<td>50m</td>
+					<td>2.3km</td>
+					<td>4km/h</td>
 
 				</tr>
 </tbody>
 
 				</table>
+
 				</div>
 				<div id="dat">
 
@@ -100,15 +185,20 @@
 				<li><p>Elevación máxima: 1100 metros</p></li>
 				<li><p>Elevación mínima: 250 metros</p></li>
 				<li><p>Distancia: 10457 metros</p></li>
-			</ul>
+				</ul>
+				</div>
 			</div>
 
-<div id="container" ng-controller="LineCtrl" ng-hide="!list1.mostrarDatos">
-	<canvas id="line" class="chart chart-line" chart-data="data"
-	chart-labels="labels" chart-series="series" chart-options="options"
-	chart-dataset-override="datasetOverride" chart-click="onClick">
-</canvas></div>
-			</div>
+			<div id="grafica" ng-hide="!list1.mostrarDatos">
+
+
+			<div id="container" ng-controller="LineCtrl" >
+				<canvas id="line" class="chart chart-line" chart-data="data"
+				chart-labels="labels" chart-series="series" chart-options="options"
+				chart-dataset-override="datasetOverride" chart-click="onClick">
+			</canvas></div>
+
+</div>
 
 
 			<div id="lista" class="radio">
@@ -130,34 +220,33 @@
 			</div>
 			<div id="botones">
 				<button id="boton-t"type="button" ng-click="list1.listarFunciones();" class="bttn-material-circle bttn-xs bttn-primary">T</button>
-				<button id="boton-r"type="button" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-primary">R</button>
-				<button id="boton-w"type="button" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-primary">W</button>
+				<button id="boton-r"type="button" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-royal">R</button>
+				<button id="boton-w"type="button" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-success">W</button>
 			</div>
       <div id="funciones" >
         <table ng-if="list1.funcionesW">
-
-        <tr>  <td ><button id="botonCrear" type="button" class="bttn-unite bttn-xs bttn-primary" ng-click="list1.listaActivaW();">Crear</button></td></tr>
-  				<tr><td><button id="botonBor" type="button" class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
-  				<tr><td><button id="botonRen" type="button" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
-					<tr><td><button id="botonDes" type="button" class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
-					<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
-        <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-primary">Cambiar ubicación</button></td></tr>
-					<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
+        <tr>  <td ><button id="botonCrear" type="button" class="bttn-unite bttn-xs bttn-success" ng-click="list1.listaActivaW();">Crear</button></td></tr>
+  				<tr><td><button id="botonBor" type="button" class="bttn-unite bttn-xs bttn-success">Borrar</button></td></tr>
+  				<tr><td><button id="botonRen" type="button" class="bttn-unite bttn-xs bttn-success">Renombrar</button></td></tr>
+					<tr><td><button id="botonDes" type="button" class="bttn-unite bttn-xs bttn-success">Descargar</button></td></tr>
+					<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-success">Importar</button></td></tr>
+        <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-success">Cambiar ubicación</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success">Ver/Ocultar lista</button></td></tr>
         </table>
         <table ng-if="list1.funcionesR">
 
-        <tr>  <td ><button id="botonCrear" type="button" ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
-  				<tr><td><button id="botonBor" type="button" class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
-  				<tr><td><button id="botonRen" type="button" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
-					<tr><td><button id="botonDes" type="button" class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
-					<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
-        <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-primary">Eliminar Punto</button></td></tr>
-          <tr><td><button id="botonIns" type="button" class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
-        <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
-          <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
-          <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
-					<tr><td><button id="botonListar" type="button" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
-          <tr><td><button id="botonDatos"type="button" ng-click="list1.verDatos();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar datos</button></td></tr>
+        <tr>  <td ><button id="botonCrear" type="button" ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-royal">Crear</button></td></tr>
+  				<tr><td><button id="botonBor" type="button" class="bttn-unite bttn-xs bttn-royal">Borrar</button></td></tr>
+  				<tr><td><button id="botonRen" type="button" class="bttn-unite bttn-xs bttn-royal">Renombrar</button></td></tr>
+					<tr><td><button id="botonDes" type="button" class="bttn-unite bttn-xs bttn-royal">Descargar</button></td></tr>
+					<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
+        <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-royal">Eliminar Punto</button></td></tr>
+          <tr><td><button id="botonIns" type="button" class="bttn-unite bttn-xs bttn-royal">Insertar Punto</button></td></tr>
+        <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
+          <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
+          <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
+          <tr><td><button id="botonDatos"type="button" ng-click="list1.verDatos();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar datos</button></td></tr>
         </table>
         <table ng-if="list1.funciones">
 

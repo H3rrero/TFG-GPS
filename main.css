@@ -21,15 +21,24 @@ margin-bottom: auto;
 #datos{
 	background-color: #FFFFFF;
 opacity: 0.85;
-height: 80%;
-width: 45%;
+height: 40%;
+width: 50%;
 overflow: auto;
+}
+#grafica{
+	display: block;
+	width: 40%;
+	height: 50%;
+	background-color: #FFFFFF;
+	opacity: 0.85;
+	margin-bottom: 1%;
+	overflow: auto;
 }
 #container{
 
 
-clear: both;
-	width: 60%;
+	display: block;
+	width: 97%;
 	background-color: #FFFFFF;
 	opacity: 0.85;
 
@@ -37,16 +46,17 @@ clear: both;
 }
 #puntos{
 	float: left;
-	height: 48%;
-	width : 55%;
-	overflow: auto;
-
+	height: 100%;
+	width : 70%;
+overflow: auto;
 }
 #dat{
-	float: left;
-	height: 45%;
-	width : 45%;
+	background-color: #FFFFFF;
+	opacity: 0.85;
+	height: 100%;
+	width : 30%;
 	overflow: auto;
+	float: right;;
 
 }
 #funciones{
@@ -61,6 +71,7 @@ overflow: auto;
 	margin: 0 auto;
 	width: 20%;
 	overflow: auto;
+	margin-left: 1%;
 }
 
 
