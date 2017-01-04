@@ -4,10 +4,12 @@ angular.module('Prueba',["chart.js"])
 .controller('PruebaController',PruebaController)
 .controller("LineCtrl", function ($scope) {
 
-  $scope.labels = ["1000", "2000", "3000", "5000", "7000", "9000", "10000"];
+  $scope.labels = ["1000","1200","1400","1600","1800", "2000","2200","2400","2600","2800", "3000","3200","3400","3600","3800", "4000",
+  "4200","4400","4600","4800", "5000","5200","5400","5600","5800", "6000","6200","6400","6600","6800", "7000"];
   $scope.series = ['Series A', 'Series B'];
   $scope.data = [
-    [100, 250, 310, 600, 745, 864, 943]
+    [100, 250, 310, 600, 745, 864, 943,1000,1010,930,780,820,850,770,680, 560,
+    620,650,700,790,830,900,987,1023,1050,1150,1230,1321,1349,1300,1320]
   ];
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
@@ -70,15 +72,14 @@ angular.module('Prueba',["chart.js"])
           var lista = /** @type {!HTMLDivElement} */(
           document.getElementById('lista'));
 
-
           var types = document.getElementById('type-selector');
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(types);
           map.controls[google.maps.ControlPosition.RIGHT_TOP].push(botones);
           map.controls[google.maps.ControlPosition.RIGHT_TOP].push(funciones);
-          map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(datos);
+          map.controls[google.maps.ControlPosition.TOP_LEFT].push(datos);
           map.controls[google.maps.ControlPosition.TOP_CENTER].push(lista);
-          map.controls[google.maps.ControlPosition.TOP_LEFT].push(grafica);
+          map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(grafica);
           var autocomplete = new google.maps.places.Autocomplete(input);
           autocomplete.bindTo('bounds', map);
 
