@@ -1,6 +1,6 @@
 (function () {
   'use strict'
-angular.module('Prueba',["chart.js"])
+angular.module('Prueba',['chart.js','ngAnimate'])
 .controller('PruebaController',PruebaController)
 .controller("LineCtrl", function ($scope) {
 
@@ -153,7 +153,16 @@ function PruebaController(){
       list1.activarListaR = false;
       list1.activarListaW = false;
       list1.mostrarDatos = false;
+      list1.mostrarBotones = false;
 
+      list1.verBotones = function () {
+        if (list1.mostrarBotones==true) {
+          list1.mostrarBotones = false;
+        } else {
+          list1.mostrarBotones=true;
+        }
+
+      }
 
       list1.verDatos = function () {
         if (list1.mostrarDatos==true) {

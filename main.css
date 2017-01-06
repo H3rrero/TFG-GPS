@@ -2,6 +2,13 @@
 	width: 50%;
 	height: 50%;
 }
+
+.sample-show-hide {
+  transition: all linear 0.5s;
+}
+.sample-show-hide.ng-hide {
+  opacity: 0;
+}
 #body-wrapper{
 	height: 90%;
 	width: 98%;
@@ -131,7 +138,7 @@ td{
 
 
 
-#importar,#botonCrear,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos{
+#importar,#botonCrear,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones{
   background-color: #fff;
 
   font-size: 11px;

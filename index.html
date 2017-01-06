@@ -6,6 +6,8 @@
 		<script src="chart.js/dist/Chart.min.js"></script>
 <script src="angular-chart.js/dist/angular-chart.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="angular-animate/angular-animate.js"></script>
+	<script src="angular-animate/angular-animate.min.js"></script>
     <script src="prueba.js"></script>
 
     <link href="main.css" rel="stylesheet" type="text/css">
@@ -398,7 +400,7 @@
 
 			</div>
 
-			<div id="grafica" ng-controller="LineCtrl"  ng-hide="!list1.mostrarDatos">
+			<div id="grafica"   ng-controller="LineCtrl"  ng-hide="!list1.mostrarDatos">
 
 
 
@@ -459,13 +461,16 @@
 					<tr><td><button id="botonListar" type="button" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
           <tr><td><button id="botonDatos"type="button" ng-click="list1.verDatos();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar datos</button></td></tr>
         </table>
-        <table ng-if="list1.funciones">
 
-        <tr>  <td ><button id="botonCrear" type="button" ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
-  				<tr><td><button id="botonBor" type="button" class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
-  				<tr><td><button id="botonRen" type="button" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
-					<tr><td><button id="botonDes" type="button" class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
-					<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
+				<table  class="sample-show-hide" align="left" ng-show="list1.mostrarBotones">
+					<tr>  <td ><button id="botonCrear" type="button"  ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
+						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
+						<tr><td><button id="botonRen" type="button"  class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
+						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
+						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
+				</table>
+        <table ng-if="list1.funciones">
+					<tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotones();" class="bttn-unite bttn-xs bttn-primary">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-primary">Eliminar Punto</button></td></tr>
           <tr><td><button id="botonIns" type="button" class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
         <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
