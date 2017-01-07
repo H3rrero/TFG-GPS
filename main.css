@@ -23,7 +23,7 @@ margin-bottom: 1%;
 	position: relative;
 
 
-	z-index: 1;
+
 }
 #datos{
 	background-color: #FFFFFF;
@@ -34,11 +34,12 @@ overflow: auto;
 }
 #grafica{
 	display: block;
-	width: 70%;
+	width: 68%;
 	height: 34%;
 	background-color: #FFFFFF;
 	opacity: 0.85;
 	overflow: auto;
+
 }
 #puntos{
 	float: left;
@@ -58,8 +59,8 @@ overflow: auto;
 #funciones{
 	display: inline;
 	vertical-align:bottom;;
-	height: 52%;
-overflow: auto;
+	height: 50%;
+z-index: 1 !important;
 }
  #lista{
 	background-color: #FFFFFF;
@@ -136,7 +137,9 @@ td{
 }
 
 
-
+#botones{
+	z-index: 1;
+}
 
 #importar,#botonCrear,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv{
   background-color: #fff;
