@@ -8,6 +8,8 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="angular-animate/angular-animate.js"></script>
 	<script src="angular-animate/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
+	<script src="ng-csv.js"></script>
     <script src="prueba.js"></script>
 
     <link href="main.css" rel="stylesheet" type="text/css">
@@ -39,7 +41,7 @@
 	<body ng-app = 'Prueba'>
 
 
-		<div id="body-wrapper" ng-controller='PruebaController as list1'>
+		<div id="body-wrapper" ng-controller='PruebaController as list1'  >
 
 				<input id="pac-input" class="controls" type="text"
 			 placeholder="Enter a location">
@@ -462,12 +464,13 @@
           <tr><td><button id="botonDatos"type="button" ng-click="list1.verDatos();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar datos</button></td></tr>
         </table>
 
-				<table  class="sample-show-hide" align="left" ng-show="list1.mostrarBotones">
+				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotones">
 					<tr>  <td ><button id="botonCrear" type="button"  ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
 						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
 						<tr><td><button id="botonRen" type="button"  class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
 						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
 						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
+						<tr><td><button id="tablaCsv"type="button" class="bttn-unite bttn-xs bttn-primary" ng-csv="getArray" csv-header="getHeader()"  filename="test.csv">Exportar tabla</button></td></tr>
 				</table>
         <table ng-if="list1.funciones">
 					<tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotones();" class="bttn-unite bttn-xs bttn-primary">Archivo</button></td></tr>
