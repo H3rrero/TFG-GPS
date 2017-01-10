@@ -3,6 +3,12 @@
 angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 .controller('PruebaController',PruebaController)
 .controller("LineCtrl", function ($scope) {
+  var line = this;
+
+  line.superponerGrafica = function () {
+    $("#datos").css("z-index", 0);
+     $("#grafica").css("z-index", 1);
+  }
 
   $scope.labels = ["1000","1200","1400","1600","1800", "2000","2200","2400","2600","2800", "3000","3200","3400","3600","3800", "4000",
   "4200","4400","4600","4800", "5000","5200","5400","5600","5800", "6000","6200","6400","6600","6800", "7000"];
@@ -227,12 +233,20 @@ console.log(list1.dataUrl);
         }
 
       }
-
+      list1.superponerTabla = function () {
+        $("#datos").css("z-index", 1);
+         $("#grafica").css("z-index", 0);
+      }
+      list1.superponerGrafica = function () {
+        $("#datos").css("z-index", 0);
+         $("#grafica").css("z-index", 1);
+      }
       list1.verTabla = function () {
         if (list1.mostrarTabla==true) {
           list1.mostrarTabla = false;
         } else {
           list1.mostrarTabla=true;
+          list1.superponerTabla();
         }
 
       }
@@ -241,6 +255,7 @@ console.log(list1.dataUrl);
           list1.mostrarGrafica = false;
         } else {
           list1.mostrarGrafica=true;
+          list1.superponerGrafica();
         }
 
       }
