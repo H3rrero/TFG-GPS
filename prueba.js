@@ -147,6 +147,11 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 function PruebaController($scope){
   var list1 = this;
 
+list1.dowImage = function () {
+  var canvas = document.getElementById("canvas");
+list1.dataUrl = canvas.toDataURL("image/png");
+console.log(list1.dataUrl);
+}
 
 
     $scope.getArray = [{a: "1", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"0",g:"0",h:"4km/h"},
@@ -187,11 +192,32 @@ function PruebaController($scope){
       list1.activarLista = false;
       list1.activarListaR = false;
       list1.activarListaW = false;
-      list1.mostrarDatos = false;
+      list1.mostrarTabla = false;
+      list1.mostrarGrafica = false;
       list1.mostrarBotones = false;
+      list1.mostrarBotonesW=false;
+      list1.mostrarBotonesR = false;
 
       list1.noVerBotones = function () {
         list1.mostrarBotones = false;
+        list1.mostrarBotonesR = false;
+        list1.mostrarBotonesW = false;
+      }
+      list1.verBotonesR = function () {
+        if (list1.mostrarBotonesR==true) {
+          list1.mostrarBotonesR = false;
+        } else {
+          list1.mostrarBotonesR=true;
+        }
+
+      }
+      list1.verBotonesW = function () {
+        if (list1.mostrarBotonesW==true) {
+          list1.mostrarBotonesW = false;
+        } else {
+          list1.mostrarBotonesW=true;
+        }
+
       }
       list1.verBotones = function () {
         if (list1.mostrarBotones==true) {
@@ -202,11 +228,19 @@ function PruebaController($scope){
 
       }
 
-      list1.verDatos = function () {
-        if (list1.mostrarDatos==true) {
-          list1.mostrarDatos = false;
+      list1.verTabla = function () {
+        if (list1.mostrarTabla==true) {
+          list1.mostrarTabla = false;
         } else {
-          list1.mostrarDatos=true;
+          list1.mostrarTabla=true;
+        }
+
+      }
+      list1.verGrafica = function () {
+        if (list1.mostrarGrafica==true) {
+          list1.mostrarGrafica = false;
+        } else {
+          list1.mostrarGrafica=true;
         }
 
       }
@@ -264,6 +298,9 @@ function PruebaController($scope){
     list1.listarFunciones = function () {
       list1.funcionesR = false;
       list1.funcionesW = false;
+      list1.mostrarBotones = false;
+      list1.mostrarBotonesR = false;
+      list1.mostrarBotonesw = false;
       if (list1.funciones==true) {
         list1.funciones = false;
       } else {
@@ -274,6 +311,9 @@ function PruebaController($scope){
     list1.listarFuncionesR = function () {
       list1.funciones = false;
       list1.funcionesW = false;
+      list1.mostrarBotones = false;
+      list1.mostrarBotonesR = false;
+      list1.mostrarBotonesw = false;
       if (list1.funcionesR==true) {
         list1.funcionesR = false;
       } else {
@@ -285,6 +325,9 @@ function PruebaController($scope){
     list1.listarFuncionesW = function () {
       list1.funciones = false;
       list1.funcionesR = false;
+      list1.mostrarBotones = false;
+      list1.mostrarBotonesR = false;
+      list1.mostrarBotonesw = false;
       if (list1.funcionesW==true) {
         list1.funcionesW = false;
       } else {
