@@ -439,8 +439,8 @@
 			<div id="grafica"   ng-controller="LineCtrl as line" ng-click="line.superponerGrafica()"  ng-hide="!list1.mostrarGrafica">
 
 
-				<a ng-href="{{list1.dataUrl}}"  ng-click="list1.dowImage()" id="btn-download" download="my-file-name.png"><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
-
+				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}"  id="btn-download"  ng-hide="list1.esIE" download="my-file-name.png"><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
+				<a  ng-click="list1.dowImage()"   id="btn-download" ng-hide="!list1.esIE" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
 				<canvas id="canvas" class="chart chart-line" chart-data="data"
 				chart-labels="labels" chart-series="series" chart-options="options"
 				chart-dataset-override="datasetOverride" chart-click="onClick" height="10%" width="75%">

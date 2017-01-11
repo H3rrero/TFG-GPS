@@ -152,11 +152,33 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
 function PruebaController($scope){
   var list1 = this;
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+if (isIE) {
+  list1.esIE=true;
+} else {
+    list1.esIE=false;
+}
 
 list1.dowImage = function () {
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+  if (isIE) {
+    var canvas = document.getElementById("canvas");
+  list1.dataUrl = canvas.toDataURL("image/webp");
+var data = atob( list1.dataUrl.substring( "data:image/png;base64,".length ) ),
+    asArray = new Uint8Array(data.length);
+
+for( var i = 0, len = data.length; i < len; ++i ) {
+    asArray[i] = data.charCodeAt(i);
+}
+
+var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
+window.navigator.msSaveBlob(blob, 'prueba.png');
+  }else{
+
   var canvas = document.getElementById("canvas");
 list1.dataUrl = canvas.toDataURL("image/png");
 console.log(list1.dataUrl);
+}
 }
 
 
