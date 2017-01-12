@@ -152,11 +152,31 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
 function PruebaController($scope){
   var list1 = this;
-  var isIE = /*@cc_on!@*/false || !!document.documentMode;
-if (isIE) {
+  list1.isChrome = !!window.chrome && !!window.chrome.webstore;
+  list1.isFirefox = typeof InstallTrigger !== 'undefined';
+  list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
+  list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+if (  list1.isIE) {
   list1.esIE=true;
-} else {
-    list1.esIE=false;
+  list1.isSafari = false;
+  list1.isChrome = false;
+  list1.isFirefox = false;
+} else if (  list1.isChrome) {
+  list1.esIE=false;
+  list1.isSafari = false;
+  list1.isChrome = true;
+  list1.isFirefox = false;
+}else if ( list1.isFirefox) {
+  list1.esIE=false;
+  list1.isSafari = false;
+  list1.isChrome = false;
+  list1.isFirefox = true;
+}else if (  list1.isSafari) {
+
+  list1.esIE=false;
+  list1.isSafari = true;
+  list1.isChrome = false;
+  list1.isFirefox = false;
 }
 
 list1.dowImage = function () {
@@ -173,7 +193,13 @@ for( var i = 0, len = data.length; i < len; ++i ) {
 
 var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
 window.navigator.msSaveBlob(blob, 'prueba.png');
-  }else{
+  }else if (list1.isSafari) {
+    console.log("hola people");
+    var canvas = document.getElementById("canvas");
+    var link = document.getElementById("btn-downloadSA");
+  list1.dataUrl = canvas.toDataURL("image/png");
+  }
+  else{
 
   var canvas = document.getElementById("canvas");
 list1.dataUrl = canvas.toDataURL("image/png");
