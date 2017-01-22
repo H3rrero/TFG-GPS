@@ -63,7 +63,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
             isPng: false,
             maxZoom: 20,
             minZoom: 1,
-            name: "PNOA",
+            name: "PNOA ES",
             tileSize: new google.maps.Size(256, 256)
           });
 
@@ -72,16 +72,30 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           var RASTERWMTS = new google.maps.ImageMapType({
             alt: "RasterIGN",
             getTileUrl: function(coord, zoom) {
-
+              console.log(RasterGetCoordUrl(coord, zoom));
               return RasterGetCoordUrl(coord, zoom);
             },
             isPng: false,
             maxZoom: 20,
             minZoom: 1,
-            name: "Raster",
+            name: "Raster ES",
             tileSize: new google.maps.Size(256, 256)
           });
 
+          //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
+          //en este caso estamos creando el mapa Raster de francia
+          var RASTERFR = new google.maps.ImageMapType({
+            alt: "WMTS del PNOA",
+            getTileUrl: function(coord, zoom) {
+
+              return RasterFrGetCoordUrl(coord, zoom);
+            },
+            isPng: false,
+            maxZoom: 20,
+            minZoom: 1,
+            name: "Raster FR",
+            tileSize: new google.maps.Size(256, 256)
+          });
           //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
           function RasterGetCoordUrl(tile, zoom) {
 
@@ -93,6 +107,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 	           var lrw = projection.fromPointToLatLng(lr);
 
 	           var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
+
 	           return "http://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=mtn_rasterizado&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
            }
            //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
@@ -106,15 +121,30 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
  	           var lrw = projection.fromPointToLatLng(lr);
 
  	           var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
+
  	           return "http://www.ign.es/wms-inspire/pnoa-ma?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=OI.OrthoimageCoverage&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
            }
+           //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
+           function RasterFrGetCoordUrl(tile, zoom) {
 
+              var projection = map.getProjection();
+              var zpow = Math.pow(2, zoom);
+              var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
+              var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
+              var ulw = projection.fromPointToLatLng(ul);
+              var lrw = projection.fromPointToLatLng(lr);
+
+              var bbox = ulw.lng() + "," + ulw.lat() + "," + lrw.lng() + "," + lrw.lat();
+
+              return "http://mapsref.brgm.fr/WMS-C-REF/?request=GetMap&service=WMS&VERSION=1.1.1&LAYERS=REF93&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&SRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX="+bbox+"&WIDTH=256&HEIGHT=256";
+           }
            //Creamos el mapa y le pasamos las opciones que definimos anteriormente
            map = new google.maps.Map(element[0],mapOptions);
 
            //Definimos los mapas creados como dos nuevos tipos de mapas
-           map.mapTypes.set('PNOA', PNOAWMTS);
-           map.mapTypes.set('Raster', RASTERWMTS);
+           map.mapTypes.set('PNOA ES', PNOAWMTS);
+           map.mapTypes.set('Raster ES', RASTERWMTS);
+           map.mapTypes.set('Raster FR', RASTERFR);
 
            map.setOptions(
             {
@@ -125,10 +155,11 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
               //menu desplegable
               style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
               // por ultimo le añadimos los mapas que s epodran visualizar
-              mapTypeIds: ['PNOA','Raster',
-                google.maps.MapTypeId.ROADMAP,
+              mapTypeIds: [  google.maps.MapTypeId.ROADMAP,
 
                 google.maps.MapTypeId.SATELLITE
+                ,'PNOA ES','Raster ES','Raster FR'
+
               ]
               }
             }
