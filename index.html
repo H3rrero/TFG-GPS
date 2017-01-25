@@ -455,20 +455,14 @@
 			<div id="lista" class="radio">
 				<ul ng-if="list1.activarLista">
 					<img  src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-				<li><input type="radio" name="track" value="track1" >Track1, +1.250m, -1450m, 12,5Km, >1950m, <970m</li>
-				<li><input type="radio" name="track" value="track2" >Track2,   +250m, -1050m,  9,5Km,  >950m, <570m</li>
-				<li><input type="radio" name="track" value="track3" >Track3, +1.250m, -1450m, 12,5Km, >1950m, <970m</li>
+				<li ng-repeat="item in list1.tracks"><input type="radio" name="track" value="track1" >{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li><input type="radio" name="ruta" value="ruta1" >Ruta 1, +1.250m, -1450m, 12,5Km, >1950m, <970m</li>
-			<li><input type="radio" name="ruta" value="ruta2" >Ruta 2, +1.250m, -1450m, 12,5Km, >1950m, <970m</li>
-			<li><input type="radio" name="ruta" value="ruta3" >Ruta 3,   +250m, -1050m,  9,5Km,  >950m, <570m</li>
+			<li ng-repeat="item in list1.rutas"><input type="radio" name="track" value="track1" >{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
-		<li><input type="radio" name="wayp" value="wayp1" >Waypoint 1</li>
-		<li><input type="radio" name="wayp" value="wayp2" >Waypoint 2</li>
-		<li><input type="radio" name="wayp" value="wayp3" >Waypoint 3</li>
+		<li ng-repeat="item in list1.waypoints"><input type="radio" name="track" value="track1" >{{item["nombre"]}},{{item["latitud"]}},{{item["longitud"]}},{{item["elevacion"]}}m</li>
 		</ul>
 			</div>
 			<div id="botones">
@@ -524,7 +518,7 @@
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
 					<tr><td>  <button id="botonTim" type="button" class="bttn-unite bttn-xs bttn-primary">Tiempos</button></td></tr>
-					<tr><td><button id="botonListar" type="button" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTabla();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar tabla</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar gráfica</button></td></tr>
 

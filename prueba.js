@@ -4,45 +4,372 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 //Contrador encargado de la visualización de contenido en el html.
 .controller('PruebaController',PruebaController)
 //COntroldor encargado de crear la gráfica d ela aplicación
-.controller("LineCtrl", function ($scope) {
-  var line = this;
+.controller('LineCtrl',LineCtrl)
+//Directiva que se encarga d ela creacion del mapa de la aplicación
+.directive('myMap', Mymap)
+//servicio que manejara y proporcionara las entidades (tracks,rutas y waypoints)
+.service('EntidadesService',EntidadesService);
 
-  //Funcion que superpone la gráfica por encima de la tabla de puntos cuando pinchas sobre la gráfica
-  line.superponerGrafica = function () {
-    $("#datos").css("z-index", 0);
-     $("#grafica").css("z-index", 1);
+
+  function PruebaController($scope,EntidadesService){
+    var list1 = this;
+
+    list1.tracks = EntidadesService.tracks;
+    list1.rutas = EntidadesService.rutas;
+    list1.waypoints = EntidadesService.waypoints;
+    list1.crear = function (id) {
+      return EntidadesService.crear(id);
+    }
+    //Comprobamos desde que navegador accede el usuario a nuestra aplicación
+    list1.isChrome = !!window.chrome && !!window.chrome.webstore;
+    list1.isFirefox = typeof InstallTrigger !== 'undefined';
+    list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
+    list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+    if (  list1.isIE) {
+      list1.esIE=true;
+      list1.isSafari = false;
+      list1.isChrome = false;
+      list1.isFirefox = false;
+    } else if (  list1.isChrome) {
+      list1.esIE=false;
+      list1.isSafari = false;
+      list1.isChrome = true;
+      list1.isFirefox = false;
+    }else if ( list1.isFirefox) {
+      list1.esIE=false;
+      list1.isSafari = false;
+      list1.isChrome = false;
+      list1.isFirefox = true;
+    }else if (  list1.isSafari) {
+
+      list1.esIE=false;
+      list1.isSafari = true;
+      list1.isChrome = false;
+      list1.isFirefox = false;
   }
 
-  //Creacion de la gráfica
-  $scope.labels = ["1000","1200","1400","1600","1800", "2000","2200","2400","2600","2800", "3000","3200","3400","3600","3800", "4000",
-  "4200","4400","4600","4800", "5000","5200","5400","5600","5800", "6000","6200","6400","6600","6800", "7000"];
-  $scope.series = ['Series A', 'Series B'];
-  $scope.data = [
-    [100, 250, 310, 600, 745, 864, 943,1000,1010,930,780,820,850,770,680, 560,
-    620,650,700,790,830,900,987,1023,1050,1150,1230,1321,1349,1300,1320]
-  ];
-  $scope.onClick = function (points, evt) {
-  };
-  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
-  $scope.options = {
-    scales: {
-      yAxes: [
-        {
-          id: 'y-axis-1',
-          type: 'linear',
-          display: true,
-          position: 'left'
+    //Funcion para la descarga de la imagen de tabla
+    list1.dowImage = function () {
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
+      //Si el navegador es explorer se hace de manera diferente ya que no es compatible con el atributo download de html5
+      if (isIE) {
+        //Accedemos al canvas que tiene la imagen
+        var canvas = document.getElementById("canvas");
+        //Obtenemos su url
+        list1.dataUrl = canvas.toDataURL("image/webp");
+        var data = atob( list1.dataUrl.substring( "data:image/png;base64,".length ) ),
+        asArray = new Uint8Array(data.length);
+
+        for( var i = 0, len = data.length; i < len; ++i ) {
+          asArray[i] = data.charCodeAt(i);
         }
-      ]
+        //creamos un objeto blob cuyo parámetro es una matriz que incluye el contenido deseado y el tipo del contenido
+        var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
+        //Usamos msSaveBlob para proporcionar la opción de descarga d ela imagen
+        window.navigator.msSaveBlob(blob, 'prueba.png');
+      }else if (list1.isSafari) {
+        var canvas = document.getElementById("canvas");
+        var link = document.getElementById("btn-downloadSA");
+        list1.dataUrl = canvas.toDataURL("image/png");
+      }
+      else{
+        //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
+        var canvas = document.getElementById("canvas");
+        list1.dataUrl = canvas.toDataURL("image/png");
+      }
     }
-  };
-})
-//Directiva que se encarga d ela creacion del mapa de la aplicación
-.directive('myMap', function() {
+
+      //Array que tiene el contenido de la tabla para ser descargado en formato csv
+      $scope.getArray = [{a: "1", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"0",g:"0",h:"4km/h"},
+                        {a: "2", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "3", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "4", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"56m",g:"1,3km",h:"4km/h"},
+                        {a: "5", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "6", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "7", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"-35m",g:"1.9km",h:"4km/h"},
+                        {a: "8", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "9", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "10", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"50m",g:"1.0km",h:"4km/h"},
+                        {a: "11", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "12", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "13", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"33m",g:"2.5km",h:"4km/h"},
+                        {a: "14", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "15", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "16", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"76m",g:"3.4km",h:"4km/h"},
+                        {a: "17", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "18", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "19", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "20", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "21", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"98m",g:"0.9",h:"4km/h"},
+                        {a: "22", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "23", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "24", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"45",g:"1.2",h:"4km/h"},
+                        {a: "25", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "26", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "27", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"32",g:"2.0",h:"4km/h"},
+                        {a: "28", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
+                        ,{a: "29", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
+                        {a: "30", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}];
+       //Cabecera que tendrá la tabla en formato csv
+       $scope.getHeader = function () {return ["Punto nº","Latitud","Longitud","Elevación","Hora","Desnivel","Distancia","Velocidad"]};
+
+       //Activar la funciones de los track
+       list1.funciones = false;
+       //Activar la funciones de las rutas
+       list1.funcionesR = false;
+       //Activar la funciones de los waypoints
+       list1.funcionesW = false;
+       //Activar la lista de los track
+       list1.activarLista = false;
+       //Activar la lista de las rutas
+       list1.activarListaR = false;
+       //Activar la lista de los waypoints
+       list1.activarListaW = false;
+       //Mostrar la tabla puntos
+       list1.mostrarTabla = false;
+       //Mostrar la gráfica
+       list1.mostrarGrafica = false;
+       //Mostrar los botones que estan dentro de archivo en los track
+       list1.mostrarBotones = false;
+       //Mostrar los botones que estan dentro de archivo en las rutas
+       list1.mostrarBotonesW=false;
+       //Mostrar los botones que estan dentro de archivo en los waypoints
+       list1.mostrarBotonesR = false;
+
+
+       //oculta los botones que estan en archivo
+       list1.noVerBotones = function () {
+        list1.mostrarBotones = false;
+        list1.mostrarBotonesR = false;
+        list1.mostrarBotonesW = false;
+      }
+      //Mostar botones de rutas
+      list1.verBotonesR = function () {
+        if (list1.mostrarBotonesR==true) {
+          list1.mostrarBotonesR = false;
+        } else {
+          list1.mostrarBotonesR=true;
+        }
+
+      }
+      //Mostar botones de waypoints
+      list1.verBotonesW = function () {
+        if (list1.mostrarBotonesW==true) {
+          list1.mostrarBotonesW = false;
+        } else {
+          list1.mostrarBotonesW=true;
+        }
+
+      }
+      //Mostrar botones de track
+      list1.verBotones = function () {
+        if (list1.mostrarBotones==true) {
+          list1.mostrarBotones = false;
+        } else {
+          list1.mostrarBotones=true;
+        }
+
+      }
+      //superpone la tabla a la gráfica
+      list1.superponerTabla = function () {
+        $("#datos").css("z-index", 1);
+         $("#grafica").css("z-index", 0);
+      }
+      //Superpone la gráfica a la tabla
+      list1.superponerGrafica = function () {
+        $("#datos").css("z-index", 0);
+         $("#grafica").css("z-index", 1);
+      }
+      //Mostar u ocultar la tabla
+      list1.verTabla = function () {
+        if (list1.mostrarTabla==true) {
+          list1.mostrarTabla = false;
+        } else {
+          list1.mostrarTabla=true;
+          list1.superponerTabla();
+        }
+
+      }
+      //Mostar u ocultar la gráfica
+      list1.verGrafica = function () {
+        if (list1.mostrarGrafica==true) {
+          list1.mostrarGrafica = false;
+        } else {
+          list1.mostrarGrafica=true;
+          list1.superponerGrafica();
+        }
+
+      }
+      //Mostar la lista de track
+      list1.listaActiva = function () {
+        list1.crear(0);
+        list1.activarListaR = false;
+        list1.activarListaW = false;
+        list1.activarLista=true;
+
+      }
+      //Mostrar la lista de rutas
+      list1.listaActivaR = function () {
+        list1.crear(1);
+        list1.activarLista = false;
+        list1.activarListaW = false;
+        list1.activarListaR=true;
+
+      }
+      //Mostrar la lista de waypoints
+      list1.listaActivaW = function () {
+        list1.crear(2);
+        list1.activarListaR = false;
+        list1.activarLista = false;
+        list1.activarListaW=true;
+
+      }
+      //Mostrar u ocultar la lista de rutas
+      list1.listaR = function () {
+        list1.activarListaW = false;
+        list1.activarLista = false;
+        if (list1.activarListaR==true) {
+          list1.activarListaR = false;
+        } else {
+          list1.activarListaR=true;
+        }
+
+      }
+      //Mostar u ocultar la lista de waypoints
+      list1.listaW = function () {
+        list1.activarListaR = false;
+        list1.activarLista = false;
+        if (list1.activarListaW==true) {
+          list1.activarListaW = false;
+        } else {
+          list1.activarListaW=true;
+        }
+
+      }
+      //Mostrar u ocultar la lista de track
+      list1.listaT = function () {
+        list1.activarListaR = false;
+        list1.activarListaW = false;
+        if (list1.activarLista==true) {
+          list1.activarLista = false;
+        } else {
+          list1.activarLista=true;
+        }
+
+      }
+      //Muestra u coulta la lista de botones relacionados con los track
+      list1.listarFunciones = function () {
+        list1.funcionesR = false;
+        list1.funcionesW = false;
+        list1.mostrarBotones = false;
+        list1.mostrarBotonesR = false;
+        list1.mostrarBotonesw = false;
+        if (list1.funciones==true) {
+          list1.funciones = false;
+        } else {
+          list1.funciones=true;
+        }
+
+      }
+      //Muestra u coulta la lista de botones relacionados con las rutas
+      list1.listarFuncionesR = function () {
+        list1.funciones = false;
+        list1.funcionesW = false;
+        list1.mostrarBotones = false;
+        list1.mostrarBotonesR = false;
+        list1.mostrarBotonesw = false;
+        if (list1.funcionesR==true) {
+          list1.funcionesR = false;
+        } else {
+          list1.funcionesR=true;
+        }
+
+      }
+      //Muestra u coulta la lista de botones relacionados con los waypoints
+      list1.listarFuncionesW = function () {
+        list1.funciones = false;
+        list1.funcionesR = false;
+        list1.mostrarBotones = false;
+        list1.mostrarBotonesR = false;
+        list1.mostrarBotonesw = false;
+        if (list1.funcionesW==true) {
+          list1.funcionesW = false;
+        } else {
+          list1.funcionesW=true;
+        }
+
+      }
+}
+
+//funcion del servicio de entidades que se encarga de gestionar las distintas entidades de la aplicación
+function EntidadesService (){
+  var service = this;
+  service.tracks = [];
+  service.rutas = [];
+  service.waypoints = [];
+
+  service.crear = function (id) {
+    switch (id) {
+      case 0:
+        service.entidad = {
+          nombre: "Nuevo-Track"+service.tracks.length,
+          distancia: 0,
+          desnivelP: 0,
+          desnivelN:0,
+          elevMax:0,
+          elevMin:0,
+          puntos:[],
+        };
+        service.tracks.push(service.entidad);
+        break;
+      case 1:
+      service.entidad = {
+        nombre: "Nueva-Ruta"+service.rutas.length,
+        distancia: 0,
+        desnivelP: 0,
+        desnivelN:0,
+        elevMax:0,
+        elevMin:0,
+        puntos:[],
+      };
+      service.rutas.push(service.entidad);
+        break;
+      case 2:
+      service.entidad = {
+        nombre: "Nuevo-Waypoint"+service.waypoints.length,
+        latitud: 0,
+        longitud:0,
+        elevacion:0,
+      };
+      service.waypoints.push(service.entidad);
+        break;
+    }
+    return service.entidad;
+  }
+
+
+
+
+}
+function Mymap() {
     // directive link function
     var link = function(scope, element, attrs) {
         var map
-
+        function CoordMapType(tileSize) {
+  this.tileSize = tileSize;
+}
+    //Creamos la cuadricula que se superpondra al mapa
+    CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+      var div = ownerDocument.createElement('div');
+      div.innerHTML = coord;
+      div.style.width = this.tileSize.width + 'px';
+      div.style.height = this.tileSize.height + 'px';
+      div.style.fontSize = '10';
+      div.style.borderStyle = 'solid';
+      div.style.borderWidth = '1px';
+      div.style.borderColor = '#AAAAAA';
+      return div;
+    };
         // funcion que inicializa el mapa
         function initMap() {
           //opciones de inicialización
@@ -51,7 +378,10 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
             zoom: 8,
             disableDefaultUI: true,
             mapTypeControl: true,
+            scaleControl: true,
+            visibleGridLines:true,
           };
+
           //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
           //en este caso estamos creando el mapa PNOA (ortofotomapa)
           var PNOAWMTS = new google.maps.ImageMapType({
@@ -140,7 +470,9 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
            }
            //Creamos el mapa y le pasamos las opciones que definimos anteriormente
            map = new google.maps.Map(element[0],mapOptions);
-
+           //Le pasamos al mapa la cuadricula que creamos anteriormente
+           map.overlayMapTypes.insertAt(
+             0, new CoordMapType(new google.maps.Size(256, 256)));
            //Definimos los mapas creados como dos nuevos tipos de mapas
            map.mapTypes.set('PNOA ES', PNOAWMTS);
            map.mapTypes.set('Raster ES', RASTERWMTS);
@@ -261,288 +593,39 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         replace: true,
         link: link
     };
-});
+}
+function LineCtrl($scope) {
+ var line = this;
 
+ //Funcion que superpone la gráfica por encima de la tabla de puntos cuando pinchas sobre la gráfica
+ line.superponerGrafica = function () {
+   $("#datos").css("z-index", 0);
+    $("#grafica").css("z-index", 1);
+ }
 
-  function PruebaController($scope){
-    var list1 = this;
+ //Creacion de la gráfica
+ $scope.labels = ["1000","1200","1400","1600","1800", "2000","2200","2400","2600","2800", "3000","3200","3400","3600","3800", "4000",
+ "4200","4400","4600","4800", "5000","5200","5400","5600","5800", "6000","6200","6400","6600","6800", "7000"];
+ $scope.series = ['Series A', 'Series B'];
+ $scope.data = [
+   [100, 250, 310, 600, 745, 864, 943,1000,1010,930,780,820,850,770,680, 560,
+   620,650,700,790,830,900,987,1023,1050,1150,1230,1321,1349,1300,1320]
+ ];
+ $scope.onClick = function (points, evt) {
+ };
+ $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+ $scope.options = {
+   scales: {
+     yAxes: [
+       {
+         id: 'y-axis-1',
+         type: 'linear',
+         display: true,
+         position: 'left'
+       }
+     ]
+   }
+ };
+}
 
-    //Comprobamos desde que navegador accede el usuario a nuestra aplicación
-    list1.isChrome = !!window.chrome && !!window.chrome.webstore;
-    list1.isFirefox = typeof InstallTrigger !== 'undefined';
-    list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
-    list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
-    if (  list1.isIE) {
-      list1.esIE=true;
-      list1.isSafari = false;
-      list1.isChrome = false;
-      list1.isFirefox = false;
-    } else if (  list1.isChrome) {
-      list1.esIE=false;
-      list1.isSafari = false;
-      list1.isChrome = true;
-      list1.isFirefox = false;
-    }else if ( list1.isFirefox) {
-      list1.esIE=false;
-      list1.isSafari = false;
-      list1.isChrome = false;
-      list1.isFirefox = true;
-    }else if (  list1.isSafari) {
-
-      list1.esIE=false;
-      list1.isSafari = true;
-      list1.isChrome = false;
-      list1.isFirefox = false;
-  }
-
-    //Funcion para la descarga de la imagen de tabla
-    list1.dowImage = function () {
-      var isIE = /*@cc_on!@*/false || !!document.documentMode;
-      //Si el navegador es explorer se hace de manera diferente ya que no es compatible con el atributo download de html5
-      if (isIE) {
-        //Accedemos al canvas que tiene la imagen
-        var canvas = document.getElementById("canvas");
-        //Obtenemos su url
-        list1.dataUrl = canvas.toDataURL("image/webp");
-        var data = atob( list1.dataUrl.substring( "data:image/png;base64,".length ) ),
-        asArray = new Uint8Array(data.length);
-
-        for( var i = 0, len = data.length; i < len; ++i ) {
-          asArray[i] = data.charCodeAt(i);
-        }
-        //creamos un objeto blob cuyo parámetro es una matriz que incluye el contenido deseado y el tipo del contenido
-        var blob = new Blob( [ asArray.buffer ], {type: "image/png"} );
-        //Usamos msSaveBlob para proporcionar la opción de descarga d ela imagen
-        window.navigator.msSaveBlob(blob, 'prueba.png');
-      }else if (list1.isSafari) {
-        var canvas = document.getElementById("canvas");
-        var link = document.getElementById("btn-downloadSA");
-        list1.dataUrl = canvas.toDataURL("image/png");
-      }
-      else{
-        //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
-        var canvas = document.getElementById("canvas");
-        list1.dataUrl = canvas.toDataURL("image/png");
-      }
-    }
-
-      //Array que tiene el contenido de la tabla para ser descargado en formato csv
-      $scope.getArray = [{a: "1", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"0",g:"0",h:"4km/h"},
-                        {a: "2", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "3", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "4", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"56m",g:"1,3km",h:"4km/h"},
-                        {a: "5", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "6", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "7", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"-35m",g:"1.9km",h:"4km/h"},
-                        {a: "8", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "9", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "10", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"50m",g:"1.0km",h:"4km/h"},
-                        {a: "11", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "12", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "13", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"33m",g:"2.5km",h:"4km/h"},
-                        {a: "14", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "15", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "16", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"76m",g:"3.4km",h:"4km/h"},
-                        {a: "17", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "18", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "19", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "20", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "21", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"98m",g:"0.9",h:"4km/h"},
-                        {a: "22", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "23", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "24", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"45",g:"1.2",h:"4km/h"},
-                        {a: "25", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "26", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "27", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"32",g:"2.0",h:"4km/h"},
-                        {a: "28", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                        ,{a: "29", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                        {a: "30", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}];
-       //Cabecera que tendrá la tabla en formato csv
-       $scope.getHeader = function () {return ["Punto nº","Latitud","Longitud","Elevación","Hora","Desnivel","Distancia","Velocidad"]};
-
-       //Activar la funciones de los track
-       list1.funciones = false;
-       //Activar la funciones de las rutas
-       list1.funcionesR = false;
-       //Activar la funciones de los waypoints
-       list1.funcionesW = false;
-       //Activar la lista de los track
-       list1.activarLista = false;
-       //Activar la lista de las rutas
-       list1.activarListaR = false;
-       //Activar la lista de los waypoints
-       list1.activarListaW = false;
-       //Mostrar la tabla puntos
-       list1.mostrarTabla = false;
-       //Mostrar la gráfica
-       list1.mostrarGrafica = false;
-       //Mostrar los botones que estan dentro de archivo en los track
-       list1.mostrarBotones = false;
-       //Mostrar los botones que estan dentro de archivo en las rutas
-       list1.mostrarBotonesW=false;
-       //Mostrar los botones que estan dentro de archivo en los waypoints
-       list1.mostrarBotonesR = false;
-
-       //oculta los botones que estan en archivo
-       list1.noVerBotones = function () {
-        list1.mostrarBotones = false;
-        list1.mostrarBotonesR = false;
-        list1.mostrarBotonesW = false;
-      }
-      //Mostar botones de rutas
-      list1.verBotonesR = function () {
-        if (list1.mostrarBotonesR==true) {
-          list1.mostrarBotonesR = false;
-        } else {
-          list1.mostrarBotonesR=true;
-        }
-
-      }
-      //Mostar botones de waypoints
-      list1.verBotonesW = function () {
-        if (list1.mostrarBotonesW==true) {
-          list1.mostrarBotonesW = false;
-        } else {
-          list1.mostrarBotonesW=true;
-        }
-
-      }
-      //Mostrar botones de track
-      list1.verBotones = function () {
-        if (list1.mostrarBotones==true) {
-          list1.mostrarBotones = false;
-        } else {
-          list1.mostrarBotones=true;
-        }
-
-      }
-      //superpone la tabla a la gráfica
-      list1.superponerTabla = function () {
-        $("#datos").css("z-index", 1);
-         $("#grafica").css("z-index", 0);
-      }
-      //Superpone la gráfica a la tabla
-      list1.superponerGrafica = function () {
-        $("#datos").css("z-index", 0);
-         $("#grafica").css("z-index", 1);
-      }
-      //Mostar u ocultar la tabla
-      list1.verTabla = function () {
-        if (list1.mostrarTabla==true) {
-          list1.mostrarTabla = false;
-        } else {
-          list1.mostrarTabla=true;
-          list1.superponerTabla();
-        }
-
-      }
-      //Mostar u ocultar la gráfica
-      list1.verGrafica = function () {
-        if (list1.mostrarGrafica==true) {
-          list1.mostrarGrafica = false;
-        } else {
-          list1.mostrarGrafica=true;
-          list1.superponerGrafica();
-        }
-
-      }
-      //Mostar la lista de track
-      list1.listaActiva = function () {
-        list1.activarListaR = false;
-        list1.activarListaW = false;
-        list1.activarLista=true;
-
-      }
-      //Mostrar la lista de rutas
-      list1.listaActivaR = function () {
-        list1.activarLista = false;
-        list1.activarListaW = false;
-        list1.activarListaR=true;
-
-      }
-      //Mostrar la lista de waypoints
-      list1.listaActivaW = function () {
-        list1.activarListaR = false;
-        list1.activarLista = false;
-        list1.activarListaW=true;
-
-      }
-      //Mostrar u ocultar la lista de rutas
-      list1.listaR = function () {
-        list1.activarListaW = false;
-        list1.activarLista = false;
-        if (list1.activarListaR==true) {
-          list1.activarListaR = false;
-        } else {
-          list1.activarListaR=true;
-        }
-
-      }
-      //Mostar u ocultar la lista de waypoints
-      list1.listaW = function () {
-        list1.activarListaR = false;
-        list1.activarLista = false;
-        if (list1.activarListaW==true) {
-          list1.activarListaW = false;
-        } else {
-          list1.activarListaW=true;
-        }
-
-      }
-      //Mostrar u ocultar la lista de track
-      list1.listaT = function () {
-        list1.activarListaR = false;
-        list1.activarListaW = false;
-        if (list1.activarLista==true) {
-          list1.activarLista = false;
-        } else {
-          list1.activarLista=true;
-        }
-
-      }
-      //Muestra u coulta la lista de botones relacionados con los track
-      list1.listarFunciones = function () {
-        list1.funcionesR = false;
-        list1.funcionesW = false;
-        list1.mostrarBotones = false;
-        list1.mostrarBotonesR = false;
-        list1.mostrarBotonesw = false;
-        if (list1.funciones==true) {
-          list1.funciones = false;
-        } else {
-          list1.funciones=true;
-        }
-
-      }
-      //Muestra u coulta la lista de botones relacionados con las rutas
-      list1.listarFuncionesR = function () {
-        list1.funciones = false;
-        list1.funcionesW = false;
-        list1.mostrarBotones = false;
-        list1.mostrarBotonesR = false;
-        list1.mostrarBotonesw = false;
-        if (list1.funcionesR==true) {
-          list1.funcionesR = false;
-        } else {
-          list1.funcionesR=true;
-        }
-
-      }
-      //Muestra u coulta la lista de botones relacionados con los waypoints
-      list1.listarFuncionesW = function () {
-        list1.funciones = false;
-        list1.funcionesR = false;
-        list1.mostrarBotones = false;
-        list1.mostrarBotonesR = false;
-        list1.mostrarBotonesw = false;
-        if (list1.funcionesW==true) {
-          list1.funcionesW = false;
-        } else {
-          list1.funcionesW=true;
-        }
-
-      }
-
-
-};
 })();
