@@ -3,6 +3,6 @@
   Se trata de una aplicación diseñada como trabajo final de grado en la escuela de ingeniería informática de la Universidad de Oviedo.
   El objetivo es diseñar una aplicación web para la edición de tracks, rutas y waypoints GPS.
 ##Estado actual
-  Diseñando el prototipo de interacción con el usuario.
+  Implementación de la aplicación.
 ##Puedes ver el avance aquí
   https://h3rrero.github.io/TFG-GPS/
