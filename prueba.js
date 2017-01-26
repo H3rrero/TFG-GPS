@@ -13,12 +13,38 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
   function PruebaController($scope,EntidadesService){
     var list1 = this;
+    //track seleccionado por el usuario
+    list1.trackActivo = 0;
+    list1.rutaActiva = 0;
+    //identificadores que usamos en los swich-case del servicio
+    list1.numTrack=0;
+    list1.numRuta=1;
+    list1.numWaypoint=2;
+
 
     list1.tracks = EntidadesService.tracks;
     list1.rutas = EntidadesService.rutas;
+
+
+
+
     list1.waypoints = EntidadesService.waypoints;
     list1.crear = function (id) {
+
       return EntidadesService.crear(id);
+    }
+    list1.anadirPuntoT = function () {
+      return EntidadesService.anadirPunto(list1.numTrack,list1.trackActivo);
+    }
+    list1.anadirPuntoR = function () {
+      return EntidadesService.anadirPunto(list1.numRuta,list1.rutaActiva);
+    }
+    list1.actualizarPuntosT = function() {
+    
+          list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
+    }
+    list1.actualizarPuntosR = function() {
+           list1.puntosTrackActivo= list1.rutas[list1.rutaActiva]["puntos"];
     }
     //Comprobamos desde que navegador accede el usuario a nuestra aplicación
     list1.isChrome = !!window.chrome && !!window.chrome.webstore;
@@ -171,7 +197,14 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
       }
       //superpone la tabla a la gráfica
+      list1.superponerLista = function () {
+          $("#lista").css("z-index", 2);
+        $("#datos").css("z-index", 1);
+         $("#grafica").css("z-index", 0);
+      }
+      //superpone la tabla a la gráfica
       list1.superponerTabla = function () {
+          $("#lista").css("z-index", 0);
         $("#datos").css("z-index", 1);
          $("#grafica").css("z-index", 0);
       }
@@ -185,6 +218,12 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         if (list1.mostrarTabla==true) {
           list1.mostrarTabla = false;
         } else {
+          if(list1.tracks.length>0){
+              list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
+          }
+          if(list1.rutas.length>0){
+              list1.puntosTrackActivo= list1.rutas[list1.rutaActiva]["puntos"];
+            }
           list1.mostrarTabla=true;
           list1.superponerTabla();
         }
@@ -319,6 +358,7 @@ function EntidadesService (){
           elevMax:0,
           elevMin:0,
           puntos:[],
+          numero: service.tracks.length,
         };
         service.tracks.push(service.entidad);
         break;
@@ -331,6 +371,7 @@ function EntidadesService (){
         elevMax:0,
         elevMin:0,
         puntos:[],
+        numero:service.rutas.length,
       };
       service.rutas.push(service.entidad);
         break;
@@ -340,6 +381,7 @@ function EntidadesService (){
         latitud: 0,
         longitud:0,
         elevacion:0,
+        numero: service.waypoints.length,
       };
       service.waypoints.push(service.entidad);
         break;
@@ -347,7 +389,32 @@ function EntidadesService (){
     return service.entidad;
   }
 
+  service.anadirPunto = function (id,num) {
+    service.punto = {
+      numero:0,
+      latitud:"43.083333",
+      longitud: "-5.804077",
+      elevacion: "600m",
+      fecha:"26/01/2017",
+      hora:"1:04",
+      desnivel:"50m",
+      distancia: "1.5km",
+      velocidad: "4km/h",
+    }
+    switch (id) {
+      case 0:
 
+        service.tracks[num]["puntos"].push(service.punto);
+        console.log(service.tracks[num]);
+        break;
+      case 1:
+
+        service.rutas[num]["puntos"].push(service.punto);
+        console.log(service.rutas[num]);
+        break;
+    }
+    return service.punto;
+  }
 
 
 }
