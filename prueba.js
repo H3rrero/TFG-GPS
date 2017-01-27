@@ -13,6 +13,8 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
   function PruebaController($scope,EntidadesService){
     var list1 = this;
+    console.log("holii");
+    console.log(this);
     //track seleccionado por el usuario
     list1.trackActivo = 0;
     list1.rutaActiva = 0;
@@ -24,11 +26,9 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.tracks = EntidadesService.tracks;
     list1.rutas = EntidadesService.rutas;
-
-
-
-
     list1.waypoints = EntidadesService.waypoints;
+    list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
+
     list1.crear = function (id) {
       EntidadesService.trackActivo = list1.trackActivo;
       return EntidadesService.crear(id);
@@ -37,25 +37,33 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
        EntidadesService.anadirPunto(list1.numTrack,list1.trackActivo);
        list1.actualizarPuntosT();
 
+
+
+    }
+    list1.anadirPuntoTForMap = function () {
+      console.log("acacacacacac");
+        console.log(EntidadesService.trackActivo);
+        list1.trackActivo = EntidadesService.trackActivo;
+       EntidadesService.anadirPunto(list1.numTrack,EntidadesService.trackActivo);
+       list1.actualizarPuntosT();
+       $scope.$apply();
+
+
     }
     list1.anadirPuntoR = function () {
        EntidadesService.anadirPunto(list1.numRuta,list1.rutaActiva);
        list1.actualizarPuntosR();
     }
     list1.actualizarPuntosT = function() {
+        EntidadesService.trackActivo = list1.trackActivo;
+         EntidadesService.actualizarPuntosT();
+         list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
 
-          if (list1.tracks.length>0){
-          list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
-          EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
-          EntidadesService.actualizarPuntos();
-          EntidadesService.trackActivo = list1.trackActivo;}
     }
     list1.actualizarPuntosR = function() {
-        if (list1.rutas.length>0){
-           list1.puntosTrackActivo= list1.rutas[list1.rutaActiva]["puntos"];
-           EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
-           EntidadesService.actualizarPuntos();
-         EntidadesService.rutaActiva = list1.rutaActiva;}
+      EntidadesService.rutaActiva = list1.rutaActiva;
+       EntidadesService.actualizarPuntosR();
+       list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
     }
     //Comprobamos desde que navegador accede el usuario a nuestra aplicación
     list1.isChrome = !!window.chrome && !!window.chrome.webstore;
@@ -368,6 +376,23 @@ function EntidadesService (){
   service.elevaciones2 = [];
   service.distancias = [];
    service.elevaciones = [];
+
+/////////////////////////PRUEBA PARA METER TODOO EN EL SERVICE///////////////////////
+service.actualizarPuntosT = function() {
+
+      if (service.tracks.length>0){
+      service.puntosTrackActivo= service.tracks[service.trackActivo]["puntos"];
+      service.actualizarPuntos();
+      }
+}
+service.actualizarPuntosR = function() {
+    if (list1.rutas.length>0){
+       service.puntosTrackActivo= service.rutas[service.rutaActiva]["puntos"];
+       service.actualizarPuntos();
+     }
+}
+////////////////////////////////////////////////////////////////////////////////////
+
   service.actualizarDistancias= function () {
     service.distancias.length = 0;
     for (var item in service.puntosTrackActivo) {
@@ -464,7 +489,7 @@ function EntidadesService (){
 }
 function Mymap(EntidadesService) {
     // directive link function
-    var link = function(scope, element, attrs) {
+    var link = function(scope, element, attrs,controller) {
         var map
         var poly
         function CoordMapType(tileSize) {
@@ -724,14 +749,18 @@ function Mymap(EntidadesService) {
             icon: image,
             map: map
           });
-          console.log(EntidadesService.trackActivo);
-          EntidadesService.anadirPunto(0,EntidadesService.trackActivo);
-              if (EntidadesService.tracks.length>0){
-              EntidadesService.puntosTrackActivo= EntidadesService.tracks[EntidadesService.trackActivo]["puntos"];
-              EntidadesService.actualizarPuntos();
-              }
-              console.log("Puntos");
-          console.log(EntidadesService.puntosTrackActivo);
+
+
+
+            console.log("activvvovoovovovo");
+            console.log(controller.trackActivo);
+
+            controller.anadirPuntoTForMap();
+
+          console.log(controller);
+
+
+
         }
 
         // LLamamos a la función que inicializa el mapa
@@ -743,6 +772,7 @@ function Mymap(EntidadesService) {
         restrict: 'E',
         template: '<div id="map"></div>',
         replace: true,
+        controller: PruebaController,
         link: link
     };
 }
