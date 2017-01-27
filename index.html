@@ -70,14 +70,14 @@
 				</thead>
 				<tr ng-repeat="item in list1.puntosTrackActivo">
 					<td>1</td>
-					<td>43.083333</td>
-					<td>-5.804077</td>
-					<td>600m</td>
-					<td>09/01/2017</td>
-					<td>09:07</td>
-					<td>0</td>
-					<td>0</td>
-					<td>4km/h</td>
+					<td>{{item["latitud"]}}</td>
+					<td>{{item["longitud"]}}</td>
+					<td>{{item["elevacion"]}}m</td>
+					<td>{{item["fecha"]}}</td>
+					<td>{{item["hora"]}}</td>
+					<td>{{item["desnivel"]}}m</td>
+					<td>{{item["distancia"]}}Km</td>
+					<td>{{item["velocidad"]}}</td>
 
 				</tr>
 

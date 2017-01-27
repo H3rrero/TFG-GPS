@@ -30,21 +30,32 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.waypoints = EntidadesService.waypoints;
     list1.crear = function (id) {
-
+      EntidadesService.trackActivo = list1.trackActivo;
       return EntidadesService.crear(id);
     }
     list1.anadirPuntoT = function () {
-      return EntidadesService.anadirPunto(list1.numTrack,list1.trackActivo);
+       EntidadesService.anadirPunto(list1.numTrack,list1.trackActivo);
+       list1.actualizarPuntosT();
+
     }
     list1.anadirPuntoR = function () {
-      return EntidadesService.anadirPunto(list1.numRuta,list1.rutaActiva);
+       EntidadesService.anadirPunto(list1.numRuta,list1.rutaActiva);
+       list1.actualizarPuntosR();
     }
     list1.actualizarPuntosT = function() {
-    
+
+          if (list1.tracks.length>0){
           list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
+          EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
+          EntidadesService.actualizarPuntos();
+          EntidadesService.trackActivo = list1.trackActivo;}
     }
     list1.actualizarPuntosR = function() {
+        if (list1.rutas.length>0){
            list1.puntosTrackActivo= list1.rutas[list1.rutaActiva]["puntos"];
+           EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
+           EntidadesService.actualizarPuntos();
+         EntidadesService.rutaActiva = list1.rutaActiva;}
     }
     //Comprobamos desde que navegador accede el usuario a nuestra aplicación
     list1.isChrome = !!window.chrome && !!window.chrome.webstore;
@@ -220,9 +231,13 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         } else {
           if(list1.tracks.length>0){
               list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
+              EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
+              EntidadesService.actualizarPuntos();
           }
           if(list1.rutas.length>0){
               list1.puntosTrackActivo= list1.rutas[list1.rutaActiva]["puntos"];
+              EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
+              EntidadesService.actualizarPuntos();
             }
           list1.mostrarTabla=true;
           list1.superponerTabla();
@@ -343,10 +358,38 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 //funcion del servicio de entidades que se encarga de gestionar las distintas entidades de la aplicación
 function EntidadesService (){
   var service = this;
+  EntidadesService.trackActivo = 0;
+  EntidadesService.rutaActiva = 0;
   service.tracks = [];
   service.rutas = [];
   service.waypoints = [];
+  service.puntosTrackActivo=[];
+  service.distancias2 = [];
+  service.elevaciones2 = [];
+  service.distancias = [];
+   service.elevaciones = [];
+  service.actualizarDistancias= function () {
+    service.distancias.length = 0;
+    for (var item in service.puntosTrackActivo) {
+      service.distancias.push(service.puntosTrackActivo[item]['distancia']);
 
+    }
+    return service.distancias;
+  }
+  service.actualizarElevaciones= function () {
+    service.elevaciones.length = 0;
+    for (var item in service.puntosTrackActivo) {
+      service.elevaciones.push(service.puntosTrackActivo[item]['elevacion']);
+    }
+    return service.elevaciones;
+  }
+
+  service.actualizarPuntos= function () {
+    service.elevaciones2 = service.actualizarElevaciones();
+    service.distancias2 = service.actualizarDistancias();
+    console.log("uolaaaa");
+    console.log(service.elevaciones2);
+  }
   service.crear = function (id) {
     switch (id) {
       case 0:
@@ -394,34 +437,36 @@ function EntidadesService (){
       numero:0,
       latitud:"43.083333",
       longitud: "-5.804077",
-      elevacion: "600m",
+      elevacion: 600,
       fecha:"26/01/2017",
       hora:"1:04",
-      desnivel:"50m",
-      distancia: "1.5km",
+      desnivel:50,
+      distancia: 1.5,
       velocidad: "4km/h",
     }
     switch (id) {
       case 0:
-
+        if (service.tracks.length>0)
         service.tracks[num]["puntos"].push(service.punto);
         console.log(service.tracks[num]);
         break;
       case 1:
-
+          if (service.tracks.length>0)
         service.rutas[num]["puntos"].push(service.punto);
         console.log(service.rutas[num]);
         break;
     }
+
     return service.punto;
   }
 
 
 }
-function Mymap() {
+function Mymap(EntidadesService) {
     // directive link function
     var link = function(scope, element, attrs) {
         var map
+        var poly
         function CoordMapType(tileSize) {
   this.tileSize = tileSize;
 }
@@ -564,6 +609,16 @@ function Mymap() {
             }
           );
 
+          poly = new google.maps.Polyline({
+    strokeColor: '#000000',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  });
+  poly.setMap(map);
+
+  // Add a listener for the click event
+  map.addListener('click', addLatLng);
+
           //botones de seleccion de entidad (T,R,W)
           var botont = /** @type {!HTMLDivElement} */(
           document.getElementById('botones'));
@@ -649,6 +704,36 @@ function Mymap() {
 
 
         }
+
+        // Handles click events on a map, and adds a new point to the Polyline.
+        function addLatLng(event) {
+          var path = poly.getPath();
+
+          // Because path is an MVCArray, we can simply append a new coordinate
+          // and it will automatically appear.
+          path.push(event.latLng);
+          var image = {
+            url: 'icono.png',
+
+          };
+
+          // Add a new marker at the new plotted point on the polyline.
+          var marker = new google.maps.Marker({
+            position: event.latLng,
+            title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+            icon: image,
+            map: map
+          });
+          console.log(EntidadesService.trackActivo);
+          EntidadesService.anadirPunto(0,EntidadesService.trackActivo);
+              if (EntidadesService.tracks.length>0){
+              EntidadesService.puntosTrackActivo= EntidadesService.tracks[EntidadesService.trackActivo]["puntos"];
+              EntidadesService.actualizarPuntos();
+              }
+              console.log("Puntos");
+          console.log(EntidadesService.puntosTrackActivo);
+        }
+
         // LLamamos a la función que inicializa el mapa
         initMap();
 
@@ -661,7 +746,7 @@ function Mymap() {
         link: link
     };
 }
-function LineCtrl($scope) {
+function LineCtrl($scope,EntidadesService) {
  var line = this;
 
  //Funcion que superpone la gráfica por encima de la tabla de puntos cuando pinchas sobre la gráfica
@@ -671,13 +756,11 @@ function LineCtrl($scope) {
  }
 
  //Creacion de la gráfica
- $scope.labels = ["1000","1200","1400","1600","1800", "2000","2200","2400","2600","2800", "3000","3200","3400","3600","3800", "4000",
- "4200","4400","4600","4800", "5000","5200","5400","5600","5800", "6000","6200","6400","6600","6800", "7000"];
- $scope.series = ['Series A', 'Series B'];
- $scope.data = [
-   [100, 250, 310, 600, 745, 864, 943,1000,1010,930,780,820,850,770,680, 560,
-   620,650,700,790,830,900,987,1023,1050,1150,1230,1321,1349,1300,1320]
- ];
+ $scope.series = ['Series A'];
+ $scope.labels = EntidadesService.distancias;
+ $scope.data = EntidadesService.elevaciones;
+
+
  $scope.onClick = function (points, evt) {
  };
  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
