@@ -23,44 +23,60 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.numRuta=1;
     list1.numWaypoint=2;
 
-
+    //Actulizamos los elementos del controlador con los del servicio
     list1.tracks = EntidadesService.tracks;
     list1.rutas = EntidadesService.rutas;
     list1.waypoints = EntidadesService.waypoints;
     list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
 
+    //Metodo que crea entidades
     list1.crear = function (id) {
+      //Actualizamos la entidad que esta activa antes de llamar al servicio
       EntidadesService.trackActivo = list1.trackActivo;
+      EntidadesService.rutaActiva = list1.rutaActiva;
+      //llamamos al metodo crear del servicio
       return EntidadesService.crear(id);
     }
-    list1.anadirPuntoT = function () {
-       EntidadesService.anadirPunto(list1.numTrack,list1.trackActivo);
-       list1.actualizarPuntosT();
 
-
-
-    }
+    //Es llamado desde el evento click del mapa y añade un punto al track activo
     list1.anadirPuntoTForMap = function () {
-      console.log("acacacacacac");
-        console.log(EntidadesService.trackActivo);
+        //Actualizamos el track activo antes de realizar las operaciones
         list1.trackActivo = EntidadesService.trackActivo;
+       //llamamos al metodo del servicio que se encarga de añadir los puntos
        EntidadesService.anadirPunto(list1.numTrack,EntidadesService.trackActivo);
+       //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
        list1.actualizarPuntosT();
        $scope.$apply();
 
 
     }
-    list1.anadirPuntoR = function () {
-       EntidadesService.anadirPunto(list1.numRuta,list1.rutaActiva);
+      //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
+    list1.anadirPuntoRForMap = function () {
+      //Actualizamosla ruta activa antes de realizar las operaciones
+        list1.rutaActiva = EntidadesService.rutaActiva;
+      //llamamos al metodo del servicio que se encarga de añadir los puntos
+       EntidadesService.anadirPunto(list1.numRuta,EntidadesService.rutaActiva);
+       //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
        list1.actualizarPuntosR();
+       $scope.$apply();
+
+
     }
+    //Actualiza los puntos de los tracks para que los componenetes que los
+    // necesiten tengan la ultima version de los puntos
     list1.actualizarPuntosT = function() {
+      //Es necesario para que el el servicio sepa que tipo de entidad esta manejando
+      EntidadesService.isTrack = true;
         EntidadesService.trackActivo = list1.trackActivo;
          EntidadesService.actualizarPuntosT();
          list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
 
     }
+    //Actualiza los puntos de las rutas para que los componenetes que los
+    // necesiten tengan la ultima version de los puntos
     list1.actualizarPuntosR = function() {
+      //Es necesario para que el el servicio sepa que tipo de entidad esta manejando
+      EntidadesService.isTrack = false;
       EntidadesService.rutaActiva = list1.rutaActiva;
        EntidadesService.actualizarPuntosR();
        list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -294,6 +310,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           list1.activarListaR = false;
         } else {
           list1.activarListaR=true;
+          EntidadesService.isTrack = false;
         }
 
       }
@@ -316,6 +333,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           list1.activarLista = false;
         } else {
           list1.activarLista=true;
+          EntidadesService.isTrack = true;
         }
 
       }
@@ -375,9 +393,59 @@ function EntidadesService (){
   service.distancias2 = [];
   service.elevaciones2 = [];
   service.distancias = [];
-   service.elevaciones = [];
+  service.elevaciones = [];
+  service.tienePoly = [];
+  service.tienePolyR = [];
+  service.polyLineas = [];
+  service.polyLineasR = [];
+  service.isTrack = true;
+  service.hayEntidadesCreadas = false;
 
-/////////////////////////PRUEBA PARA METER TODOO EN EL SERVICE///////////////////////
+
+//FUncion que retorna true o false si la entidad activa actual ya tiene
+// una polilinea asignada o no la tiene
+service.tienePolyF = function () {
+  if (service.isTrack) {
+    return service.tienePoly[service.trackActivo];
+  } else {
+    return service.tienePolyR[service.rutaActiva];
+  }
+}
+//Cambia el color de las polilineas de los track y las rutas
+service.colorPoly= function () {
+  if (service.isTrack) {
+    return '#3D04F9';
+  } else {
+    return '#C004F9';
+  }
+}
+//Añade una polilinea a la entidad que esta activa actualmente
+service.addPoly = function (poly) {
+  if (service.isTrack) {
+
+    service.polyLineas[service.trackActivo]= poly;
+
+    service.tienePoly[service.trackActivo]=true;
+  } else {
+
+    service.polyLineasR[service.rutaActiva]= poly;
+
+    service.tienePolyR[service.rutaActiva]=true;
+  }
+}
+//devuelve la polilinea de la entidad activa actualmente
+service.getPoly = function () {
+  if (service.isTrack) {
+
+    return service.polyLineas[service.trackActivo];
+  } else {
+
+
+    return service.polyLineasR[service.rutaActiva];
+  }
+}
+
+//Actualiza los puntos del track activo
 service.actualizarPuntosT = function() {
 
       if (service.tracks.length>0){
@@ -385,14 +453,15 @@ service.actualizarPuntosT = function() {
       service.actualizarPuntos();
       }
 }
+
+//Actualiza los puntos de la ruta activa
 service.actualizarPuntosR = function() {
-    if (list1.rutas.length>0){
+    if (service.rutas.length>0){
        service.puntosTrackActivo= service.rutas[service.rutaActiva]["puntos"];
        service.actualizarPuntos();
      }
 }
-////////////////////////////////////////////////////////////////////////////////////
-
+//Actualiza una lista de distacias que es necesaria para actualizar la grafica
   service.actualizarDistancias= function () {
     service.distancias.length = 0;
     for (var item in service.puntosTrackActivo) {
@@ -401,6 +470,7 @@ service.actualizarPuntosR = function() {
     }
     return service.distancias;
   }
+  //Actualiza una lista de elevaciones(de los puntos) que es necesaria para la grafica
   service.actualizarElevaciones= function () {
     service.elevaciones.length = 0;
     for (var item in service.puntosTrackActivo) {
@@ -409,13 +479,16 @@ service.actualizarPuntosR = function() {
     return service.elevaciones;
   }
 
+  //LLama a las dos funciones anteriores
   service.actualizarPuntos= function () {
     service.elevaciones2 = service.actualizarElevaciones();
     service.distancias2 = service.actualizarDistancias();
-    console.log("uolaaaa");
-    console.log(service.elevaciones2);
   }
+  //funcion que crea una entidad
   service.crear = function (id) {
+    //Boolean necesario para en caso de que no haya ninguna entidad
+    // creada no se activara el evento click del mapa
+    service.hayEntidadesCreadas = true;
     switch (id) {
       case 0:
         service.entidad = {
@@ -429,6 +502,8 @@ service.actualizarPuntosR = function() {
           numero: service.tracks.length,
         };
         service.tracks.push(service.entidad);
+        service.tienePoly.push(false);
+        service.isTrack = true;
         break;
       case 1:
       service.entidad = {
@@ -442,6 +517,8 @@ service.actualizarPuntosR = function() {
         numero:service.rutas.length,
       };
       service.rutas.push(service.entidad);
+      service.tienePolyR.push(false);
+      service.isTrack = false;
         break;
       case 2:
       service.entidad = {
@@ -456,7 +533,7 @@ service.actualizarPuntosR = function() {
     }
     return service.entidad;
   }
-
+  //Añade un punto a la entidad activada actualmente
   service.anadirPunto = function (id,num) {
     service.punto = {
       numero:0,
@@ -473,12 +550,12 @@ service.actualizarPuntosR = function() {
       case 0:
         if (service.tracks.length>0)
         service.tracks[num]["puntos"].push(service.punto);
-        console.log(service.tracks[num]);
+
         break;
       case 1:
           if (service.tracks.length>0)
         service.rutas[num]["puntos"].push(service.punto);
-        console.log(service.rutas[num]);
+
         break;
     }
 
@@ -634,15 +711,7 @@ function Mymap(EntidadesService) {
             }
           );
 
-          poly = new google.maps.Polyline({
-    strokeColor: '#000000',
-    strokeOpacity: 1.0,
-    strokeWeight: 3
-  });
-  poly.setMap(map);
 
-  // Add a listener for the click event
-  map.addListener('click', addLatLng);
 
           //botones de seleccion de entidad (T,R,W)
           var botont = /** @type {!HTMLDivElement} */(
@@ -728,21 +797,51 @@ function Mymap(EntidadesService) {
             });
 
 
+
+    // evento click para añadir puntos
+    map.addListener('click', addLatLng);
+
         }
 
-        // Handles click events on a map, and adds a new point to the Polyline.
+        // puncion que crea las polilineas y los puntos
         function addLatLng(event) {
+          //Entramos si hay alguna entidad creada
+          if (EntidadesService.hayEntidadesCreadas==true) {
+          //Depende de que entidad sea llamamos a un metodo u otro
+          if (EntidadesService.isTrack == true) {
+            controller.anadirPuntoTForMap();
+          } else {
+            controller.anadirPuntoRForMap();
+          }
+
+          //Si no tiene polilinea la creamos
+          if (EntidadesService.tienePolyF()==false) {
+
+            poly = new google.maps.Polyline({
+              strokeColor: EntidadesService.colorPoly(),
+              strokeOpacity: 1.0,
+              strokeWeight: 3
+            });
+            poly.setMap(map);
+            //Añadimos la polilinea a la entidad actual
+            EntidadesService.addPoly(poly);
+
+            //Si ya la tiene pues la obtenemos
+          } else {
+
+          poly = EntidadesService.getPoly();
+          }
+
           var path = poly.getPath();
 
-          // Because path is an MVCArray, we can simply append a new coordinate
-          // and it will automatically appear.
+          //Le pasamos las coordenadas a la polilinea
           path.push(event.latLng);
           var image = {
             url: 'icono.png',
 
           };
 
-          // Add a new marker at the new plotted point on the polyline.
+          // Creamos el marcador que indicara el punto creado en el mapa
           var marker = new google.maps.Marker({
             position: event.latLng,
             title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
@@ -752,15 +851,10 @@ function Mymap(EntidadesService) {
 
 
 
-            console.log("activvvovoovovovo");
-            console.log(controller.trackActivo);
-
-            controller.anadirPuntoTForMap();
-
-          console.log(controller);
 
 
 
+}
         }
 
         // LLamamos a la función que inicializa el mapa

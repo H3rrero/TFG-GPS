@@ -108,14 +108,14 @@
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
 					<img  src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks"><input type="radio" name="track" ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()">{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas"><input type="radio" name="track" ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
-		<li ng-repeat="item in list1.waypoints"><input type="radio" name="track" value="track1" >{{item["nombre"]}},{{item["latitud"]}},{{item["longitud"]}},{{item["elevacion"]}}m</li>
+		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" value="track1" >{{item["nombre"]}},{{item["latitud"]}},{{item["longitud"]}},{{item["elevacion"]}}m</li>
 		</ul>
 			</div>
 			<div id="botones">
@@ -154,7 +154,7 @@
 
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesR();" class="bttn-unite bttn-xs bttn-royal">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-royal">Eliminar Punto</button></td></tr>
-          <tr><td><button id="botonIns" type="button" ng-click="list1.anadirPuntoR();" class="bttn-unite bttn-xs bttn-royal">Insertar Punto</button></td></tr>
+          <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-royal">Insertar Punto</button></td></tr>
         <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
@@ -166,7 +166,7 @@
         <table ng-if="list1.funciones">
 					<tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotones();" class="bttn-unite bttn-xs bttn-primary">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-primary">Eliminar Punto</button></td></tr>
-          <tr><td><button id="botonIns" type="button" ng-click="list1.anadirPuntoT();" class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
+          <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
         <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
