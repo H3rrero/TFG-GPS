@@ -29,6 +29,15 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.waypoints = EntidadesService.waypoints;
     list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
 
+
+
+    list1.crearWaypoint = function () {
+      if(EntidadesService.isWaypoint == false)
+      EntidadesService.isWaypoint = true;
+      else {
+        EntidadesService.isWaypoint = false;
+      }
+    }
     //Metodo que crea entidades
     list1.crear = function (id) {
       //Actualizamos la entidad que esta activa antes de llamar al servicio
@@ -67,6 +76,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.actualizarPuntosT = function() {
       //Es necesario para que el el servicio sepa que tipo de entidad esta manejando
       EntidadesService.isTrack = true;
+      EntidadesService.isWaypoint = false;
         EntidadesService.trackActivo = list1.trackActivo;
          EntidadesService.actualizarPuntosT();
          list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -77,6 +87,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.actualizarPuntosR = function() {
       //Es necesario para que el el servicio sepa que tipo de entidad esta manejando
       EntidadesService.isTrack = false;
+      EntidadesService.isWaypoint = false;
       EntidadesService.rutaActiva = list1.rutaActiva;
        EntidadesService.actualizarPuntosR();
        list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -296,10 +307,10 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       }
       //Mostrar la lista de waypoints
       list1.listaActivaW = function () {
-        list1.crear(2);
         list1.activarListaR = false;
         list1.activarLista = false;
         list1.activarListaW=true;
+        list1.crearWaypoint();
 
       }
       //Mostrar u ocultar la lista de rutas
@@ -311,6 +322,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         } else {
           list1.activarListaR=true;
           EntidadesService.isTrack = false;
+          EntidadesService.isWaypoint = false;
         }
 
       }
@@ -322,6 +334,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           list1.activarListaW = false;
         } else {
           list1.activarListaW=true;
+          EntidadesService.isWaypoint = true;
         }
 
       }
@@ -334,6 +347,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         } else {
           list1.activarLista=true;
           EntidadesService.isTrack = true;
+          EntidadesService.isWaypoint = false;
         }
 
       }
@@ -384,8 +398,8 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 //funcion del servicio de entidades que se encarga de gestionar las distintas entidades de la aplicación
 function EntidadesService (){
   var service = this;
-  EntidadesService.trackActivo = 0;
-  EntidadesService.rutaActiva = 0;
+  service.trackActivo = 0;
+  service.rutaActiva = 0;
   service.tracks = [];
   service.rutas = [];
   service.waypoints = [];
@@ -398,7 +412,8 @@ function EntidadesService (){
   service.tienePolyR = [];
   service.polyLineas = [];
   service.polyLineasR = [];
-  service.isTrack = true;
+  service.isTrack = false;
+  service.isWaypoint = false;
   service.hayEntidadesCreadas = false;
 
 
@@ -504,6 +519,7 @@ service.actualizarPuntosR = function() {
         service.tracks.push(service.entidad);
         service.tienePoly.push(false);
         service.isTrack = true;
+        service.isWaypoint = false;
         break;
       case 1:
       service.entidad = {
@@ -519,6 +535,7 @@ service.actualizarPuntosR = function() {
       service.rutas.push(service.entidad);
       service.tienePolyR.push(false);
       service.isTrack = false;
+      service.isWaypoint = false;
         break;
       case 2:
       service.entidad = {
@@ -553,7 +570,7 @@ service.actualizarPuntosR = function() {
 
         break;
       case 1:
-          if (service.tracks.length>0)
+          if (service.rutas.length>0)
         service.rutas[num]["puntos"].push(service.punto);
 
         break;
@@ -803,17 +820,30 @@ function Mymap(EntidadesService) {
 
         }
 
+
         // puncion que crea las polilineas y los puntos
         function addLatLng(event) {
           //Entramos si hay alguna entidad creada
-          if (EntidadesService.hayEntidadesCreadas==true) {
+          if (EntidadesService.hayEntidadesCreadas==true || EntidadesService.isWaypoint == true) {
           //Depende de que entidad sea llamamos a un metodo u otro
           if (EntidadesService.isTrack == true) {
             controller.anadirPuntoTForMap();
-          } else {
+          } else if(EntidadesService.isWaypoint == true){
+            console.log("holaaaaa");
+            controller.crear(2);
+             scope.$apply();
+          }
+          else{
             controller.anadirPuntoRForMap();
           }
-
+          if(EntidadesService.isWaypoint == true){
+            var marker = new google.maps.Marker({
+              position: event.latLng,
+              title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+              icon: 'iconowp.png',
+              map: map
+            });
+          }else{
           //Si no tiene polilinea la creamos
           if (EntidadesService.tienePolyF()==false) {
 
@@ -848,7 +878,7 @@ function Mymap(EntidadesService) {
             icon: image,
             map: map
           });
-
+}
 
 
 
