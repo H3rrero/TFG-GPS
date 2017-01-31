@@ -69,14 +69,14 @@
 				</tr>
 				</thead>
 				<tr ng-repeat="item in list1.puntosTrackActivo">
-					<td>1</td>
+					<td>{{item["numero"]}}</td>
 					<td>{{item["latitud"]}}</td>
 					<td>{{item["longitud"]}}</td>
 					<td>{{item["elevacion"]}}m</td>
 					<td>{{item["fecha"]}}</td>
 					<td>{{item["hora"]}}</td>
 					<td>{{item["desnivel"]}}m</td>
-					<td>{{item["distancia"]}}Km</td>
+					<td>{{item["distancia"]}}m</td>
 					<td>{{item["velocidad"]}}</td>
 
 				</tr>
@@ -115,7 +115,7 @@
 			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
-		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" value="track1" >{{item["nombre"]}},{{item["latitud"]}},{{item["longitud"]}},{{item["elevacion"]}}m</li>
+		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" value="track1" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
 		</ul>
 			</div>
 			<div id="botones">

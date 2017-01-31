@@ -32,9 +32,10 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
 
     list1.crearWaypoint = function () {
-      if(EntidadesService.isWaypoint == false)
+      if(EntidadesService.isWaypoint == false || EntidadesService.isWaypoint == undefined){
       EntidadesService.isWaypoint = true;
-      else {
+      EntidadesService.isTrack = false;
+    }else {
         EntidadesService.isWaypoint = false;
       }
     }
@@ -48,11 +49,11 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     }
 
     //Es llamado desde el evento click del mapa y añade un punto al track activo
-    list1.anadirPuntoTForMap = function () {
+    list1.anadirPuntoTForMap = function (latitud,longitud) {
         //Actualizamos el track activo antes de realizar las operaciones
         list1.trackActivo = EntidadesService.trackActivo;
        //llamamos al metodo del servicio que se encarga de añadir los puntos
-       EntidadesService.anadirPunto(list1.numTrack,EntidadesService.trackActivo);
+       EntidadesService.anadirPunto(list1.numTrack,EntidadesService.trackActivo,latitud,longitud);
        //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
        list1.actualizarPuntosT();
        $scope.$apply();
@@ -60,11 +61,11 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     }
       //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
-    list1.anadirPuntoRForMap = function () {
+    list1.anadirPuntoRForMap = function (latitud,longitud) {
       //Actualizamosla ruta activa antes de realizar las operaciones
         list1.rutaActiva = EntidadesService.rutaActiva;
       //llamamos al metodo del servicio que se encarga de añadir los puntos
-       EntidadesService.anadirPunto(list1.numRuta,EntidadesService.rutaActiva);
+       EntidadesService.anadirPunto(list1.numRuta,EntidadesService.rutaActiva,latitud,longitud);
        //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
        list1.actualizarPuntosR();
        $scope.$apply();
@@ -398,11 +399,13 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 //funcion del servicio de entidades que se encarga de gestionar las distintas entidades de la aplicación
 function EntidadesService (){
   var service = this;
+  service.cont = 0;
   service.trackActivo = 0;
   service.rutaActiva = 0;
   service.tracks = [];
   service.rutas = [];
   service.waypoints = [];
+  service.markers = [];
   service.puntosTrackActivo=[];
   service.distancias2 = [];
   service.elevaciones2 = [];
@@ -413,9 +416,14 @@ function EntidadesService (){
   service.polyLineas = [];
   service.polyLineasR = [];
   service.isTrack = false;
-  service.isWaypoint = false;
+  service.isWaypoint;
   service.hayEntidadesCreadas = false;
-
+  service.elevacion=0;
+  service.distancia=0;
+  service.latitud = 0;
+  service.longitud = 0;
+  service.fecha = new Date("2017","01", "01", "00", "00", "00", "00");
+  console.log(service.fecha);
 
 //FUncion que retorna true o false si la entidad activa actual ya tiene
 // una polilinea asignada o no la tiene
@@ -516,6 +524,7 @@ service.actualizarPuntosR = function() {
           puntos:[],
           numero: service.tracks.length,
         };
+
         service.tracks.push(service.entidad);
         service.tienePoly.push(false);
         service.isTrack = true;
@@ -540,39 +549,52 @@ service.actualizarPuntosR = function() {
       case 2:
       service.entidad = {
         nombre: "Nuevo-Waypoint"+service.waypoints.length,
-        latitud: 0,
-        longitud:0,
-        elevacion:0,
+        latitud: service.latitud,
+        longitud:service.longitud,
+        elevacion:service.elevacion,
         numero: service.waypoints.length,
       };
       service.waypoints.push(service.entidad);
+      service.isWaypoint = true;
+      service.isTrack = false;
         break;
     }
     return service.entidad;
   }
+
+  service.calcularDesnivel = function ()
+  {
+    if(service.puntosTrackActivo.length>0){
+    return (service.elevacion-service.puntosTrackActivo[service.puntosTrackActivo.length-1].elevacion).toFixed(2);}
+    else {
+      return 0;
+    }
+  }
   //Añade un punto a la entidad activada actualmente
-  service.anadirPunto = function (id,num) {
+  service.anadirPunto = function (id,num,latitud,longitud) {
     service.punto = {
       numero:0,
-      latitud:"43.083333",
-      longitud: "-5.804077",
-      elevacion: 600,
-      fecha:"26/01/2017",
-      hora:"1:04",
-      desnivel:50,
-      distancia: 1.5,
+      latitud:latitud,
+      longitud: longitud,
+      elevacion: service.elevacion,
+      fecha:service.fecha.getDate()+"/"+service.fecha.getMonth()+"/"+service.fecha.getFullYear(),
+      hora:service.fecha.getHours()+":"+service.fecha.getMinutes(),
+      desnivel:service.calcularDesnivel(),
+      distancia: service.distancia,
       velocidad: "4km/h",
     }
     switch (id) {
       case 0:
-        if (service.tracks.length>0)
+        if (service.tracks.length>0){
+          service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
-
+      }
         break;
       case 1:
-          if (service.rutas.length>0)
-        service.rutas[num]["puntos"].push(service.punto);
-
+          if (service.rutas.length>0){
+            service.punto.numero = service.rutas[num]["puntos"].length;
+            service.rutas[num]["puntos"].push(service.punto);
+      }
         break;
     }
 
@@ -586,6 +608,7 @@ function Mymap(EntidadesService) {
     var link = function(scope, element, attrs,controller) {
         var map
         var poly
+        var elevator
         function CoordMapType(tileSize) {
   this.tileSize = tileSize;
 }
@@ -701,6 +724,8 @@ function Mymap(EntidadesService) {
            }
            //Creamos el mapa y le pasamos las opciones que definimos anteriormente
            map = new google.maps.Map(element[0],mapOptions);
+           //servicio de elevacion
+            elevator = new google.maps.ElevationService;
            //Le pasamos al mapa la cuadricula que creamos anteriormente
            map.overlayMapTypes.insertAt(
              0, new CoordMapType(new google.maps.Size(256, 256)));
@@ -816,33 +841,105 @@ function Mymap(EntidadesService) {
 
 
     // evento click para añadir puntos
-    map.addListener('click', addLatLng);
+    map.addListener('click', addLatLng,elevator);
 
         }
 
-
+        var calcularDistancias = function (event) {
+          if(EntidadesService.puntosTrackActivo.length>0){
+          var _kCord = new google.maps.LatLng(EntidadesService.puntosTrackActivo[EntidadesService.puntosTrackActivo.length-1].latitud,
+             EntidadesService.puntosTrackActivo[EntidadesService.puntosTrackActivo.length-1].longitud);
+          EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(event.latLng, _kCord).toFixed(2);
+        }else{
+            EntidadesService.distancia = 0;
+        }
+        }
         // puncion que crea las polilineas y los puntos
-        function addLatLng(event) {
+        function addLatLng(event,elevation) {
           //Entramos si hay alguna entidad creada
+          console.log("es wp?");
+          console.log(EntidadesService.isWaypoint);
+          console.log("es track?");
+          console.log(EntidadesService.isTrack);
           if (EntidadesService.hayEntidadesCreadas==true || EntidadesService.isWaypoint == true) {
           //Depende de que entidad sea llamamos a un metodo u otro
           if (EntidadesService.isTrack == true) {
-            controller.anadirPuntoTForMap();
+
+            elevator.getElevationForLocations({
+              'locations': [event.latLng]
+            }, function(results, status) {
+              if (status === google.maps.ElevationStatus.OK) {
+                if (results[0]) {
+
+                  EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                  calcularDistancias(event);
+                  controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
+                } else {
+                console.log("no result found");
+                controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
+                }
+              } else {
+              console.log("elevation service failed");
+              controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
+              }
+            });
+
+
           } else if(EntidadesService.isWaypoint == true){
-            console.log("holaaaaa");
-            controller.crear(2);
-             scope.$apply();
+            EntidadesService.latitud = event.latLng.lat().toFixed(6);
+            EntidadesService.longitud = event.latLng.lng().toFixed(6);
+            elevator.getElevationForLocations({
+              'locations': [event.latLng]
+            }, function(results, status) {
+              if (status === google.maps.ElevationStatus.OK) {
+                if (results[0]) {
+
+                  EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                  controller.crear(2);
+                   scope.$apply();
+                } else {
+                console.log("no result found");
+                controller.crear(2);
+                 scope.$apply();
+                }
+              } else {
+              console.log("elevation service failed");
+              controller.crear(2);
+               scope.$apply();
+              }
+            });
           }
           else{
-            controller.anadirPuntoRForMap();
+            elevator.getElevationForLocations({
+              'locations': [event.latLng]
+            }, function(results, status) {
+              if (status === google.maps.ElevationStatus.OK) {
+                if (results[0]) {
+
+                  EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                  calcularDistancias(event);
+                  controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
+                } else {
+                console.log("no result found");
+                controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
+                }
+              } else {
+              console.log("elevation service failed");
+              controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
+              }
+            });
           }
           if(EntidadesService.isWaypoint == true){
+            var nombre = "Nuevo-Waypoint"+EntidadesService.cont;
+            EntidadesService.cont = EntidadesService.cont+1;
             var marker = new google.maps.Marker({
               position: event.latLng,
-              title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+              title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
               icon: 'iconowp.png',
               map: map
             });
+            EntidadesService.markers.push(marker);
+            console.log(EntidadesService.markers);
           }else{
           //Si no tiene polilinea la creamos
           if (EntidadesService.tienePolyF()==false) {
