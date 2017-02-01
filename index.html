@@ -77,7 +77,7 @@
 					<td>{{item["hora"]}}</td>
 					<td>{{item["desnivel"]}}m</td>
 					<td>{{item["distancia"]}}m</td>
-					<td>{{item["velocidad"]}}</td>
+					<td>{{item["velocidad"]}}min/km</td>
 
 				</tr>
 
@@ -108,11 +108,11 @@
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
 					<img  src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,-{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
 		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" value="track1" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
@@ -159,7 +159,7 @@
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
 					<tr><td><button id="botonListar" type="button" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
-          <tr><td><button id="botonDatos"type="button" ng-click="list1.verTabla();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar tabla</button></td></tr>
+          <tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar tabla</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar gráfica</button></td></tr>
         </table>
 
@@ -172,7 +172,7 @@
           <tr><td><button id="botonInv" type="button" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
 					<tr><td>  <button id="botonTim" type="button" class="bttn-unite bttn-xs bttn-primary">Tiempos</button></td></tr>
 					<tr><td><button id="botonListar" type="button" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
-					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTabla();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar tabla</button></td></tr>
+					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar tabla</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar gráfica</button></td></tr>
 
 

@@ -45,7 +45,17 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       EntidadesService.trackActivo = list1.trackActivo;
       EntidadesService.rutaActiva = list1.rutaActiva;
       //llamamos al metodo crear del servicio
-      return EntidadesService.crear(id);
+       EntidadesService.crear(id);
+       if (id==0) {
+         if(list1.mostrarTabla==true)
+            list1.mostrarTabla = false;
+         list1.verTablaT();
+       }
+       if (id==1) {
+         if(list1.mostrarTabla==true)
+            list1.mostrarTabla = false;
+         list1.verTablaR();
+       }
     }
 
     //Es llamado desde el evento click del mapa y añade un punto al track activo
@@ -261,19 +271,30 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
          $("#grafica").css("z-index", 1);
       }
       //Mostar u ocultar la tabla
-      list1.verTabla = function () {
+      list1.verTablaT = function () {
         if (list1.mostrarTabla==true) {
           list1.mostrarTabla = false;
         } else {
           if(list1.tracks.length>0){
               list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
               EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
-              EntidadesService.actualizarPuntos();
+              list1.actualizarPuntosT();
           }
+          list1.mostrarTabla=true;
+          list1.superponerTabla();
+        }
+
+      }
+      //Mostar u ocultar la tabla
+      list1.verTablaR = function () {
+        if (list1.mostrarTabla==true) {
+          list1.mostrarTabla = false;
+        } else {
+
           if(list1.rutas.length>0){
               list1.puntosTrackActivo= list1.rutas[list1.rutaActiva]["puntos"];
               EntidadesService.puntosTrackActivo= list1.puntosTrackActivo;
-              EntidadesService.actualizarPuntos();
+              list1.actualizarPuntosR();
             }
           list1.mostrarTabla=true;
           list1.superponerTabla();
@@ -324,6 +345,9 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           list1.activarListaR=true;
           EntidadesService.isTrack = false;
           EntidadesService.isWaypoint = false;
+          if(list1.mostrarTabla==true)
+             list1.mostrarTabla = false;
+          list1.verTablaR();
         }
 
       }
@@ -349,6 +373,9 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           list1.activarLista=true;
           EntidadesService.isTrack = true;
           EntidadesService.isWaypoint = false;
+          if(list1.mostrarTabla==true)
+             list1.mostrarTabla = false;
+          list1.verTablaT();
         }
 
       }
@@ -422,9 +449,72 @@ function EntidadesService (){
   service.distancia=0;
   service.latitud = 0;
   service.longitud = 0;
-  service.fecha = new Date("2017","01", "01", "00", "00", "00", "00");
-  console.log(service.fecha);
 
+service.calcularFecha = function (ritmo) {
+  var smet = ritmo/1000;
+  var min = service.distancia*smet;
+  var segundos = parseInt(min*60);
+  console.log("horas");
+  console.log(min/60);
+  console.log("minutos");
+  console.log(min);
+  service.tracks[service.trackActivo].fecha.setSeconds(segundos);
+}
+service.calcularFechaR = function (ritmo) {
+  var smet = ritmo/1000;
+  var min = service.distancia*smet;
+  var segundos = parseInt(min*60);
+  console.log("horas");
+  console.log(min/60);
+  console.log("minutos");
+  console.log(min);
+  service.rutas[service.rutaActiva].fecha.setSeconds(segundos);
+}
+service.ordenarMinutos = function () {
+  var minutos;
+  if(service.tracks[service.trackActivo].fecha.getMinutes()<10)
+      minutos="0"+service.tracks[service.trackActivo].fecha.getMinutes();
+  else
+      minutos=service.tracks[service.trackActivo].fecha.getMinutes();
+  return minutos;
+}
+service.ordenarMinutosR = function () {
+  var minutos;
+  if(service.rutas[service.rutaActiva].fecha.getMinutes()<10)
+      minutos="0"+service.rutas[service.rutaActiva].fecha.getMinutes();
+  else
+      minutos=service.rutas[service.rutaActiva].fecha.getMinutes();
+  return minutos;
+}
+service.calcularDatosTrack = function (id,punto) {
+  if (id==0) {
+    service.tracks[service.trackActivo].distancia = (parseFloat(service.tracks[service.trackActivo].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
+    if (parseFloat(punto.desnivel)>=0) {
+        service.tracks[service.trackActivo].desnivelP = (parseFloat(punto.desnivel) + parseFloat(  service.tracks[service.trackActivo].desnivelP)).toFixed(2);
+    }else {
+      service.tracks[service.trackActivo].desnivelN = (parseFloat(punto.desnivel) + parseFloat(service.tracks[service.trackActivo].desnivelN)).toFixed(2);
+    }
+    if (parseFloat(punto.elevacion)>parseFloat(service.tracks[service.trackActivo].elevMax)) {
+      service.tracks[service.trackActivo].elevMax=parseFloat(punto.elevacion).toFixed(2);
+    }
+    if (parseFloat(punto.elevacion)<parseFloat(service.tracks[service.trackActivo].elevMin)) {
+     service.tracks[service.trackActivo].elevMin=parseFloat(punto.elevacion).toFixed(2);
+    }
+  } else {
+    service.rutas[service.rutaActiva].distancia = (parseFloat(service.rutas[service.rutaActiva].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
+    if (parseFloat(punto.desnivel)>=0) {
+        service.rutas[service.rutaActiva].desnivelP = (parseFloat(punto.desnivel) + parseFloat(service.rutas[service.rutaActiva].desnivelP)).toFixed(2);
+    }else {
+      service.rutas[service.rutaActiva].desnivelN = (parseFloat(punto.desnivel) + parseFloat(service.rutas[service.rutaActiva].desnivelN)).toFixed(2);
+    }
+    if (parseFloat(punto.elevacion)>parseFloat(service.rutas[service.rutaActiva].elevMax)) {
+      service.rutas[service.rutaActiva].elevMax=parseFloat(punto.elevacion).toFixed(2);
+    }
+    if (parseFloat(punto.elevacion)<parseFloat(service.rutas[service.rutaActiva].elevMin)) {
+     service.rutas[service.rutaActiva].elevMin=parseFloat(punto.elevacion).toFixed(2);
+    }
+  }
+}
 //FUncion que retorna true o false si la entidad activa actual ya tiene
 // una polilinea asignada o no la tiene
 service.tienePolyF = function () {
@@ -520,9 +610,10 @@ service.actualizarPuntosR = function() {
           desnivelP: 0,
           desnivelN:0,
           elevMax:0,
-          elevMin:0,
+          elevMin:9999999,
           puntos:[],
           numero: service.tracks.length,
+          fecha: new Date("2017","01", "01", "00", "00", "00", "00"),
         };
 
         service.tracks.push(service.entidad);
@@ -537,9 +628,10 @@ service.actualizarPuntosR = function() {
         desnivelP: 0,
         desnivelN:0,
         elevMax:0,
-        elevMin:0,
+        elevMin:9999999,
         puntos:[],
         numero:service.rutas.length,
+        fecha: new Date("2017","01", "01", "00", "00", "00", "00"),
       };
       service.rutas.push(service.entidad);
       service.tienePolyR.push(false);
@@ -572,28 +664,46 @@ service.actualizarPuntosR = function() {
   }
   //Añade un punto a la entidad activada actualmente
   service.anadirPunto = function (id,num,latitud,longitud) {
-    service.punto = {
-      numero:0,
-      latitud:latitud,
-      longitud: longitud,
-      elevacion: service.elevacion,
-      fecha:service.fecha.getDate()+"/"+service.fecha.getMonth()+"/"+service.fecha.getFullYear(),
-      hora:service.fecha.getHours()+":"+service.fecha.getMinutes(),
-      desnivel:service.calcularDesnivel(),
-      distancia: service.distancia,
-      velocidad: "4km/h",
-    }
+
     switch (id) {
       case 0:
+      service.calcularFecha(15);
+      service.punto = {
+        numero:0,
+        latitud:latitud,
+        longitud: longitud,
+        elevacion: service.elevacion,
+        fecha:service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear(),
+        hora:service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos(),
+        desnivel:service.calcularDesnivel(),
+        distancia: service.distancia,
+        velocidad: 15,
+      }
         if (service.tracks.length>0){
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
+        service.calcularDatosTrack(0,service.punto);
       }
         break;
       case 1:
+      console.log("distancia");
+      console.log(service.distancia);
+      service.calcularFechaR(15);
+      service.punto = {
+        numero:0,
+        latitud:latitud,
+        longitud: longitud,
+        elevacion: service.elevacion,
+        fecha:service.rutas[service.rutaActiva].fecha.getDate()+"/"+service.rutas[service.rutaActiva].fecha.getMonth()+"/"+service.rutas[service.rutaActiva].fecha.getFullYear(),
+        hora:service.rutas[service.rutaActiva].fecha.getHours()+":"+service.ordenarMinutosR(),
+        desnivel:service.calcularDesnivel(),
+        distancia: service.distancia,
+        velocidad: 15,
+      }
           if (service.rutas.length>0){
             service.punto.numero = service.rutas[num]["puntos"].length;
             service.rutas[num]["puntos"].push(service.punto);
+            service.calcularDatosTrack(1,service.punto);
       }
         break;
     }
@@ -943,11 +1053,23 @@ function Mymap(EntidadesService) {
           }else{
           //Si no tiene polilinea la creamos
           if (EntidadesService.tienePolyF()==false) {
-
+            var lineSymbolarrow = {
+			             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+			             strokeColor : EntidadesService.colorPoly(),
+			             strokeOpacity : 0.7,
+			             strokeWeight : 2.9,
+			             scale : 2.7
+		             };
+		        var arrow = {
+			           icon : lineSymbolarrow,
+			           offset : '50%',
+			          repeat : '80px'
+		            };
             poly = new google.maps.Polyline({
               strokeColor: EntidadesService.colorPoly(),
               strokeOpacity: 1.0,
-              strokeWeight: 3
+              strokeWeight: 3,
+              	icons : [arrow]
             });
             poly.setMap(map);
             //Añadimos la polilinea a la entidad actual
