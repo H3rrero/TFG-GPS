@@ -49,11 +49,17 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
        if (id==0) {
          if(list1.mostrarTabla==true)
             list1.mostrarTabla = false;
+          else {
+            list1.mostrarTabla = true;
+          }
          list1.verTablaT();
        }
        if (id==1) {
          if(list1.mostrarTabla==true)
             list1.mostrarTabla = false;
+            else {
+              list1.mostrarTabla = true;
+            }
          list1.verTablaR();
        }
     }
@@ -449,25 +455,78 @@ function EntidadesService (){
   service.distancia=0;
   service.latitud = 0;
   service.longitud = 0;
+  service.markersT = [];
+  service.wpRta = [];
+  service.velocidad = 4;
 
-service.calcularFecha = function (ritmo) {
-  var smet = ritmo/1000;
-  var min = service.distancia*smet;
-  var segundos = parseInt(min*60);
-  console.log("horas");
-  console.log(min/60);
-  console.log("minutos");
-  console.log(min);
+
+service.calcularDuracion= function () {
+  var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelP)/400).toFixed(2);
+  var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[service.trackActivo].desnivelN)/600)).toFixed(2);
+  var hDistanciaHori = (parseFloat(service.tracks[service.trackActivo].distancia)/parseFloat(service.velocidad)).toFixed(2);
+  var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
+  if (hDistanciaHori>=hdesnivelGeneral ) {
+    var menor = parseFloat(hdesnivelGeneral*0.5).toFixed(2);
+    if (menor=="NaN") {
+      menor=0;
+    }
+    var horasFinales = parseFloat(hDistanciaHori)+parseFloat(menor);
+    var minutosDescanso = horasFinales*10;
+    var minutosFInales = (horasFinales*60)+minutosDescanso;
+    var duracionRecorrido = minutosFInales/60;
+    console.log("durecion recorrido DEL TRACK GENERAL");
+    console.log(duracionRecorrido);
+    return duracionRecorrido;
+  } else {
+    var menor = parseFloat(hDistanciaHori*0.5).toFixed(2);
+    var horasFinales = parseFloat(hdesnivelGeneral)+parseFloat(menor);
+    var minutosDescanso = horasFinales*10;
+    var minutosFInales = (horasFinales*60)+minutosDescanso;
+    var duracionRecorrido = minutosFInales/60;
+    console.log("durecion recorrido DEL TRACK GENERAL");
+    console.log(duracionRecorrido);
+    return duracionRecorrido;
+  }
+}
+service.calcularDuracionPuntos= function (punto) {//desnivel  distancia
+  console.log(service.puntosTrackActivo);
+  var hDesnivelSubida = (parseFloat(punto.desnivel)/400).toFixed(2);
+  var hDesnivelBajada = (Math.abs(parseFloat(punto.desnivel)/600)).toFixed(2);
+  if (punto.desnivel>0) {
+    hDesnivelBajada = 0;
+  } else {
+    hDesnivelSubida = 0;
+  }
+  var distanciakm =punto.distancia/1000;
+  var hDistanciaHori = (parseFloat(distanciakm)/parseFloat(service.velocidad)).toFixed(2);
+  var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
+  if (hDistanciaHori>=hdesnivelGeneral ) {
+    var menor = parseFloat(hdesnivelGeneral*0.5).toFixed(2);
+    if (menor=="NaN") {
+      menor=0;
+    }
+    var horasFinales = parseFloat(hDistanciaHori)+parseFloat(menor);
+    var minutosDescanso = horasFinales*10;
+    var minutosFInales = (horasFinales*60)+minutosDescanso;
+    var duracionRecorrido = minutosFInales/60;
+    return duracionRecorrido;
+  } else {
+    var menor = parseFloat(hDistanciaHori*0.5).toFixed(2);
+    var horasFinales = parseFloat(hdesnivelGeneral)+parseFloat(menor);
+    var minutosDescanso = horasFinales*10;
+    var minutosFInales = (horasFinales*60)+minutosDescanso;
+    var duracionRecorrido = minutosFInales/60;
+    return duracionRecorrido;
+  }
+}
+service.calcularFecha = function (horas) {
+  var segundos = parseFloat(horas)*parseFloat(3600);
   service.tracks[service.trackActivo].fecha.setSeconds(segundos);
 }
 service.calcularFechaR = function (ritmo) {
   var smet = ritmo/1000;
   var min = service.distancia*smet;
   var segundos = parseInt(min*60);
-  console.log("horas");
-  console.log(min/60);
-  console.log("minutos");
-  console.log(min);
   service.rutas[service.rutaActiva].fecha.setSeconds(segundos);
 }
 service.ordenarMinutos = function () {
@@ -613,7 +672,8 @@ service.actualizarPuntosR = function() {
           elevMin:9999999,
           puntos:[],
           numero: service.tracks.length,
-          fecha: new Date("2017","01", "01", "00", "00", "00", "00"),
+          fecha: new Date(),
+          duracion:0,
         };
 
         service.tracks.push(service.entidad);
@@ -631,7 +691,8 @@ service.actualizarPuntosR = function() {
         elevMin:9999999,
         puntos:[],
         numero:service.rutas.length,
-        fecha: new Date("2017","01", "01", "00", "00", "00", "00"),
+        fecha: new Date(),
+        duracion:0,
       };
       service.rutas.push(service.entidad);
       service.tienePolyR.push(false);
@@ -667,7 +728,6 @@ service.actualizarPuntosR = function() {
 
     switch (id) {
       case 0:
-      service.calcularFecha(15);
       service.punto = {
         numero:0,
         latitud:latitud,
@@ -683,6 +743,10 @@ service.actualizarPuntosR = function() {
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
         service.calcularDatosTrack(0,service.punto);
+        service.tracks[service.trackActivo].duracion = service.calcularDuracion().toFixed(2);
+        service.calcularFecha(service.calcularDuracionPuntos(service.punto));
+        service.tracks[num]["puntos"][service.tracks[num]["puntos"].length-1].fecha=service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
+        service.tracks[num]["puntos"][service.tracks[num]["puntos"].length-1].hora =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
       }
         break;
       case 1:
@@ -1090,13 +1154,52 @@ function Mymap(EntidadesService) {
 
           };
 
-          // Creamos el marcador que indicara el punto creado en el mapa
+
+          if (EntidadesService.isTrack == true) {
+            // Creamos el marcador que indicara el punto creado en el mapa
+            var marker = new google.maps.Marker({
+              position: event.latLng,
+              title: "Inicio del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+              icon: image,
+              map: map
+            });
+          if (EntidadesService.markersT[EntidadesService.trackActivo]===undefined) {
+            var markers = [];
+            markers.push(marker);
+            EntidadesService.markersT[EntidadesService.trackActivo] = markers;
+          } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
+            marker.icon = "iconoFin.png";
+            marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+            EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
+          }else{
+            marker.icon = "iconoFin.png";
+            marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+            EntidadesService.markersT[EntidadesService.trackActivo][1].setMap(null);
+            EntidadesService.markersT[EntidadesService.trackActivo][1]=marker;
+          }
+        }else {
+          if (EntidadesService.wpRta[EntidadesService.rutaActiva]===undefined) {
+            var nombre = "Waypoint Nº"+0;
+            var marker = new google.maps.Marker({
+              position: event.latLng,
+              title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+              icon: 'iconowp.png',
+              map: map
+            });
+          var wpsruta = [];
+          wpsruta.push(marker);
+          EntidadesService.wpRta[EntidadesService.rutaActiva] = wpsruta;
+        }else {
+          var nombre = "Waypoint Nº"+EntidadesService.wpRta[EntidadesService.rutaActiva].length;
           var marker = new google.maps.Marker({
             position: event.latLng,
-            title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-            icon: image,
+            title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+            icon: 'iconowp.png',
             map: map
           });
+          EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
+        }
+        }
 }
 
 
@@ -1131,7 +1234,7 @@ function LineCtrl($scope,EntidadesService) {
  //Creacion de la gráfica
  $scope.series = ['Series A'];
  $scope.labels = EntidadesService.distancias;
- $scope.data = EntidadesService.elevaciones;
+ $scope.data = [EntidadesService.elevaciones];
 
 
  $scope.onClick = function (points, evt) {

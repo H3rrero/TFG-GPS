@@ -107,8 +107,8 @@
 
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
-					<img  src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+					<img  src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion(ida y vuelta)." height="5%" width="5%">
+				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,{{item["duracion"]}}h</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
