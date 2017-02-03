@@ -28,22 +28,42 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.rutas = EntidadesService.rutas;
     list1.waypoints = EntidadesService.waypoints;
     list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
-
-
+    list1.modoCreacion = false;
+    list1.mostrarMensaje =false;
 
     list1.crearWaypoint = function () {
       if(EntidadesService.isWaypoint == false || EntidadesService.isWaypoint == undefined){
       EntidadesService.isWaypoint = true;
       EntidadesService.isTrack = false;
+      list1.modoCreacion = true;
     }else {
         EntidadesService.isWaypoint = false;
+        list1.modoCreacion = false;
       }
     }
+
+    list1.cambiarTiempos = function () {
+      var velocidad = prompt("Velocidad del recorrido en km/h (no incluya la unidad, solo el numero)", "4");
+      var fechas = prompt("Introduca año,mes,dia,hora,minutos separados por comas","2017,01,01,00,00");
+      var cadena = fechas.split(",");
+      console.log(velocidad);
+      console.log(fechas);
+      var fecha = new Date(cadena[0],cadena[1],cadena[2],cadena[3],cadena[4],"00","00");
+      EntidadesService.cambiarTiempos(5,fecha);
+      list1.actualizarPuntosT();
+    }
+
     //Metodo que crea entidades
     list1.crear = function (id) {
       //Actualizamos la entidad que esta activa antes de llamar al servicio
       EntidadesService.trackActivo = list1.trackActivo;
       EntidadesService.rutaActiva = list1.rutaActiva;
+      if(EntidadesService.isWaypoint==true)
+      {
+        list1.mostrarMensaje = true;
+      }else {
+        list1.mostrarMensaje = false;
+      }
       //llamamos al metodo crear del servicio
        EntidadesService.crear(id);
        if (id==0) {
@@ -94,6 +114,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       //Es necesario para que el el servicio sepa que tipo de entidad esta manejando
       EntidadesService.isTrack = true;
       EntidadesService.isWaypoint = false;
+      list1.modoCreacion = false;
         EntidadesService.trackActivo = list1.trackActivo;
          EntidadesService.actualizarPuntosT();
          list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -105,16 +126,18 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       //Es necesario para que el el servicio sepa que tipo de entidad esta manejando
       EntidadesService.isTrack = false;
       EntidadesService.isWaypoint = false;
+      list1.modoCreacion = false;
       EntidadesService.rutaActiva = list1.rutaActiva;
        EntidadesService.actualizarPuntosR();
        list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
     }
     //Comprobamos desde que navegador accede el usuario a nuestra aplicación
+    list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
+    list1.isEdge = !list1.isIE && !!window.StyleMedia;
     list1.isChrome = !!window.chrome && !!window.chrome.webstore;
     list1.isFirefox = typeof InstallTrigger !== 'undefined';
-    list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
-    if (  list1.isIE) {
+    if (  list1.isIE || list1.isEdge) {
       list1.esIE=true;
       list1.isSafari = false;
       list1.isChrome = false;
@@ -141,7 +164,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.dowImage = function () {
       var isIE = /*@cc_on!@*/false || !!document.documentMode;
       //Si el navegador es explorer se hace de manera diferente ya que no es compatible con el atributo download de html5
-      if (isIE) {
+      if (isIE || list1.isEdge) {
         //Accedemos al canvas que tiene la imagen
         var canvas = document.getElementById("canvas");
         //Obtenemos su url
@@ -224,8 +247,11 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
        list1.mostrarBotonesW=false;
        //Mostrar los botones que estan dentro de archivo en los waypoints
        list1.mostrarBotonesR = false;
+       list1.mostrarAlert = true;
 
-
+list1.noVerAlert = function () {
+ list1.mostrarAlert = false;
+}
        //oculta los botones que estan en archivo
        list1.noVerBotones = function () {
         list1.mostrarBotones = false;
@@ -293,6 +319,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       }
       //Mostar u ocultar la tabla
       list1.verTablaR = function () {
+
         if (list1.mostrarTabla==true) {
           list1.mostrarTabla = false;
         } else {
@@ -345,14 +372,26 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.listaR = function () {
         list1.activarListaW = false;
         list1.activarLista = false;
+        if(EntidadesService.isWaypoint==true)
+        {
+          list1.mostrarMensaje = true;
+        }else {
+          list1.mostrarMensaje = false;
+        }
         if (list1.activarListaR==true) {
           list1.activarListaR = false;
         } else {
           list1.activarListaR=true;
           EntidadesService.isTrack = false;
+
+          console.log("mostrarMensaje");
+          console.log(list1.mostrarMensaje);
           EntidadesService.isWaypoint = false;
           if(list1.mostrarTabla==true)
              list1.mostrarTabla = false;
+           else {
+             list1.mostrarTabla = true;
+           }
           list1.verTablaR();
         }
 
@@ -366,6 +405,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         } else {
           list1.activarListaW=true;
           EntidadesService.isWaypoint = true;
+          list1.modoCreacion = true;
         }
 
       }
@@ -373,14 +413,25 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.listaT = function () {
         list1.activarListaR = false;
         list1.activarListaW = false;
+        if(EntidadesService.isWaypoint==true)
+        {
+          list1.mostrarMensaje = true;
+        }else {
+          list1.mostrarMensaje = false;
+        }
         if (list1.activarLista==true) {
           list1.activarLista = false;
         } else {
           list1.activarLista=true;
           EntidadesService.isTrack = true;
+
           EntidadesService.isWaypoint = false;
+          list1.modoCreacion = false;
           if(list1.mostrarTabla==true)
              list1.mostrarTabla = false;
+           else {
+             list1.mostrarTabla = true;
+           }
           list1.verTablaT();
         }
 
@@ -460,9 +511,28 @@ function EntidadesService (){
   service.velocidad = 4;
 
 
-service.calcularDuracion= function () {
-  var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelP)/400).toFixed(2);
-  var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[service.trackActivo].desnivelN)/600)).toFixed(2);
+service.cambiarTiempos = function (velocidad,fecha) {
+  service.velocidad = velocidad;
+  service.tracks[service.trackActivo].duracionIda=service.calcularDuracion(true).toFixed(2);
+  service.tracks[service.trackActivo].duracionVuelta=service.calcularDuracion(false).toFixed(2);
+  service.tracks[service.trackActivo].fecha = fecha;
+  for (var item in service.puntosTrackActivo) {
+    service.calcularDuracionPuntos(service.puntosTrackActivo[item]);
+    service.calcularFecha(service.calcularDuracionPuntos(service.puntosTrackActivo[item]));
+    service.puntosTrackActivo[item].fecha=service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
+    service.puntosTrackActivo[item].hora =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
+    service.puntosTrackActivo[item].velocidad=service.velocidad;
+  }
+}
+
+service.calcularDuracion= function (ida) {
+  if (ida) {
+    var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelP)/400).toFixed(2);
+    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[service.trackActivo].desnivelN)/600)).toFixed(2);
+  } else {
+    var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelN)/400).toFixed(2);
+    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[service.trackActivo].desnivelP)/600)).toFixed(2);
+  }
   var hDistanciaHori = (parseFloat(service.tracks[service.trackActivo].distancia)/parseFloat(service.velocidad)).toFixed(2);
   var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
   if (hDistanciaHori>=hdesnivelGeneral ) {
@@ -474,8 +544,13 @@ service.calcularDuracion= function () {
     var minutosDescanso = horasFinales*10;
     var minutosFInales = (horasFinales*60)+minutosDescanso;
     var duracionRecorrido = minutosFInales/60;
-    console.log("durecion recorrido DEL TRACK GENERAL");
-    console.log(duracionRecorrido);
+    if (ida) {
+      console.log("TIEMPO IDA");
+      console.log(duracionRecorrido);
+    } else {
+      console.log("TIEMPO VUELTA");
+      console.log(duracionRecorrido);
+    }
     return duracionRecorrido;
   } else {
     var menor = parseFloat(hDistanciaHori*0.5).toFixed(2);
@@ -483,8 +558,13 @@ service.calcularDuracion= function () {
     var minutosDescanso = horasFinales*10;
     var minutosFInales = (horasFinales*60)+minutosDescanso;
     var duracionRecorrido = minutosFInales/60;
-    console.log("durecion recorrido DEL TRACK GENERAL");
-    console.log(duracionRecorrido);
+    if (ida) {
+      console.log("TIEMPO IDA");
+      console.log(duracionRecorrido);
+    } else {
+      console.log("TIEMPO VUELTA");
+      console.log(duracionRecorrido);
+    }
     return duracionRecorrido;
   }
 }
@@ -673,7 +753,8 @@ service.actualizarPuntosR = function() {
           puntos:[],
           numero: service.tracks.length,
           fecha: new Date(),
-          duracion:0,
+          duracionIda:0,
+          duracionVuelta:0,
         };
 
         service.tracks.push(service.entidad);
@@ -737,13 +818,14 @@ service.actualizarPuntosR = function() {
         hora:service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos(),
         desnivel:service.calcularDesnivel(),
         distancia: service.distancia,
-        velocidad: 15,
+        velocidad: 4,
       }
         if (service.tracks.length>0){
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
         service.calcularDatosTrack(0,service.punto);
-        service.tracks[service.trackActivo].duracion = service.calcularDuracion().toFixed(2);
+        service.tracks[service.trackActivo].duracionIda = parseFloat(service.calcularDuracion(true)).toFixed(2);
+        service.tracks[service.trackActivo].duracionVuelta = parseFloat(service.calcularDuracion(false)).toFixed(2);
         service.calcularFecha(service.calcularDuracionPuntos(service.punto));
         service.tracks[num]["puntos"][service.tracks[num]["puntos"].length-1].fecha=service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
         service.tracks[num]["puntos"][service.tracks[num]["puntos"].length-1].hora =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
@@ -762,7 +844,7 @@ service.actualizarPuntosR = function() {
         hora:service.rutas[service.rutaActiva].fecha.getHours()+":"+service.ordenarMinutosR(),
         desnivel:service.calcularDesnivel(),
         distancia: service.distancia,
-        velocidad: 15,
+        velocidad: 4,
       }
           if (service.rutas.length>0){
             service.punto.numero = service.rutas[num]["puntos"].length;
