@@ -144,7 +144,7 @@ table th{
 	z-index: 1;
 }
 
-#importar,#botonCrear,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv,#downBt{
+#importar,#botonCrear,#botonCrearW,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv,#downBt{
   background-color: #fff;
 
   font-size: 11px;

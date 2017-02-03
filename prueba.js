@@ -29,30 +29,79 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.waypoints = EntidadesService.waypoints;
     list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
     list1.modoCreacion = false;
+    EntidadesService.modoCreacion = false;
     list1.mostrarMensaje =false;
 
+    //FUncion que activa o desactiva el modo creacion de los waypoints
     list1.crearWaypoint = function () {
       if(EntidadesService.isWaypoint == false || EntidadesService.isWaypoint == undefined){
       EntidadesService.isWaypoint = true;
       EntidadesService.isTrack = false;
       list1.modoCreacion = true;
+      EntidadesService.modoCreacion = true;
     }else {
         EntidadesService.isWaypoint = false;
         list1.modoCreacion = false;
+        EntidadesService.modoCreacion = false;
       }
     }
 
+    //Detectamos si pulsa la tecla escape y si el modo creacion de waypoints esta actuivado pues lo desactivamos
+    document.onkeydown = function (e) {
+      if ( !e.metaKey ) {
+        e.preventDefault();
+      }
+      var boton = document.getElementById("botonCrearW");
+      console.log(EntidadesService.modoCreacion);
+      if (EntidadesService.modoCreacion == true) {
+        boton.click();
+      }
+    };
+
+    //FUncion que pide al usuario una fecha y una velocidad y calcula los tiempos del track a partir de esos datos
     list1.cambiarTiempos = function () {
+      //Solo ejecutamos la funcion si hay algun tracl creado y si en el momento actual se esta modificando un track
+      if(EntidadesService.tracks.length>0 && EntidadesService.isTrack == true){
       var velocidad = prompt("Velocidad del recorrido en km/h (no incluya la unidad, solo el numero)", "4");
+      var velocidadInt = parseInt(velocidad);
+      //Si la velocidad introducida no es correcta y la operacion no se ha cancelado se vuelve a pedir la velocidad
+      while (isNaN(velocidadInt) == true && velocidad != null) {
+          velocidad = prompt("Por favor introduzca una velocidad correcta en km/h (no incluya la unidad, solo el numero)", "4");
+          velocidadInt = parseInt(velocidad);
+          //Si la operacion es cancelada por el usuario se sale del while
+          if (velocidad==null) {
+            break;
+          }
+      }
+      console.log(velocidadInt);
+      //Si la operacion no ha sido cancelada se pide la fecha al ususario
+      if(velocidad!= null)
       var fechas = prompt("Introduca año,mes,dia,hora,minutos separados por comas","2017,01,01,00,00");
+      //Si la operacion ha sido cancelada no se ejecutara este if
+      if(fechas!=null && velocidad != null){
       var cadena = fechas.split(",");
       console.log(velocidad);
       console.log(fechas);
       var fecha = new Date(cadena[0],cadena[1],cadena[2],cadena[3],cadena[4],"00","00");
-      EntidadesService.cambiarTiempos(5,fecha);
-      list1.actualizarPuntosT();
-    }
-
+      console.log(fecha);
+      //Si la fecha es incorrecta  se vuelve a pedir
+      while (fecha == "Invalid Date") {
+        fechas = prompt("La fecha no se ha introducido en el formato indicado por favor introduca año,mes,dia,hora,minutos separados por comas","2017,01,01,00,00");
+        //Si se cancela la operacion se sale del while
+        if (fechas == null) {
+          break;
+        }else {
+          cadena = fechas.split(",");
+          fecha = new Date(cadena[0],cadena[1],cadena[2],cadena[3],cadena[4],"00","00");
+        }
+      }
+      //Si la operacio ha sido cancelada no se ejecutara el metodo
+      if (fechas !=null) {
+        EntidadesService.cambiarTiempos(parseInt(velocidad),fecha);
+        list1.actualizarPuntosT();
+      }
+    }}
+}
     //Metodo que crea entidades
     list1.crear = function (id) {
       //Actualizamos la entidad que esta activa antes de llamar al servicio
@@ -115,6 +164,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       EntidadesService.isTrack = true;
       EntidadesService.isWaypoint = false;
       list1.modoCreacion = false;
+      EntidadesService.modoCreacion = false;
         EntidadesService.trackActivo = list1.trackActivo;
          EntidadesService.actualizarPuntosT();
          list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -127,6 +177,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       EntidadesService.isTrack = false;
       EntidadesService.isWaypoint = false;
       list1.modoCreacion = false;
+      EntidadesService.modoCreacion = false;
       EntidadesService.rutaActiva = list1.rutaActiva;
        EntidadesService.actualizarPuntosR();
        list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -249,6 +300,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
        list1.mostrarBotonesR = false;
        list1.mostrarAlert = true;
 
+//Funcion que oculta el alerte que indica si el modoc reacion esta activado o desactivado
 list1.noVerAlert = function () {
  list1.mostrarAlert = false;
 }
@@ -404,8 +456,7 @@ list1.noVerAlert = function () {
           list1.activarListaW = false;
         } else {
           list1.activarListaW=true;
-          EntidadesService.isWaypoint = true;
-          list1.modoCreacion = true;
+          EntidadesService.isWaypoint = false;
         }
 
       }
@@ -427,6 +478,7 @@ list1.noVerAlert = function () {
 
           EntidadesService.isWaypoint = false;
           list1.modoCreacion = false;
+          EntidadesService.modoCreacion = false;
           if(list1.mostrarTabla==true)
              list1.mostrarTabla = false;
            else {
@@ -509,13 +561,15 @@ function EntidadesService (){
   service.markersT = [];
   service.wpRta = [];
   service.velocidad = 4;
+  service.modoCreacion = false;
 
-
+//Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.
 service.cambiarTiempos = function (velocidad,fecha) {
   service.velocidad = velocidad;
   service.tracks[service.trackActivo].duracionIda=service.calcularDuracion(true).toFixed(2);
   service.tracks[service.trackActivo].duracionVuelta=service.calcularDuracion(false).toFixed(2);
   service.tracks[service.trackActivo].fecha = fecha;
+  //Se recorren todos los puntos y se les asiogna la nueva fecha y velocidad
   for (var item in service.puntosTrackActivo) {
     service.calcularDuracionPuntos(service.puntosTrackActivo[item]);
     service.calcularFecha(service.calcularDuracionPuntos(service.puntosTrackActivo[item]));
@@ -525,6 +579,7 @@ service.cambiarTiempos = function (velocidad,fecha) {
   }
 }
 
+//Calcula la duracion de la ida y de la velta de un track
 service.calcularDuracion= function (ida) {
   if (ida) {
     var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelP)/400).toFixed(2);
@@ -568,6 +623,7 @@ service.calcularDuracion= function (ida) {
     return duracionRecorrido;
   }
 }
+//Calcula la duracion del tramo entre dos puntos de un track
 service.calcularDuracionPuntos= function (punto) {//desnivel  distancia
   console.log(service.puntosTrackActivo);
   var hDesnivelSubida = (parseFloat(punto.desnivel)/400).toFixed(2);
@@ -599,16 +655,19 @@ service.calcularDuracionPuntos= function (punto) {//desnivel  distancia
     return duracionRecorrido;
   }
 }
+//Suma a la fecha del track activo la horas que revibe como parametro
 service.calcularFecha = function (horas) {
   var segundos = parseFloat(horas)*parseFloat(3600);
   service.tracks[service.trackActivo].fecha.setSeconds(segundos);
 }
+//Calcula la fecha a partir de una velocidad
 service.calcularFechaR = function (ritmo) {
   var smet = ritmo/1000;
   var min = service.distancia*smet;
   var segundos = parseInt(min*60);
   service.rutas[service.rutaActiva].fecha.setSeconds(segundos);
 }
+//Añade un cero a los minutos que son menores de 10
 service.ordenarMinutos = function () {
   var minutos;
   if(service.tracks[service.trackActivo].fecha.getMinutes()<10)
@@ -617,6 +676,7 @@ service.ordenarMinutos = function () {
       minutos=service.tracks[service.trackActivo].fecha.getMinutes();
   return minutos;
 }
+//Añade un cero a los minutos que son menores de 10
 service.ordenarMinutosR = function () {
   var minutos;
   if(service.rutas[service.rutaActiva].fecha.getMinutes()<10)
@@ -625,6 +685,7 @@ service.ordenarMinutosR = function () {
       minutos=service.rutas[service.rutaActiva].fecha.getMinutes();
   return minutos;
 }
+//Calcula todos los datos del track que son mostrados en la lista al lado de su nombre
 service.calcularDatosTrack = function (id,punto) {
   if (id==0) {
     service.tracks[service.trackActivo].distancia = (parseFloat(service.tracks[service.trackActivo].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
@@ -740,9 +801,10 @@ service.actualizarPuntosR = function() {
   service.crear = function (id) {
     //Boolean necesario para en caso de que no haya ninguna entidad
     // creada no se activara el evento click del mapa
-    service.hayEntidadesCreadas = true;
+
     switch (id) {
       case 0:
+      service.hayEntidadesCreadas = true;
         service.entidad = {
           nombre: "Nuevo-Track"+service.tracks.length,
           distancia: 0,
@@ -763,6 +825,7 @@ service.actualizarPuntosR = function() {
         service.isWaypoint = false;
         break;
       case 1:
+      service.hayEntidadesCreadas = true;
       service.entidad = {
         nombre: "Nueva-Ruta"+service.rutas.length,
         distancia: 0,
@@ -1100,7 +1163,7 @@ function Mymap(EntidadesService) {
     map.addListener('click', addLatLng,elevator);
 
         }
-
+        //Calcula la distancia entre dos puntos del mapa
         var calcularDistancias = function (event) {
           if(EntidadesService.puntosTrackActivo.length>0){
           var _kCord = new google.maps.LatLng(EntidadesService.puntosTrackActivo[EntidadesService.puntosTrackActivo.length-1].latitud,
@@ -1117,10 +1180,10 @@ function Mymap(EntidadesService) {
           console.log(EntidadesService.isWaypoint);
           console.log("es track?");
           console.log(EntidadesService.isTrack);
-          if (EntidadesService.hayEntidadesCreadas==true || EntidadesService.isWaypoint == true) {
+          if ((EntidadesService.hayEntidadesCreadas==true && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0)) || EntidadesService.isWaypoint == true) {
           //Depende de que entidad sea llamamos a un metodo u otro
           if (EntidadesService.isTrack == true) {
-
+            //Servicio de elevaciones que nos da la elevacion del punto actual
             elevator.getElevationForLocations({
               'locations': [event.latLng]
             }, function(results, status) {
@@ -1245,14 +1308,17 @@ function Mymap(EntidadesService) {
               icon: image,
               map: map
             });
+            //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
           if (EntidadesService.markersT[EntidadesService.trackActivo]===undefined) {
             var markers = [];
             markers.push(marker);
             EntidadesService.markersT[EntidadesService.trackActivo] = markers;
+            //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
           } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
             marker.icon = "iconoFin.png";
             marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
+            //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
           }else{
             marker.icon = "iconoFin.png";
             marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
