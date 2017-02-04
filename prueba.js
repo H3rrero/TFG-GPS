@@ -32,6 +32,11 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     EntidadesService.modoCreacion = false;
     list1.mostrarMensaje =false;
 
+    list1.invertirTrack = function () {
+      EntidadesService.invertirTrack();
+      list1.actualizarPuntosT();
+    }
+
     //FUncion que activa o desactiva el modo creacion de los waypoints
     list1.crearWaypoint = function () {
       if(EntidadesService.isWaypoint == false || EntidadesService.isWaypoint == undefined){
@@ -562,6 +567,40 @@ function EntidadesService (){
   service.wpRta = [];
   service.velocidad = 4;
   service.modoCreacion = false;
+  service.latitudPInv = 0;
+  service.longitudPInv = 0;
+  service.modoInvertir = false;
+  service.mapa;
+
+  //FUncion para invertir un track
+  service.invertirTrack = function () {
+    //Eliminapos la polilinea actual
+    service.getPoly().setMap(null);
+    //ELiminamos los marcadores de inicion y fin actuales
+    service.markersT[service.trackActivo][0].setMap(null);
+    service.markersT[service.trackActivo][1].setMap(null);
+    //Marcamos al track como que no tiene polilinea
+    service.tienePoly[service.trackActivo]=false;
+    //Y tambien como que no tiene marcadores
+    service.markersT[service.trackActivo] = undefined;
+    //Booramos los puntos actuales
+    service.tracks[service.trackActivo].puntos = [];
+    //Asignamos una nueva fecha
+    service.tracks[service.trackActivo].fecha = new Date();
+    //Recorremos los puntos al reves para volver a añadirlos
+    for (var i = service.puntosTrackActivo.length-1; i >= 0; i--) {
+      //Guardamos la longitud y laltitud para pasarsela al mapa
+      service.longitudPInv = service.puntosTrackActivo[i].longitud;
+      service.latitudPInv = service.puntosTrackActivo[i].latitud;
+      //Activamos el modo invertir
+        service.modoInvertir = true;
+      //Simulamos un click el mapa para añadir el punto
+      google.maps.event.trigger(service.mapa, 'click');
+
+    }
+    //Desactivamos el modo invertir
+    service.modoInvertir = false;
+  }
 
 //Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.
 service.cambiarTiempos = function (velocidad,fecha) {
@@ -1161,26 +1200,161 @@ function Mymap(EntidadesService) {
 
     // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
-
+    EntidadesService.mapa = map;
         }
         //Calcula la distancia entre dos puntos del mapa
-        var calcularDistancias = function (event) {
+        var calcularDistancias = function (latlng) {
           if(EntidadesService.puntosTrackActivo.length>0){
           var _kCord = new google.maps.LatLng(EntidadesService.puntosTrackActivo[EntidadesService.puntosTrackActivo.length-1].latitud,
              EntidadesService.puntosTrackActivo[EntidadesService.puntosTrackActivo.length-1].longitud);
-          EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(event.latLng, _kCord).toFixed(2);
+          EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(latlng, _kCord).toFixed(2);
         }else{
             EntidadesService.distancia = 0;
         }
         }
         // puncion que crea las polilineas y los puntos
         function addLatLng(event,elevation) {
-          //Entramos si hay alguna entidad creada
-          console.log("es wp?");
-          console.log(EntidadesService.isWaypoint);
-          console.log("es track?");
-          console.log(EntidadesService.isTrack);
-          if ((EntidadesService.hayEntidadesCreadas==true && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0)) || EntidadesService.isWaypoint == true) {
+
+          if(EntidadesService.modoInvertir == true){
+            console.log("estoy en invertir");
+          var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
+            //Depende de que entidad sea llamamos a un metodo u otro
+            if (EntidadesService.isTrack == true) {
+              //Servicio de elevaciones que nos da la elevacion del punto actual
+              elevator.getElevationForLocations({
+                'locations': [evento]
+              }, function(results, status) {
+                if (status === google.maps.ElevationStatus.OK) {
+                  if (results[0]) {
+
+                    EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                    calcularDistancias(evento);
+                    controller.anadirPuntoTForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
+                  } else {
+                  console.log("no result found");
+                  controller.anadirPuntoTForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
+                  }
+                } else {
+                console.log("elevation service failed");
+                controller.anadirPuntoTForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
+                }
+              });
+
+
+            }
+            else{
+              elevator.getElevationForLocations({
+                'locations': [evento]
+              }, function(results, status) {
+                if (status === google.maps.ElevationStatus.OK) {
+                  if (results[0]) {
+
+                    EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                    calcularDistancias(evento);
+                    controller.anadirPuntoRForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
+                  } else {
+                  console.log("no result found");
+                  controller.anadirPuntoRForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
+                  }
+                } else {
+                console.log("elevation service failed");
+                controller.anadirPuntoRForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
+                }
+              });
+            }
+
+            //Si no tiene polilinea la creamos
+            if (EntidadesService.tienePolyF()==false) {
+              var lineSymbolarrow = {
+                     path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                     strokeColor : EntidadesService.colorPoly(),
+                     strokeOpacity : 0.7,
+                     strokeWeight : 2.9,
+                     scale : 2.7
+                   };
+              var arrow = {
+                   icon : lineSymbolarrow,
+                   offset : '50%',
+                  repeat : '80px'
+                  };
+              poly = new google.maps.Polyline({
+                strokeColor: EntidadesService.colorPoly(),
+                strokeOpacity: 1.0,
+                strokeWeight: 3,
+                  icons : [arrow]
+              });
+              poly.setMap(map);
+              //Añadimos la polilinea a la entidad actual
+              EntidadesService.addPoly(poly);
+
+              //Si ya la tiene pues la obtenemos
+            } else {
+
+            poly = EntidadesService.getPoly();
+            }
+
+            var path = poly.getPath();
+
+            //Le pasamos las coordenadas a la polilinea
+            path.push(evento);
+            var image = {
+              url: 'icono.png',
+
+            };
+
+
+            if (EntidadesService.isTrack == true) {
+              // Creamos el marcador que indicara el punto creado en el mapa
+              var marker = new google.maps.Marker({
+                position: evento,
+                title: "Inicio del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
+                icon: image,
+                map: map
+              });
+              //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
+            if (EntidadesService.markersT[EntidadesService.trackActivo]===undefined) {
+              var markers = [];
+              markers.push(marker);
+              EntidadesService.markersT[EntidadesService.trackActivo] = markers;
+              //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
+            } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
+              marker.icon = "iconoFin.png";
+              marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+              EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
+              //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
+            }else{
+              marker.icon = "iconoFin.png";
+              marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+              EntidadesService.markersT[EntidadesService.trackActivo][1].setMap(null);
+              EntidadesService.markersT[EntidadesService.trackActivo][1]=marker;
+            }
+          }else {
+            if (EntidadesService.wpRta[EntidadesService.rutaActiva]===undefined) {
+              var nombre = "Waypoint Nº"+0;
+              var marker = new google.maps.Marker({
+                position: evento,
+                title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
+                icon: 'iconowp.png',
+                map: map
+              });
+            var wpsruta = [];
+            wpsruta.push(marker);
+            EntidadesService.wpRta[EntidadesService.rutaActiva] = wpsruta;
+          }else {
+            var nombre = "Waypoint Nº"+EntidadesService.wpRta[EntidadesService.rutaActiva].length;
+            var marker = new google.maps.Marker({
+              position: evento,
+              title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
+              icon: 'iconowp.png',
+              map: map
+            });
+            EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
+          }
+          }
+
+  }
+
+          if ((EntidadesService.modoInvertir == false && EntidadesService.hayEntidadesCreadas==true && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0)) || EntidadesService.isWaypoint == true) {
           //Depende de que entidad sea llamamos a un metodo u otro
           if (EntidadesService.isTrack == true) {
             //Servicio de elevaciones que nos da la elevacion del punto actual
@@ -1191,7 +1365,7 @@ function Mymap(EntidadesService) {
                 if (results[0]) {
 
                   EntidadesService.elevacion = results[0].elevation.toFixed(2);
-                  calcularDistancias(event);
+                  calcularDistancias(event.latLng);
                   controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
                 } else {
                 console.log("no result found");
@@ -1236,7 +1410,7 @@ function Mymap(EntidadesService) {
                 if (results[0]) {
 
                   EntidadesService.elevacion = results[0].elevation.toFixed(2);
-                  calcularDistancias(event);
+                  calcularDistancias(event.latLng);
                   controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
                 } else {
                 console.log("no result found");

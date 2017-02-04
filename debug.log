@@ -1,0 +1,6 @@
+[0204/193032:ERROR:process_info.cc(330)] VirtualQueryEx: Acceso denegado. (0x5)
+[0204/193032:ERROR:process_info.cc(547)] ReadMemoryInfo failed
+[0204/193032:ERROR:process_reader_win.cc(142)] SuspendThread: Acceso denegado. (0x5)
+[0204/193032:ERROR:exception_snapshot_win.cc(87)] thread ID 3156 not found in process
+[0204/193032:WARNING:crash_report_exception_handler.cc(61)] ProcessSnapshotWin::Initialize failed
+[0204/193032:ERROR:scoped_process_suspend.cc(38)] NtResumeProcess: Se intentó obtener acceso a un proceso que está cerrándose.  (0xc000010a)
