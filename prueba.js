@@ -34,7 +34,6 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.invertirTrack = function () {
       EntidadesService.invertirTrack();
-      list1.actualizarPuntosT();
     }
 
     //FUncion que activa o desactiva el modo creacion de los waypoints
@@ -139,6 +138,19 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     }
 
     //Es llamado desde el evento click del mapa y añade un punto al track activo
+    list1.anadirPuntoTForMapI = function (latitud,longitud) {
+        //Actualizamos el track activo antes de realizar las operaciones
+        list1.trackActivo = EntidadesService.trackActivo;
+       //llamamos al metodo del servicio que se encarga de añadir los puntos
+       EntidadesService.anadirPunto(list1.numTrack,EntidadesService.trackActivo,latitud,longitud);
+       //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
+       list1.actualizarPuntosT();
+
+
+
+    }
+
+    //Es llamado desde el evento click del mapa y añade un punto al track activo
     list1.anadirPuntoTForMap = function (latitud,longitud) {
         //Actualizamos el track activo antes de realizar las operaciones
         list1.trackActivo = EntidadesService.trackActivo;
@@ -150,6 +162,18 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
 
     }
+    //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
+  list1.anadirPuntoRForMapI = function (latitud,longitud) {
+    //Actualizamosla ruta activa antes de realizar las operaciones
+      list1.rutaActiva = EntidadesService.rutaActiva;
+    //llamamos al metodo del servicio que se encarga de añadir los puntos
+     EntidadesService.anadirPunto(list1.numRuta,EntidadesService.rutaActiva,latitud,longitud);
+     //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
+     list1.actualizarPuntosR();
+     $scope.$apply();
+
+
+  }
       //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
     list1.anadirPuntoRForMap = function (latitud,longitud) {
       //Actualizamosla ruta activa antes de realizar las operaciones
@@ -569,11 +593,15 @@ function EntidadesService (){
   service.modoCreacion = false;
   service.latitudPInv = 0;
   service.longitudPInv = 0;
+  service.elevacionP = 0;
   service.modoInvertir = false;
   service.mapa;
 
   //FUncion para invertir un track
   service.invertirTrack = function () {
+
+    var puntos =new Array();
+    console.log(puntos);
     //Eliminapos la polilinea actual
     service.getPoly().setMap(null);
     //ELiminamos los marcadores de inicion y fin actuales
@@ -583,21 +611,36 @@ function EntidadesService (){
     service.tienePoly[service.trackActivo]=false;
     //Y tambien como que no tiene marcadores
     service.markersT[service.trackActivo] = undefined;
+    for (var variable in service.tracks[service.trackActivo].puntos) {
+      console.log("Puntos antes de anteeeeeessss de seerrrr eliminarlos");
+      console.log(service.tracks[service.trackActivo].puntos[variable]);
+      puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+    }
     //Booramos los puntos actuales
-    service.tracks[service.trackActivo].puntos = [];
+    for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+      service.tracks[service.trackActivo].puntos.splice(i,1);
+      service.puntosTrackActivo.splice(i,1);
+    }
     //Asignamos una nueva fecha
     service.tracks[service.trackActivo].fecha = new Date();
     //Recorremos los puntos al reves para volver a añadirlos
-    for (var i = service.puntosTrackActivo.length-1; i >= 0; i--) {
+    for (var i = puntos.length-1; i >= 0; i--) {
+      console.log("Puntos mientras son anadidos");
+      console.log(puntos[i]);
       //Guardamos la longitud y laltitud para pasarsela al mapa
-      service.longitudPInv = service.puntosTrackActivo[i].longitud;
-      service.latitudPInv = service.puntosTrackActivo[i].latitud;
+      service.longitudPInv = puntos[i].longitud;
+      service.latitudPInv = puntos[i].latitud;
+      service.elevacionP = puntos[i].elevacion;
       //Activamos el modo invertir
         service.modoInvertir = true;
+
       //Simulamos un click el mapa para añadir el punto
       google.maps.event.trigger(service.mapa, 'click');
 
+
+
     }
+
     //Desactivamos el modo invertir
     service.modoInvertir = false;
   }
@@ -639,11 +682,9 @@ service.calcularDuracion= function (ida) {
     var minutosFInales = (horasFinales*60)+minutosDescanso;
     var duracionRecorrido = minutosFInales/60;
     if (ida) {
-      console.log("TIEMPO IDA");
-      console.log(duracionRecorrido);
+
     } else {
-      console.log("TIEMPO VUELTA");
-      console.log(duracionRecorrido);
+
     }
     return duracionRecorrido;
   } else {
@@ -653,18 +694,15 @@ service.calcularDuracion= function (ida) {
     var minutosFInales = (horasFinales*60)+minutosDescanso;
     var duracionRecorrido = minutosFInales/60;
     if (ida) {
-      console.log("TIEMPO IDA");
-      console.log(duracionRecorrido);
+
     } else {
-      console.log("TIEMPO VUELTA");
-      console.log(duracionRecorrido);
+
     }
     return duracionRecorrido;
   }
 }
 //Calcula la duracion del tramo entre dos puntos de un track
 service.calcularDuracionPuntos= function (punto) {//desnivel  distancia
-  console.log(service.puntosTrackActivo);
   var hDesnivelSubida = (parseFloat(punto.desnivel)/400).toFixed(2);
   var hDesnivelBajada = (Math.abs(parseFloat(punto.desnivel)/600)).toFixed(2);
   if (punto.desnivel>0) {
@@ -923,6 +961,8 @@ service.actualizarPuntosR = function() {
         velocidad: 4,
       }
         if (service.tracks.length>0){
+          console.log("Que punto llega?");
+          console.log(service.punto);
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
         service.calcularDatosTrack(0,service.punto);
@@ -1218,49 +1258,20 @@ function Mymap(EntidadesService) {
           if(EntidadesService.modoInvertir == true){
             console.log("estoy en invertir");
           var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
+
             //Depende de que entidad sea llamamos a un metodo u otro
             if (EntidadesService.isTrack == true) {
-              //Servicio de elevaciones que nos da la elevacion del punto actual
-              elevator.getElevationForLocations({
-                'locations': [evento]
-              }, function(results, status) {
-                if (status === google.maps.ElevationStatus.OK) {
-                  if (results[0]) {
-
-                    EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                    EntidadesService.elevacion = EntidadesService.elevacionP;
                     calcularDistancias(evento);
-                    controller.anadirPuntoTForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
-                  } else {
-                  console.log("no result found");
-                  controller.anadirPuntoTForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
-                  }
-                } else {
-                console.log("elevation service failed");
-                controller.anadirPuntoTForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
-                }
-              });
-
-
+                    console.log("latitud y longotud que llegan");
+                    console.log(EntidadesService.latitudPInv);
+                    console.log(EntidadesService.longitudPInv);
+                    controller.anadirPuntoTForMapI(evento.lat().toFixed(6),evento.lng().toFixed(6));
             }
             else{
-              elevator.getElevationForLocations({
-                'locations': [evento]
-              }, function(results, status) {
-                if (status === google.maps.ElevationStatus.OK) {
-                  if (results[0]) {
-
-                    EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                    EntidadesService.elevacion = EntidadesService.elevacionP;
                     calcularDistancias(evento);
-                    controller.anadirPuntoRForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
-                  } else {
-                  console.log("no result found");
-                  controller.anadirPuntoRForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
-                  }
-                } else {
-                console.log("elevation service failed");
-                controller.anadirPuntoRForMap(evento.lat().toFixed(6),evento.lng().toFixed(6));
-                }
-              });
+                    controller.anadirPuntoRForMapI(evento.lat().toFixed(6),evento.lng().toFixed(6));
             }
 
             //Si no tiene polilinea la creamos
