@@ -32,8 +32,21 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     EntidadesService.modoCreacion = false;
     list1.mostrarMensaje =false;
 
+
+    list1.renombrarT = function () {
+      var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
+      EntidadesService.renombrarT(nombre);
+    }
+    list1.renombrarR = function () {
+      var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
+      EntidadesService.renombrarR(nombre);
+    }
+
     list1.invertirTrack = function () {
       EntidadesService.invertirTrack();
+    }
+    list1.invertirRuta = function () {
+      EntidadesService.invertirRuta();
     }
 
     //FUncion que activa o desactiva el modo creacion de los waypoints
@@ -170,7 +183,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
      EntidadesService.anadirPunto(list1.numRuta,EntidadesService.rutaActiva,latitud,longitud);
      //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
      list1.actualizarPuntosR();
-     $scope.$apply();
+
 
 
   }
@@ -596,6 +609,67 @@ function EntidadesService (){
   service.elevacionP = 0;
   service.modoInvertir = false;
   service.mapa;
+
+
+
+  service.renombrarT = function (nombre) {
+    if(service.isTrack == true)
+    service.tracks[service.trackActivo].nombre = nombre;
+  }
+  service.renombrarR = function (nombre) {
+    if (service.isTrack == false)
+    service.rutas[service.rutaActiva].nombre = nombre;
+  }
+  //FUncion para invertir un track
+  service.invertirRuta = function () {
+
+    var puntos =new Array();
+    console.log(puntos);
+    //Eliminapos la polilinea actual
+    service.getPoly().setMap(null);
+    //ELiminamos los marcadores actuales
+    for (var item in service.wpRta[service.rutaActiva]) {
+        service.wpRta[service.rutaActiva][item].setMap(null);
+    }
+
+
+    //Marcamos la ruta como que no tiene polilinea
+    service.tienePolyR[service.rutaActiva]=false;
+    //Y tambien como que no tiene marcadores
+      service.wpRta[service.rutaActiva] = undefined;
+    for (var variable in service.rutas[service.rutaActiva].puntos) {
+      console.log("Puntos antes de anteeeeeessss de seerrrr eliminarlos");
+      console.log(service.rutas[service.rutaActiva].puntos[variable]);
+      puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+    }
+    //Booramos los puntos actuales
+    for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+      service.rutas[service.rutaActiva].puntos.splice(i,1);
+      service.puntosTrackActivo.splice(i,1);
+    }
+    //Asignamos una nueva fecha
+    service.rutas[service.rutaActiva].fecha = new Date();
+    //Recorremos los puntos al reves para volver a añadirlos
+    for (var i = puntos.length-1; i >= 0; i--) {
+      console.log("Puntos mientras son anadidos");
+      console.log(puntos[i]);
+      //Guardamos la longitud y laltitud para pasarsela al mapa
+      service.longitudPInv = puntos[i].longitud;
+      service.latitudPInv = puntos[i].latitud;
+      service.elevacionP = puntos[i].elevacion;
+      //Activamos el modo invertir
+        service.modoInvertir = true;
+
+      //Simulamos un click el mapa para añadir el punto
+      google.maps.event.trigger(service.mapa, 'click');
+
+
+
+    }
+
+    //Desactivamos el modo invertir
+    service.modoInvertir = false;
+  }
 
   //FUncion para invertir un track
   service.invertirTrack = function () {
