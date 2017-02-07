@@ -51,11 +51,16 @@
   </div>
 </div>
 <div ng-if="list1.mostrarMensaje">
-
-
 <div class="modal fade bs-example-modal-sm" id="modalTR" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" >
   <div class="modal-dialog modal-sm" role="document">
 		<div class="alert alert-danger" role="alert"  >El modo creación de Waypoints ha sido desactivado.</div>
+  </div>
+</div>
+</div>
+<div ng-if="list1.error">
+<div class="modal fade bs-example-modal-sm" id="modalMS" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" >
+  <div class="modal-dialog modal-sm" role="document">
+		<div class="alert alert-danger" role="alert"  >{{list1.mensajeError}}</div>
   </div>
 </div>
 </div>
@@ -67,7 +72,7 @@
 				<div id="puntos">
 
 
-				<table  class="table table-condensed">
+				<table  class="table table-hover table-condensed">
 					<tbody>
 						<thead >
 
@@ -83,8 +88,8 @@
 					<th>Velocidad</th>
 				</tr>
 				</thead>
-				<tr ng-repeat="item in list1.puntosTrackActivo">
-					<td>{{item["numero"]}}</td>
+				<tr ng-repeat="item in list1.puntosTrackActivo" ng-click="list1.puntoSelec($index);">
+					<td >{{item["numero"]}}</td>
 					<td>{{item["latitud"]}}</td>
 					<td>{{item["longitud"]}}</td>
 					<td>{{item["elevacion"]}}m</td>
@@ -130,7 +135,7 @@
 			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
-		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" value="track1" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
+		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
 		</ul>
 			</div>
 			<div id="botones">
@@ -142,21 +147,21 @@
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesW">
 					<tr>  <td ><button id="botonCrearW" type="button" data-toggle="modal" data-target="#modalW" ng-click="list1.listaActivaW();" class="bttn-unite bttn-xs bttn-success">Crear</button></td></tr>
 						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-success">Borrar</button></td></tr>
-						<tr><td><button id="botonRen" type="button"  class="bttn-unite bttn-xs bttn-success">Renombrar</button></td></tr>
+						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarW();" class="bttn-unite bttn-xs bttn-success">Renombrar</button></td></tr>
 						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></td></tr>
 						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-success">Importar</button></td></tr>
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesR">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR"  ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-royal">Crear</button></td></tr>
 						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-royal">Borrar</button></td></tr>
-						<tr><td><button id="botonRen" type="button" ng-click="list1.renombrarR();" class="bttn-unite bttn-xs bttn-royal">Renombrar</button></td></tr>
+						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarR();" class="bttn-unite bttn-xs bttn-royal">Renombrar</button></td></tr>
 						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-royal">Descargar</button></td></tr>
 						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotones">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
 						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
-						<tr><td><button id="botonRen" type="button" ng-click="list1.renombrarT();" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
+						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarT();" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
 						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
 						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
 				</table>
@@ -170,7 +175,7 @@
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesR();" class="bttn-unite bttn-xs bttn-royal">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-royal">Eliminar Punto</button></td></tr>
           <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-royal">Insertar Punto</button></td></tr>
-        <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
+        <tr><td><button id="botonRec" type="button"  class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" ng-click="list1.invertirRuta();" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
 					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
@@ -182,7 +187,7 @@
 					<tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotones();" class="bttn-unite bttn-xs bttn-primary">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-primary">Eliminar Punto</button></td></tr>
           <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
-        <tr><td><button id="botonRec" type="button" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
+        <tr><td><button id="botonRec" type="button" ng-click="list1.recortarTrack();" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" ng-click="list1.invertirTrack();" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
 					<tr><td>  <button id="botonTim" type="button" ng-click="list1.cambiarTiempos();" class="bttn-unite bttn-xs bttn-primary">Tiempos</button></td></tr>
