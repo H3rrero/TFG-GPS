@@ -153,14 +153,14 @@
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesR">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR"  ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-royal">Crear</button></td></tr>
-						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-royal">Borrar</button></td></tr>
+						<tr><td><button id="botonBor" type="button" data-toggle="modal" data-target="#modalMS" ng-click="  list1.borrarRuta();" class="bttn-unite bttn-xs bttn-royal">Borrar</button></td></tr>
 						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarR();" class="bttn-unite bttn-xs bttn-royal">Renombrar</button></td></tr>
 						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-royal">Descargar</button></td></tr>
 						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotones">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
-						<tr><td><button id="botonBor" type="button"  class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
+						<tr><td><button id="botonBor" type="button" data-toggle="modal" data-target="#modalMS" ng-click="  list1.borrarTrack();" class="bttn-unite bttn-xs bttn-primary">Borrar</button></td></tr>
 						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarT();" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
 						<tr><td><button id="botonDes" type="button"  class="bttn-unite bttn-xs bttn-primary">Descargar</button></td></tr>
 						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
@@ -175,7 +175,7 @@
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesR();" class="bttn-unite bttn-xs bttn-royal">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-royal">Eliminar Punto</button></td></tr>
           <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-royal">Insertar Punto</button></td></tr>
-        <tr><td><button id="botonRec" type="button"  class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
+        <tr><td><button id="botonRec" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.recortarRuta();" class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" ng-click="list1.invertirRuta();" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
 					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
@@ -187,7 +187,7 @@
 					<tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotones();" class="bttn-unite bttn-xs bttn-primary">Archivo</button></td></tr>
         <tr>  <td><button id="botonEli" type="button" class="bttn-unite bttn-xs bttn-primary">Eliminar Punto</button></td></tr>
           <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
-        <tr><td><button id="botonRec" type="button" ng-click="list1.recortarTrack();" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
+        <tr><td><button id="botonRec" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.recortarTrack();" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" ng-click="list1.invertirTrack();" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
 					<tr><td>  <button id="botonTim" type="button" ng-click="list1.cambiarTiempos();" class="bttn-unite bttn-xs bttn-primary">Tiempos</button></td></tr>
