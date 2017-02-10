@@ -35,6 +35,67 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.mensajeError ="";
     list1.error= false;
 
+    list1.unirRutas = function () {
+      list1.error=false;
+      if (EntidadesService.isTrack==true
+          || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
+          || EntidadesService.modoCreacion==true) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona una ruta para recortar";
+      }else if (EntidadesService.rutas.length<2) {
+        list1.error= true;
+        list1.mensajeError="Se necesitan al menos dos rutas para poder realizar la unión";
+      }
+      else{
+        var rutaElegida = prompt("Introduczca el nombre o el nº(la primera ruta seria el nº 0) de la ruta que quiere unir","0");
+        var elegido =parseInt(rutaElegida);
+        if(isNaN(elegido))
+        {
+          elegido = EntidadesService.buscarRutaPorNombre(rutaElegida);
+        }
+        if(elegido==null || EntidadesService.rutas[elegido]==undefined){
+          list1.error= true;
+          list1.mensajeError="La ruta elegido no existe";
+        }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2 || EntidadesService.rutas[elegido].puntos.length<2) {
+          list1.error= true;
+          list1.mensajeError="Algunas de las dos rutas no dispone de al menos dos puntos creados";
+        }
+        else{
+      list1.crear(1);
+      EntidadesService.unirRuta(elegido);}
+    }
+    }
+
+    list1.unirTracks = function () {
+      list1.error=false;
+      if (EntidadesService.isTrack==false
+          || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona un track para recortar";
+      }else if (EntidadesService.tracks.length<2) {
+        list1.error= true;
+        list1.mensajeError="Se necesitan al menos dos tracks para poder realizar la unión";
+      }
+      else{
+        var trackElegido = prompt("Introduczca el nombre o el nº(el primer track seria el nº 0) del track que quiere unir","0");
+        var elegido =parseInt(trackElegido);
+        if(isNaN(elegido))
+        {
+          elegido = EntidadesService.buscarTrackPorNombre(trackElegido);
+        }
+        if(elegido==null || EntidadesService.tracks[elegido]==undefined){
+          list1.error= true;
+          list1.mensajeError="El track elegido no existe";
+        }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2 || EntidadesService.tracks[elegido].puntos.length<2) {
+          list1.error= true;
+          list1.mensajeError="Alguno de los dos tracks no dispone de al menos dos puntos creados";
+        }
+        else{
+      list1.crear(0);
+      EntidadesService.unirTrack(elegido);}
+    }
+    }
+
     list1.borrarRuta = function () {
       list1.error= false;
       if (EntidadesService.isTrack==true
@@ -791,6 +852,61 @@ function EntidadesService (){
   service.modoRecorte1 = false;
   service.modoRecorte2 = false;
   service.colorPolyNF = "";
+  service.modoUnion = false;
+
+  service.buscarRutaPorNombre = function (nombre) {
+    for (var item in service.tracks) {
+      if(service.rutas[item].nombre ==nombre){
+        return item;
+      }
+    }
+    return null;
+  }
+  service.buscarTrackPorNombre = function (nombre) {
+    for (var item in service.tracks) {
+      if(service.tracks[item].nombre ==nombre){
+        return item;
+      }
+    }
+    return null;
+  }
+  service.unirRuta = function (rutaElegida) {
+    service.modoInvertir = true;
+    for (var item in service.rutas[service.rutaActiva].puntos) {
+      service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
+      service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;
+      service.elevacionP = service.rutas[service.rutaActiva].puntos[item].elevacion;
+      service.modoRecorte2=true;
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    for (var item in service.rutas[rutaElegida].puntos) {
+      service.longitudPInv = service.rutas[rutaElegida].puntos[item].longitud;
+      service.latitudPInv = service.rutas[rutaElegida].puntos[item].latitud;
+      service.elevacionP = service.rutas[rutaElegida].puntos[item].elevacion;
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    service.modoInvertir = false;
+    service.modoRecorte2 = false;
+  }
+
+  service.unirTrack = function (trackElegido) {
+    service.modoInvertir = true;
+    for (var item in service.tracks[service.trackActivo].puntos) {
+      service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
+      service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
+      service.elevacionP = service.tracks[service.trackActivo].puntos[item].elevacion;
+      service.modoRecorte2=true;
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    for (var item in service.tracks[trackElegido].puntos) {
+      service.longitudPInv = service.tracks[trackElegido].puntos[item].longitud;
+      service.latitudPInv = service.tracks[trackElegido].puntos[item].latitud;
+      service.elevacionP = service.tracks[trackElegido].puntos[item].elevacion;
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    service.modoInvertir = false;
+    service.modoRecorte2 = false;
+  }
   service.recortarTrack = function () {
     for (var item in service.tracks[service.trackActivo].puntos) {
       if (item<=service.puntoElegido) {
