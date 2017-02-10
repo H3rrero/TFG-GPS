@@ -11,7 +11,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 .service('EntidadesService',EntidadesService);
 
 
-  function PruebaController($scope,EntidadesService){
+  function PruebaController($scope,EntidadesService,$document){
     var list1 = this;
     console.log("holii");
     console.log(this);
@@ -37,10 +37,16 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.borrarRuta = function () {
       list1.error= false;
-      if (EntidadesService.isTrack==true || EntidadesService.modoCreacion == true) {
+      if (EntidadesService.isTrack==true
+         || EntidadesService.modoCreacion == true
+         || EntidadesService.rutas[EntidadesService.rutaActiva]===undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona una ruta para eliminar";
-      } else {
+      }else if (EntidadesService.rutas.length<1) {
+        list1.error= true;
+        list1.mensajeError="Necesitas tener rutas creadas para poder eliminarlas";
+      }
+       else {
           EntidadesService.borrarRuta();
       }
 
@@ -48,10 +54,15 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.borrarTrack = function () {
       list1.error= false;
-      if (EntidadesService.isTrack==false) {
+      if (EntidadesService.isTrack==false
+          || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para eliminar";
-      } else {
+      }else if (EntidadesService.tracks.length<1) {
+        list1.error= true;
+        list1.mensajeError="Necesitas tener tracks creados para poder eliminarlos";
+      }
+      else {
           EntidadesService.borrarTrack();
       }
 
@@ -59,7 +70,14 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.recortarRuta = function () {
       list1.error= false;
-      if (EntidadesService.puntoElegido==null) {
+      console.log(EntidadesService.puntoElegido);
+      var punto = EntidadesService.puntoElegido;
+      if (EntidadesService.isTrack==true
+         || EntidadesService.modoCreacion == true
+         || EntidadesService.rutas[EntidadesService.rutaActiva]===undefined) {
+           list1.error= true;
+           list1.mensajeError="Por favor selecciona una ruta para recortar";
+      }else if (EntidadesService.puntoElegido==null) {
         list1.error= true;
         list1.mensajeError="Antes de cortar tienes que seleccionar en la tabla el punto a partir del cual quieres realizar el corte";
       }else if (list1.rutas[list1.rutaActiva].puntos.length<2) {
@@ -69,13 +87,23 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       else{
       list1.crear(1);
       list1.crear(1);
+      EntidadesService.puntoElegido=punto;
       EntidadesService.recortarRuta();
+      console.log("punto elegido");
+      console.log(EntidadesService.puntoElegido);
     }
     }
 
     list1.recortarTrack = function () {
       list1.error= false;
-      if (EntidadesService.puntoElegido==null) {
+      console.log("Punticoo");
+        console.log(EntidadesService.puntoElegido);
+      var punto = EntidadesService.puntoElegido;
+      if (EntidadesService.isTrack==false
+          || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona un track para recortar";
+      }else if (EntidadesService.puntoElegido==null) {
         list1.error= true;
         list1.mensajeError="Antes de cortar tienes que seleccionar en la tabla el punto a partir del cual quieres realizar el corte";
       }else if (list1.tracks[list1.trackActivo].puntos.length<2) {
@@ -85,7 +113,10 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       else{
       list1.crear(0);
       list1.crear(0);
+      EntidadesService.puntoElegido = punto;
       EntidadesService.recortarTrack();
+      console.log("punto elegido");
+      console.log(EntidadesService.puntoElegido);
     }
     }
 
@@ -132,10 +163,29 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     }
 
     list1.invertirTrack = function () {
+      list1.error = false;
+      if (EntidadesService.isTrack==false
+          || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona un track para invertir";
+      }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2) {
+        list1.error= true;
+        list1.mensajeError="El track no dispone de puntos que invertir";
+      }else{
       EntidadesService.invertirTrack();
     }
+    }
     list1.invertirRuta = function () {
-      EntidadesService.invertirRuta();
+      list1.error = false;
+      if (EntidadesService.isTrack==true
+          || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona una ruta para invertir";
+      }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2) {
+        list1.error= true;
+        list1.mensajeError="La ruta no dispone de puntos que invertir";
+      }else{
+      EntidadesService.invertirRuta();}
     }
 
     //FUncion que activa o desactiva el modo creacion de los waypoints
@@ -146,23 +196,22 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.modoCreacion = true;
       EntidadesService.modoCreacion = true;
     }else {
-        //EntidadesService.isWaypoint = false;
+        EntidadesService.isWaypoint = false;
         list1.modoCreacion = false;
         EntidadesService.modoCreacion = false;
       }
     }
 
     //Detectamos si pulsa la tecla escape y si el modo creacion de waypoints esta actuivado pues lo desactivamos
-    document.onkeydown = function (e) {
-      if ( !e.metaKey ) {
-        e.preventDefault();
-      }
-      var boton = document.getElementById("botonCrearW");
-      console.log(EntidadesService.modoCreacion);
-      if (EntidadesService.modoCreacion == true) {
+    $document.bind("keydown",function (e) {
+
+      var boton = $('#botonCrearW');
+
+      if (EntidadesService.modoCreacion == true && e.key=="Escape") {
         boton.click();
       }
-    };
+
+    });
 
     //FUncion que pide al usuario una fecha y una velocidad y calcula los tiempos del track a partir de esos datos
     list1.cambiarTiempos = function () {
@@ -227,6 +276,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
           else {
             list1.mostrarTabla = true;
           }
+          EntidadesService.puntoElegido=null;
          list1.verTablaT();
        }
        if (id==1) {
@@ -235,6 +285,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
             else {
               list1.mostrarTabla = true;
             }
+            EntidadesService.puntoElegido=null;
          list1.verTablaR();
        }
     }
@@ -312,6 +363,14 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
 
     }
+    list1.changedT = function () {
+      list1.actualizarPuntosT();
+      EntidadesService.puntoElegido = null;
+    }
+    list1.changedR = function () {
+      list1.actualizarPuntosR();
+      EntidadesService.puntoElegido = null;
+    }
     //Actualiza los puntos de los tracks para que los componenetes que los
     // necesiten tengan la ultima version de los puntos
     list1.actualizarPuntosT = function() {
@@ -320,6 +379,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       EntidadesService.isWaypoint = false;
       list1.modoCreacion = false;
       EntidadesService.modoCreacion = false;
+
         EntidadesService.trackActivo = list1.trackActivo;
          EntidadesService.actualizarPuntosT();
          list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
@@ -590,7 +650,7 @@ list1.noVerAlert = function () {
         } else {
           list1.activarListaR=true;
           EntidadesService.isTrack = false;
-
+          EntidadesService.puntoElegido=null;
           console.log("mostrarMensaje");
           console.log(list1.mostrarMensaje);
           EntidadesService.isWaypoint = false;
@@ -630,7 +690,7 @@ list1.noVerAlert = function () {
         } else {
           list1.activarLista=true;
           EntidadesService.isTrack = true;
-
+          EntidadesService.puntoElegido=null;
           EntidadesService.isWaypoint = false;
           list1.modoCreacion = false;
           EntidadesService.modoCreacion = false;
@@ -921,14 +981,20 @@ function EntidadesService (){
   }
   service.borrarTrack = function () {
     //Eliminapos la polilinea actual
+    if(service.polyLineas[service.trackActivo]!==undefined){
     service.getPoly().setMap(null);
+    service.polyLineas.splice(service.trackActivo,1);
+    }
     //ELiminamos los marcadores de inicion y fin actuales
+    if(service.markersT[service.trackActivo]!==undefined){
     console.log("markers");
     console.log(service.markersT);
     service.markersT[service.trackActivo][0].setMap(null);
     service.markersT[service.trackActivo][1].setMap(null);
+    }
     //Marcamos al track como que no tiene polilinea
     service.tienePoly[service.trackActivo]=false;
+    service.tienePoly.splice(service.trackActivo,1);
     //Y tambien como que no tiene marcadores
     service.markersT[service.trackActivo] = undefined;
     service.markersT.splice(service.trackActivo,1);
@@ -939,24 +1005,39 @@ function EntidadesService (){
     }
     //Borramos el track por completo
     service.tracks.splice(service.trackActivo,1);
+    if(service.tracks.length<1 && service.rutas.length<1 && service.waypoints.length<1)
+    {
+      service.hayEntidadesCreadas=false;
+    }
+    console.log(service.tracks.length);
+    console.log(service.hayEntidadesCreadas);
   }
   service.borrarRuta = function () {
+    console.log(service.rutaActiva);
     //Eliminapos la polilinea actual
-    service.getPoly().setMap(null);
+  service.polyLineasR[service.rutaActiva].setMap(null);
+    service.polyLineasR.splice(service.rutaActiva,1);
     //ELiminamos los marcadores actuales
     for (var item in service.wpRta[service.rutaActiva]) {
         service.wpRta[service.rutaActiva][item].setMap(null);
     }
     //Marcamos la ruta como que no tiene polilinea
     service.tienePolyR[service.rutaActiva]=false;
+    service.tienePolyR.splice(service.rutaActiva,1);
     //Y tambien como que no tiene marcadores
       service.wpRta[service.rutaActiva] = undefined;
+      service.wpRta.splice(service.rutaActiva,1);
     //Booramos los puntos actuales
     for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
       service.rutas[service.rutaActiva].puntos.splice(i,1);
       service.puntosTrackActivo.splice(i,1);
     }
     service.rutas.splice(service.rutaActiva,1);
+    if(service.tracks.length<1 && service.rutas.length<1 && service.waypoints.length<1)
+    {
+      service.hayEntidadesCreadas=false;
+    }
+    console.log(service.hayEntidadesCreadas);
   }
 
 //Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.

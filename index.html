@@ -128,11 +128,11 @@
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
 					<img  src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.actualizarPuntosT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
+				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.actualizarPuntosR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
 		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
@@ -177,7 +177,7 @@
           <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-royal">Insertar Punto</button></td></tr>
         <tr><td><button id="botonRec" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.recortarRuta();" class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
-          <tr><td><button id="botonInv" type="button" ng-click="list1.invertirRuta();" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
+          <tr><td><button id="botonInv" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.invertirRuta();" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
 					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
           <tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar tabla</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar gráfica</button></td></tr>
@@ -189,7 +189,7 @@
           <tr><td><button id="botonIns" type="button"  class="bttn-unite bttn-xs bttn-primary">Insertar Punto</button></td></tr>
         <tr><td><button id="botonRec" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.recortarTrack();" class="bttn-unite bttn-xs bttn-primary">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
-          <tr><td><button id="botonInv" type="button" ng-click="list1.invertirTrack();" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
+          <tr><td><button id="botonInv" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.invertirTrack();" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
 					<tr><td>  <button id="botonTim" type="button" ng-click="list1.cambiarTiempos();" class="bttn-unite bttn-xs bttn-primary">Tiempos</button></td></tr>
 					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar tabla</button></td></tr>
