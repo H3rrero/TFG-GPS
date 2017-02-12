@@ -34,64 +34,98 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.mostrarMensaje =false;
     list1.mensajeError ="";
     list1.error= false;
+    list1.puntoBorrado = false;
 
+    //Metodo que llama al metodo unir del service
     list1.unirRutas = function () {
+      //Desactivamos el boolean error
       list1.error=false;
+      //Si ninguna ruta fuera seleccionada activamos el error y pasamos el mensaje
       if (EntidadesService.isTrack==true
           || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
           || EntidadesService.modoCreacion==true) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona una ruta para recortar";
+        //SI la ruta no tiene al menos dos puntos activamos el error
       }else if (EntidadesService.rutas.length<2) {
         list1.error= true;
         list1.mensajeError="Se necesitan al menos dos rutas para poder realizar la unión";
       }
       else{
+        //Pedimos la ruta con la que se quiere unir
         var rutaElegida = prompt("Introduczca el nombre o el nº(la primera ruta seria el nº 0) de la ruta que quiere unir","0");
+        //Pasamos el index a int
         var elegido =parseInt(rutaElegida);
+        //SI en lugar de posicion nos mete el nombre
         if(isNaN(elegido))
         {
+          //Entonces lo buscamos por el nombre
           elegido = EntidadesService.buscarRutaPorNombre(rutaElegida);
         }
+        //Si la ruta no exitiera activamos el error
         if(elegido==null || EntidadesService.rutas[elegido]==undefined){
           list1.error= true;
           list1.mensajeError="La ruta elegido no existe";
+          //Si alguna de las dos rutas no tiene al menos dos puntos creados activamos el error
         }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2 || EntidadesService.rutas[elegido].puntos.length<2) {
           list1.error= true;
           list1.mensajeError="Algunas de las dos rutas no dispone de al menos dos puntos creados";
+          //Si el usuario intenta unir una rita con ella misma activamos el error
+        }else if (elegido==EntidadesService.rutaActiva
+               || elegido== EntidadesService.rutas[EntidadesService.rutaActiva].nombre) {
+          list1.error= true;
+          list1.mensajeError="Elige otra ruta, no puede unir una ruta con ella misma";
         }
         else{
+          //Creamos la ruta que almacenara los puntos de la union
       list1.crear(1);
+      //Llamamos al metodo unir rutas del service
       EntidadesService.unirRuta(elegido);}
     }
     }
-
+    //metodo que llama a la funcion unir tracks del service
     list1.unirTracks = function () {
+      //Desactivamos el error
       list1.error=false;
+      //Activamos el error si el usuario no ha seleccionado un track
       if (EntidadesService.isTrack==false
           || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para recortar";
+        //Activamos el error si el track no dispone de al menos dos puntos
       }else if (EntidadesService.tracks.length<2) {
         list1.error= true;
         list1.mensajeError="Se necesitan al menos dos tracks para poder realizar la unión";
       }
       else{
+        //Pedimos el track al usuario
         var trackElegido = prompt("Introduczca el nombre o el nº(el primer track seria el nº 0) del track que quiere unir","0");
+        //Lo pasamos a entero
         var elegido =parseInt(trackElegido);
+        //Si ha metido su nombre en lugar de su posicion
         if(isNaN(elegido))
         {
+          //Buscamos el track por el nombre
           elegido = EntidadesService.buscarTrackPorNombre(trackElegido);
         }
+        //Activamos el error si el track no exitiera
         if(elegido==null || EntidadesService.tracks[elegido]==undefined){
           list1.error= true;
           list1.mensajeError="El track elegido no existe";
+          //Activamos el error si el track no tiene al menos dos puntos
         }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2 || EntidadesService.tracks[elegido].puntos.length<2) {
           list1.error= true;
           list1.mensajeError="Alguno de los dos tracks no dispone de al menos dos puntos creados";
+          //Activamos el error si el usuario ha intentado unir el track con el mismo
+        }else if (elegido==EntidadesService.trackActivo
+              || elegido == EntidadesService.tracks[EntidadesService.trackActivo].nombre) {
+          list1.error= true;
+          list1.mensajeError="Elige otro track, no puedes unir un track con el mismo";
         }
         else{
+          //Creamos el track que almacenara los puntos de la union
       list1.crear(0);
+      //llamamos al metodo unir del service
       EntidadesService.unirTrack(elegido);}
     }
     }
@@ -183,6 +217,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
     list1.puntoSelec = function (index) {
       EntidadesService.puntoSelec(index);
+      list1.puntoBorrado = true;
     }
 
     list1.renombrarT = function () {
@@ -220,6 +255,105 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       EntidadesService.wpActivo=list1.wpActivo;
       EntidadesService.renombrarW(nombre);
     }
+
+    }
+
+    list1.eliminarPuntoRuta = function () {
+      list1.error= false;
+      if (EntidadesService.isTrack==true
+          || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
+          || EntidadesService.modoCreacion == true) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona una ruta";
+      }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
+        list1.error= true;
+        list1.mensajeError="Debes seleccionar un punto para poder borrarlo";
+      }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<1) {
+        list1.error= true;
+        list1.mensajeError="La ruta no dispone de puntos que eliminar";
+      }else {
+        EntidadesService.eliminarPuntoRuta();
+        list1.puntoBorrado =false;
+        EntidadesService.puntoElegido = null;
+      }
+
+    }
+
+    list1.anadirPuntoRuta = function () {
+      list1.error=false;
+
+       if (EntidadesService.modoInsertar == true) {
+         EntidadesService.modoInsertar = false;
+        list1.error= true;
+        list1.mensajeError="Acabas de salir del modo insertar punto intermedio";
+      }
+      else if (EntidadesService.isTrack==true
+          || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona una ruta ";
+      }else if ( EntidadesService.puntoElegido == null) {
+        list1.error= true;
+        list1.mensajeError="Debes seleccionar un punto para poder insertar a continuación";
+      }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2) {
+        list1.error= true;
+        list1.mensajeError="La ruta no dispone de puntos entre los que insertar";
+      }
+      else{
+      EntidadesService.modoInsertar = true;
+      list1.error= true;
+      list1.mensajeError="Has entrado en el modo insertar punto intermedio, "+
+                          "para salir pulse otra vez insertar punto. "+
+                          "Selecciona el punto de origen y después pincha donde "+
+                          "quieras añadir el nuevo punto";
+      }
+    }
+
+    list1.anadirPuntoTrack = function () {
+      list1.error=false;
+
+      if (EntidadesService.modoInsertar == true) {
+        EntidadesService.modoInsertar = false;
+        list1.error= true;
+        list1.mensajeError="Acabas de salir del modo insertar punto intermedio";
+      }
+      else if (EntidadesService.isTrack==false
+          || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona un track ";
+      }else if ( EntidadesService.puntoElegido == null) {
+        list1.error= true;
+        list1.mensajeError="Debes seleccionar un punto para poder insertar a continuación";
+      }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2) {
+        list1.error= true;
+        list1.mensajeError="El track no dispone de puntos entre los que insertar";
+      }
+      else{
+      EntidadesService.modoInsertar = true;
+      list1.error= true;
+      list1.mensajeError="Has entrado en el modo insertar punto intermedio, "+
+                          "para salir pulse otra vez insertar punto. "+
+                          "Selecciona el punto de origen y después pincha donde "+
+                          "quieras añadir el nuevo punto";
+      }
+    }
+
+    list1.eliminarPuntoTrack = function () {
+      list1.error= false;
+      if (EntidadesService.isTrack==false
+          || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona un track ";
+      }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
+        list1.error= true;
+        list1.mensajeError="Debes seleccionar un punto para poder borrarlo";
+      }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<1) {
+        list1.error= true;
+        list1.mensajeError="El track no dispone de puntos que eliminar";
+      }else {
+        EntidadesService.eliminarPuntoTrack();
+        list1.puntoBorrado =false;
+        EntidadesService.puntoElegido = null;
+      }
 
     }
 
@@ -853,7 +987,181 @@ function EntidadesService (){
   service.modoRecorte2 = false;
   service.colorPolyNF = "";
   service.modoUnion = false;
+  service.modoInsertar = false;
+  service.puntoN={};
 
+  service.anadirPuntoRuta = function () {
+    var puntos =new Array();
+    service.colorPolyNF = service.getPoly().strokeColor;
+    //Eliminapos la polilinea actual
+    service.getPoly().setMap(null);
+    //ELiminamos los marcadores actuales
+    for (var item in service.wpRta[service.rutaActiva]) {
+        service.wpRta[service.rutaActiva][item].setMap(null);
+    }
+
+
+    //Marcamos la ruta como que no tiene polilinea
+    service.tienePolyR[service.rutaActiva]=false;
+    //Y tambien como que no tiene marcadores
+      service.wpRta[service.rutaActiva] = undefined;
+    for (var variable in service.rutas[service.rutaActiva].puntos) {
+      puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+    }
+    //Añadimos el nuevo punto
+    puntos.splice(service.puntoElegido+1,0,service.puntoN);
+    //Booramos los puntos actuales
+    for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+      service.rutas[service.rutaActiva].puntos.splice(i,1);
+      service.puntosTrackActivo.splice(i,1);
+    }
+    //Asignamos una nueva fecha
+    service.rutas[service.rutaActiva].fecha = new Date();
+    //Recorremos los puntos para volver a añadirlos
+    for (var i = 0; i <puntos.length; i++) {
+      //Guardamos la longitud y laltitud para pasarsela al mapa
+      service.longitudPInv = puntos[i].longitud;
+      service.latitudPInv = puntos[i].latitud;
+      service.elevacionP = puntos[i].elevacion;
+      //Activamos el modo invertir
+        service.modoInvertir = true;
+
+      //Simulamos un click el mapa para añadir el punto
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    //Desactivamos el modo invertir
+    service.modoInvertir = false;
+  }
+
+  service.anadirPuntoTrack = function () {
+    var puntos =new Array();
+    service.colorPolyNF = service.getPoly().strokeColor;
+    //Eliminapos la polilinea actual
+    service.getPoly().setMap(null);
+    //ELiminamos los marcadores de inicion y fin actuales
+    service.markersT[service.trackActivo][0].setMap(null);
+    service.markersT[service.trackActivo][1].setMap(null);
+    //Marcamos al track como que no tiene polilinea
+    service.tienePoly[service.trackActivo]=false;
+    //Y tambien como que no tiene marcadores
+    service.markersT[service.trackActivo] = undefined;
+    for (var variable in service.tracks[service.trackActivo].puntos) {
+      puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+    }
+    //Añadimos el nuevo punto
+    puntos.splice(service.puntoElegido+1,0,service.puntoN);
+    console.log(puntos);
+    //Booramos los puntos actuales
+    for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+      service.tracks[service.trackActivo].puntos.splice(i,1);
+      service.puntosTrackActivo.splice(i,1);
+    }
+    //Asignamos una nueva fecha
+    service.tracks[service.trackActivo].fecha = new Date();
+    for (var i =0; i < puntos.length; i++) {
+      //Guardamos la longitud y laltitud para pasarsela al mapa
+      service.longitudPInv = puntos[i].longitud;
+      service.latitudPInv = puntos[i].latitud;
+      service.elevacionP = puntos[i].elevacion;
+      //Activamos el modo invertir (usamos este modo ya que nos sirve
+      //perfectamente simplemente llamandolo sin invertir los puntos anteriormente)
+        service.modoInvertir = true;
+
+      //Simulamos un click el mapa para añadir el punto
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    //Desactivamos el modo invertir
+    service.modoInvertir = false;
+  }
+
+  //Metodo que elimina un punto de una ruta
+  service.eliminarPuntoRuta = function () {
+    var puntos =new Array();
+    //Guardamos el color de la ruta
+    service.colorPolyNF = service.getPoly().strokeColor;
+    //Eliminapos la polilinea actual
+    service.getPoly().setMap(null);
+    //ELiminamos los marcadores actuales
+    for (var item in service.wpRta[service.rutaActiva]) {
+        service.wpRta[service.rutaActiva][item].setMap(null);
+    }
+
+
+    //Marcamos la ruta como que no tiene polilinea
+    service.tienePolyR[service.rutaActiva]=false;
+    //Y tambien como que no tiene marcadores
+      service.wpRta[service.rutaActiva] = undefined;
+    for (var variable in service.rutas[service.rutaActiva].puntos) {
+      puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+    }
+    //Booramos los puntos actuales
+    for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+      service.rutas[service.rutaActiva].puntos.splice(i,1);
+      service.puntosTrackActivo.splice(i,1);
+    }
+    //Eliminamos el punto seleccionado
+    puntos.splice(service.puntoElegido,1);
+    //Asignamos una nueva fecha
+    service.rutas[service.rutaActiva].fecha = new Date();
+    //Recorremos los puntos para volver a añadirlos
+    for (var i = 0; i <puntos.length; i++) {
+      //Guardamos la longitud y laltitud para pasarsela al mapa
+      service.longitudPInv = puntos[i].longitud;
+      service.latitudPInv = puntos[i].latitud;
+      service.elevacionP = puntos[i].elevacion;
+      //Activamos el modo invertir
+        service.modoInvertir = true;
+
+      //Simulamos un click el mapa para añadir el punto
+      google.maps.event.trigger(service.mapa, 'click');
+    }
+    //Desactivamos el modo invertir
+    service.modoInvertir = false;
+  }
+
+ service.eliminarPuntoTrack = function () {
+   var puntos =new Array();
+   //Guardamos el color de la polilinea
+   service.colorPolyNF = service.getPoly().strokeColor;
+   //Eliminapos la polilinea actual
+   service.getPoly().setMap(null);
+   //ELiminamos los marcadores de inicion y fin actuales
+   service.markersT[service.trackActivo][0].setMap(null);
+   //En caso de que no tenga marcador de final no accedemos a el
+   if(service.markersT[service.trackActivo].length>1)
+   service.markersT[service.trackActivo][1].setMap(null);
+   //Marcamos al track como que no tiene polilinea
+   service.tienePoly[service.trackActivo]=false;
+   //Y tambien como que no tiene marcadores
+   service.markersT[service.trackActivo] = undefined;
+   for (var variable in service.tracks[service.trackActivo].puntos) {
+     puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+   }
+   //Eliminamos el punto elegido d ela lista de punto a pintar
+   puntos.splice(service.puntoElegido,1);
+   //Booramos los puntos actuales
+   for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+     service.tracks[service.trackActivo].puntos.splice(i,1);
+     service.puntosTrackActivo.splice(i,1);
+   }
+   //Asignamos una nueva fecha
+   service.tracks[service.trackActivo].fecha = new Date();
+   for (var i =0; i < puntos.length; i++) {
+     //Guardamos la longitud y laltitud para pasarsela al mapa
+     service.longitudPInv = puntos[i].longitud;
+     service.latitudPInv = puntos[i].latitud;
+     service.elevacionP = puntos[i].elevacion;
+     //Activamos el modo invertir (usamos este modo ya que nos sirve
+     //perfectamente simplemente llamandolo sin invertir los puntos anteriormente)
+       service.modoInvertir = true;
+
+     //Simulamos un click el mapa para añadir el punto
+     google.maps.event.trigger(service.mapa, 'click');
+   }
+   //Desactivamos el modo invertir
+   service.modoInvertir = false;
+ }
+ //Metodo que devuelve la posicion de una ruta a partir de su nombre
   service.buscarRutaPorNombre = function (nombre) {
     for (var item in service.tracks) {
       if(service.rutas[item].nombre ==nombre){
@@ -862,6 +1170,7 @@ function EntidadesService (){
     }
     return null;
   }
+   //Metodo que devuelve la posicion de un track a partir de su nombre
   service.buscarTrackPorNombre = function (nombre) {
     for (var item in service.tracks) {
       if(service.tracks[item].nombre ==nombre){
@@ -870,66 +1179,94 @@ function EntidadesService (){
     }
     return null;
   }
+  //Metodo que une dos rutas
   service.unirRuta = function (rutaElegida) {
+    //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
+    //Recorremos los puntos de la primera ruta
     for (var item in service.rutas[service.rutaActiva].puntos) {
+      //Guardamos los datos de los puntos
       service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
       service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;
       service.elevacionP = service.rutas[service.rutaActiva].puntos[item].elevacion;
+      //Activamos el modo segundo recorte
       service.modoRecorte2=true;
+      //Simulamos el click para añadir los puntos a la nueva ruta y al mapa
       google.maps.event.trigger(service.mapa, 'click');
     }
+    //Recorremos la segunda ruta
     for (var item in service.rutas[rutaElegida].puntos) {
+      //Guardamos los datos de los puntos
       service.longitudPInv = service.rutas[rutaElegida].puntos[item].longitud;
       service.latitudPInv = service.rutas[rutaElegida].puntos[item].latitud;
       service.elevacionP = service.rutas[rutaElegida].puntos[item].elevacion;
+        //Simulamos el click para añadir los puntos a la nueva ruta y al mapa
       google.maps.event.trigger(service.mapa, 'click');
     }
+    //Desactivamos los modos activados durante el metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
   }
 
+  //metodo que une dos tracks
   service.unirTrack = function (trackElegido) {
+    //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
+    //Recorremos los puntos del primer track
     for (var item in service.tracks[service.trackActivo].puntos) {
+      //Guardamos los datos de los puntos
       service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
       service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
       service.elevacionP = service.tracks[service.trackActivo].puntos[item].elevacion;
+      //EL modo segundo recorte nos viene que ni pintado para esta situación
       service.modoRecorte2=true;
+      //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
       google.maps.event.trigger(service.mapa, 'click');
     }
+    //Recorremos el segundo track
     for (var item in service.tracks[trackElegido].puntos) {
+        //Guardamos los datos de los puntos
       service.longitudPInv = service.tracks[trackElegido].puntos[item].longitud;
       service.latitudPInv = service.tracks[trackElegido].puntos[item].latitud;
       service.elevacionP = service.tracks[trackElegido].puntos[item].elevacion;
+      //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
       google.maps.event.trigger(service.mapa, 'click');
     }
+    //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
   }
   service.recortarTrack = function () {
+    //Recorremos los puntos del track seleccionado
     for (var item in service.tracks[service.trackActivo].puntos) {
+      //Recorremos los punto anteriores al punto elegido
       if (item<=service.puntoElegido) {
+        //Guardamos sus datos porque los necesitaremos cuando los pintemos en el mapa
         service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
         service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
         service.elevacionP = service.tracks[service.trackActivo].puntos[item].elevacion;
-        //Activamos el modo invertir
+        //Activamos el modo invertir y el modo primer recorte
           service.modoInvertir = true;
           service.modoRecorte1 = true;
+          //Simulamos un click en el mapa para que se añada el punto
           google.maps.event.trigger(service.mapa, 'click');
 
       }
       service.modoRecorte1 = false;
+      //Recorremos los punto a partir del punto elegido
       if (item>=service.puntoElegido) {
+        //Guardamos sus datos
         service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
         service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
         service.elevacionP = service.tracks[service.trackActivo].puntos[item].elevacion;
-        //Activamos el modo invertir
+        //Activamos el modo invertir y el modo segundo recorte
           service.modoInvertir = true;
           service.modoRecorte2 = true;
+          //Simulamos un click en el mapa para que se añada el punto
           google.maps.event.trigger(service.mapa, 'click');
       }
     }
+    //Desactivamos todos los modos y ponemos a null el punto elegido
     service.modoInvertir = false;
     service.modoRecorte1 = false;
     service.modoRecorte2 = false;
@@ -937,59 +1274,73 @@ function EntidadesService (){
   }
   service.recortarRuta = function () {
     for (var item in service.rutas[service.rutaActiva].puntos) {
+      //Recorremos los puntos antes del punto elegido
       if (item<=service.puntoElegido) {
+        //Guardamos sus datos
         service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
         service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;
         service.elevacionP = service.rutas[service.rutaActiva].puntos[item].elevacion;
-        //Activamos el modo invertir
+        //Activamos el modo invertir y el modo primer recorde
           service.modoInvertir = true;
           service.modoRecorte1 = true;
+          //simulamos click en el mapa
           google.maps.event.trigger(service.mapa, 'click');
 
       }
       service.modoRecorte1 = false;
+      //Recorremos los puntos despues del punto elegido
       if (item>=service.puntoElegido) {
+        //guardamos sus datos
         service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
         service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;
         service.elevacionP = service.rutas[service.rutaActiva].puntos[item].elevacion;
-        //Activamos el modo invertir
+        //Activamos el modo invertir y el modo segundo recorte
           service.modoInvertir = true;
           service.modoRecorte2 = true;
           google.maps.event.trigger(service.mapa, 'click');
       }
     }
+    //Deesactivamos todos los modos y ponemos el punto elegido como null
     service.modoInvertir = false;
     service.modoRecorte1 = false;
     service.modoRecorte2 = false;
     service.puntoElegido = null;
   }
 
-
+  //Metodo que guarda el punto seleccionado en la tabla de puntos
   service.puntoSelec = function (index) {
+    //Guardamos el index del punto elegido
     service.puntoElegido = index;
+    //Activamos el modo seleccion
     service.seleccion = true;
     if(service.isTrack == true){
+      //Guardamos los datos del punto
       service.latitudSelec = service.tracks[service.trackActivo].puntos[index].latitud;
       service.longitudSelec = service.tracks[service.trackActivo].puntos[index].longitud;
-      //Simulamos un click el mapa para añadir el punto
+      //Simulamos un click el mapa para añadir el marcado del punto elegido
       google.maps.event.trigger(service.mapa, 'click');
     }else{
+      //Guardamos los datos del punto
       service.latitudSelec = service.rutas[service.rutaActiva].puntos[index].latitud;
       service.longitudSelec = service.rutas[service.rutaActiva].puntos[index].longitud;
-      //Simulamos un click el mapa para añadir el punto
+      //Simulamos un click el mapa para añadir el marcado del punto elegido
       google.maps.event.trigger(service.mapa, 'click');
     }
+    //Desactivamos el modo selecion
     service.seleccion = false;
   }
 
+  //metodo que cambia el nombre a un track elegido
   service.renombrarT = function (nombre) {
     if(service.isTrack == true)
     service.tracks[service.trackActivo].nombre = nombre;
   }
+  //Metodo que cambia el nombre a una ruta elegida
   service.renombrarR = function (nombre) {
     if (service.isTrack == false)
     service.rutas[service.rutaActiva].nombre = nombre;
   }
+  //Metodo que cambia el nombre a un wayPoint elegido
   service.renombrarW = function (nombre) {
     if (service.isWaypoint == true)
     service.waypoints[service.wpActivo].nombre = nombre;
@@ -1813,6 +2164,44 @@ function Mymap(EntidadesService) {
             });
             EntidadesService.markerPunto = marker;
           }
+          if(EntidadesService.modoInsertar == true && EntidadesService.puntoElegido!=null && event!==undefined){
+
+            //Servicio de elevaciones que nos da la elevacion del punto actual
+            elevator.getElevationForLocations({
+              'locations': [event.latLng]
+            }, function(results, status) {
+              if (status === google.maps.ElevationStatus.OK) {
+                if (results[0]) {
+                  EntidadesService.puntoN = {
+                    numero:0,
+                    latitud:0,
+                    longitud: 0,
+                    elevacion: 0,
+                    fecha:0,
+                    hora:0,
+                    desnivel:0,
+                    distancia: 0,
+                    velocidad: 4,
+                  }
+                  console.log("Estoy en elevacionnnnnn");
+                  EntidadesService.puntoN.longitud = event.latLng.lng().toFixed(6);
+                  EntidadesService.puntoN.latitud = event.latLng.lat().toFixed(6);
+                  EntidadesService.puntoN.elevacion = results[0].elevation.toFixed(2);
+                  EntidadesService.modoInsertar = false;
+                  if(EntidadesService.isTrack==true)
+                  EntidadesService.anadirPuntoTrack();
+                  else {
+                    EntidadesService.anadirPuntoRuta();
+                  }
+                } else {
+                console.log("no result found");
+                }
+              } else {
+              console.log("elevation service failed");
+              }
+            });
+
+          }
           if(EntidadesService.modoInvertir == true){
             console.log("estoy en invertir");
           var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
@@ -2057,7 +2446,7 @@ function Mymap(EntidadesService) {
 
   }
 
-          if ((EntidadesService.modoInvertir == false && EntidadesService.seleccion==false && EntidadesService.hayEntidadesCreadas==true && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0)) || EntidadesService.isWaypoint == true) {
+          if ((EntidadesService.modoInsertar == false && EntidadesService.modoInvertir == false && EntidadesService.seleccion==false && EntidadesService.hayEntidadesCreadas==true && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0)) || EntidadesService.isWaypoint == true) {
           //Depende de que entidad sea llamamos a un metodo u otro
           if (EntidadesService.isTrack == true) {
             //Servicio de elevaciones que nos da la elevacion del punto actual
