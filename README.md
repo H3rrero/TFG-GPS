@@ -5,15 +5,16 @@
 ##Estado actual
 ###Funciones implementadas:
     - Crear para Track,Ruta y Waypoint
-    - Borrar para Track,Ruta, falta Waypoint
+    - Borrar para Track,Ruta
     - Renombrar para Track,Ruta y Waypoint
     - Recortar para Track y Ruta
     - Invertir para Track y Ruta
     - Calcular tiempos para Track y Ruta
-###Falta por implementar:
     - Funcion unir para Track y ruta
     - Funcion eliminar un punto para Track y Ruta
     - Funcion insertar un punto para Track y Ruta
+###Falta por implementar:
+    - Funcion borrar un waypoint
     - Funcion descargar/importar para Track,Ruta, falta Waypoint
 ##Puedes ver el avance aquí
   https://h3rrero.github.io/TFG-GPS/
