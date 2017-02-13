@@ -621,6 +621,24 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.isFirefox = false;
   }
 
+    list1.dowXml = function () {
+      list1.error=false;
+      if(EntidadesService.tracks.length<1)
+      {
+        list1.error= true;
+        list1.mensajeError="Necesitas tener tracks creados para poder descargar uno";
+      }
+      else if (EntidadesService.isTrack==false) {
+        list1.error= true;
+        list1.mensajeError="Por favor selecciona un track para descargar";
+      }else{
+      var xml = EntidadesService.getXml();
+      //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
+      list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+        + encodeURIComponent(xml);
+      }
+    }
+
     //Funcion para la descarga de la imagen de tabla
     list1.dowImage = function () {
       var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -646,7 +664,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         list1.dataUrl = canvas.toDataURL("image/png");
       }
       else{
-        //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
+
         var canvas = document.getElementById("canvas");
         list1.dataUrl = canvas.toDataURL("image/png");
       }
@@ -989,6 +1007,27 @@ function EntidadesService (){
   service.modoUnion = false;
   service.modoInsertar = false;
   service.puntoN={};
+
+  service.getXml = function () {
+    var xml = "<?xml version="+'"1.0"'+" encoding="+'"UTF-8"'+"?>\n"
+    +"<gpx xmlns="+'"http://www.topografix.com/GPX/1/1"'+" creator="+'"Alejandro Fernández Herrero"'
+    +" version="+'"1.1"'+" xmlns:xsi="+'"http://www.w3.org/2001/XMLSchema-instance"'+">\n"+
+    "\t<metadata>\n"+"\t\t<name>TFG Tracks GPS</name>\n"+"\t\t<link href="+'"https://h3rrero.github.io/TFG-GPS/"'+">\n"+
+    "\t\t\t<text>TFG-GPS</text>\n"+"\t\t</link>\n"+"\t</metadata>\n";
+
+    xml = xml+"\t<trk>\n"+"\t\t<name>"+service.tracks[service.trackActivo].nombre+"</name>\n"+
+          "\t\t<trkseg>\n";
+    for (var item in service.tracks[service.trackActivo].puntos) {
+    xml = xml+"\t\t\t<trkpt lat="+'"'+service.tracks[service.trackActivo].puntos[item].latitud+'"'+" lon="+'"'+
+          service.tracks[service.trackActivo].puntos[item].longitud+'"'+">\n"+
+          "\t\t\t\t<ele>"+service.tracks[service.trackActivo].puntos[item].elevacion+"</ele>\n"+
+          "\t\t\t\t<time>"+service.tracks[service.trackActivo].puntos[item].fecha+"T"+
+          service.tracks[service.trackActivo].puntos[item].hora+"</time>\n"+
+          "\t\t\t</trkpt>\n";
+    }
+    xml = xml+"\t\t</trkseg>\n"+"\t</trk>\n"+"</gpx>";
+    return xml;
+  }
 
   service.anadirPuntoRuta = function () {
     var puntos =new Array();
