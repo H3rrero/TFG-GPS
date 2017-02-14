@@ -130,174 +130,223 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     }
     }
 
+    //Metodo que permite borrar una ruta
     list1.borrarRuta = function () {
+      //Se pone el error a false para resetearlo
       list1.error= false;
+      //Se comprueba que se ha seleccionado una ruta y si no es asi salta un error
       if (EntidadesService.isTrack==true
          || EntidadesService.modoCreacion == true
          || EntidadesService.rutas[EntidadesService.rutaActiva]===undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona una ruta para eliminar";
+        //Nos aseguramos de que tenga rutas creadas
       }else if (EntidadesService.rutas.length<1) {
         list1.error= true;
         list1.mensajeError="Necesitas tener rutas creadas para poder eliminarlas";
       }
+      //En caso de estar todo correcto llamamos al metodo del service
        else {
           EntidadesService.borrarRuta();
       }
 
     }
 
+    //Metodo que borra un track
     list1.borrarTrack = function () {
+      //Reseteamos el error
       list1.error= false;
+      //Comprobamos que haya seleccionado un track
       if (EntidadesService.isTrack==false
           || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para eliminar";
+        //Comprobamos que tenga tracks creados
       }else if (EntidadesService.tracks.length<1) {
         list1.error= true;
         list1.mensajeError="Necesitas tener tracks creados para poder eliminarlos";
       }
+      //Si todo esta correcto llamamos al metodo del service
       else {
           EntidadesService.borrarTrack();
       }
 
     }
 
+    //Metodo que recorta una ruta
     list1.recortarRuta = function () {
+      //Reseteamos el error
       list1.error= false;
-      console.log(EntidadesService.puntoElegido);
+      //Punto que usuario a seleccionado en la tabla a partir del cual se recorta
       var punto = EntidadesService.puntoElegido;
+      //Se comprueba que se haya seleccionado una ruta
       if (EntidadesService.isTrack==true
          || EntidadesService.modoCreacion == true
          || EntidadesService.rutas[EntidadesService.rutaActiva]===undefined) {
            list1.error= true;
            list1.mensajeError="Por favor selecciona una ruta para recortar";
+      //Se comprueba que se haya seleccionado el punto a partir del cual se recorta
       }else if (EntidadesService.puntoElegido==null) {
         list1.error= true;
         list1.mensajeError="Antes de cortar tienes que seleccionar en la tabla el punto a partir del cual quieres realizar el corte";
+      //Se comprueba que la ruta tenga mas de un punto creado
       }else if (list1.rutas[list1.rutaActiva].puntos.length<2) {
         list1.error= true;
         list1.mensajeError="La ruta necesita tener mas de un punto creado para poder ser cortada";
       }
+      //S todo esta bien...
       else{
+      //Creamos dos nuevas rutas que almacenaran los dos recortes creados
       list1.crear(1);
       list1.crear(1);
+      //Guardamos el punto elegido
       EntidadesService.puntoElegido=punto;
+      // Y llamamos al metodo del service
       EntidadesService.recortarRuta();
-      console.log("punto elegido");
-      console.log(EntidadesService.puntoElegido);
     }
     }
 
+    //Metodo que recorta un track
     list1.recortarTrack = function () {
+      //Reseteamos el error
       list1.error= false;
-      console.log("Punticoo");
-        console.log(EntidadesService.puntoElegido);
+      //Punto elegido a partir del cual se recorta
       var punto = EntidadesService.puntoElegido;
+      //Se comprueba que se haya seleccionado un track
       if (EntidadesService.isTrack==false
           || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para recortar";
+      //Se comprueba que se haya selccionado un punto
       }else if (EntidadesService.puntoElegido==null) {
         list1.error= true;
         list1.mensajeError="Antes de cortar tienes que seleccionar en la tabla el punto a partir del cual quieres realizar el corte";
+      //Se comprueba que el track tiene al menos dos puntos creados
       }else if (list1.tracks[list1.trackActivo].puntos.length<2) {
         list1.error= true;
         list1.mensajeError="El track necesita tener mas de un punto creado para poder ser cortado";
       }
+      //Si todo esta bien...
       else{
+        //Creamos dos tracks para almacenar los dos recortes
       list1.crear(0);
       list1.crear(0);
+      //Guardamos el punto elegido
       EntidadesService.puntoElegido = punto;
+      //Y llamaos al metodo del service
       EntidadesService.recortarTrack();
-      console.log("punto elegido");
-      console.log(EntidadesService.puntoElegido);
     }
     }
 
+    //Funcion que obtiene de la tabla el punto seleccionado por el usuario
     list1.puntoSelec = function (index) {
       EntidadesService.puntoSelec(index);
       list1.puntoBorrado = true;
     }
 
+    //funcion que permite cambiar el nombre a un track
     list1.renombrarT = function () {
       list1.error= false;
+      //Se comprueba que tenga algun track creado
       if (EntidadesService.tracks.length<=0) {
         list1.error= true;
         list1.mensajeError="No tienes ningun track creado";
       }
       var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
       if(nombre!= null && EntidadesService.tracks.length>0){
+      //Se llama al metodo del service para cambiar el nombre
       EntidadesService.renombrarT(nombre);
     }
 
     }
+    //Metodo que cambia el nombre a una ruta
     list1.renombrarR = function () {
       list1.error= false;
+      //Se comprueba que tenga rutas creadas
       if (EntidadesService.rutas.length<=0) {
         list1.error= true;
         list1.mensajeError="No tienes ninguna ruta creada";
       }
       var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
       if(nombre!= null && EntidadesService.rutas.length>0){
+        //Se llama al metodo del service para cambiar el nombre
       EntidadesService.renombrarR(nombre);
     }
 
     }
+    //Metodo que cambia el nombre a un waypoint
     list1.renombrarW = function () {
       list1.error= false;
+      //Se comprueba que se tengan waypoints creados
       if (EntidadesService.waypoints.length<=0) {
         list1.error= true;
         list1.mensajeError="No tienes ningun waypoint creado";
       }
       var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
       if(nombre!= null && EntidadesService.waypoints.length>0){
+        //SE guarda el waypoint seleccionado
       EntidadesService.wpActivo=list1.wpActivo;
+      //Se llama al metodo del service para cambiar el nombre
       EntidadesService.renombrarW(nombre);
     }
 
     }
 
+    //Metodo que permite eliminar un punto de una ruta
     list1.eliminarPuntoRuta = function () {
+      //Se resetea el error
       list1.error= false;
+      //Se comprueba que se haya seleccionado una ruta
       if (EntidadesService.isTrack==true
           || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
           || EntidadesService.modoCreacion == true) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona una ruta";
+        //Se comprueba que se haya seleccionado el punto a borrar
       }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
         list1.error= true;
         list1.mensajeError="Debes seleccionar un punto para poder borrarlo";
+      //Se comprueba que la ruta tenga puntos creados
       }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<1) {
         list1.error= true;
         list1.mensajeError="La ruta no dispone de puntos que eliminar";
+        //En caso de ir todo bien...
       }else {
+        //se llama al metodo del service
         EntidadesService.eliminarPuntoRuta();
+        //Se quita el modo borrar
         list1.puntoBorrado =false;
+        //Se resetea el punto elegido
         EntidadesService.puntoElegido = null;
       }
 
     }
 
+    //Metodo que añade un punto intermedio a una ruta
     list1.anadirPuntoRuta = function () {
+      //Se resetea el error
       list1.error=false;
-
+      //SI el modo insertar esta activado se desactiva
        if (EntidadesService.modoInsertar == true) {
          EntidadesService.modoInsertar = false;
         list1.error= true;
         list1.mensajeError="Acabas de salir del modo insertar punto intermedio";
-      }
+      }//Se comprueba que se haya seleccionado una ruta
       else if (EntidadesService.isTrack==true
           || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona una ruta ";
+        //Se comprueba que se haya selccionado el punto a partir
+        // del cual se insertara el nuevo punto
       }else if ( EntidadesService.puntoElegido == null) {
         list1.error= true;
         list1.mensajeError="Debes seleccionar un punto para poder insertar a continuación";
+        //Se comprueba que la ruta tenga puntos creados
       }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2) {
         list1.error= true;
         list1.mensajeError="La ruta no dispone de puntos entre los que insertar";
       }
+      //Si no hay errores activamos el modo inserccion y avisamos al usuario
       else{
       EntidadesService.modoInsertar = true;
       list1.error= true;
@@ -308,25 +357,31 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       }
     }
 
+    //Metodo que añade un punto a un track
     list1.anadirPuntoTrack = function () {
+      //Reseteamos el error
       list1.error=false;
-
+      //Si esta activado el modo insertar pues lo desactivamos
       if (EntidadesService.modoInsertar == true) {
         EntidadesService.modoInsertar = false;
         list1.error= true;
         list1.mensajeError="Acabas de salir del modo insertar punto intermedio";
       }
+      //Comprobamos que tenga seleccionado un track
       else if (EntidadesService.isTrack==false
           || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track ";
+        //Comprobamos que tenga un punto seleccionado
       }else if ( EntidadesService.puntoElegido == null) {
         list1.error= true;
         list1.mensajeError="Debes seleccionar un punto para poder insertar a continuación";
+        //COmprobamos que el track tenga puntos creados
       }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2) {
         list1.error= true;
         list1.mensajeError="El track no dispone de puntos entre los que insertar";
       }
+      //Si todo esta bien activamos el modo insertar y avisamos al usuario
       else{
       EntidadesService.modoInsertar = true;
       list1.error= true;
@@ -337,18 +392,23 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       }
     }
 
+    //Metodo que elimina un punto de un track
     list1.eliminarPuntoTrack = function () {
       list1.error= false;
+      //Comprobamos que se haya selccionado un track
       if (EntidadesService.isTrack==false
           || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track ";
+        //Comprobamos que se haya seleccionado un punto
       }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
         list1.error= true;
         list1.mensajeError="Debes seleccionar un punto para poder borrarlo";
+        //Comprobamos que el track tenga puntos creados
       }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<1) {
         list1.error= true;
         list1.mensajeError="El track no dispone de puntos que eliminar";
+        //SI todo esta bien llamamos al metodo del service
       }else {
         EntidadesService.eliminarPuntoTrack();
         list1.puntoBorrado =false;
@@ -356,30 +416,39 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       }
 
     }
-
+    //Metodo que invierte el sentido de un track
     list1.invertirTrack = function () {
+      //Reseteamos el error
       list1.error = false;
+      //COmprobamos que se haya seleccionado un track para invertir
       if (EntidadesService.isTrack==false
           || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para invertir";
+        //Se comprueba que el track tenga puntos creados
       }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2) {
         list1.error= true;
         list1.mensajeError="El track no dispone de puntos que invertir";
       }else{
+        //Si todo es correcto llamamos al metodo del service
       EntidadesService.invertirTrack();
     }
     }
+    //Metodo que permite invertir el sentido de una ruta
     list1.invertirRuta = function () {
+      //Reseteamos el error
       list1.error = false;
+      //Comprobamos que se haya seleccionado una ruta
       if (EntidadesService.isTrack==true
           || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona una ruta para invertir";
+        //Se comprueba que tenga los puntos suficientes para invertir
       }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2) {
         list1.error= true;
         list1.mensajeError="La ruta no dispone de puntos que invertir";
       }else{
+        //Si todo esta bien se llam al metodo dek service
       EntidadesService.invertirRuta();}
     }
 
@@ -619,6 +688,22 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.isSafari = true;
       list1.isChrome = false;
       list1.isFirefox = false;
+  }
+  list1.dowXmlForWp = function () {
+    list1.error=false;
+      list1.dataUrl="";
+    if(EntidadesService.waypoints.length<1)
+    {
+      list1.error= true;
+      list1.mensajeError="Necesitas tener waypoints creados para poder descargarlos";
+    }else{
+    var xml = EntidadesService.getWaypoints();
+      console.log("he llegado a descarga");
+    //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
+    list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+      + encodeURIComponent(xml);
+
+    }
   }
   list1.dowXmlForR = function () {
     list1.error=false;
@@ -1034,17 +1119,40 @@ function EntidadesService (){
   service.puntoN={};
 
 
-  service.getXml = function (track) {
+  //Funcion que genera y devuelve un gpx con los waypoints
+  service.getWaypoints = function () {
+    //Esta serie la cabecera del gpx
     var xml = "<?xml version="+'"1.0"'+" encoding="+'"UTF-8"'+"?>\n"
     +"<gpx xmlns="+'"http://www.topografix.com/GPX/1/1"'+" creator="+'"Alejandro Fernández Herrero"'
     +" version="+'"1.1"'+" xmlns:xsi="+'"http://www.w3.org/2001/XMLSchema-instance"'+">\n"+
     "\t<metadata>\n"+"\t\t<name>TFG Tracks GPS</name>\n"+"\t\t<link href="+'"https://h3rrero.github.io/TFG-GPS/"'+">\n"+
     "\t\t\t<text>TFG-GPS</text>\n"+"\t\t</link>\n"+"\t</metadata>\n";
-    console.log("waypoints");
-    console.log(service.waypoints);
+
+    //Se recorren los waypoints y se añaden al gpx
+    for (var item in service.waypoints) {
+        xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
+        +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
+        service.waypoints[item].elevacion+"</ele>\n"+"\t\t<name>"+
+        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
+        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
+    }
+    xml = xml+"</gpx>";
+    return xml;
+  }
+
+  //FUncion que crea un gpx para un track o una ruta segun sea el caso
+  service.getXml = function (track) {
+    //Cabecera del gpx
+    var xml = "<?xml version="+'"1.0"'+" encoding="+'"UTF-8"'+"?>\n"
+    +"<gpx xmlns="+'"http://www.topografix.com/GPX/1/1"'+" creator="+'"Alejandro Fernández Herrero"'
+    +" version="+'"1.1"'+" xmlns:xsi="+'"http://www.w3.org/2001/XMLSchema-instance"'+">\n"+
+    "\t<metadata>\n"+"\t\t<name>TFG Tracks GPS</name>\n"+"\t\t<link href="+'"https://h3rrero.github.io/TFG-GPS/"'+">\n"+
+    "\t\t\t<text>TFG-GPS</text>\n"+"\t\t</link>\n"+"\t</metadata>\n";
+
+    //Si es track
     if (track == true) {
 
-
+    //Se recorren los waypoints y se añaden al gpx
     for (var item in service.waypoints) {
         xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
         +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
@@ -1057,6 +1165,8 @@ function EntidadesService (){
 
     xml = xml+"\t<trk>\n"+"\t\t<name>"+service.tracks[service.trackActivo].nombre+"</name>\n"+
           "\t\t<trkseg>\n";
+
+    //Se recorren los puntos del track para crear el gpx
     for (var item in service.tracks[service.trackActivo].puntos) {
     xml = xml+"\t\t\t<trkpt lat="+'"'+service.tracks[service.trackActivo].puntos[item].latitud+'"'+" lon="+'"'+
           service.tracks[service.trackActivo].puntos[item].longitud+'"'+">\n"+
@@ -1066,7 +1176,10 @@ function EntidadesService (){
           "\t\t\t</trkpt>\n";
     }
     xml = xml+"\t\t</trkseg>\n"+"\t</trk>\n"+"</gpx>";
+
+  //Si es una ruta
   }else {
+    //Se añaden los waypoints al gpx
     for (var item in service.waypoints) {
         xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
         +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
@@ -1074,7 +1187,28 @@ function EntidadesService (){
         service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
         +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
     }
-    xml = xml+"</gpx>";
+    //Se añaden los puntos de la ruta a gpx como waypoints
+    for (var item in service.rutas[service.rutaActiva].puntos) {
+        xml = xml + "\t<wpt lat="+'"'+service.rutas[service.rutaActiva].puntos[item].latitud+'"'
+        +" lon="+'"'+service.rutas[service.rutaActiva].puntos[item].longitud+'"'+">\n"+"\t\t<ele>"+
+        service.rutas[service.rutaActiva].puntos[item].elevacion+"</ele>\n"+"\t\t<name>"+
+        "Waypoint de ruta Nº"+item+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
+        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
+    }
+
+
+        xml = xml+"\t<trk>\n"+"\t\t<name>"+service.rutas[service.rutaActiva].nombre+"</name>\n"+
+              "\t\t<trkseg>\n";
+        //Se añade la ruta al gpx
+        for (var item in service.rutas[service.rutaActiva].puntos) {
+        xml = xml+"\t\t\t<trkpt lat="+'"'+service.rutas[service.rutaActiva].puntos[item].latitud+'"'+" lon="+'"'+
+              service.rutas[service.rutaActiva].puntos[item].longitud+'"'+">\n"+
+              "\t\t\t\t<ele>"+service.rutas[service.rutaActiva].puntos[item].elevacion+"</ele>\n"+
+              "\t\t\t\t<time>"+service.rutas[service.rutaActiva].puntos[item].fecha+"T"+
+              service.rutas[service.rutaActiva].puntos[item].hora+"</time>\n"+
+              "\t\t\t</trkpt>\n";
+        }
+        xml = xml+"\t\t</trkseg>\n"+"\t</trk>\n"+"</gpx>";
   }
     return xml;
   }
@@ -1612,7 +1746,12 @@ service.cambiarTiempos = function (velocidad,fecha) {
   }
 }
 
-//Calcula la duracion de la ida y de la velta de un track
+//Calcula la duracion del tramo entre dos puntos de un track
+//Usamos una formula de montañismo
+//Se calcula el tiempo en subida y bajada  y se suman
+//Se calcula el tiempo en recorrer la distancia del track en linea recta sin elevaciones
+//Despues se comprueba cual de los dos tiempos calculados es mayor
+// Y el resultado seria la suma del mayor mas la mitad del menor
 service.calcularDuracion= function (ida) {
   if (ida) {
     var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelP)/400).toFixed(2);
@@ -1653,7 +1792,12 @@ service.calcularDuracion= function (ida) {
   }
 }
 //Calcula la duracion del tramo entre dos puntos de un track
-service.calcularDuracionPuntos= function (punto) {//desnivel  distancia
+//Usamos una formula de montañismo
+//Se calcula el tiempo en subida y bajada  y se suman
+//Se calcula el tiempo en recorrer la distancia del track en linea recta sin elevaciones
+//Despues se comprueba cual de los dos tiempos calculados es mayor
+// Y el resultado seria la suma del mayor mas la mitad del menor
+service.calcularDuracionPuntos= function (punto) {
   var hDesnivelSubida = (parseFloat(punto.desnivel)/400).toFixed(2);
   var hDesnivelBajada = (Math.abs(parseFloat(punto.desnivel)/600)).toFixed(2);
   if (punto.desnivel>0) {
@@ -2249,7 +2393,7 @@ function Mymap(EntidadesService) {
               draggable: true,
               animation: google.maps.Animation.DROP,
               position: evento,
-              icon : "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+              icon : "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
             });
             EntidadesService.markerPunto = marker;
           }
@@ -2277,10 +2421,14 @@ function Mymap(EntidadesService) {
                   EntidadesService.puntoN.latitud = event.latLng.lat().toFixed(6);
                   EntidadesService.puntoN.elevacion = results[0].elevation.toFixed(2);
                   EntidadesService.modoInsertar = false;
-                  if(EntidadesService.isTrack==true)
+                  if(EntidadesService.isTrack==true){
                   EntidadesService.anadirPuntoTrack();
-                  else {
+                  controller.actualizarPuntosT();
+                  scope.$apply();
+                }else {
                     EntidadesService.anadirPuntoRuta();
+                    controller.actualizarPuntosR();
+                    scope.$apply();
                   }
                 } else {
                 console.log("no result found");
