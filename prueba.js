@@ -620,9 +620,31 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.isChrome = false;
       list1.isFirefox = false;
   }
+  list1.dowXmlForR = function () {
+    list1.error=false;
+      list1.dataUrl="";
+    if(EntidadesService.rutas.length<1)
+    {
+      list1.error= true;
+      list1.mensajeError="Necesitas tener rutas creadas para poder descargar una";
+    }
+    else if (EntidadesService.isTrack==true || EntidadesService.modoCreacion == true) {
+      list1.error= true;
+      list1.mensajeError="Por favor selecciona una ruta para descargar";
+    }else{
+    var xml = EntidadesService.getXml(false);
+      console.log("he llegado a descarga");
+    //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
+    list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+      + encodeURIComponent(xml);
 
+    }
+
+  }
     list1.dowXml = function () {
       list1.error=false;
+        list1.dataUrl="";
+      console.log("he llegado");
       if(EntidadesService.tracks.length<1)
       {
         list1.error= true;
@@ -632,11 +654,14 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para descargar";
       }else{
-      var xml = EntidadesService.getXml();
+      var xml = EntidadesService.getXml(true);
+        console.log("he llegado a descarga");
       //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
       list1.dataUrl = 'data:xml/plain;charset=utf-8,'
         + encodeURIComponent(xml);
+
       }
+
     }
 
     //Funcion para la descarga de la imagen de tabla
@@ -1008,12 +1033,27 @@ function EntidadesService (){
   service.modoInsertar = false;
   service.puntoN={};
 
-  service.getXml = function () {
+
+  service.getXml = function (track) {
     var xml = "<?xml version="+'"1.0"'+" encoding="+'"UTF-8"'+"?>\n"
     +"<gpx xmlns="+'"http://www.topografix.com/GPX/1/1"'+" creator="+'"Alejandro Fernández Herrero"'
     +" version="+'"1.1"'+" xmlns:xsi="+'"http://www.w3.org/2001/XMLSchema-instance"'+">\n"+
     "\t<metadata>\n"+"\t\t<name>TFG Tracks GPS</name>\n"+"\t\t<link href="+'"https://h3rrero.github.io/TFG-GPS/"'+">\n"+
     "\t\t\t<text>TFG-GPS</text>\n"+"\t\t</link>\n"+"\t</metadata>\n";
+    console.log("waypoints");
+    console.log(service.waypoints);
+    if (track == true) {
+
+
+    for (var item in service.waypoints) {
+        xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
+        +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
+        service.waypoints[item].elevacion+"</ele>\n"+"\t\t<name>"+
+        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
+        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
+    }
+
+
 
     xml = xml+"\t<trk>\n"+"\t\t<name>"+service.tracks[service.trackActivo].nombre+"</name>\n"+
           "\t\t<trkseg>\n";
@@ -1026,6 +1066,16 @@ function EntidadesService (){
           "\t\t\t</trkpt>\n";
     }
     xml = xml+"\t\t</trkseg>\n"+"\t</trk>\n"+"</gpx>";
+  }else {
+    for (var item in service.waypoints) {
+        xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
+        +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
+        service.waypoints[item].elevacion+"</ele>\n"+"\t\t<name>"+
+        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
+        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
+    }
+    xml = xml+"</gpx>";
+  }
     return xml;
   }
 
