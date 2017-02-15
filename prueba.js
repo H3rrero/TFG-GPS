@@ -690,13 +690,26 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       list1.isFirefox = false;
   }
   list1.dowXmlForWp = function () {
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.error=false;
       list1.dataUrl="";
     if(EntidadesService.waypoints.length<1)
     {
       list1.error= true;
       list1.mensajeError="Necesitas tener waypoints creados para poder descargarlos";
-    }else{
+    }  else if (isIE || list1.isEdge) {
+        var xml = EntidadesService.getWaypoints();
+      list1.dataUrl = 'data:application/xml,'
+        + encodeURIComponent(xml);
+       window.navigator.msSaveBlob( new Blob([xml], {type:'application/xml'}), "myfile.gpx" )
+      }
+      else if (list1.isSafari) {
+        var xml = EntidadesService.getWaypoints();
+      list1.dataUrl = 'data:application/xml,'
+        + encodeURIComponent(xml);
+        window.open('data:application/xml,' +encodeURIComponent(xml));
+      }
+    else{
     var xml = EntidadesService.getWaypoints();
       console.log("he llegado a descarga");
     //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
@@ -706,6 +719,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     }
   }
   list1.dowXmlForR = function () {
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.error=false;
       list1.dataUrl="";
     if(EntidadesService.rutas.length<1)
@@ -716,6 +730,18 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     else if (EntidadesService.isTrack==true || EntidadesService.modoCreacion == true) {
       list1.error= true;
       list1.mensajeError="Por favor selecciona una ruta para descargar";
+    }//Si el navegador es explorer se hace de manera diferente ya que no es compatible con el atributo download de html5
+    else if (isIE || list1.isEdge) {
+    var xml = EntidadesService.getXml(false);
+    list1.dataUrl = 'data:application/xml,'
+      + encodeURIComponent(xml);
+     window.navigator.msSaveBlob( new Blob([xml], {type:'application/xml'}), "myfile.gpx" )
+    }
+    else if (list1.isSafari) {
+    var xml = EntidadesService.getXml(false);
+    list1.dataUrl = 'data:application/xml,'
+      + encodeURIComponent(xml);
+      window.open('data:application/xml,' +encodeURIComponent(xml));
     }else{
     var xml = EntidadesService.getXml(false);
       console.log("he llegado a descarga");
@@ -727,6 +753,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 
   }
     list1.dowXml = function () {
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
       list1.error=false;
         list1.dataUrl="";
       console.log("he llegado");
@@ -738,7 +765,21 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       else if (EntidadesService.isTrack==false) {
         list1.error= true;
         list1.mensajeError="Por favor selecciona un track para descargar";
-      }else{
+      }
+      //Si el navegador es explorer se hace de manera diferente ya que no es compatible con el atributo download de html5
+      else if (isIE || list1.isEdge) {
+      var xml = EntidadesService.getXml(true);
+      list1.dataUrl = 'data:application/xml,'
+        + encodeURIComponent(xml);
+       window.navigator.msSaveBlob( new Blob([xml], {type:'application/xml'}), "myfile.gpx" )
+      }
+      else if (list1.isSafari) {
+      var xml = EntidadesService.getXml(true);
+      list1.dataUrl = 'data:application/xml,'
+        + encodeURIComponent(xml);
+        window.open('data:application/xml,' +encodeURIComponent(xml));
+      }
+      else{
       var xml = EntidadesService.getXml(true);
         console.log("he llegado a descarga");
       //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
@@ -1152,17 +1193,6 @@ function EntidadesService (){
     //Si es track
     if (track == true) {
 
-    //Se recorren los waypoints y se añaden al gpx
-    for (var item in service.waypoints) {
-        xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
-        +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
-        service.waypoints[item].elevacion+"</ele>\n"+"\t\t<name>"+
-        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
-        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
-    }
-
-
-
     xml = xml+"\t<trk>\n"+"\t\t<name>"+service.tracks[service.trackActivo].nombre+"</name>\n"+
           "\t\t<trkseg>\n";
 
@@ -1179,14 +1209,6 @@ function EntidadesService (){
 
   //Si es una ruta
   }else {
-    //Se añaden los waypoints al gpx
-    for (var item in service.waypoints) {
-        xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
-        +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
-        service.waypoints[item].elevacion+"</ele>\n"+"\t\t<name>"+
-        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
-        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
-    }
     //Se añaden los puntos de la ruta a gpx como waypoints
     for (var item in service.rutas[service.rutaActiva].puntos) {
         xml = xml + "\t<wpt lat="+'"'+service.rutas[service.rutaActiva].puntos[item].latitud+'"'
