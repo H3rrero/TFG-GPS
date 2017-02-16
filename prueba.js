@@ -775,9 +775,9 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
       }
       else if (list1.isSafari) {
       var xml = EntidadesService.getXml(true);
-      list1.dataUrl = 'data:application/xml,'
-        + encodeURIComponent(xml);
-        window.open('data:application/xml,' +encodeURIComponent(xml));
+      //list1.dataUrl = 'data:application/xml,'
+        //+ encodeURIComponent(xml);
+        window.open('data:application/octet-stream,' +encodeURIComponent(xml));
       }
       else{
       var xml = EntidadesService.getXml(true);
