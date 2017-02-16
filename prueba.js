@@ -7,9 +7,43 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
 .controller('LineCtrl',LineCtrl)
 //Directiva que se encarga d ela creacion del mapa de la aplicación
 .directive('myMap', Mymap)
+//Directiva que se utiliza para importar gpx
+.directive("fileread", ImportFunction)
 //servicio que manejara y proporcionara las entidades (tracks,rutas y waypoints)
 .service('EntidadesService',EntidadesService);
 
+
+//Funcion de la directiva de importacion
+function ImportFunction(EntidadesService) {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            //Evento change del input de importacion
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileread = changeEvent.target.files[0];
+                    var reader = new FileReader();
+
+
+           reader.onload = (function(theFile) {
+             return function(e) {
+
+               //Guardamos el contenido del xml en el service
+              EntidadesService.xmlImportado = e.target.result;
+              console.log("XML");
+              console.log(EntidadesService.xmlImportado);
+             };
+           })(changeEvent.target.files[0]);
+
+          //Leemos el contendo del fichero
+          reader.readAsText(changeEvent.target.files[0],"UTF-8");
+                });
+            });
+        }
+    }
+}
 
   function PruebaController($scope,EntidadesService,$document){
     var list1 = this;
@@ -35,6 +69,16 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
     list1.mensajeError ="";
     list1.error= false;
     list1.puntoBorrado = false;
+    list1.fichero;
+    list1.mostrarInput = false;
+
+    list1.activarImport = function () {
+      if(list1.mostrarInput == false)
+      list1.mostrarInput = true;
+      else {
+        list1.mostrarInput = false;
+      }
+    }
 
     //Metodo que llama al metodo unir del service
     list1.unirRutas = function () {
@@ -780,6 +824,7 @@ angular.module('Prueba',['chart.js','ngAnimate','ngSanitize', 'ngCsv'])
         window.open('data:application/octet-stream,' +encodeURIComponent(xml));
       }
       else{
+        console.log(list1.fichero);
       var xml = EntidadesService.getXml(true);
         console.log("he llegado a descarga");
       //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
@@ -1158,7 +1203,7 @@ function EntidadesService (){
   service.modoUnion = false;
   service.modoInsertar = false;
   service.puntoN={};
-
+  service.xmlImportado;
 
   //Funcion que genera y devuelve un gpx con los waypoints
   service.getWaypoints = function () {

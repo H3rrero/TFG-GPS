@@ -151,7 +151,7 @@
 						<tr><td><a  ng-click="list1.dowXmlForWp()"  id="btn-download"  ng-hide="!list1.esIE"  ><button id="botonDes" data-toggle="modal" data-target="#modalMS" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForWp()"   id="btn-download" ng-hide="!list1.isSafari"   ><button id="botonDes" data-toggle="modal" data-target="#modalMS" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForWp()" ng-href="{{list1.dataUrl}}" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-download"   download="my-file-name.gpx" ><button id="botonDes" data-toggle="modal" data-target="#modalMS" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></a></td></tr>
-						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-success">Importar</button></td></tr>
+						<tr><td><button id="importarW"type="button" class="bttn-unite bttn-xs bttn-success">Importar</button></td></tr>
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesR">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR"  ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-royal">Crear</button></td></tr>
@@ -160,7 +160,7 @@
 						<tr><td><a  ng-click="list1.dowXmlForR()"   ng-hide="!list1.esIE"  id="btn-download"    ><button id="botonDes" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()"    ng-hide="!list1.isSafari" id="btn-download"   ><button id="botonDes" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()" ng-hide="!(list1.isChrome||list1.isFirefox)" ng-href="{{list1.dataUrl}}"  id="btn-download"   download="my-file-name.gpx" ><button id="botonDes" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal">Descargar</button></a></td></tr>
-						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
+						<tr><td><button id="importarR"type="button" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotones">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
@@ -168,8 +168,9 @@
 						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarT();" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()"  id="btn-download"  ng-hide="!list1.esIE"  ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()" id="btn-download"  ng-hide="!list1.isSafari"  ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
-						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-download" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.gpx" ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
-						<tr><td><button id="importar"type="button" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
+						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-download" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.pdf" ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
+						<tr><td><button id="importarT"type="button" ng-click="list1.activarImport();" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
+						<tr><td><input id='importarT' ng-hide="!list1.mostrarInput" type='file' fileread="list1.fichero"></td></tr>
 				</table>
         <table ng-if="list1.funcionesW">
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success">Archivo</button></td></tr>
