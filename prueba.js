@@ -30,15 +30,18 @@ function ImportFunction(EntidadesService) {
            reader.onload = (function(theFile) {
              return function(e) {
 
-               //Guardamos el contenido del xml en el service
-              EntidadesService.xmlImportado = e.target.result;
+
               console.log("XML");
-              console.log(EntidadesService.xmlImportado);
+              var xml = $.parseXML( e.target.result);
+              //Guardamos el contenido del xml en el service
+             EntidadesService.xmlImportado = xml;
+             console.log(EntidadesService.xmlImportado);
              };
            })(changeEvent.target.files[0]);
 
           //Leemos el contendo del fichero
           reader.readAsText(changeEvent.target.files[0],"UTF-8");
+          //reader.readAsDataURL(changeEvent.target.files[0]);
                 });
             });
         }
@@ -70,13 +73,17 @@ function ImportFunction(EntidadesService) {
     list1.error= false;
     list1.puntoBorrado = false;
     list1.fichero;
-    list1.mostrarInput = false;
+    list1.noError = false;
 
     list1.activarImport = function () {
-      if(list1.mostrarInput == false)
-      list1.mostrarInput = true;
-      else {
-        list1.mostrarInput = false;
+      list1.error = false;
+      if(EntidadesService.xmlImportado == undefined){
+      list1.error= true;
+      list1.mensajeError="Antes de importar selecciona un archivo con el boton seleccione fichero ";
+
+    }else {
+      list1.crear(0);
+      EntidadesService.importXML();
       }
     }
 
@@ -369,6 +376,7 @@ function ImportFunction(EntidadesService) {
     //Metodo que añade un punto intermedio a una ruta
     list1.anadirPuntoRuta = function () {
       //Se resetea el error
+      list1.noError = false;
       list1.error=false;
       //SI el modo insertar esta activado se desactiva
        if (EntidadesService.modoInsertar == true) {
@@ -393,7 +401,7 @@ function ImportFunction(EntidadesService) {
       //Si no hay errores activamos el modo inserccion y avisamos al usuario
       else{
       EntidadesService.modoInsertar = true;
-      list1.error= true;
+      list1.noError= true;
       list1.mensajeError="Has entrado en el modo insertar punto intermedio, "+
                           "para salir pulse otra vez insertar punto. "+
                           "Selecciona el punto de origen y después pincha donde "+
@@ -404,6 +412,7 @@ function ImportFunction(EntidadesService) {
     //Metodo que añade un punto a un track
     list1.anadirPuntoTrack = function () {
       //Reseteamos el error
+      list1.noError= false;
       list1.error=false;
       //Si esta activado el modo insertar pues lo desactivamos
       if (EntidadesService.modoInsertar == true) {
@@ -428,7 +437,7 @@ function ImportFunction(EntidadesService) {
       //Si todo esta bien activamos el modo insertar y avisamos al usuario
       else{
       EntidadesService.modoInsertar = true;
-      list1.error= true;
+      list1.noError= true;
       list1.mensajeError="Has entrado en el modo insertar punto intermedio, "+
                           "para salir pulse otra vez insertar punto. "+
                           "Selecciona el punto de origen y después pincha donde "+
@@ -749,8 +758,6 @@ function ImportFunction(EntidadesService) {
       }
       else if (list1.isSafari) {
         var xml = EntidadesService.getWaypoints();
-      list1.dataUrl = 'data:application/xml,'
-        + encodeURIComponent(xml);
         window.open('data:application/xml,' +encodeURIComponent(xml));
       }
     else{
@@ -783,8 +790,6 @@ function ImportFunction(EntidadesService) {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(false);
-    list1.dataUrl = 'data:application/xml,'
-      + encodeURIComponent(xml);
       window.open('data:application/xml,' +encodeURIComponent(xml));
     }else{
     var xml = EntidadesService.getXml(false);
@@ -819,9 +824,8 @@ function ImportFunction(EntidadesService) {
       }
       else if (list1.isSafari) {
       var xml = EntidadesService.getXml(true);
-      //list1.dataUrl = 'data:application/xml,'
-        //+ encodeURIComponent(xml);
-        window.open('data:application/octet-stream,' +encodeURIComponent(xml));
+
+        window.open('data:application/xml,' +encodeURIComponent(xml));
       }
       else{
         console.log(list1.fichero);
@@ -1204,6 +1208,35 @@ function EntidadesService (){
   service.modoInsertar = false;
   service.puntoN={};
   service.xmlImportado;
+
+
+  service.importXML = function () {
+    var puntos=service.xmlImportado.getElementsByTagName("trkpt");
+    var elevaciones = service.xmlImportado.getElementsByTagName("ele");
+    console.log(elevaciones[0].textContent);
+
+    //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
+    service.modoInvertir = true;
+    //Recorremos los puntos del primer track
+    for (var item in puntos) {
+      if(item <puntos.length){
+      console.log("Que cuyons pasa?");
+      console.log(item);
+      console.log(puntos[item].attributes.lon.nodeValue);
+      console.log(puntos[item].attributes.lat.nodeValue);
+      //Guardamos los datos de los puntos
+      service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
+      service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
+      service.elevacionP = parseFloat(elevaciones[item].textContent);
+      //EL modo segundo recorte nos viene que ni pintado para esta situación
+      service.modoRecorte2=true;
+      //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
+      google.maps.event.trigger(service.mapa, 'click');
+    }}
+    //Desactivamos los modos activados durante este metodo
+    service.modoInvertir = false;
+    service.modoRecorte2 = false;
+  }
 
   //Funcion que genera y devuelve un gpx con los waypoints
   service.getWaypoints = function () {
@@ -2508,6 +2541,8 @@ function Mymap(EntidadesService) {
           }
           if(EntidadesService.modoInvertir == true){
             console.log("estoy en invertir");
+            console.log(EntidadesService.latitudPInv);
+            console.log(EntidadesService.longitudPInv);
           var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
 
             //Depende de que entidad sea llamamos a un metodo u otro

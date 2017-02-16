@@ -36,7 +36,7 @@
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ5GI9TFx8kPwL8dyViS5UUDIybpH36IE&libraries=places"
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ5GI9TFx8kPwL8dyViS5UUDIybpH36IE&libraries=places,geometry"
 			></script>
 		</head>
 	<body ng-app = 'Prueba'>
@@ -57,10 +57,11 @@
   </div>
 </div>
 </div>
-<div ng-if="list1.error">
+<div ng-if="(list1.error||list1.noError)">
 <div class="modal fade bs-example-modal-sm" id="modalMS" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" >
   <div class="modal-dialog modal-sm" role="document">
-		<div class="alert alert-danger" role="alert"  >{{list1.mensajeError}}</div>
+		<div class="alert alert-danger" ng-if="list1.error" role="alert"  >{{list1.mensajeError}}</div>
+		<div class="alert alert-success" ng-if="list1.noError" role="alert"  >{{list1.mensajeError}}</div>
   </div>
 </div>
 </div>
@@ -169,8 +170,8 @@
 						<tr><td><a  ng-click="list1.dowXml()"  id="btn-download"  ng-hide="!list1.esIE"  ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()" id="btn-download"  ng-hide="!list1.isSafari"  ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-download" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.pdf" ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
-						<tr><td><button id="importarT"type="button" ng-click="list1.activarImport();" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
-						<tr><td><input id='importarT' ng-hide="!list1.mostrarInput" type='file' fileread="list1.fichero"></td></tr>
+						<tr><td><button id="importarT"type="button"  data-toggle="modal" data-target="#modalMS" ng-click="list1.activarImport();" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
+						<tr><td ><button id="inputBt" type="button" name="button"  class="bttn-unite bttn-xs bttn-primary"><input id='inputImport'  type='file' fileread="list1.fichero">Seleccione Fichero</button></td></tr>
 				</table>
         <table ng-if="list1.funcionesW">
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success">Archivo</button></td></tr>
