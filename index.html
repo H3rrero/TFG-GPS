@@ -2,32 +2,32 @@
 <html>
 	<head>
 		<title>GPS Proyect</title>
-  	<script src="../angular/angular.min.js"></script>
-		<script src="../chart.js/dist/Chart.min.js"></script>
-<script src="../angular-chart.js/dist/angular-chart.min.js"></script>
+  	<script src="angular/angular.min.js"></script>
+		<script src="chart.js/dist/Chart.min.js"></script>
+<script src="angular-chart.js/dist/angular-chart.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="../angular-animate/angular-animate.js"></script>
-	<script src="../angular-animate/angular-animate.min.js"></script>
+	<script src="angular-animate/angular-animate.js"></script>
+	<script src="angular-animate/angular-animate.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
-	<script src="../resources/ng-csv.js"></script>
-    <script src="gps.module.js"></script>
-		<script src="gps.controller.js"></script>
-		<script src="gps.service.js"></script>
-		<script src="grafico.directive.js"></script>
-		<script src="mapa.directive.js"></script>
-		<script src="fileRead.directive.js"></script>
+	<script src="resources/ng-csv.js"></script>
+    <script src="src/gps.module.js"></script>
+		<script src="src/gps.controller.js"></script>
+		<script src="src/gps.service.js"></script>
+		<script src="src/grafico.directive.js"></script>
+		<script src="src/mapa.directive.js"></script>
+		<script src="src/fileRead.directive.js"></script>
 
-    <link href="../css/main.css" rel="stylesheet" type="text/css">
-		  <link href="../css/unite.css" rel="stylesheet" type="text/css">
-			  <link href="../css/gradient.css" rel="stylesheet" type="text/css">
-			  <link href="../css/material-circle.css" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
+		  <link href="css/unite.css" rel="stylesheet" type="text/css">
+			  <link href="css/gradient.css" rel="stylesheet" type="text/css">
+			  <link href="css/material-circle.css" rel="stylesheet" type="text/css">
 
 		<!-- CSS de Bootstrap -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<!-- Librería jQuery requerida por los plugins de JavaScript -->
     <script src="https://code.jquery.com/jquery.js"></script>
 		<!-- Todos los plugins JavaScript de Bootstrap  -->
-	 <script src="../js/bootstrap.min.js"></script>
+	 <script src="js/bootstrap.min.js"></script>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 		<meta charset="utf-8">
 		<style>
@@ -122,7 +122,7 @@
 				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}"  id="btn-download"  ng-hide="!list1.isFirefox" download="my-file-name.png"><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
 				<a  ng-click="list1.dowImage()"   id="btn-download" ng-hide="!list1.esIE" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
 				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}" target="_blank"  id="btn-downloadSA" ng-hide="!list1.isSafari" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
-				<img  src="../img/informacion.png" ng-hide="!list1.isSafari" title="Al usar Safari te saldrá una nueva ventana con la imagen, dale a boton derecho y a guardar como." height="6%" width="1%">
+				<img  src="img/informacion.png" ng-hide="!list1.isSafari" title="Al usar Safari te saldrá una nueva ventana con la imagen, dale a boton derecho y a guardar como." height="6%" width="1%">
 				<canvas id="canvas" class="chart chart-line" chart-data="data"
 				chart-labels="labels" chart-series="series" chart-options="options"
 				chart-dataset-override="datasetOverride" chart-click="onClick" height="10%" width="75%">
@@ -133,11 +133,11 @@
 
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
-					<img  src="../img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
+					<img  src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
 				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
-			<img src="../img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
+			<img src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
 			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">

@@ -270,7 +270,7 @@ function Mymap(EntidadesService) {
             var marker = new google.maps.Marker({
               position: evento,
               title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-              icon: '../img/iconowp.png',
+              icon: 'img/iconowp.png',
               map: map
             });
             EntidadesService.markers.push(marker);
@@ -479,7 +479,7 @@ function Mymap(EntidadesService) {
             //Le pasamos las coordenadas a la polilinea
             path.push(evento);
             var image = {
-              url: '../img/icono.png',
+              url: 'img/icono.png',
 
             };
 
@@ -500,12 +500,12 @@ function Mymap(EntidadesService) {
                 EntidadesService.markersT[EntidadesService.tracks.length-2] = markers;
                 //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
               } else if(EntidadesService.markersT[EntidadesService.tracks.length-2].length==1){
-                marker.icon = "../img/iconoFin.png";
+                marker.icon = "img/iconoFin.png";
                 marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-2].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
-                marker.icon = "../img/iconoFin.png";
+                marker.icon = "img/iconoFin.png";
                 marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-2][1].setMap(null);
                 EntidadesService.markersT[EntidadesService.tracks.length-2][1]=marker;
@@ -518,12 +518,12 @@ function Mymap(EntidadesService) {
                 EntidadesService.markersT[EntidadesService.tracks.length-1] = markers;
                 //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
               } else if(EntidadesService.markersT[EntidadesService.tracks.length-1].length==1){
-                marker.icon = "../img/iconoFin.png";
+                marker.icon = "img/iconoFin.png";
                 marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-1].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
-                marker.icon = "../img/iconoFin.png";
+                marker.icon = "img/iconoFin.png";
                 marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-1][1].setMap(null);
                 EntidadesService.markersT[EntidadesService.tracks.length-1][1]=marker;
@@ -536,12 +536,12 @@ function Mymap(EntidadesService) {
               EntidadesService.markersT[EntidadesService.trackActivo] = markers;
               //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
             } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
-              marker.icon = "../img/iconoFin.png";
+              marker.icon = "img/iconoFin.png";
               marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
               EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
               //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
             }else{
-              marker.icon = "../img/iconoFin.png";
+              marker.icon = "img/iconoFin.png";
               marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
               EntidadesService.markersT[EntidadesService.trackActivo][1].setMap(null);
               EntidadesService.markersT[EntidadesService.trackActivo][1]=marker;
@@ -560,7 +560,7 @@ function Mymap(EntidadesService) {
               var marker = new google.maps.Marker({
                 position: evento,
                 title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-                icon: '../img/iconowp.png',
+                icon: 'img/iconowp.png',
                 map: map
               });
             var wpsruta = [];
@@ -571,7 +571,7 @@ function Mymap(EntidadesService) {
             var marker = new google.maps.Marker({
               position: evento,
               title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-              icon: '../img/iconowp.png',
+              icon: 'img/iconowp.png',
               map: map
             });
             EntidadesService.wpRta[rutaACortar].push(marker);
@@ -657,7 +657,7 @@ function Mymap(EntidadesService) {
             var marker = new google.maps.Marker({
               position: event.latLng,
               title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-              icon: '../img/iconowp.png',
+              icon: 'img/iconowp.png',
               map: map
             });
             EntidadesService.markers.push(marker);
@@ -698,7 +698,7 @@ function Mymap(EntidadesService) {
           //Le pasamos las coordenadas a la polilinea
           path.push(event.latLng);
           var image = {
-            url: '../img/icono.png',
+            url: 'img/icono.png',
 
           };
 
@@ -718,12 +718,12 @@ function Mymap(EntidadesService) {
             EntidadesService.markersT[EntidadesService.trackActivo] = markers;
             //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
           } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
-            marker.icon = "../img/iconoFin.png";
+            marker.icon = "img/iconoFin.png";
             marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
           }else{
-            marker.icon = "../img/iconoFin.png";
+            marker.icon = "img/iconoFin.png";
             marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo][1].setMap(null);
             EntidadesService.markersT[EntidadesService.trackActivo][1]=marker;
@@ -734,7 +734,7 @@ function Mymap(EntidadesService) {
             var marker = new google.maps.Marker({
               position: event.latLng,
               title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-              icon: '../img/iconowp.png',
+              icon: 'img/iconowp.png',
               map: map
             });
           var wpsruta = [];
@@ -745,7 +745,7 @@ function Mymap(EntidadesService) {
           var marker = new google.maps.Marker({
             position: event.latLng,
             title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-            icon: '../img/iconowp.png',
+            icon: 'img/iconowp.png',
             map: map
           });
           EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
