@@ -15,8 +15,10 @@
     - Funcion insertar un punto para Track y Ruta
     - Funcion descarga para track, ruta y waypoint
     - Funcion importar para track
-###Falta por implementar:
     - Funcion borrar un waypoint
     - Funcion importar para Ruta y Waypoint
+###Falta por implementar:
+    -FUncion cambiar posicion un waypoint
+    
 ##Puedes ver el avance aquí
   https://h3rrero.github.io/TFG-GPS/
