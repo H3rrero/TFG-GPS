@@ -75,6 +75,29 @@ function ImportFunction(EntidadesService) {
     list1.fichero;
     list1.noError = false;
 
+    list1.activarImportWp = function functionName() {
+      list1.error = false;
+      if(EntidadesService.xmlImportado == undefined){
+      list1.error= true;
+      list1.mensajeError="Antes de importar selecciona un archivo con el boton seleccione fichero ";
+
+    }else {
+      EntidadesService.importXMLWp();
+      }
+    }
+
+    list1.activarImportRuta = function () {
+      list1.error = false;
+      if(EntidadesService.xmlImportado == undefined){
+      list1.error= true;
+      list1.mensajeError="Antes de importar selecciona un archivo con el boton seleccione fichero ";
+
+    }else {
+      list1.crear(1);
+      EntidadesService.importXML();
+      }
+    }
+
     list1.activarImport = function () {
       list1.error = false;
       if(EntidadesService.xmlImportado == undefined){
@@ -1208,7 +1231,27 @@ function EntidadesService (){
   service.modoInsertar = false;
   service.puntoN={};
   service.xmlImportado;
+  service.modoImportWP = false;
+service.importXMLWp = function () {
+  var puntos=service.xmlImportado.getElementsByTagName("wpt");
+ var elevaciones = service.xmlImportado.getElementsByTagName("ele");
 
+
+  service.modoImportWP = true;
+  //Recorremos los puntos del primer track
+  for (var item in puntos) {
+    if(item <puntos.length){
+    //Guardamos los datos de los puntos
+    service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
+    service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
+    service.elevacionP = parseFloat(elevaciones[item].textContent);
+
+    //Simulamos el click para que se añada el punto
+    google.maps.event.trigger(service.mapa, 'click');
+  }}
+  //Desactivamos los modos activados durante este metodo
+  service.modoImportWP = false;
+}
 
   service.importXML = function () {
     var puntos=service.xmlImportado.getElementsByTagName("trkpt");
@@ -1220,10 +1263,6 @@ function EntidadesService (){
     //Recorremos los puntos del primer track
     for (var item in puntos) {
       if(item <puntos.length){
-      console.log("Que cuyons pasa?");
-      console.log(item);
-      console.log(puntos[item].attributes.lon.nodeValue);
-      console.log(puntos[item].attributes.lat.nodeValue);
       //Guardamos los datos de los puntos
       service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
       service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
@@ -2483,6 +2522,26 @@ function Mymap(EntidadesService) {
         }
         // puncion que crea las polilineas y los puntos
         function addLatLng(event,elevation) {
+          if (EntidadesService.modoImportWP == true) {
+            var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
+            EntidadesService.latitud = EntidadesService.latitudPInv;
+            EntidadesService.longitud = EntidadesService.longitudPInv;
+            EntidadesService.elevacion = EntidadesService.elevacionP;
+            controller.crear(2);
+            scope.$apply();
+            var nombre = "Nuevo-Waypoint"+EntidadesService.cont;
+            EntidadesService.cont = EntidadesService.cont+1;
+            var marker = new google.maps.Marker({
+              position: evento.latLng,
+              title: "Nombre: "+nombre+"\nLatitud: "+evento.latLng.lat().toFixed(6)+"\nLongitud: "+evento.latLng.lng().toFixed(6),
+              icon: 'iconowp.png',
+              map: map
+            });
+            EntidadesService.markers.push(marker);
+            console.log(EntidadesService.markers);
+          }
+
+
           if (EntidadesService.seleccion == true) {
             var evento =  new google.maps.LatLng(EntidadesService.latitudSelec, EntidadesService.longitudSelec);
             if(EntidadesService.markerPunto !=null){

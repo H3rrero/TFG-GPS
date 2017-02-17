@@ -152,7 +152,9 @@
 						<tr><td><a  ng-click="list1.dowXmlForWp()"  id="btn-download"  ng-hide="!list1.esIE"  ><button id="botonDes" data-toggle="modal" data-target="#modalMS" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForWp()"   id="btn-download" ng-hide="!list1.isSafari"   ><button id="botonDes" data-toggle="modal" data-target="#modalMS" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForWp()" ng-href="{{list1.dataUrl}}" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-download"   download="my-file-name.gpx" ><button id="botonDes" data-toggle="modal" data-target="#modalMS" type="button"  class="bttn-unite bttn-xs bttn-success">Descargar</button></a></td></tr>
-						<tr><td><button id="importarW"type="button" class="bttn-unite bttn-xs bttn-success">Importar</button></td></tr>
+						<tr><td><button id="importarR"type="button"  data-toggle="modal" data-target="#modalMS" ng-click="list1.activarImportWp();" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
+						<tr><td ><button id="inputBt" type="button" ng-if="!list1.esIE" name="button"  class="bttn-unite bttn-xs bttn-success"><input id='inputImport' ng-if="!list1.esIE"  type='file' fileread="list1.fichero">Seleccione Fichero</button></td></tr>
+						<tr><td><input id='inputIE' ng-if="list1.esIE"  type='file' fileread="list1.fichero"></td></tr>
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesR">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR"  ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-royal">Crear</button></td></tr>
@@ -161,7 +163,10 @@
 						<tr><td><a  ng-click="list1.dowXmlForR()"   ng-hide="!list1.esIE"  id="btn-download"    ><button id="botonDes" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()"    ng-hide="!list1.isSafari" id="btn-download"   ><button id="botonDes" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()" ng-hide="!(list1.isChrome||list1.isFirefox)" ng-href="{{list1.dataUrl}}"  id="btn-download"   download="my-file-name.gpx" ><button id="botonDes" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal">Descargar</button></a></td></tr>
-						<tr><td><button id="importarR"type="button" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
+						<tr><td><button id="importarR"type="button"  data-toggle="modal" data-target="#modalMS" ng-click="list1.activarImportRuta();" class="bttn-unite bttn-xs bttn-royal">Importar</button></td></tr>
+						<tr><td ><button id="inputBt" type="button" ng-if="!list1.esIE" name="button"  class="bttn-unite bttn-xs bttn-royal"><input id='inputImport' ng-if="!list1.esIE"  type='file' fileread="list1.fichero">Seleccione Fichero</button></td></tr>
+						<tr><td><input id='inputIE' ng-if="list1.esIE"  type='file' fileread="list1.fichero"></td></tr>
+
 				</table>
 				<table  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotones">
 					<tr>  <td ><button id="botonCrear" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary">Crear</button></td></tr>
@@ -169,9 +174,10 @@
 						<tr><td><button id="botonRen" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarT();" class="bttn-unite bttn-xs bttn-primary">Renombrar</button></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()"  id="btn-download"  ng-hide="!list1.esIE"  ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()" id="btn-download"  ng-hide="!list1.isSafari"  ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
-						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-download" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.pdf" ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
+						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-download" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.gpx" ><button id="botonDes" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary">Descargar</button></a></td></tr>
 						<tr><td><button id="importarT"type="button"  data-toggle="modal" data-target="#modalMS" ng-click="list1.activarImport();" class="bttn-unite bttn-xs bttn-primary">Importar</button></td></tr>
-						<tr><td ><button id="inputBt" type="button" name="button"  class="bttn-unite bttn-xs bttn-primary"><input id='inputImport'  type='file' fileread="list1.fichero">Seleccione Fichero</button></td></tr>
+						<tr><td ><button id="inputBt" type="button" ng-if="!list1.esIE" name="button"  class="bttn-unite bttn-xs bttn-primary"><input id='inputImport' ng-if="!list1.esIE"  type='file' fileread="list1.fichero">Seleccione Fichero</button></td></tr>
+						<tr><td><input id='inputIE' ng-if="list1.esIE"  type='file' fileread="list1.fichero"></td></tr>
 				</table>
         <table ng-if="list1.funcionesW">
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success">Archivo</button></td></tr>
@@ -186,9 +192,9 @@
         <tr><td><button id="botonRec" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.recortarRuta();" class="bttn-unite bttn-xs bttn-royal">Recortar</button></td></tr>
           <tr><td><button id="botonUnir" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.unirRutas();" class="bttn-unite bttn-xs bttn-royal">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.invertirRuta();" class="bttn-unite bttn-xs bttn-royal">Invertir</button></td></tr>
-					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar lista</button></td></tr>
-          <tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar tabla</button></td></tr>
-					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocultar gráfica</button></td></tr>
+					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocu lista</button></td></tr>
+          <tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaR();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocu tabla</button></td></tr>
+					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-royal">Ver/Ocu gráfica</button></td></tr>
         </table>
 
         <table ng-if="list1.funciones">
@@ -199,9 +205,9 @@
           <tr><td><button id="botonUnir" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.unirTracks();" class="bttn-unite bttn-xs bttn-primary">Unir</button></td></tr>
           <tr><td><button id="botonInv" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.invertirTrack();" class="bttn-unite bttn-xs bttn-primary">Invertir</button></td></tr>
 					<tr><td>  <button id="botonTim" type="button" ng-click="list1.cambiarTiempos();" class="bttn-unite bttn-xs bttn-primary">Tiempos</button></td></tr>
-					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar lista</button></td></tr>
-					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar tabla</button></td></tr>
-					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocultar gráfica</button></td></tr>
+					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocu lista</button></td></tr>
+					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaT();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocu tabla</button></td></tr>
+					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary">Ver/Ocu gráfica</button></td></tr>
 
 
         </table>
