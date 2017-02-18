@@ -658,8 +658,15 @@ function Mymap(EntidadesService) {
               position: event.latLng,
               title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
               icon: 'img/iconowp.png',
+              draggable:true,
               map: map
             });
+            google.maps.event.addListener(marker, 'dragend', function (e) {
+              console.log("yuhuuuu");
+              
+			           marker.position = e.latLng;
+			          marker.title= "Nombre: "+nombre+"\nLatitud: "+e.latLng.lat().toFixed(6)+"\nLongitud: "+e.latLng.lng().toFixed(6);
+		                         });
             EntidadesService.markers.push(marker);
             console.log(EntidadesService.markers);
           }else{

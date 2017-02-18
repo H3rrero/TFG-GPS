@@ -774,7 +774,8 @@ list1.dowXmlForWp = function () {
     }
     else if (list1.isSafari) {
       var xml = EntidadesService.getWaypoints();
-      window.open('data:application/xml,' +encodeURIComponent(xml));
+      list1.dataUrl = 'data:xml/plain,'
+        + encodeURIComponent(xml);
     }
   else{
   var xml = EntidadesService.getWaypoints();
@@ -807,7 +808,8 @@ list1.dowXmlForR = function () {
   }
   else if (list1.isSafari) {
   var xml = EntidadesService.getXml(false);
-    window.open('data:application/xml,' +encodeURIComponent(xml));
+  list1.dataUrl = 'data:xml/plain,'
+    + encodeURIComponent(xml);
   }else{
   var xml = EntidadesService.getXml(false);
     console.log("he llegado a descarga");
