@@ -4,7 +4,7 @@
 angular.module('GPS')
 .controller('PruebaController',PruebaController);
 
-function PruebaController($scope,EntidadesService,$document){
+function PruebaController($scope,EntidadesService,$document,FileSaver){
   var list1 = this;
   console.log("holii");
   console.log(this);
@@ -845,8 +845,8 @@ list1.dowXmlForR = function () {
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
     list1.dataUrl = 'data:xml/plain;charset=utf-8,'
-      + encodeURIComponent(xml)+'/nuevo.gpx';
-
+      + encodeURIComponent(xml);
+      FileSaver.saveAs(list1.dataUrl, 'track.gpx');
       //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
     else{
