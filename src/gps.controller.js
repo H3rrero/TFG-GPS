@@ -844,9 +844,10 @@ list1.dowXmlForR = function () {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
-    list1.dataUrl = 'data:xml/plain;charset=utf-8,'
-      + encodeURIComponent(xml);
-      FileSaver.saveAs(list1.dataUrl, 'track.gpx');
+    //list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+      //+ encodeURIComponent(xml);
+      var data = new Blob([xml], { type: 'xml/plain;charset=utf-8' });
+      FileSaver.saveAs(data, 'track.gpx');
       //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
     else{
