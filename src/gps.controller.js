@@ -842,7 +842,9 @@ list1.dowXmlForR = function () {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
-      window.open('data:xml/plain;charset=utf-8,' +encodeURIComponent(xml));
+    list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+      + encodeURIComponent(xml);
+      //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
     else{
       console.log(list1.fichero);
