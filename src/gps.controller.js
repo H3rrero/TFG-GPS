@@ -842,7 +842,7 @@ list1.dowXmlForR = function () {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
-      window.navigator.msSaveBlob( new Blob([xml], {type:'application/octet-stream'}), "myfile.gpx" )
+      window.open('data:xml/octet-stream,' +encodeURIComponent(xml));
     }
     else{
       console.log(list1.fichero);
