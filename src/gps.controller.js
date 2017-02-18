@@ -842,8 +842,9 @@ list1.dowXmlForR = function () {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
-
-      window.open('data:application/xml,' +xml);
+    var blob = new Blob([xml], {type: 'application/octet-stream'});
+       var url = URL.createObjectURL(url);
+       window.open(url);
     }
     else{
       console.log(list1.fichero);
