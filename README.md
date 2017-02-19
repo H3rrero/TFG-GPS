@@ -19,10 +19,10 @@
     - Funcion importar para Ruta y Waypoint
     -Funcion cambiar posicion un waypoint
 ###Falta por implementar:
-    -Exportar la tabla correcta (Actualmente se exporta una de prueba con datos inventados)
     -Hacer pruebas
     -Controlar errores
     -Sacar creacion de mapas a fichero
+    -Mapas de portugal
     
 ##Puedes ver el avance aquí
   https://h3rrero.github.io/TFG-GPS/
