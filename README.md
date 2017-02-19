@@ -17,7 +17,7 @@
     - Funcion importar para track
     - Funcion borrar un waypoint
     - Funcion importar para Ruta y Waypoint
-    -Funcion cambiar posicion un waypoint
+    - Funcion cambiar posicion un waypoint
 ###Falta por implementar:
     -Hacer pruebas
     -Controlar errores
