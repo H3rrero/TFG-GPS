@@ -663,9 +663,33 @@ function Mymap(EntidadesService) {
             });
             google.maps.event.addListener(marker, 'dragend', function (e) {
               console.log("yuhuuuu");
-              
+              for (var item in EntidadesService.waypoints) {
+                if ("Nombre: "+EntidadesService.waypoints[item].nombre+"\nLatitud: "+
+                EntidadesService.waypoints[item].latitud+"\nLongitud: "+EntidadesService.waypoints[item].longitud
+                 == marker.title) {
+                   console.log("pim pam pum");
+                   var posicion = item;
+                  EntidadesService.waypoints[item].longitud = e.latLng.lng().toFixed(6);
+                  EntidadesService.waypoints[item].latitud = e.latLng.lat().toFixed(6);
+                  elevator.getElevationForLocations({
+                    'locations': [e.latLng]
+                  }, function(results, status) {
+                    if (status === google.maps.ElevationStatus.OK) {
+                      if (results[0]) {
+                      EntidadesService.waypoints[posicion].elevacion = results[0].elevation.toFixed(2);
+                      scope.$apply();
+                      } else {
+                      console.log("no result found");
+                      }
+                    } else {
+                    console.log("elevation service failed");
+                    }
+                  });
+                }
+              }
 			           marker.position = e.latLng;
 			          marker.title= "Nombre: "+nombre+"\nLatitud: "+e.latLng.lat().toFixed(6)+"\nLongitud: "+e.latLng.lng().toFixed(6);
+                scope.$apply();
 		                         });
             EntidadesService.markers.push(marker);
             console.log(EntidadesService.markers);

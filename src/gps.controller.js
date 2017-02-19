@@ -773,9 +773,13 @@ list1.dowXmlForWp = function () {
      window.navigator.msSaveBlob( new Blob([xml], {type:'application/xml'}), "myfile.gpx" )
     }
     else if (list1.isSafari) {
+      list1.error = false;
       var xml = EntidadesService.getWaypoints();
       list1.dataUrl = 'data:xml/plain,'
         + encodeURIComponent(xml);
+        list1.error = true;
+        list1.mensajeError='Al usar safari puede que te baje sin extension,cuando '+
+        'lo tengas renombra el archivo y añadele la extension ".gpx"';
     }
   else{
   var xml = EntidadesService.getWaypoints();
@@ -807,9 +811,13 @@ list1.dowXmlForR = function () {
    window.navigator.msSaveBlob( new Blob([xml], {type:'application/xml'}), "myfile.gpx" )
   }
   else if (list1.isSafari) {
+    list1.error = false;
   var xml = EntidadesService.getXml(false);
   list1.dataUrl = 'data:xml/plain,'
     + encodeURIComponent(xml);
+    list1.error = true;
+    list1.mensajeError='Al usar safari puede que te baje sin extension,cuando '+
+    'lo tengas renombra el archivo y añadele la extension ".gpx"';
   }else{
   var xml = EntidadesService.getXml(false);
     console.log("he llegado a descarga");
@@ -843,10 +851,13 @@ list1.dowXmlForR = function () {
      window.navigator.msSaveBlob( new Blob([xml], {type:'application/xml'}), "myfile.gpx" )
     }
     else if (list1.isSafari) {
+      list1.error =false;
     var xml = EntidadesService.getXml(true);
     list1.dataUrl = 'data:xml/plain;charset=utf-8,'
       + encodeURIComponent(xml);
-
+      list1.error = true;
+      list1.mensajeError='Al usar safari puede que te baje sin extension,cuando '+
+      'lo tengas renombra el archivo y añadele la extension ".gpx"';
       //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
     else{
