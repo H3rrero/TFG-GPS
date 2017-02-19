@@ -847,9 +847,9 @@ list1.dowXmlForR = function () {
     //list1.dataUrl = 'data:xml/plain;charset=utf-8,'
       //+ encodeURIComponent(xml);
       var data = new Blob([xml], { type: 'application/octet-stream' });
-      data.FetchAttributes();//Fetch properties first so that you don't overwrite existing properties when you call SetProperties
-            data.Properties.ContentDisposition = string.Format("attachment;filename=\"{0}\"", friendlyName);
-            data.SetProperties();
+
+            data.Properties.ContentDisposition = string.Format("attachment;filename=\"{0}\"", "friendlyName.gpx");
+    
       FileSaver.saveAs(data, 'track.gpx');
       //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
