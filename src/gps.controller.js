@@ -848,8 +848,8 @@ list1.dowXmlForR = function () {
       //+ encodeURIComponent(xml);
       var data = new Blob([xml], { type: 'application/octet-stream' });
 
-            data.Properties.ContentDisposition = string.Format("attachment;filename=\"{0}\"", "friendlyName.gpx");
-    
+            data.Properties.ContentDisposition = "attachment;filename="+"friendlyName.gpx";
+
       FileSaver.saveAs(data, 'track.gpx');
       //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
