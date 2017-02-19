@@ -358,6 +358,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.eliminarPuntoRuta = function () {
     //Se resetea el error
     list1.error= false;
+    list1.noError = false;
     //Se comprueba que se haya seleccionado una ruta
     if (EntidadesService.isTrack==true
         || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
@@ -367,7 +368,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       //Se comprueba que se haya seleccionado el punto a borrar
     }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
       list1.error= true;
-      list1.mensajeError="Debes seleccionar un punto para poder borrarlo";
+      list1.mensajeError="Debes seleccionar un punto en la tabla de puntos  para poder borrarlo";
     //Se comprueba que la ruta tenga puntos creados
     }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<1) {
       list1.error= true;
@@ -403,7 +404,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       // del cual se insertara el nuevo punto
     }else if ( EntidadesService.puntoElegido == null) {
       list1.error= true;
-      list1.mensajeError="Debes seleccionar un punto para poder insertar a continuación";
+      list1.mensajeError="Debes seleccionar un punto en la tabla de puntos para poder insertar a continuación";
       //Se comprueba que la ruta tenga puntos creados
     }else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length<2) {
       list1.error= true;
@@ -439,7 +440,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       //Comprobamos que tenga un punto seleccionado
     }else if ( EntidadesService.puntoElegido == null) {
       list1.error= true;
-      list1.mensajeError="Debes seleccionar un punto para poder insertar a continuación";
+      list1.mensajeError="Debes seleccionar un punto en la tabla de puntos para poder insertar a continuación";
       //COmprobamos que el track tenga puntos creados
     }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<2) {
       list1.error= true;
@@ -468,7 +469,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       //Comprobamos que se haya seleccionado un punto
     }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
       list1.error= true;
-      list1.mensajeError="Debes seleccionar un punto para poder borrarlo";
+      list1.mensajeError="Debes seleccionar un punto en la tabla de puntos para poder borrarlo";
       //Comprobamos que el track tenga puntos creados
     }else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length<1) {
       list1.error= true;
