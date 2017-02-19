@@ -844,10 +844,14 @@ list1.dowXmlForR = function () {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
-    list1.dataUrl = 'data:xml/plain;charset=utf-8,'
-      + encodeURIComponent(xml);
-
-      window.open('data:xml/plain;charset=utf-8;Content-Disposition:attachment;filename=export.gpx', +encodeURIComponent(xml));
+    //list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+      //+ encodeURIComponent(xml);
+      var data = new Blob([xml], { type: 'application/octet-stream' });
+      data.FetchAttributes();//Fetch properties first so that you don't overwrite existing properties when you call SetProperties
+            data.Properties.ContentDisposition = string.Format("attachment;filename=\"{0}\"", friendlyName);
+            data.SetProperties();
+      FileSaver.saveAs(data, 'track.gpx');
+      //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
     else{
       console.log(list1.fichero);
