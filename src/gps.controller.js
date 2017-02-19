@@ -847,7 +847,7 @@ list1.dowXmlForR = function () {
     list1.dataUrl = 'data:xml/plain;charset=utf-8,'
       + encodeURIComponent(xml);
 
-      window.open('data:xml/plain;charset=utf-8;content-disposition:attachment;filename=export.gpx', +encodeURIComponent(xml));
+      window.open('data:xml/plain;charset=utf-8;Content-Disposition:attachment;filename=export.gpx', +encodeURIComponent(xml));
     }
     else{
       console.log(list1.fichero);
