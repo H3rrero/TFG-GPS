@@ -76,7 +76,7 @@
 			 placeholder="Enter a location">
 			<my-map ></my-map>
 <div id="datos" ng-hide="!list1.mostrarTabla" ng-click="list1.superponerTabla()">
-<button id="tablaCsv"type="button" class="bttn-gradient bttn-xs bttn-danger" ng-csv="getArray" csv-header="getHeader()"  filename="test.csv">Exportar tabla</button>
+<button id="tablaCsv"type="button" ng-click="list1.exportTabla();" class="bttn-gradient bttn-xs bttn-danger" ng-csv="getArray" csv-header="getHeader()"  filename="test.csv">Exportar tabla</button>
 				<div id="puntos">
 
 

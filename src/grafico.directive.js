@@ -14,12 +14,14 @@ function LineCtrl($scope,EntidadesService) {
  }
 
  //Creacion de la gráfica
- $scope.series = ['Series A'];
+ $scope.series = ['Elevacion'];
  $scope.labels = EntidadesService.distancias;
  $scope.data = [EntidadesService.elevaciones];
 
 
  $scope.onClick = function (points, evt) {
+   EntidadesService.puntoSelec(points[0]._index);
+   EntidadesService.puntoBorrado = true;
  };
  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
  $scope.options = {

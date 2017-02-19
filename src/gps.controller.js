@@ -297,7 +297,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   //Funcion que obtiene de la tabla el punto seleccionado por el usuario
   list1.puntoSelec = function (index) {
     EntidadesService.puntoSelec(index);
-    list1.puntoBorrado = true;
+    EntidadesService.puntoBorrado = true;
   }
 
   //funcion que permite cambiar el nombre a un track
@@ -366,7 +366,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       list1.error= true;
       list1.mensajeError="Por favor selecciona una ruta";
       //Se comprueba que se haya seleccionado el punto a borrar
-    }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
+    }else if (EntidadesService.puntoBorrado == false || EntidadesService.puntoElegido == null) {
       list1.error= true;
       list1.mensajeError="Debes seleccionar un punto en la tabla de puntos  para poder borrarlo";
     //Se comprueba que la ruta tenga puntos creados
@@ -378,7 +378,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       //se llama al metodo del service
       EntidadesService.eliminarPuntoRuta();
       //Se quita el modo borrar
-      list1.puntoBorrado =false;
+      EntidadesService.puntoBorrado =false;
       //Se resetea el punto elegido
       EntidadesService.puntoElegido = null;
     }
@@ -467,7 +467,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       list1.error= true;
       list1.mensajeError="Por favor selecciona un track ";
       //Comprobamos que se haya seleccionado un punto
-    }else if (list1.puntoBorrado == false || EntidadesService.puntoElegido == null) {
+    }else if (EntidadesService.puntoBorrado == false || EntidadesService.puntoElegido == null) {
       list1.error= true;
       list1.mensajeError="Debes seleccionar un punto en la tabla de puntos para poder borrarlo";
       //Comprobamos que el track tenga puntos creados
@@ -477,7 +477,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
       //SI todo esta bien llamamos al metodo del service
     }else {
       EntidadesService.eliminarPuntoTrack();
-      list1.puntoBorrado =false;
+      EntidadesService.puntoBorrado =false;
       EntidadesService.puntoElegido = null;
     }
 
@@ -716,6 +716,7 @@ list1.anadirPuntoRForMapI = function (latitud,longitud) {
       EntidadesService.trackActivo = list1.trackActivo;
        EntidadesService.actualizarPuntosT();
        list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
+       list1.exportTabla();
 
   }
   //Actualiza los puntos de las rutas para que los componenetes que los
@@ -729,6 +730,7 @@ list1.anadirPuntoRForMapI = function (latitud,longitud) {
     EntidadesService.rutaActiva = list1.rutaActiva;
      EntidadesService.actualizarPuntosR();
      list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
+     list1.exportTabla();
   }
   //Comprobamos desde que navegador accede el usuario a nuestra aplicación
   list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -904,39 +906,26 @@ list1.dowXmlForR = function () {
     }
   }
 
-    //Array que tiene el contenido de la tabla para ser descargado en formato csv
-    $scope.getArray = [{a: "1", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"0",g:"0",h:"4km/h"},
-                      {a: "2", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "3", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "4", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"56m",g:"1,3km",h:"4km/h"},
-                      {a: "5", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "6", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "7", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"-35m",g:"1.9km",h:"4km/h"},
-                      {a: "8", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "9", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "10", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"50m",g:"1.0km",h:"4km/h"},
-                      {a: "11", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "12", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "13", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"33m",g:"2.5km",h:"4km/h"},
-                      {a: "14", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "15", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "16", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"76m",g:"3.4km",h:"4km/h"},
-                      {a: "17", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "18", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "19", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "20", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "21", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"98m",g:"0.9",h:"4km/h"},
-                      {a: "22", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "23", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "24", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"45",g:"1.2",h:"4km/h"},
-                      {a: "25", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "26", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "27", b:"43.083333",c:"-5.804077",d:"600m",e:"09:07",f:"32",g:"2.0",h:"4km/h"},
-                      {a: "28", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}
-                      ,{a: "29", b:"42.982951",c:"-5.957886",d:"630m",e:"09:50",f:"-20m",g:"1.5km",h:"4km/h"},
-                      {a: "30", b:"43.207578",c:"-6.474243",d:"650m",e:"09:25",f:"50m",g:"1km",h:"4km/h"}];
+    list1.exportTabla = function () {
+      var array =[];
+      for (var item in list1.puntosTrackActivo) {
+        var e = {a:item , b:list1.puntosTrackActivo[item].latitud,
+          c:list1.puntosTrackActivo[item].longitud,
+          d:list1.puntosTrackActivo[item].elevacion,
+          e:list1.puntosTrackActivo[item].fecha,
+          f:list1.puntosTrackActivo[item].hora,
+          g:list1.puntosTrackActivo[item].desnivel,
+          h:list1.puntosTrackActivo[item].distancia,
+          i:list1.puntosTrackActivo[item].velocidad};
+        array.push(e);
+      }
+      $scope.getArray = array;
+      console.log($scope.getArray);
+    }
+
+
      //Cabecera que tendrá la tabla en formato csv
-     $scope.getHeader = function () {return ["Punto nº","Latitud","Longitud","Elevación","Hora","Desnivel","Distancia","Velocidad"]};
+     $scope.getHeader = function () {return ["Punto nº","Latitud","Longitud","Elevación","Fecha","Hora","Desnivel","Distancia","Velocidad"]};
 
      //Activar la funciones de los track
      list1.funciones = false;

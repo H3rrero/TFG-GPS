@@ -53,6 +53,7 @@ function EntidadesService (){
   service.puntoN={};
   service.xmlImportado;
   service.modoImportWP = false;
+  service.puntoborrado = false;
 service.importXMLWp = function () {
   var puntos=service.xmlImportado.getElementsByTagName("wpt");
  var elevaciones = service.xmlImportado.getElementsByTagName("ele");
