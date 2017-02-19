@@ -20,8 +20,10 @@ function LineCtrl($scope,EntidadesService) {
 
 
  $scope.onClick = function (points, evt) {
+   if(points.length>0){
    EntidadesService.puntoSelec(points[0]._index);
    EntidadesService.puntoBorrado = true;
+ }
  };
  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
  $scope.options = {
