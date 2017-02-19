@@ -844,14 +844,10 @@ list1.dowXmlForR = function () {
     }
     else if (list1.isSafari) {
     var xml = EntidadesService.getXml(true);
-    //list1.dataUrl = 'data:xml/plain;charset=utf-8,'
-      //+ encodeURIComponent(xml);
-      var data = new Blob([xml], { type: 'application/octet-stream' });
+    list1.dataUrl = 'data:xml/plain;charset=utf-8,'
+      + encodeURIComponent(xml);
 
-            data.Properties.ContentDisposition = "attachment;filename="+"friendlyName.gpx";
-
-      FileSaver.saveAs(data, 'track.gpx');
-      //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
+      window.open('data:xml/plain;charset=utf-8;Content-Disposition:attachment;filename="fname.ext",' +encodeURIComponent(xml));
     }
     else{
       console.log(list1.fichero);
