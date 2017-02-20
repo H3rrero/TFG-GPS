@@ -580,9 +580,10 @@ function Mymap(EntidadesService) {
 
   }
 
-          if (( EntidadesService.modoInsertar == false
+          if (( EntidadesService.modoInsertar == false && EntidadesService.modoImportWP == false
             && EntidadesService.modoInvertir == false && EntidadesService.seleccion==false && EntidadesService.hayEntidadesCreadas==true
-            && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0)) || (EntidadesService.isWaypoint == true && EntidadesService.modoImportWP == false)) {
+            && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0))
+             || (EntidadesService.isWaypoint == true && EntidadesService.modoImportWP == false )) {
           //Depende de que entidad sea llamamos a un metodo u otro
           console.log(EntidadesService.modoImportWP);
           if (EntidadesService.isTrack == true) {

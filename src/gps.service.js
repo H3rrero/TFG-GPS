@@ -56,17 +56,17 @@ function EntidadesService (){
   service.puntoborrado = false;
 service.importXMLWp = function () {
   var puntos=service.xmlImportado.getElementsByTagName("wpt");
- var elevaciones = service.xmlImportado.getElementsByTagName("ele");
 
-console.log(elevaciones);
+
   service.modoImportWP = true;
   //Recorremos los puntos del primer track
   for (var item in puntos) {
     if(item <puntos.length){
+      console.log(service.modoImportWP);
     //Guardamos los datos de los puntos
     service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
     service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
-    service.elevacionP = parseFloat(elevaciones[item].textContent);
+    service.elevacionP = parseFloat(puntos[item].firstElementChild.textContent);
 
     //Simulamos el click para que se añada el punto
     google.maps.event.trigger(service.mapa, 'click');
@@ -77,9 +77,6 @@ console.log(elevaciones);
 
   service.importXML = function () {
     var puntos=service.xmlImportado.getElementsByTagName("trkpt");
-    var elevaciones = service.xmlImportado.getElementsByTagName("ele");
-    console.log(elevaciones[0].textContent);
-
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
     //Recorremos los puntos del primer track
@@ -88,9 +85,10 @@ console.log(elevaciones);
       //Guardamos los datos de los puntos
       service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
       service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
-      service.elevacionP = parseFloat(elevaciones[item].textContent);
+      service.elevacionP = parseFloat(puntos[item].firstElementChild.textContent);
       //EL modo segundo recorte nos viene que ni pintado para esta situación
       service.modoRecorte2=true;
+
       //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
       google.maps.event.trigger(service.mapa, 'click');
     }}

@@ -40,6 +40,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   }else {
     EntidadesService.importXMLWp();
     }
+    console.log(EntidadesService.isWaypoint);
   }
 
   list1.activarImportRuta = function () {
@@ -52,6 +53,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     list1.crear(1);
     EntidadesService.importXML();
     }
+    console.log(EntidadesService.isTrack);
   }
 
   list1.activarImport = function () {
@@ -64,6 +66,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     list1.crear(0);
     EntidadesService.importXML();
     }
+    console.log(EntidadesService.isTrack);
   }
 
   //Metodo que llama al metodo unir del service
@@ -738,27 +741,37 @@ list1.anadirPuntoRForMapI = function (latitud,longitud) {
   list1.isChrome = !!window.chrome && !!window.chrome.webstore;
   list1.isFirefox = typeof InstallTrigger !== 'undefined';
   list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
-  if (  list1.isIE || list1.isEdge) {
+  if (  list1.isIE ) {
     list1.esIE=true;
     list1.isSafari = false;
     list1.isChrome = false;
     list1.isFirefox = false;
-  } else if (  list1.isChrome) {
+    list1.isEdge = false;
+  } else if (list1.isEdge) {
+    list1.esIE=false;
+    list1.isSafari = false;
+    list1.isChrome = false;
+    list1.isFirefox = false;
+    list1.isEdge = true;
+  }  else if (  list1.isChrome) {
     list1.esIE=false;
     list1.isSafari = false;
     list1.isChrome = true;
     list1.isFirefox = false;
+    list1.isEdge = false;
   }else if ( list1.isFirefox) {
     list1.esIE=false;
     list1.isSafari = false;
     list1.isChrome = false;
     list1.isFirefox = true;
+    list1.isEdge = false;
   }else if (  list1.isSafari) {
 
     list1.esIE=false;
     list1.isSafari = true;
     list1.isChrome = false;
     list1.isFirefox = false;
+    list1.isEdge = false;
 }
 list1.dowXmlForWp = function () {
     var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -960,13 +973,16 @@ list1.mostrarAlert = false;
       list1.mostrarBotones = false;
       list1.mostrarBotonesR = false;
       list1.mostrarBotonesW = false;
+        $("#funciones").css("width","7.5%");
     }
     //Mostar botones de rutas
     list1.verBotonesR = function () {
       if (list1.mostrarBotonesR==true) {
         list1.mostrarBotonesR = false;
+          $("#funciones").css("width","7.5%");
       } else {
         list1.mostrarBotonesR=true;
+          $("#funciones").css("width","15%");
       }
 
     }
@@ -974,8 +990,10 @@ list1.mostrarAlert = false;
     list1.verBotonesW = function () {
       if (list1.mostrarBotonesW==true) {
         list1.mostrarBotonesW = false;
+          $("#funciones").css("width","7.5%");
       } else {
         list1.mostrarBotonesW=true;
+          $("#funciones").css("width","15%");
       }
 
     }
@@ -983,8 +1001,10 @@ list1.mostrarAlert = false;
     list1.verBotones = function () {
       if (list1.mostrarBotones==true) {
         list1.mostrarBotones = false;
+          $("#funciones").css("width","7.5%");
       } else {
         list1.mostrarBotones=true;
+      $("#funciones").css("width","15%");
       }
 
     }

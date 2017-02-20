@@ -17,17 +17,18 @@ function ImportFunction(EntidadesService) {
                 scope.$apply(function () {
                     scope.fileread = changeEvent.target.files[0];
                     var reader = new FileReader();
-
+                    console.log("XML");
+                    console.log(changeEvent.target.files);
 
            reader.onload = (function(theFile) {
              return function(e) {
 
 
-              console.log("XML");
+
               var xml = $.parseXML( e.target.result);
               //Guardamos el contenido del xml en el service
              EntidadesService.xmlImportado = xml;
-             console.log(EntidadesService.xmlImportado);
+
              };
            })(changeEvent.target.files[0]);
 

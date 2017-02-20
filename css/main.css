@@ -4,7 +4,7 @@
 }
 
 .sample-show-hide {
-  transition: all linear 0.5s;
+  transition: all linear 0s;
 }
 .sample-show-hide.ng-hide {
   opacity: 0;
@@ -70,7 +70,7 @@ overflow: auto;
 	vertical-align:bottom;;
 	height: 50%;
 z-index: 2 !important;
-width: 15%;
+width: 7.5%;
 }
 
  #lista{
