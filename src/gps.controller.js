@@ -734,7 +734,7 @@ list1.anadirPuntoRForMapI = function (latitud,longitud) {
   }
   //Comprobamos desde que navegador accede el usuario a nuestra aplicación
   list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
-  list1.isEdge = !list1.isIE && !!window.StyleMedia;
+  list1.isEdge = /Edge\/\d./i.test(navigator.userAgent);
   list1.isChrome = !!window.chrome && !!window.chrome.webstore;
   list1.isFirefox = typeof InstallTrigger !== 'undefined';
   list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
