@@ -54,6 +54,9 @@ function EntidadesService (){
   service.xmlImportado;
   service.modoImportWP = false;
   service.puntoborrado = false;
+  service.isTrackImport = false;
+  service.isRuteImport = false;
+  service.isWpImport = false;
 service.importXMLWp = function () {
   var puntos=service.xmlImportado.getElementsByTagName("wpt");
 

@@ -30,7 +30,11 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.puntoBorrado = false;
   list1.fichero;
   list1.noError = false;
-
+  list1.mensajeVerTabla= "ver tabla";
+  list1.mensajeVerGrafica= "ver gráfica";
+  list1.mensajeVerlista = "ver lista";
+  list1.mensajeVerlistaR = "ver lista";
+  list1.mensajeVerlistaW = "ver lista";
   list1.activarImportWp = function functionName() {
     list1.error = false;
     if(EntidadesService.xmlImportado == undefined){
@@ -973,16 +977,16 @@ list1.mostrarAlert = false;
       list1.mostrarBotones = false;
       list1.mostrarBotonesR = false;
       list1.mostrarBotonesW = false;
-        $("#funciones").css("width","7.5%");
+        $("#funciones").css("width","8.5%");
     }
     //Mostar botones de rutas
     list1.verBotonesR = function () {
       if (list1.mostrarBotonesR==true) {
         list1.mostrarBotonesR = false;
-          $("#funciones").css("width","7.5%");
+          $("#funciones").css("width","8.5%");
       } else {
         list1.mostrarBotonesR=true;
-          $("#funciones").css("width","15%");
+          $("#funciones").css("width","17%");
       }
 
     }
@@ -990,10 +994,10 @@ list1.mostrarAlert = false;
     list1.verBotonesW = function () {
       if (list1.mostrarBotonesW==true) {
         list1.mostrarBotonesW = false;
-          $("#funciones").css("width","7.5%");
+          $("#funciones").css("width","8.5%");
       } else {
         list1.mostrarBotonesW=true;
-          $("#funciones").css("width","15%");
+          $("#funciones").css("width","17%");
       }
 
     }
@@ -1001,10 +1005,10 @@ list1.mostrarAlert = false;
     list1.verBotones = function () {
       if (list1.mostrarBotones==true) {
         list1.mostrarBotones = false;
-          $("#funciones").css("width","7.5%");
+          $("#funciones").css("width","8.5%");
       } else {
         list1.mostrarBotones=true;
-      $("#funciones").css("width","15%");
+      $("#funciones").css("width","17%");
       }
 
     }
@@ -1029,6 +1033,7 @@ list1.mostrarAlert = false;
     list1.verTablaT = function () {
       if (list1.mostrarTabla==true) {
         list1.mostrarTabla = false;
+        list1.mensajeVerTabla= "ver tabla"
       } else {
         if(list1.tracks.length>0){
             list1.puntosTrackActivo= list1.tracks[list1.trackActivo]["puntos"];
@@ -1036,6 +1041,7 @@ list1.mostrarAlert = false;
             list1.actualizarPuntosT();
         }
         list1.mostrarTabla=true;
+        list1.mensajeVerTabla= "ocultar tabla"
         list1.superponerTabla();
       }
 
@@ -1045,6 +1051,7 @@ list1.mostrarAlert = false;
 
       if (list1.mostrarTabla==true) {
         list1.mostrarTabla = false;
+        list1.mensajeVerTabla= "ver tabla"
       } else {
 
         if(list1.rutas.length>0){
@@ -1053,6 +1060,7 @@ list1.mostrarAlert = false;
             list1.actualizarPuntosR();
           }
         list1.mostrarTabla=true;
+        list1.mensajeVerTabla= "ocultar tabla"
         list1.superponerTabla();
       }
 
@@ -1061,8 +1069,10 @@ list1.mostrarAlert = false;
     list1.verGrafica = function () {
       if (list1.mostrarGrafica==true) {
         list1.mostrarGrafica = false;
+        list1.mensajeVerGrafica= "ver gráfica";
       } else {
         list1.mostrarGrafica=true;
+        list1.mensajeVerGrafica= "ocultar gráfica";
         list1.superponerGrafica();
       }
 
@@ -1073,6 +1083,9 @@ list1.mostrarAlert = false;
       list1.activarListaR = false;
       list1.activarListaW = false;
       list1.activarLista=true;
+      list1.mensajeVerlista = "ocultar lista";
+      list1.mensajeVerlistaR = "ver lista";
+      list1.mensajeVerlistaW = "ver lista";
 
     }
     //Mostrar la lista de rutas
@@ -1081,6 +1094,9 @@ list1.mostrarAlert = false;
       list1.activarLista = false;
       list1.activarListaW = false;
       list1.activarListaR=true;
+      list1.mensajeVerlista = "ver lista";
+      list1.mensajeVerlistaR = "ocultar lista";
+      list1.mensajeVerlistaW = "ver lista";
 
     }
     //Mostrar la lista de waypoints
@@ -1088,6 +1104,9 @@ list1.mostrarAlert = false;
       list1.activarListaR = false;
       list1.activarLista = false;
       list1.activarListaW=true;
+      list1.mensajeVerlista = "ocultar lista";
+      list1.mensajeVerlistaR = "ver lista";
+      list1.mensajeVerlistaW = "ocultar lista";
       list1.crearWaypoint();
 
     }
@@ -1103,8 +1122,12 @@ list1.mostrarAlert = false;
       }
       if (list1.activarListaR==true) {
         list1.activarListaR = false;
+        list1.mensajeVerlistaR = "ver lista";
       } else {
         list1.activarListaR=true;
+        list1.mensajeVerlistaR = "ocultar lista";
+        list1.mensajeVerlistaW = "ver lista";
+        list1.mensajeVerlista = "ver lista";
         EntidadesService.isTrack = false;
         EntidadesService.puntoElegido=null;
         console.log("mostrarMensaje");
@@ -1125,8 +1148,12 @@ list1.mostrarAlert = false;
       list1.activarLista = false;
       if (list1.activarListaW==true) {
         list1.activarListaW = false;
+        list1.mensajeVerlistaW = "ver lista";
       } else {
         list1.activarListaW=true;
+        list1.mensajeVerlistaW = "ocultar lista";
+        list1.mensajeVerlistaR = "ver lista";
+        list1.mensajeVerlista = "ver lista";
         EntidadesService.isWaypoint = false;
       }
 
@@ -1143,8 +1170,12 @@ list1.mostrarAlert = false;
       }
       if (list1.activarLista==true) {
         list1.activarLista = false;
+        list1.mensajeVerlista = "ver lista";
       } else {
         list1.activarLista=true;
+        list1.mensajeVerlista = "ocultar lista";
+        list1.mensajeVerlistR = "ver lista";
+        list1.mensajeVerlistW = "ver lista";
         EntidadesService.isTrack = true;
         EntidadesService.puntoElegido=null;
         EntidadesService.isWaypoint = false;
@@ -1165,11 +1196,14 @@ list1.mostrarAlert = false;
       list1.funcionesW = false;
       list1.mostrarBotones = false;
       list1.mostrarBotonesR = false;
-      list1.mostrarBotonesw = false;
+      list1.mostrarBotonesW = false;
       if (list1.funciones==true) {
         list1.funciones = false;
       } else {
         list1.funciones=true;
+        EntidadesService.isTrackImport = true;
+        EntidadesService.isRuteImport = false;
+        EntidadesService.isWpImport = false;
       }
 
     }
@@ -1179,11 +1213,14 @@ list1.mostrarAlert = false;
       list1.funcionesW = false;
       list1.mostrarBotones = false;
       list1.mostrarBotonesR = false;
-      list1.mostrarBotonesw = false;
+      list1.mostrarBotonesW = false;
       if (list1.funcionesR==true) {
         list1.funcionesR = false;
       } else {
         list1.funcionesR=true;
+        EntidadesService.isTrackImport = false;
+        EntidadesService.isRuteImport = true;
+        EntidadesService.isWpImport = false;
       }
 
     }
@@ -1193,11 +1230,14 @@ list1.mostrarAlert = false;
       list1.funcionesR = false;
       list1.mostrarBotones = false;
       list1.mostrarBotonesR = false;
-      list1.mostrarBotonesw = false;
+      list1.mostrarBotonesW = false;
       if (list1.funcionesW==true) {
         list1.funcionesW = false;
       } else {
         list1.funcionesW=true;
+        EntidadesService.isTrackImport = false;
+        EntidadesService.isRuteImport = false;
+        EntidadesService.isWpImport = true;
       }
 
     }

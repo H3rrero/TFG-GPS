@@ -28,6 +28,18 @@ function ImportFunction(EntidadesService) {
               var xml = $.parseXML( e.target.result);
               //Guardamos el contenido del xml en el service
              EntidadesService.xmlImportado = xml;
+             console.log("Wpimport");
+             console.log(EntidadesService.isWpImport);
+             if (EntidadesService.isTrackImport) {
+               EntidadesService.crear(0);
+               EntidadesService.importXML();
+             }else if (EntidadesService.isWpImport) {
+               EntidadesService.importXMLWp();
+             }
+             else {
+               EntidadesService.crear(1);
+               EntidadesService.importXML();
+             }
 
              };
            })(changeEvent.target.files[0]);
