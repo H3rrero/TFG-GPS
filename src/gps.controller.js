@@ -124,7 +124,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   //metodo que llama a la funcion unir tracks del service
   list1.unirTracks = function () {
     //Desactivamos el error
-    list1.noError= false;
+      list1.noError= false;
     list1.error=false;
     //Activamos el error si el usuario no ha seleccionado un track
     if (EntidadesService.isTrack==false

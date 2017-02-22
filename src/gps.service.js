@@ -57,6 +57,7 @@ function EntidadesService (){
   service.isTrackImport = false;
   service.isRuteImport = false;
   service.isWpImport = false;
+  service.puntosGrafico = [];
 service.importXMLWp = function () {
   var puntos=service.xmlImportado.getElementsByTagName("wpt");
 
@@ -980,6 +981,20 @@ service.actualizarPuntosR = function() {
   service.actualizarPuntos= function () {
     service.elevaciones2 = service.actualizarElevaciones();
     service.distancias2 = service.actualizarDistancias();
+    service.calcularPuntosGrafico();
+  }
+  service.calcularPuntosGrafico = function () {
+      var distancia = 0;
+      service.puntosGrafico.length = 0;
+      for(var item in service.distancias){
+        distancia = parseFloat(distancia )+ parseFloat(service.distancias[item]);
+      var obj = {x:parseFloat(distancia/1000).toFixed(2),y:service.elevaciones[item]};
+      service.puntosGrafico.push(obj);
+      console.log(service.puntosGrafico);
+      }
+  }
+  service.getPuntosGrafico = function () {
+      return service.puntosGrafico;
   }
   //funcion que crea una entidad
   service.crear = function (id) {
