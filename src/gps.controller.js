@@ -6,8 +6,7 @@ angular.module('GPS')
 
 function PruebaController($scope,EntidadesService,$document,FileSaver){
   var list1 = this;
-  console.log("holii");
-  console.log(this);
+
   //track seleccionado por el usuario
   list1.trackActivo = 0;
   list1.rutaActiva = 0;
@@ -35,6 +34,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.mensajeVerlista = "ver lista";
   list1.mensajeVerlistaR = "ver lista";
   list1.mensajeVerlistaW = "ver lista";
+
+
   list1.activarImportWp = function functionName() {
     list1.error = false;
     if(EntidadesService.xmlImportado == undefined){
@@ -44,7 +45,6 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   }else {
     EntidadesService.importXMLWp();
     }
-    console.log(EntidadesService.isWaypoint);
   }
 
   list1.activarImportRuta = function () {
@@ -57,7 +57,6 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     list1.crear(1);
     EntidadesService.importXML();
     }
-    console.log(EntidadesService.isTrack);
   }
 
   list1.activarImport = function () {
@@ -70,7 +69,6 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     list1.crear(0);
     EntidadesService.importXML();
     }
-    console.log(EntidadesService.isTrack);
   }
 
   //Metodo que llama al metodo unir del service
@@ -83,7 +81,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
         || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
         || EntidadesService.modoCreacion==true) {
       list1.error= true;
-      list1.mensajeError="Por favor selecciona una ruta para recortar";
+      list1.mensajeError="Por favor selecciona una ruta para unir";
       //SI la ruta no tiene al menos dos puntos activamos el error
     }else if (EntidadesService.rutas.length<2) {
       list1.error= true;
@@ -130,7 +128,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     if (EntidadesService.isTrack==false
         || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
       list1.error= true;
-      list1.mensajeError="Por favor selecciona un track para recortar";
+      list1.mensajeError="Por favor selecciona un track para unir";
       //Activamos el error si el track no dispone de al menos dos puntos
     }else if (EntidadesService.tracks.length<2) {
       list1.error= true;
@@ -352,7 +350,6 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     }else{
     var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
     if(nombre!= null && EntidadesService.waypoints.length>0){
-      console.log(nombre);
       //SE guarda el waypoint seleccionado
     EntidadesService.wpActivo=list1.wpActivo;
     //Se llama al metodo del service para cambiar el nombre
@@ -565,17 +562,13 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
           break;
         }
     }
-    console.log(velocidadInt);
     //Si la operacion no ha sido cancelada se pide la fecha al ususario
     if(velocidad!= null)
     var fechas = prompt("Introduca año,mes,dia,hora,minutos separados por comas","2017,01,01,00,00");
     //Si la operacion ha sido cancelada no se ejecutara este if
     if(fechas!=null && velocidad != null){
     var cadena = fechas.split(",");
-    console.log(velocidad);
-    console.log(fechas);
     var fecha = new Date(cadena[0],cadena[1],cadena[2],cadena[3],cadena[4],"00","00");
-    console.log(fecha);
     //Si la fecha es incorrecta  se vuelve a pedir
     while (fecha == "Invalid Date") {
       fechas = prompt("La fecha no se ha introducido en el formato indicado por favor introduca año,mes,dia,hora,minutos separados por comas","2017,01,01,00,00");
@@ -803,7 +796,6 @@ list1.dowXmlForWp = function () {
     }
   else{
   var xml = EntidadesService.getWaypoints();
-    console.log("he llegado a descarga");
   //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
   list1.dataUrl = 'data:xml/plain;charset=utf-8,'
     + encodeURIComponent(xml);
@@ -840,7 +832,6 @@ list1.dowXmlForR = function () {
     'lo tengas renombra el archivo y añadele la extension ".gpx"';
   }else{
   var xml = EntidadesService.getXml(false);
-    console.log("he llegado a descarga");
   //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
   list1.dataUrl = 'data:xml/plain;charset=utf-8,'
     + encodeURIComponent(xml);
@@ -853,7 +844,6 @@ list1.dowXmlForR = function () {
     list1.noError= false;
     list1.error=false;
       list1.dataUrl="";
-    console.log("he llegado");
     if(EntidadesService.tracks.length<1)
     {
       list1.error= true;
@@ -881,9 +871,7 @@ list1.dowXmlForR = function () {
       //window.open('data:application/octet-stream,' +encodeURIComponent(xml));
     }
     else{
-      console.log(list1.fichero);
     var xml = EntidadesService.getXml(true);
-      console.log("he llegado a descarga");
     //en los navegadores chroome y mozilla hacemos uso de la propiedad download para descargar la imagen
     list1.dataUrl = 'data:xml/plain;charset=utf-8,'
       + encodeURIComponent(xml);
@@ -937,7 +925,6 @@ list1.dowXmlForR = function () {
         array.push(e);
       }
       $scope.getArray = array;
-      console.log($scope.getArray);
     }
 
 
@@ -1130,8 +1117,6 @@ list1.mostrarAlert = false;
         list1.mensajeVerlista = "ver lista";
         EntidadesService.isTrack = false;
         EntidadesService.puntoElegido=null;
-        console.log("mostrarMensaje");
-        console.log(list1.mostrarMensaje);
         EntidadesService.isWaypoint = false;
         if(list1.mostrarTabla==true)
            list1.mostrarTabla = false;
@@ -1241,6 +1226,7 @@ list1.mostrarAlert = false;
       }
 
     }
+
 }
 
 

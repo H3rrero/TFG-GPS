@@ -58,15 +58,74 @@ function EntidadesService (){
   service.isRuteImport = false;
   service.isWpImport = false;
   service.puntosGrafico = [];
+
+  //Centra el mapa segun el track importado
+  service.centrarMapa = function () {
+      //Inicializamos el elemento bounds de google maps
+      var bounds = new google.maps.LatLngBounds();
+      //Recorremos los puntos del track
+      for (var item in service.tracks[service.tracks.length-1].puntos) {
+          var coor =  new google.maps.LatLng(service.tracks[service.tracks.length-1].puntos[item].latitud,
+              service.tracks[service.tracks.length-1].puntos[item].longitud);
+          //Añadimos las coordenadas del punto al bound
+          bounds.extend(coor);
+      }
+      //Calculamos y cambiamos el entro del mapa
+      service.mapa.setCenter(bounds.getCenter());
+      //Aplicamos el zoom en relazion al track importado
+      service.mapa.setZoom(service.getZoomByBounds(service.mapa,bounds));
+  };
+    //Centra el mapa en la ruta importada
+    service.centrarRuta = function () {
+        var bounds = new google.maps.LatLngBounds();
+        for (var item in service.rutas[service.rutas.length-1].puntos) {
+            var coor =  new google.maps.LatLng(service.rutas[service.rutas.length-1].puntos[item].latitud,
+                service.rutas[service.rutas.length-1].puntos[item].longitud);
+            bounds.extend(coor);
+        }
+        service.mapa.setCenter(bounds.getCenter());
+        service.mapa.setZoom(service.getZoomByBounds(service.mapa,bounds));
+    };
+    //centra el mapa en los waypoints importados
+    service.centrarWP = function () {
+        var puntos=service.xmlImportado.getElementsByTagName("wpt");
+        var bounds = new google.maps.LatLngBounds();
+        for (var item in puntos) {
+          if(item<puntos.length){
+            var coor =  new google.maps.LatLng(puntos[item].attributes.lat.nodeValue,puntos[item].attributes.lon.nodeValue);
+            bounds.extend(coor);
+        }}
+        service.mapa.setCenter(bounds.getCenter());
+        service.mapa.setZoom(service.getZoomByBounds(service.mapa,bounds));
+    };
+    //Funcion que calcula y ajusta el zoom del mapa al track importado
+    service.getZoomByBounds = function ( map, bounds ){
+        var MAX_ZOOM = map.mapTypes.get( map.getMapTypeId() ).maxZoom || 21 ;
+        var MIN_ZOOM = map.mapTypes.get( map.getMapTypeId() ).minZoom || 0 ;
+
+        var ne= map.getProjection().fromLatLngToPoint( bounds.getNorthEast() );
+        var sw= map.getProjection().fromLatLngToPoint( bounds.getSouthWest() );
+
+        var worldCoordWidth = Math.abs(ne.x-sw.x);
+        var worldCoordHeight = Math.abs(ne.y-sw.y);
+
+        //Fit padding in pixels
+        var FIT_PAD = 40;
+
+        for( var zoom = MAX_ZOOM; zoom >= MIN_ZOOM; --zoom ){
+            if( worldCoordWidth*(1<<zoom)+2*FIT_PAD < $(map.getDiv()).width() &&
+                worldCoordHeight*(1<<zoom)+2*FIT_PAD < $(map.getDiv()).height() )
+                return zoom;
+        }
+        return 0;
+    }
 service.importXMLWp = function () {
   var puntos=service.xmlImportado.getElementsByTagName("wpt");
-
-
   service.modoImportWP = true;
   //Recorremos los puntos del primer track
   for (var item in puntos) {
     if(item <puntos.length){
-      console.log(service.modoImportWP);
+
     //Guardamos los datos de los puntos
     service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
     service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
@@ -236,7 +295,7 @@ service.importXMLWp = function () {
     }
     //Añadimos el nuevo punto
     puntos.splice(service.puntoElegido+1,0,service.puntoN);
-    console.log(puntos);
+
     //Booramos los puntos actuales
     for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
       service.tracks[service.trackActivo].puntos.splice(i,1);
@@ -457,6 +516,7 @@ service.importXMLWp = function () {
     service.modoRecorte1 = false;
     service.modoRecorte2 = false;
     service.puntoElegido = null;
+
   }
   service.recortarRuta = function () {
     for (var item in service.rutas[service.rutaActiva].puntos) {
@@ -536,7 +596,7 @@ service.importXMLWp = function () {
   service.invertirRuta = function () {
 
     var puntos =new Array();
-    console.log(puntos);
+
     service.colorPolyNF = service.getPoly().strokeColor;
     //Eliminapos la polilinea actual
     service.getPoly().setMap(null);
@@ -551,8 +611,6 @@ service.importXMLWp = function () {
     //Y tambien como que no tiene marcadores
       service.wpRta[service.rutaActiva] = undefined;
     for (var variable in service.rutas[service.rutaActiva].puntos) {
-      console.log("Puntos antes de anteeeeeessss de seerrrr eliminarlos");
-      console.log(service.rutas[service.rutaActiva].puntos[variable]);
       puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
     }
     //Booramos los puntos actuales
@@ -564,8 +622,6 @@ service.importXMLWp = function () {
     service.rutas[service.rutaActiva].fecha = new Date();
     //Recorremos los puntos al reves para volver a añadirlos
     for (var i = puntos.length-1; i >= 0; i--) {
-      console.log("Puntos mientras son anadidos");
-      console.log(puntos[i]);
       //Guardamos la longitud y laltitud para pasarsela al mapa
       service.longitudPInv = puntos[i].longitud;
       service.latitudPInv = puntos[i].latitud;
@@ -588,7 +644,6 @@ service.importXMLWp = function () {
   service.invertirTrack = function () {
 
     var puntos =new Array();
-    console.log(puntos);
     service.colorPolyNF = service.getPoly().strokeColor;
     //Eliminapos la polilinea actual
     service.getPoly().setMap(null);
@@ -600,8 +655,6 @@ service.importXMLWp = function () {
     //Y tambien como que no tiene marcadores
     service.markersT[service.trackActivo] = undefined;
     for (var variable in service.tracks[service.trackActivo].puntos) {
-      console.log("Puntos antes de anteeeeeessss de seerrrr eliminarlos");
-      console.log(service.tracks[service.trackActivo].puntos[variable]);
       puntos.push(service.tracks[service.trackActivo].puntos[variable]);
     }
     //Booramos los puntos actuales
@@ -613,8 +666,6 @@ service.importXMLWp = function () {
     service.tracks[service.trackActivo].fecha = new Date();
     //Recorremos los puntos al reves para volver a añadirlos
     for (var i = puntos.length-1; i >= 0; i--) {
-      console.log("Puntos mientras son anadidos");
-      console.log(puntos[i]);
       //Guardamos la longitud y laltitud para pasarsela al mapa
       service.longitudPInv = puntos[i].longitud;
       service.latitudPInv = puntos[i].latitud;
@@ -640,8 +691,6 @@ service.importXMLWp = function () {
     }
     //ELiminamos los marcadores de inicion y fin actuales
     if(service.markersT[service.trackActivo]!==undefined){
-    console.log("markers");
-    console.log(service.markersT);
     service.markersT[service.trackActivo][0].setMap(null);
     service.markersT[service.trackActivo][1].setMap(null);
     }
@@ -662,11 +711,8 @@ service.importXMLWp = function () {
     {
       service.hayEntidadesCreadas=false;
     }
-    console.log(service.tracks.length);
-    console.log(service.hayEntidadesCreadas);
   }
   service.borrarRuta = function () {
-    console.log(service.rutaActiva);
     //Eliminapos la polilinea actual
   service.polyLineasR[service.rutaActiva].setMap(null);
     service.polyLineasR.splice(service.rutaActiva,1);
@@ -690,7 +736,6 @@ service.importXMLWp = function () {
     {
       service.hayEntidadesCreadas=false;
     }
-    console.log(service.hayEntidadesCreadas);
   }
   //Metodo que permote borrar un waypoint
   service.borrarWp = function () {
@@ -990,7 +1035,6 @@ service.actualizarPuntosR = function() {
         distancia = parseFloat(distancia )+ parseFloat(service.distancias[item]);
       var obj = {x:parseFloat(distancia/1000).toFixed(2),y:service.elevaciones[item]};
       service.puntosGrafico.push(obj);
-      console.log(service.puntosGrafico);
       }
   }
   service.getPuntosGrafico = function () {
@@ -1083,8 +1127,6 @@ service.actualizarPuntosR = function() {
         velocidad: 4,
       }
         if (service.tracks.length>0){
-          console.log("Que punto llega?");
-          console.log(service.punto);
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
         service.calcularDatosTrack(0,service.punto);
@@ -1096,8 +1138,6 @@ service.actualizarPuntosR = function() {
       }
         break;
       case 1:
-      console.log("distancia");
-      console.log(service.distancia);
       service.calcularFechaR(15);
       service.punto = {
         numero:0,

@@ -57,7 +57,6 @@ function Mymap(EntidadesService) {
           var RASTERWMTS = new google.maps.ImageMapType({
             alt: "RasterIGN",
             getTileUrl: function(coord, zoom) {
-              console.log(RasterGetCoordUrl(coord, zoom));
               return RasterGetCoordUrl(coord, zoom);
             },
             isPng: false,
@@ -134,7 +133,6 @@ function Mymap(EntidadesService) {
            map.mapTypes.set('PNOA ES', PNOAWMTS);
            map.mapTypes.set('Raster ES', RASTERWMTS);
            map.mapTypes.set('Raster FR', RASTERFR);
-
            map.setOptions(
             {
               //cofiguramos las opciones de controles del mapa
@@ -263,7 +261,7 @@ function Mymap(EntidadesService) {
             EntidadesService.longitud = EntidadesService.longitudPInv;
             EntidadesService.elevacion = EntidadesService.elevacionP;
             controller.crear(2);
-            console.log(evento.lat());
+
 
             var nombre = "Nuevo-Waypoint"+EntidadesService.cont;
             EntidadesService.cont = EntidadesService.cont+1;
@@ -274,7 +272,7 @@ function Mymap(EntidadesService) {
               map: map
             });
             EntidadesService.markers.push(marker);
-            console.log(EntidadesService.markers);
+
           }
 
 
@@ -311,7 +309,7 @@ function Mymap(EntidadesService) {
                     distancia: 0,
                     velocidad: 4,
                   }
-                  console.log("Estoy en elevacionnnnnn");
+
                   EntidadesService.puntoN.longitud = event.latLng.lng().toFixed(6);
                   EntidadesService.puntoN.latitud = event.latLng.lat().toFixed(6);
                   EntidadesService.puntoN.elevacion = results[0].elevation.toFixed(2);
@@ -335,11 +333,8 @@ function Mymap(EntidadesService) {
 
           }
           if(EntidadesService.modoInvertir == true){
-            console.log("estoy en invertir");
-            console.log(EntidadesService.latitudPInv);
-            console.log(EntidadesService.longitudPInv);
-          var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
 
+          var evento =  new google.maps.LatLng(EntidadesService.latitudPInv, EntidadesService.longitudPInv);
             //Depende de que entidad sea llamamos a un metodo u otro
             if (EntidadesService.isTrack == true) {
                     EntidadesService.elevacion = EntidadesService.elevacionP;
@@ -440,8 +435,7 @@ function Mymap(EntidadesService) {
 
               poly = EntidadesService.getPolyR(puntoRecorte2);
               }
-              console.log("Estoy en modo recorte 2");
-              console.log(puntoRecorte2);
+
             }
             else{
             //Si no tiene polilinea la creamos
@@ -585,7 +579,6 @@ function Mymap(EntidadesService) {
             && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0))
              || (EntidadesService.isWaypoint == true && EntidadesService.modoImportWP == false )) {
           //Depende de que entidad sea llamamos a un metodo u otro
-          console.log(EntidadesService.modoImportWP);
           if (EntidadesService.isTrack == true) {
             //Servicio de elevaciones que nos da la elevacion del punto actual
             elevator.getElevationForLocations({
@@ -663,12 +656,12 @@ function Mymap(EntidadesService) {
               map: map
             });
             google.maps.event.addListener(marker, 'dragend', function (e) {
-              console.log("yuhuuuu");
+
               for (var item in EntidadesService.waypoints) {
                 if ("Nombre: "+EntidadesService.waypoints[item].nombre+"\nLatitud: "+
                 EntidadesService.waypoints[item].latitud+"\nLongitud: "+EntidadesService.waypoints[item].longitud
                  == marker.title) {
-                   console.log("pim pam pum");
+
                    var posicion = item;
                   EntidadesService.waypoints[item].longitud = e.latLng.lng().toFixed(6);
                   EntidadesService.waypoints[item].latitud = e.latLng.lat().toFixed(6);
@@ -693,7 +686,6 @@ function Mymap(EntidadesService) {
                 scope.$apply();
 		                         });
             EntidadesService.markers.push(marker);
-            console.log(EntidadesService.markers);
           }else{
           //Si no tiene polilinea la creamos
           if (EntidadesService.tienePolyF()==false) {

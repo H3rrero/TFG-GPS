@@ -28,25 +28,24 @@ function ImportFunction(EntidadesService) {
               var xml = $.parseXML( e.target.result);
               //Guardamos el contenido del xml en el service
              EntidadesService.xmlImportado = xml;
-             console.log("Wpimport");
-             console.log(EntidadesService.isWpImport);
              if (EntidadesService.isTrackImport) {
                EntidadesService.crear(0);
                EntidadesService.importXML();
+               EntidadesService.centrarMapa();
              }else if (EntidadesService.isWpImport) {
                EntidadesService.importXMLWp();
+                 EntidadesService.centrarWP();
              }
              else {
                EntidadesService.crear(1);
                EntidadesService.importXML();
+               EntidadesService.centrarRuta();
              }
-
              };
            })(changeEvent.target.files[0]);
 
           //Leemos el contendo del fichero
           reader.readAsText(changeEvent.target.files[0],"UTF-8");
-          //reader.readAsDataURL(changeEvent.target.files[0]);
                 });
             });
         }
