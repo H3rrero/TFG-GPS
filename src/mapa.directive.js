@@ -16,7 +16,8 @@ function Mymap(EntidadesService) {
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
       var div = ownerDocument.createElement('div');
-      div.innerHTML = coord;
+      div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+coord+'</p>';
+        div.style.color ='#FFFFFF';
       div.style.width = this.tileSize.width + 'px';
       div.style.height = this.tileSize.height + 'px';
       div.style.fontSize = '10';
@@ -243,6 +244,54 @@ function Mymap(EntidadesService) {
     map.addListener('click', addLatLng,elevator);
     EntidadesService.mapa = map;
         }
+        //Calcula la distancia entre dos puntos del mapa para los recortes de una ruta
+        var calcularDistanciasRR = function (latlng) {
+            if(EntidadesService.modoRecorte1 == true && EntidadesService.
+                    rutas[EntidadesService.rutas.length-2].puntos.length>0){
+                var _kCord = new google.maps.LatLng(EntidadesService.
+                        rutas[EntidadesService.rutas.length-2].puntos[EntidadesService.
+                        rutas[EntidadesService.rutas.length-2].puntos.length-1].latitud,
+                    EntidadesService.
+                        rutas[EntidadesService.rutas.length-2].puntos[EntidadesService.
+                        rutas[EntidadesService.rutas.length-2].puntos.length-1].longitud);
+                EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(latlng, _kCord).toFixed(2);
+            }else if(EntidadesService.modoRecorte2 == true && EntidadesService.
+                    rutas[EntidadesService.rutas.length-1].puntos.length>0){
+                var _kCord = new google.maps.LatLng(EntidadesService.
+                        rutas[EntidadesService.rutas.length-1].puntos[EntidadesService.
+                        rutas[EntidadesService.rutas.length-1].puntos.length-1].latitud,
+                    EntidadesService.
+                        rutas[EntidadesService.rutas.length-1].puntos[EntidadesService.
+                        rutas[EntidadesService.rutas.length-1].puntos.length-1].longitud);
+                EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(latlng, _kCord).toFixed(2);
+            } else {
+                EntidadesService.distancia = 0;
+            }
+        }
+        //Calcula la distancia entre dos puntos del mapa para los recortes de un track
+        var calcularDistanciasR = function (latlng) {
+            if(EntidadesService.modoRecorte1 == true && EntidadesService.
+                    tracks[EntidadesService.tracks.length-2].puntos.length>0){
+                var _kCord = new google.maps.LatLng(EntidadesService.
+                        tracks[EntidadesService.tracks.length-2].puntos[EntidadesService.
+                        tracks[EntidadesService.tracks.length-2].puntos.length-1].latitud,
+                    EntidadesService.
+                        tracks[EntidadesService.tracks.length-2].puntos[EntidadesService.
+                        tracks[EntidadesService.tracks.length-2].puntos.length-1].longitud);
+                EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(latlng, _kCord).toFixed(2);
+            }else if(EntidadesService.modoRecorte2 == true && EntidadesService.
+                    tracks[EntidadesService.tracks.length-1].puntos.length>0){
+                var _kCord = new google.maps.LatLng(EntidadesService.
+                        tracks[EntidadesService.tracks.length-1].puntos[EntidadesService.
+                        tracks[EntidadesService.tracks.length-1].puntos.length-1].latitud,
+                    EntidadesService.
+                        tracks[EntidadesService.tracks.length-1].puntos[EntidadesService.
+                        tracks[EntidadesService.tracks.length-1].puntos.length-1].longitud);
+                EntidadesService.distancia = google.maps.geometry.spherical.computeDistanceBetween(latlng, _kCord).toFixed(2);
+            } else {
+                EntidadesService.distancia = 0;
+            }
+        }
         //Calcula la distancia entre dos puntos del mapa
         var calcularDistancias = function (latlng) {
           if(EntidadesService.puntosTrackActivo.length>0){
@@ -338,7 +387,10 @@ function Mymap(EntidadesService) {
             //Depende de que entidad sea llamamos a un metodo u otro
             if (EntidadesService.isTrack == true) {
                     EntidadesService.elevacion = EntidadesService.elevacionP;
-                    calcularDistancias(evento);
+                    if(EntidadesService.modoRecorte1 == true || EntidadesService.modoRecorte2 == true)
+                    calcularDistanciasR(evento);
+                    else
+                        calcularDistancias(evento);
                     if(EntidadesService.modoRecorte1 == true){
                       controller.anadirPuntoTForMapR(EntidadesService.tracks.length-2,evento.lat().toFixed(6),evento.lng().toFixed(6));
                     }
@@ -352,6 +404,9 @@ function Mymap(EntidadesService) {
             }
             else{
                     EntidadesService.elevacion = EntidadesService.elevacionP;
+                    if(EntidadesService.modoRecorte1 == true || EntidadesService.modoRecorte2 == true)
+                    calcularDistanciasRR(evento);
+                    else
                     calcularDistancias(evento);
                     if(EntidadesService.modoRecorte1 == true){
                       controller.anadirPuntoRForMapR(EntidadesService.rutas.length-2,evento.lat().toFixed(6),evento.lng().toFixed(6));

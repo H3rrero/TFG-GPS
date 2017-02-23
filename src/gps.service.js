@@ -620,6 +620,13 @@ service.importXMLWp = function () {
     }
     //Asignamos una nueva fecha
     service.rutas[service.rutaActiva].fecha = new Date();
+      service.rutas[service.rutaActiva].distancia= 0;
+      service.rutas[service.rutaActiva].desnivelP= 0;
+      service.rutas[service.rutaActiva].desnivelN=0;
+      service.rutas[service.rutaActiva].elevMax=0;
+      service.rutas[service.rutaActiva].elevMin=9999999;
+      service.rutas[service.rutaActiva].duracionIda=0;
+      service.rutas[service.rutaActiva].duracionVuelta=0;
     //Recorremos los puntos al reves para volver a añadirlos
     for (var i = puntos.length-1; i >= 0; i--) {
       //Guardamos la longitud y laltitud para pasarsela al mapa
@@ -664,6 +671,13 @@ service.importXMLWp = function () {
     }
     //Asignamos una nueva fecha
     service.tracks[service.trackActivo].fecha = new Date();
+      service.tracks[service.trackActivo].distancia= 0;
+      service.tracks[service.trackActivo].desnivelP= 0;
+      service.tracks[service.trackActivo].desnivelN=0;
+      service.tracks[service.trackActivo].elevMax=0;
+      service.tracks[service.trackActivo].elevMin=9999999;
+      service.tracks[service.trackActivo].duracionIda=0;
+      service.tracks[service.trackActivo].duracionVuelta=0;
     //Recorremos los puntos al reves para volver a añadirlos
     for (var i = puntos.length-1; i >= 0; i--) {
       //Guardamos la longitud y laltitud para pasarsela al mapa
@@ -763,7 +777,7 @@ service.cambiarTiempos = function (velocidad,fecha) {
   //Se recorren todos los puntos y se les asiogna la nueva fecha y velocidad
   for (var item in service.puntosTrackActivo) {
     service.calcularDuracionPuntos(service.puntosTrackActivo[item]);
-    service.calcularFecha(service.calcularDuracionPuntos(service.puntosTrackActivo[item]));
+    service.calcularFecha(service.trackActivo,service.calcularDuracionPuntos(service.puntosTrackActivo[item]));
     service.puntosTrackActivo[item].fecha=service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
     service.puntosTrackActivo[item].hora =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
     service.puntosTrackActivo[item].velocidad=service.velocidad;
@@ -776,15 +790,15 @@ service.cambiarTiempos = function (velocidad,fecha) {
 //Se calcula el tiempo en recorrer la distancia del track en linea recta sin elevaciones
 //Despues se comprueba cual de los dos tiempos calculados es mayor
 // Y el resultado seria la suma del mayor mas la mitad del menor
-service.calcularDuracion= function (ida) {
+service.calcularDuracion= function (ida,num) {
   if (ida) {
-    var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelP)/400).toFixed(2);
-    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[service.trackActivo].desnivelN)/600)).toFixed(2);
+    var hDesnivelSubida = (parseFloat(service.tracks[num].desnivelP)/400).toFixed(2);
+    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[num].desnivelN)/600)).toFixed(2);
   } else {
-    var hDesnivelSubida = (parseFloat(service.tracks[service.trackActivo].desnivelN)/400).toFixed(2);
-    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[service.trackActivo].desnivelP)/600)).toFixed(2);
+    var hDesnivelSubida = (parseFloat(service.tracks[num].desnivelN)/400).toFixed(2);
+    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[num].desnivelP)/600)).toFixed(2);
   }
-  var hDistanciaHori = (parseFloat(service.tracks[service.trackActivo].distancia)/parseFloat(service.velocidad)).toFixed(2);
+  var hDistanciaHori = (parseFloat(service.tracks[num].distancia)/parseFloat(service.velocidad)).toFixed(2);
   var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
   if (hDistanciaHori>=hdesnivelGeneral ) {
     var menor = parseFloat(hdesnivelGeneral*0.5).toFixed(2);
@@ -852,9 +866,9 @@ service.calcularDuracionPuntos= function (punto) {
   }
 }
 //Suma a la fecha del track activo la horas que revibe como parametro
-service.calcularFecha = function (horas) {
+service.calcularFecha = function (num,horas) {
   var segundos = parseFloat(horas)*parseFloat(3600);
-  service.tracks[service.trackActivo].fecha.setSeconds(segundos);
+  service.tracks[num].fecha.setSeconds(segundos);
 }
 //Calcula la fecha a partir de una velocidad
 service.calcularFechaR = function (ritmo) {
@@ -882,32 +896,32 @@ service.ordenarMinutosR = function () {
   return minutos;
 }
 //Calcula todos los datos del track que son mostrados en la lista al lado de su nombre
-service.calcularDatosTrack = function (id,punto) {
+service.calcularDatosTrack = function (id,punto,track) {
   if (id==0) {
-    service.tracks[service.trackActivo].distancia = (parseFloat(service.tracks[service.trackActivo].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
+    service.tracks[track].distancia = (parseFloat(service.tracks[track].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
     if (parseFloat(punto.desnivel)>=0) {
-        service.tracks[service.trackActivo].desnivelP = (parseFloat(punto.desnivel) + parseFloat(  service.tracks[service.trackActivo].desnivelP)).toFixed(2);
+        service.tracks[track].desnivelP = (parseFloat(punto.desnivel) + parseFloat(  service.tracks[track].desnivelP)).toFixed(2);
     }else {
-      service.tracks[service.trackActivo].desnivelN = (parseFloat(punto.desnivel) + parseFloat(service.tracks[service.trackActivo].desnivelN)).toFixed(2);
+      service.tracks[track].desnivelN = (parseFloat(punto.desnivel) + parseFloat(service.tracks[track].desnivelN)).toFixed(2);
     }
-    if (parseFloat(punto.elevacion)>parseFloat(service.tracks[service.trackActivo].elevMax)) {
-      service.tracks[service.trackActivo].elevMax=parseFloat(punto.elevacion).toFixed(2);
+    if (parseFloat(punto.elevacion)>parseFloat(service.tracks[track].elevMax)) {
+      service.tracks[track].elevMax=parseFloat(punto.elevacion).toFixed(2);
     }
-    if (parseFloat(punto.elevacion)<parseFloat(service.tracks[service.trackActivo].elevMin)) {
-     service.tracks[service.trackActivo].elevMin=parseFloat(punto.elevacion).toFixed(2);
+    if (parseFloat(punto.elevacion)<parseFloat(service.tracks[track].elevMin)) {
+     service.tracks[track].elevMin=parseFloat(punto.elevacion).toFixed(2);
     }
   } else {
-    service.rutas[service.rutaActiva].distancia = (parseFloat(service.rutas[service.rutaActiva].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
+    service.rutas[track].distancia = (parseFloat(service.rutas[track].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
     if (parseFloat(punto.desnivel)>=0) {
-        service.rutas[service.rutaActiva].desnivelP = (parseFloat(punto.desnivel) + parseFloat(service.rutas[service.rutaActiva].desnivelP)).toFixed(2);
+        service.rutas[track].desnivelP = (parseFloat(punto.desnivel) + parseFloat(service.rutas[track].desnivelP)).toFixed(2);
     }else {
-      service.rutas[service.rutaActiva].desnivelN = (parseFloat(punto.desnivel) + parseFloat(service.rutas[service.rutaActiva].desnivelN)).toFixed(2);
+      service.rutas[track].desnivelN = (parseFloat(punto.desnivel) + parseFloat(service.rutas[track].desnivelN)).toFixed(2);
     }
-    if (parseFloat(punto.elevacion)>parseFloat(service.rutas[service.rutaActiva].elevMax)) {
-      service.rutas[service.rutaActiva].elevMax=parseFloat(punto.elevacion).toFixed(2);
+    if (parseFloat(punto.elevacion)>parseFloat(service.rutas[track].elevMax)) {
+      service.rutas[track].elevMax=parseFloat(punto.elevacion).toFixed(2);
     }
-    if (parseFloat(punto.elevacion)<parseFloat(service.rutas[service.rutaActiva].elevMin)) {
-     service.rutas[service.rutaActiva].elevMin=parseFloat(punto.elevacion).toFixed(2);
+    if (parseFloat(punto.elevacion)<parseFloat(service.rutas[track].elevMin)) {
+     service.rutas[track].elevMin=parseFloat(punto.elevacion).toFixed(2);
     }
   }
 }
@@ -1102,9 +1116,47 @@ service.actualizarPuntosR = function() {
     return service.entidad;
   }
 
+    service.calcularDesnivelR = function ()
+    { if(service.modoRecorte1 == true ){
+      if(service.
+              rutas[service.rutas.length-2].puntos.length>0)
+        return (service.elevacion-service.
+            rutas[service.rutas.length-2].puntos[service.
+            rutas[service.rutas.length-2].puntos.length-1].elevacion).toFixed(2);
+      else
+        return 0;
+    }else if(service.modoRecorte2 == true ){
+      if(service.
+              rutas[service.rutas.length-1].puntos.length>0)
+        return (service.elevacion-service.
+            rutas[service.rutas.length-1].puntos[service.
+            rutas[service.rutas.length-1].puntos.length-1].elevacion).toFixed(2);
+      else
+        return 0;
+    }else if(service.puntosTrackActivo.length>0){
+        return (service.elevacion-service.puntosTrackActivo[service.puntosTrackActivo.length-1].elevacion).toFixed(2);}
+    else {
+        return 0;
+    }
+    }
   service.calcularDesnivel = function ()
-  {
-    if(service.puntosTrackActivo.length>0){
+  { if(service.modoRecorte1 == true ){
+      if(service.
+          tracks[service.tracks.length-2].puntos.length>0)
+      return (service.elevacion-service.
+          tracks[service.tracks.length-2].puntos[service.
+          tracks[service.tracks.length-2].puntos.length-1].elevacion).toFixed(2);
+      else
+        return 0;
+  }else if(service.modoRecorte2 == true  ){
+    if(service.
+            tracks[service.tracks.length-1].puntos.length>0)
+      return (service.elevacion-service.
+          tracks[service.tracks.length-1].puntos[service.
+          tracks[service.tracks.length-1].puntos.length-1].elevacion).toFixed(2);
+    else
+      return 0;
+  }else if(service.puntosTrackActivo.length>0){
     return (service.elevacion-service.puntosTrackActivo[service.puntosTrackActivo.length-1].elevacion).toFixed(2);}
     else {
       return 0;
@@ -1129,10 +1181,10 @@ service.actualizarPuntosR = function() {
         if (service.tracks.length>0){
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
-        service.calcularDatosTrack(0,service.punto);
-        service.tracks[num].duracionIda = parseFloat(service.calcularDuracion(true)).toFixed(2);
-        service.tracks[num].duracionVuelta = parseFloat(service.calcularDuracion(false)).toFixed(2);
-        service.calcularFecha(service.calcularDuracionPuntos(service.punto));
+        service.calcularDatosTrack(0,service.punto,num);
+        service.tracks[num].duracionIda = parseFloat(service.calcularDuracion(true,num)).toFixed(2);
+        service.tracks[num].duracionVuelta = parseFloat(service.calcularDuracion(false,num)).toFixed(2);
+        service.calcularFecha(num,service.calcularDuracionPuntos(service.punto));
         service.tracks[num]["puntos"][service.tracks[num]["puntos"].length-1].fecha=service.tracks[num].fecha.getDate()+"/"+service.tracks[num].fecha.getMonth()+"/"+service.tracks[num].fecha.getFullYear();
         service.tracks[num]["puntos"][service.tracks[num]["puntos"].length-1].hora =service.tracks[num].fecha.getHours()+":"+service.ordenarMinutos();
       }
@@ -1146,14 +1198,14 @@ service.actualizarPuntosR = function() {
         elevacion: service.elevacion,
         fecha:service.rutas[service.rutaActiva].fecha.getDate()+"/"+service.rutas[service.rutaActiva].fecha.getMonth()+"/"+service.rutas[service.rutaActiva].fecha.getFullYear(),
         hora:service.rutas[service.rutaActiva].fecha.getHours()+":"+service.ordenarMinutosR(),
-        desnivel:service.calcularDesnivel(),
+        desnivel:service.calcularDesnivelR(),
         distancia: service.distancia,
         velocidad: 4,
       }
           if (service.rutas.length>0){
             service.punto.numero = service.rutas[num]["puntos"].length;
             service.rutas[num]["puntos"].push(service.punto);
-            service.calcularDatosTrack(1,service.punto);
+            service.calcularDatosTrack(1,service.punto,service.rutaActiva);
       }
         break;
     }

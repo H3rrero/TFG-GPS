@@ -76,6 +76,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     //Desactivamos el boolean error
     list1.noError= false;
     list1.error=false;
+    EntidadesService.modoInsertar = false;
     //Si ninguna ruta fuera seleccionada activamos el error y pasamos el mensaje
     if (EntidadesService.isTrack==true
         || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
@@ -124,6 +125,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     //Desactivamos el error
       list1.noError= false;
     list1.error=false;
+      EntidadesService.modoInsertar = false;
     //Activamos el error si el usuario no ha seleccionado un track
     if (EntidadesService.isTrack==false
         || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
@@ -171,6 +173,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.borrarRuta = function () {
     //Se pone el error a false para resetearlo
     list1.error= false;
+    list1.noError = false;
+    EntidadesService.modoInsertar = false;
     //Se comprueba que se ha seleccionado una ruta y si no es asi salta un error
     if (EntidadesService.isTrack==true
        || EntidadesService.modoCreacion == true
@@ -192,6 +196,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.borrarWp = function () {
     //Se pone el error a false para resetearlo
     list1.error= false;
+    lis1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Se comprueba que se ha seleccionado una ruta y si no es asi salta un error
     if (EntidadesService.isTrack==true
        || EntidadesService.waypoints[EntidadesService.wpActivo]===undefined) {
@@ -217,6 +223,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.borrarTrack = function () {
     //Reseteamos el error
     list1.error= false;
+    list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Comprobamos que haya seleccionado un track
     if (EntidadesService.isTrack==false
         || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
@@ -238,6 +246,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.recortarRuta = function () {
     //Reseteamos el error
     list1.error= false;
+      list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Punto que usuario a seleccionado en la tabla a partir del cual se recorta
     var punto = EntidadesService.puntoElegido;
     //Se comprueba que se haya seleccionado una ruta
@@ -271,6 +281,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.recortarTrack = function () {
     //Reseteamos el error
     list1.error= false;
+      list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Punto elegido a partir del cual se recorta
     var punto = EntidadesService.puntoElegido;
     //Se comprueba que se haya seleccionado un track
@@ -308,6 +320,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   //funcion que permite cambiar el nombre a un track
   list1.renombrarT = function () {
     list1.error= false;
+    list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Se comprueba que tenga algun track creado
     if (EntidadesService.tracks.length<=0) {
       list1.error= true;
@@ -323,6 +337,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   //Metodo que cambia el nombre a una ruta
   list1.renombrarR = function () {
     list1.error= false;
+    list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Se comprueba que tenga rutas creadas
     if (EntidadesService.rutas.length<=0) {
       list1.error= true;
@@ -338,6 +354,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   //Metodo que cambia el nombre a un waypoint
   list1.renombrarW = function () {
     list1.error= false;
+    list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Se comprueba que se tengan waypoints creados
     if (EntidadesService.waypoints.length<=0) {
       list1.error= true;
@@ -363,6 +381,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
     //Se resetea el error
     list1.error= false;
     list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Se comprueba que se haya seleccionado una ruta
     if (EntidadesService.isTrack==true
         || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined
@@ -423,6 +442,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
                         "Selecciona el punto de origen y después pincha donde "+
                         "quieras añadir el nuevo punto";
     }
+
   }
 
   //Metodo que añade un punto a un track
@@ -465,6 +485,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.eliminarPuntoTrack = function () {
     list1.noError= false;
     list1.error=false;
+      EntidadesService.modoInsertar = false;
     //Comprobamos que se haya selccionado un track
     if (EntidadesService.isTrack==false
         || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
@@ -490,6 +511,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.invertirTrack = function () {
     //Reseteamos el error
     list1.error = false;
+    list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //COmprobamos que se haya seleccionado un track para invertir
     if (EntidadesService.isTrack==false
         || EntidadesService.tracks[EntidadesService.trackActivo]=== undefined) {
@@ -508,6 +531,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.invertirRuta = function () {
     //Reseteamos el error
     list1.error = false;
+      list1.noError = false;
+      EntidadesService.modoInsertar = false;
     //Comprobamos que se haya seleccionado una ruta
     if (EntidadesService.isTrack==true
         || EntidadesService.rutas[EntidadesService.rutaActiva]=== undefined) {
@@ -774,6 +799,7 @@ list1.dowXmlForWp = function () {
     var isIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.noError= false;
     list1.error=false;
+    EntidadesService.modoInsertar = false;
     list1.dataUrl="";
   if(EntidadesService.waypoints.length<1)
   {
@@ -806,6 +832,7 @@ list1.dowXmlForR = function () {
     var isIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.noError= false;
     list1.error=false;
+    EntidadesService.modoInsertar = false;
     list1.dataUrl="";
   if(EntidadesService.rutas.length<1)
   {
@@ -843,6 +870,7 @@ list1.dowXmlForR = function () {
     var isIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.noError= false;
     list1.error=false;
+      EntidadesService.modoInsertar = false;
       list1.dataUrl="";
     if(EntidadesService.tracks.length<1)
     {
@@ -1091,7 +1119,7 @@ list1.mostrarAlert = false;
       list1.activarListaR = false;
       list1.activarLista = false;
       list1.activarListaW=true;
-      list1.mensajeVerlista = "ocultar lista";
+      list1.mensajeVerlista = "ver lista";
       list1.mensajeVerlistaR = "ver lista";
       list1.mensajeVerlistaW = "ocultar lista";
       list1.crearWaypoint();
@@ -1159,8 +1187,8 @@ list1.mostrarAlert = false;
       } else {
         list1.activarLista=true;
         list1.mensajeVerlista = "ocultar lista";
-        list1.mensajeVerlistR = "ver lista";
-        list1.mensajeVerlistW = "ver lista";
+        list1.mensajeVerlistaR = "ver lista";
+        list1.mensajeVerlistaW = "ver lista";
         EntidadesService.isTrack = true;
         EntidadesService.puntoElegido=null;
         EntidadesService.isWaypoint = false;
