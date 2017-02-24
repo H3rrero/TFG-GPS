@@ -58,6 +58,7 @@ function EntidadesService (){
   service.isRuteImport = false;
   service.isWpImport = false;
   service.puntosGrafico = [];
+  service.modoEdicion = true;
 
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {

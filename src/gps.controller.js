@@ -34,7 +34,27 @@ function PruebaController($scope,EntidadesService,$document,FileSaver){
   list1.mensajeVerlista = "ver lista";
   list1.mensajeVerlistaR = "ver lista";
   list1.mensajeVerlistaW = "ver lista";
+  list1.modoEdicion = EntidadesService.modoEdicion;
+  list1.apiMaps = true;
 
+
+  list1.modoEdicionF = function () {
+      list1.noError= false;
+      list1.error=false;
+      if(list1.modoEdicion == true)
+      {
+        list1.error=true;
+        list1.modoEdicion = false;
+        EntidadesService.modoEdicion = false;
+          list1.mensajeError="Has desativado el modo edición";
+      }
+      else{
+          list1.noError=true;
+          list1.mensajeError="Has activado el modo edición";
+          list1.modoEdicion = true;
+          EntidadesService.modoEdicion = true;
+      }
+  }
 
   list1.activarImportWp = function functionName() {
     list1.error = false;

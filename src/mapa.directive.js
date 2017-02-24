@@ -13,6 +13,7 @@ function Mymap(EntidadesService) {
         function CoordMapType(tileSize) {
   this.tileSize = tileSize;
 }
+
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
       var div = ownerDocument.createElement('div');
@@ -26,107 +27,113 @@ function Mymap(EntidadesService) {
       div.style.borderColor = '#AAAAAA';
       return div;
     };
+
         // funcion que inicializa el mapa
         function initMap() {
-          //opciones de inicialización
-          var mapOptions = {
-            center: {lat: 40.41, lng: -3.70},
-            zoom: 8,
-            disableDefaultUI: true,
-            mapTypeControl: true,
-            scaleControl: true,
-            visibleGridLines:true,
-          };
+            //opciones de inicialización
+            var mapOptions = {
+                center: {lat: 40.41, lng: -3.70},
+                zoom: 8,
+                disableDefaultUI: true,
+                mapTypeControl: true,
+                scaleControl: true,
+                visibleGridLines: true,
+            };
 
-          //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
-          //en este caso estamos creando el mapa PNOA (ortofotomapa)
-          var PNOAWMTS = new google.maps.ImageMapType({
-            alt: "WMTS del PNOA",
-            getTileUrl: function(coord, zoom) {
+            //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
+            //en este caso estamos creando el mapa PNOA (ortofotomapa)
+            var PNOAWMTS = new google.maps.ImageMapType({
+                alt: "WMTS del PNOA",
+                getTileUrl: function (coord, zoom) {
 
-              return PNOAGetCoordUrl(coord, zoom);
-            },
-            isPng: false,
-            maxZoom: 20,
-            minZoom: 1,
-            name: "PNOA ES",
-            tileSize: new google.maps.Size(256, 256)
-          });
+                    return PNOAGetCoordUrl(coord, zoom);
+                },
+                isPng: false,
+                maxZoom: 20,
+                minZoom: 1,
+                name: "PNOA ES",
+                tileSize: new google.maps.Size(256, 256)
+            });
 
-          //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
-          //en este caso estamos creando el mapa  Raster
-          var RASTERWMTS = new google.maps.ImageMapType({
-            alt: "RasterIGN",
-            getTileUrl: function(coord, zoom) {
-              return RasterGetCoordUrl(coord, zoom);
-            },
-            isPng: false,
-            maxZoom: 20,
-            minZoom: 1,
-            name: "Raster ES",
-            tileSize: new google.maps.Size(256, 256)
-          });
+            //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
+            //en este caso estamos creando el mapa  Raster
+            var RASTERWMTS = new google.maps.ImageMapType({
+                alt: "RasterIGN",
+                getTileUrl: function (coord, zoom) {
+                    return RasterGetCoordUrl(coord, zoom);
+                },
+                isPng: false,
+                maxZoom: 20,
+                minZoom: 1,
+                name: "Raster ES",
+                tileSize: new google.maps.Size(256, 256)
+            });
 
-          //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
-          //en este caso estamos creando el mapa Raster de francia
-          var RASTERFR = new google.maps.ImageMapType({
-            alt: "WMTS del PNOA",
-            getTileUrl: function(coord, zoom) {
+            //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
+            //en este caso estamos creando el mapa Raster de francia
+            var RASTERFR = new google.maps.ImageMapType({
+                alt: "WMTS del PNOA",
+                getTileUrl: function (coord, zoom) {
 
-              return RasterFrGetCoordUrl(coord, zoom);
-            },
-            isPng: false,
-            maxZoom: 20,
-            minZoom: 1,
-            name: "Raster FR",
-            tileSize: new google.maps.Size(256, 256)
-          });
-          //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
-          function RasterGetCoordUrl(tile, zoom) {
+                    return RasterFrGetCoordUrl(coord, zoom);
+                },
+                isPng: false,
+                maxZoom: 20,
+                minZoom: 1,
+                name: "Raster FR",
+                tileSize: new google.maps.Size(256, 256)
+            });
+            //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
+            function RasterGetCoordUrl(tile, zoom) {
 
-	           var projection = map.getProjection();
-	           var zpow = Math.pow(2, zoom);
-	           var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
-	           var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
-	           var ulw = projection.fromPointToLatLng(ul);
-	           var lrw = projection.fromPointToLatLng(lr);
+                var projection = map.getProjection();
+                var zpow = Math.pow(2, zoom);
+                var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
+                var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
+                var ulw = projection.fromPointToLatLng(ul);
+                var lrw = projection.fromPointToLatLng(lr);
 
-	           var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
+                var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
 
-	           return "http://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=mtn_rasterizado&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
-           }
-           //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
-           function PNOAGetCoordUrl(tile, zoom) {
+                return "http://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=mtn_rasterizado&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
+            }
 
- 	           var projection = map.getProjection();
- 	           var zpow = Math.pow(2, zoom);
- 	           var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
- 	           var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
- 	           var ulw = projection.fromPointToLatLng(ul);
- 	           var lrw = projection.fromPointToLatLng(lr);
+            //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
+            function PNOAGetCoordUrl(tile, zoom) {
 
- 	           var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
+                var projection = map.getProjection();
+                var zpow = Math.pow(2, zoom);
+                var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
+                var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
+                var ulw = projection.fromPointToLatLng(ul);
+                var lrw = projection.fromPointToLatLng(lr);
 
- 	           return "http://www.ign.es/wms-inspire/pnoa-ma?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=OI.OrthoimageCoverage&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
-           }
-           //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
-           function RasterFrGetCoordUrl(tile, zoom) {
+                var bbox = ulw.lat() + "," + ulw.lng() + "," + lrw.lat() + "," + lrw.lng();
 
-              var projection = map.getProjection();
-              var zpow = Math.pow(2, zoom);
-              var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
-              var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
-              var ulw = projection.fromPointToLatLng(ul);
-              var lrw = projection.fromPointToLatLng(lr);
+                return "http://www.ign.es/wms-inspire/pnoa-ma?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=OI.OrthoimageCoverage&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
+            }
 
-              var bbox = ulw.lng() + "," + ulw.lat() + "," + lrw.lng() + "," + lrw.lat();
+            //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
+            function RasterFrGetCoordUrl(tile, zoom) {
 
-              return "http://mapsref.brgm.fr/WMS-C-REF/?request=GetMap&service=WMS&VERSION=1.1.1&LAYERS=REF93&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&SRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX="+bbox+"&WIDTH=256&HEIGHT=256";
-           }
-           //Creamos el mapa y le pasamos las opciones que definimos anteriormente
-           map = new google.maps.Map(element[0],mapOptions);
-           //servicio de elevacion
+                var projection = map.getProjection();
+                var zpow = Math.pow(2, zoom);
+                var ul = new google.maps.Point(tile.x * 256.0 / zpow, (tile.y + 1) * 256.0 / zpow);
+                var lr = new google.maps.Point((tile.x + 1) * 256.0 / zpow, (tile.y) * 256.0 / zpow);
+                var ulw = projection.fromPointToLatLng(ul);
+                var lrw = projection.fromPointToLatLng(lr);
+
+                var bbox = ulw.lng() + "," + ulw.lat() + "," + lrw.lng() + "," + lrw.lat();
+
+                return "http://mapsref.brgm.fr/WMS-C-REF/?request=GetMap&service=WMS&VERSION=1.1.1&LAYERS=REF93&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&SRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox + "&WIDTH=256&HEIGHT=256";
+            }
+
+            //Creamos el mapa y le pasamos las opciones que definimos anteriormente
+            try {
+            map = new google.maps.Map(element[0], mapOptions);
+            //servicio de elevacion
             elevator = new google.maps.ElevationService;
+            }catch(e) {console.log("error");console.log(e.message)}
            //Le pasamos al mapa la cuadricula que creamos anteriormente
            map.overlayMapTypes.insertAt(
              0, new CoordMapType(new google.maps.Size(256, 256)));
@@ -629,10 +636,10 @@ function Mymap(EntidadesService) {
 
   }
 
-          if (( EntidadesService.modoInsertar == false && EntidadesService.modoImportWP == false
+          if ((EntidadesService.modoEdicion==true && EntidadesService.modoInsertar == false && EntidadesService.modoImportWP == false
             && EntidadesService.modoInvertir == false && EntidadesService.seleccion==false && EntidadesService.hayEntidadesCreadas==true
             && (EntidadesService.isTrack==true || EntidadesService.rutas.length>0))
-             || (EntidadesService.isWaypoint == true && EntidadesService.modoImportWP == false )) {
+             || (EntidadesService.isWaypoint == true && EntidadesService.modoImportWP == false && EntidadesService.modoEdicion==true)) {
           //Depende de que entidad sea llamamos a un metodo u otro
           if (EntidadesService.isTrack == true) {
             //Servicio de elevaciones que nos da la elevacion del punto actual

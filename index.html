@@ -148,6 +148,8 @@
 		</ul>
 			</div>
 			<div id="botones">
+				<button class="btMediOn" ng-click="list1.modoEdicionF()" data-toggle="modal" data-target="#modalMS" ng-if="list1.modoEdicion">On</button>
+				<button class="btMedi" ng-click="list1.modoEdicionF()" data-toggle="modal" data-target="#modalMS" ng-if="!list1.modoEdicion">Off</button>
 				<button id="boton-t"type="button" ng-click="list1.listarFunciones();" class="bttn-material-circle bttn-xs bttn-primary">T</button>
 				<button id="boton-r"type="button" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-royal">R</button>
 				<button id="boton-w"type="button" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-success">W</button>
