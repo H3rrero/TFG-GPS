@@ -132,6 +132,7 @@ width: 7.5%;
   font-size: 13px;
   font-weight: 300;
   text-overflow: ellipsis;
+	margin-top: 10px;
 
 }
 #boton-w{
@@ -141,6 +142,7 @@ width: 7.5%;
   font-weight: 300;
   margin-right: 12px;
   text-overflow: ellipsis;
+	margin-top: 10px;
 
 }
 #tableP{
@@ -162,7 +164,7 @@ table th{
 
 #botones{
 	z-index: 1;
-	width: 11.5%;
+
 }
 
 #importarW,#label,#inputBt,#importarR,#importarT,#botonCrear,#botonCrearW,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv,#downBt{
@@ -245,10 +247,10 @@ li{
 	color:#ffffff;
 	font-family:Arial;
 	font-size:17px;
-	padding:2px 16px;
+	padding:0px 36px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #810e05;
-	margin-right: 5%;
+	margin-right: 10px;
 }
 .btMedi:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24437), color-stop(1, #c62d1f));
@@ -285,10 +287,10 @@ li{
 	color:#ffffff;
 	font-family:Arial;
 	font-size:17px;
-	padding:2px 16px;
+	padding:0px 36px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #2f6627;
-	margin-right: 5%;
+	margin-right: 10px;
 }
 .btMediOn:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #5cbf2a), color-stop(1, #44c767));

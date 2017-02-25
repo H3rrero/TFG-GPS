@@ -5,14 +5,16 @@ angular.module('GPS')
 .directive('myMap', Mymap);
 
 function Mymap(EntidadesService) {
+
     // directive link function
     var link = function(scope, element, attrs,controller) {
-        var map
-        var poly
-        var elevator
+        var map;
+        var poly;
+        var elevator;
         function CoordMapType(tileSize) {
   this.tileSize = tileSize;
 }
+
 
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
@@ -28,8 +30,11 @@ function Mymap(EntidadesService) {
       return div;
     };
 
+
+
         // funcion que inicializa el mapa
         function initMap() {
+
             //opciones de inicialización
             var mapOptions = {
                 center: {lat: 40.41, lng: -3.70},
@@ -129,11 +134,10 @@ function Mymap(EntidadesService) {
             }
 
             //Creamos el mapa y le pasamos las opciones que definimos anteriormente
-            try {
             map = new google.maps.Map(element[0], mapOptions);
             //servicio de elevacion
             elevator = new google.maps.ElevationService;
-            }catch(e) {console.log("error");console.log(e.message)}
+
            //Le pasamos al mapa la cuadricula que creamos anteriormente
            map.overlayMapTypes.insertAt(
              0, new CoordMapType(new google.maps.Size(256, 256)));
@@ -161,7 +165,8 @@ function Mymap(EntidadesService) {
           );
 
 
-
+            var onOff = /** @type {!HTMLDivElement} */(
+                document.getElementById('on/Off'));
           //botones de seleccion de entidad (T,R,W)
           var botont = /** @type {!HTMLDivElement} */(
           document.getElementById('botones'));
@@ -184,10 +189,15 @@ function Mymap(EntidadesService) {
           var types = document.getElementById('type-selector');
 
           //A continuación colocamos cada elemento en la posición del mapa deseada
+
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(types);
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(onOff);
           map.controls[google.maps.ControlPosition.RIGHT_TOP].push(botones);
+
           map.controls[google.maps.ControlPosition.RIGHT_TOP].push(funciones);
+
           map.controls[google.maps.ControlPosition.TOP_LEFT].push(datos);
           map.controls[google.maps.ControlPosition.TOP_CENTER].push(lista);
           map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(grafica);
