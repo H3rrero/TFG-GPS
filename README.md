@@ -21,8 +21,6 @@
 ###Falta por implementar:
     -Hacer pruebas
     -Controlar errores
-    -Sacar creacion de mapas a fichero
-    -Mapas de portugal
     
 ##Puedes ver el avance aquí
   https://h3rrero.github.io/TFG-GPS/
