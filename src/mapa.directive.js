@@ -23,7 +23,7 @@ function Mymap(EntidadesService) {
         div.style.color ='#FFFFFF';
       div.style.width = this.tileSize.width + 'px';
       div.style.height = this.tileSize.height + 'px';
-      div.style.fontSize = '10';
+      div.style.fontSize = '10px';
       div.style.borderStyle = 'solid';
       div.style.borderWidth = '1px';
       div.style.borderColor = '#AAAAAA';
@@ -58,6 +58,14 @@ function Mymap(EntidadesService) {
                 minZoom: 1,
                 name: "PNOA ES",
                 tileSize: new google.maps.Size(256, 256)
+            });
+            var OSM = new google.maps.ImageMapType({
+                getTileUrl: function(coord, zoom) {
+                    return OSMGetCoorUrl(coord,zoom);
+                },
+                tileSize: new google.maps.Size(256, 256),
+                name: "OpenStreetMap",
+                maxZoom: 18
             });
 
             //objeto mapType d ela API de google maps para la creacion de mapas basados en mosaicos
@@ -102,7 +110,14 @@ function Mymap(EntidadesService) {
 
                 return "http://www.ign.es/wms-inspire/mapa-raster?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=mtn_rasterizado&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&CRS=EPSG:4326&WIDTH=250&HEIGHT=250&BBOX=" + bbox;
             }
+            function OSMGetCoorUrl(coord, zoom) {
+                // "Wrap" x (logitude) at 180th meridian properly
+                var tilesPerGlobe = 1 << zoom;
+                var x = coord.x % tilesPerGlobe;
+                if (x < 0) x = tilesPerGlobe+x;
+                return "http://tile.opencyclemap.org/cycle/" + zoom + "/" + x + "/" + coord.y + ".png";
 
+            }
             //Función que calcula las coordenadas y desvuelve la url para obtener las imagenes del mapa en esas coordenadas
             function PNOAGetCoordUrl(tile, zoom) {
 
@@ -145,6 +160,7 @@ function Mymap(EntidadesService) {
            map.mapTypes.set('PNOA ES', PNOAWMTS);
            map.mapTypes.set('Raster ES', RASTERWMTS);
            map.mapTypes.set('Raster FR', RASTERFR);
+            map.mapTypes.set('OSM', OSM);
            map.setOptions(
             {
               //cofiguramos las opciones de controles del mapa
@@ -157,7 +173,7 @@ function Mymap(EntidadesService) {
               mapTypeIds: [  google.maps.MapTypeId.ROADMAP,
 
                 google.maps.MapTypeId.SATELLITE
-                ,'PNOA ES','Raster ES','Raster FR'
+                ,'PNOA ES','Raster ES','Raster FR','OSM'
 
               ]
               }
@@ -333,12 +349,67 @@ function Mymap(EntidadesService) {
             EntidadesService.cont = EntidadesService.cont+1;
             var marker = new google.maps.Marker({
               position: evento,
-              title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
+              title: "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
               icon: 'img/iconowp.png',
               map: map
             });
             EntidadesService.markers.push(marker);
+              marker.addListener('click', function() {
+                  for (var item in EntidadesService.waypoints) {
 
+                      if (EntidadesService.waypoints[item].latitud+EntidadesService.waypoints[item].longitud
+                          == marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6)) {
+
+                          var contentString = '<div id="content">'+
+                              '<label for="nombre" style="    color: #8a9499;">'+
+                              'Nombre:'+
+                              '</label>'+
+                              '<p id="nombre">'+EntidadesService.waypoints[item].nombre+'</p>'+
+                              '<label for="descripcion" style="    color: #8a9499;">'+
+                              'Descripción:'+
+                              '</label>'+
+                              '<p id="descripcion">'+EntidadesService.waypoints[item].descripcion+'</p>'+
+                              '</div>';
+
+                          var infowindow = new google.maps.InfoWindow({
+                              content: contentString
+                          });
+
+
+                      }
+                  }
+                  infowindow.open(map, marker);
+              });
+              google.maps.event.addListener(marker, 'dragend', function (e) {
+
+                  for (var item in EntidadesService.waypoints) {
+                      if ("Latitud: "+
+                          EntidadesService.waypoints[item].latitud+"\nLongitud: "+EntidadesService.waypoints[item].longitud
+                          == marker.title) {
+
+                          var posicion = item;
+                          EntidadesService.waypoints[item].longitud = e.latLng.lng().toFixed(6);
+                          EntidadesService.waypoints[item].latitud = e.latLng.lat().toFixed(6);
+                          elevator.getElevationForLocations({
+                              'locations': [e.latLng]
+                          }, function(results, status) {
+                              if (status === google.maps.ElevationStatus.OK) {
+                                  if (results[0]) {
+                                      EntidadesService.waypoints[posicion].elevacion = results[0].elevation.toFixed(2);
+                                      scope.$apply();
+                                  } else {
+                                      console.log("no result found");
+                                  }
+                              } else {
+                                  console.log("elevation service failed");
+                              }
+                          });
+                      }
+                  }
+                  marker.position = e.latLng;
+                  marker.title= "Latitud: "+e.latLng.lat().toFixed(6)+"\nLongitud: "+e.latLng.lng().toFixed(6);
+                  scope.$apply();
+              });
           }
 
 
@@ -722,15 +793,42 @@ function Mymap(EntidadesService) {
             EntidadesService.cont = EntidadesService.cont+1;
             var marker = new google.maps.Marker({
               position: event.latLng,
-              title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+              title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
               icon: 'img/iconowp.png',
               draggable:true,
               map: map
             });
+
+              marker.addListener('click', function() {
+                  for (var item in EntidadesService.waypoints) {
+
+                      if (EntidadesService.waypoints[item].latitud+EntidadesService.waypoints[item].longitud
+                          == marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6)) {
+
+                          var contentString = '<div id="content">'+
+                              '<label for="nombre" style="    color: #8a9499;">'+
+                              'Nombre:'+
+                              '</label>'+
+                              '<p id="nombre">'+EntidadesService.waypoints[item].nombre+'</p>'+
+                              '<label for="descripcion" style="    color: #8a9499;">'+
+                              'Descripción:'+
+                              '</label>'+
+                              '<p id="descripcion">'+EntidadesService.waypoints[item].descripcion+'</p>'+
+                              '</div>';
+
+                          var infowindow = new google.maps.InfoWindow({
+                              content: contentString
+                          });
+
+
+                      }
+                  }
+                  infowindow.open(map, marker);
+              });
             google.maps.event.addListener(marker, 'dragend', function (e) {
 
               for (var item in EntidadesService.waypoints) {
-                if ("Nombre: "+EntidadesService.waypoints[item].nombre+"\nLatitud: "+
+                if ("Latitud: "+
                 EntidadesService.waypoints[item].latitud+"\nLongitud: "+EntidadesService.waypoints[item].longitud
                  == marker.title) {
 
@@ -754,7 +852,7 @@ function Mymap(EntidadesService) {
                 }
               }
 			           marker.position = e.latLng;
-			          marker.title= "Nombre: "+nombre+"\nLatitud: "+e.latLng.lat().toFixed(6)+"\nLongitud: "+e.latLng.lng().toFixed(6);
+			          marker.title= "Latitud: "+e.latLng.lat().toFixed(6)+"\nLongitud: "+e.latLng.lng().toFixed(6);
                 scope.$apply();
 		                         });
             EntidadesService.markers.push(marker);

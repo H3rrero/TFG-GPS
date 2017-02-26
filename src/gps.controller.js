@@ -337,6 +337,21 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
         EntidadesService.puntoBorrado = true;
     }
 
+    list1.descripcion = function () {
+        list1.error = false;
+        list1.noError = false;
+        EntidadesService.modoInsertar = false;
+        //Se comprueba que tenga algun waypoint creado
+        if (EntidadesService.waypoints.length <= 0) {
+            list1.error = true;
+            list1.mensajeError = "No tienes ningun waypoint creado";
+        }
+        var nombre = prompt("Introduzca la nueva descripción", "Nueva descripción");
+        if (nombre != null && EntidadesService.waypoints.length > 0) {
+            //Se llama al metodo del service para cambiar la descripción
+            EntidadesService.cambiarDescripcion(nombre);
+        }
+    }
     //funcion que permite cambiar el nombre a un track
     list1.renombrarT = function () {
         list1.error = false;

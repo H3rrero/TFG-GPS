@@ -578,6 +578,9 @@ service.importXMLWp = function () {
     service.seleccion = false;
   }
 
+    service.cambiarDescripcion = function (descripcion) {
+        service.waypoints[service.wpActivo].descripcion = descripcion;
+    }
   //metodo que cambia el nombre a un track elegido
   service.renombrarT = function (nombre) {
     if(service.isTrack == true)
@@ -1109,6 +1112,7 @@ service.actualizarPuntosR = function() {
         longitud:service.longitud,
         elevacion:service.elevacion,
         numero: service.waypoints.length,
+        descripcion:"Añade una descripción",
       };
       service.waypoints.push(service.entidad);
       service.isWaypoint = true;
