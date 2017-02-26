@@ -1037,7 +1037,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
             $("#funciones").css("width", "8.5%");
         } else {
             list1.mostrarBotonesR = true;
-            $("#funciones").css("width", "17%");
+            $("#funciones").css("width", "30%");
         }
 
     }
@@ -1048,7 +1048,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
             $("#funciones").css("width", "8.5%");
         } else {
             list1.mostrarBotonesW = true;
-            $("#funciones").css("width", "17%");
+            $("#funciones").css("width", "30%");
         }
 
     }
@@ -1059,7 +1059,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
             $("#funciones").css("width", "8.5%");
         } else {
             list1.mostrarBotones = true;
-            $("#funciones").css("width", "17%");
+            $("#funciones").css("width", "30%");
         }
 
     }
