@@ -60,6 +60,7 @@ function EntidadesService (){
   service.puntosGrafico = [];
   service.modoEdicion = true;
   service.conection = false;
+  service.mapas = [];
 
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {

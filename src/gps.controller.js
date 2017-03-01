@@ -6,7 +6,7 @@ angular.module('GPS')
 
 function PruebaController($scope,EntidadesService,$document,FileSaver) {
     var list1 = this;
-
+    console.log("controler");
     //track seleccionado por el usuario
     list1.trackActivo = 0;
     list1.rutaActiva = 0;

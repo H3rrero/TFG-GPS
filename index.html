@@ -18,6 +18,7 @@
 		<script src="src/grafico.directive.js"></script>
 		<script src="src/mapa.directive.js"></script>
 		<script src="src/fileRead.directive.js"></script>
+		<script src="src/mapas.service.js"></script>
 
     <link href="css/main.css" rel="stylesheet" type="text/css">
 		<link href="css/unite.css" rel="stylesheet" type="text/css">
@@ -126,7 +127,7 @@
 				<a  ng-click="list1.dowImage()"   id="btn-download" ng-hide="!list1.esIE" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
 				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}" target="_blank"  id="btn-downloadSA" ng-hide="!list1.isSafari" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">Descargar grafica</button></a>
 				<img  src="img/informacion.png" ng-hide="!list1.isSafari" title="Al usar Safari te saldrá una nueva ventana con la imagen, dale a boton derecho y a guardar como." height="6%" width="1%">
-				<canvas id="canvas" class="chart chart-line" chart-data="data"
+				<canvas id="canvas" chart-colors="colors" class="chart chart-line" chart-data="data"
 				chart-labels="labels" chart-series="series" chart-options="options"
 				chart-dataset-override="datasetOverride" chart-click="onClick" height="10%" width="75%">
 			</canvas>

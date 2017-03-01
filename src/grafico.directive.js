@@ -1,8 +1,14 @@
 (function () {
     'use strict';
 
-    angular.module('GPS')
-        .controller('LineCtrl',LineCtrl);
+    angular.module('GPS').config(function (ChartJsProvider) {
+        // Configure all charts
+        ChartJsProvider.setOptions({
+            colors: ['#97BBCD', '#DCDCDC', '#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360']
+        });
+
+    });
+    angular.module('GPS') .controller('LineCtrl',LineCtrl);
 
     function LineCtrl($scope,EntidadesService) {
         var line = this;
@@ -16,7 +22,15 @@
         //Creacion de la gráfica
         $scope.series = ['Elevacion'];
         $scope.data = [EntidadesService.getPuntosGrafico()];
-
+        $scope.colors =  [{
+            backgroundColor : '#0062ff',
+            pointBackgroundColor: '#f90202',
+            pointHoverBackgroundColor: '#f90202',
+            borderColor: '#f90202',
+            pointBorderColor: '#f90202',
+            pointHoverBorderColor: '#f90202',
+            fill: true /* this option hide background-color */
+        }, '#00ADF9', '#FDB45C', '#46BFBD'];
 
         $scope.onClick = function (points, evt) {
             if(points.length>0){
@@ -24,6 +38,7 @@
                 EntidadesService.puntoBorrado = true;
             }
         };
+
         $scope.datasetOverride = [{ xAxisID: 'x-axis-1' }];
         $scope.options = {
 
