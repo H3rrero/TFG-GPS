@@ -52,7 +52,6 @@
 
 
 		<div id="body-wrapper"  ng-controller='PruebaController as list1'  >
-
 <div class="modal fade bs-example-modal-sm" id="modalW" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="alert alert-success" role="alert" ng-hide="!list1.modoCreacion">El modo creación de Waypoints ha sido ativado, pincha en el mapa para crear Waypoints</div>
@@ -194,6 +193,7 @@
         <table id="tableP" ng-if="list1.funcionesW">
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success">Archivo</button></td></tr>
 					<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success">{{list1.mensajeVerlistaW}}</button></td></tr>
+			<tr>  <td ><button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-success">{{list1.coordV}}</button></td></tr>
         </table>
         <table id="tableP" ng-if="list1.funcionesR">
 
@@ -206,6 +206,7 @@
 					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaR();" class="bttn-unite bttn-xs bttn-royal">{{list1.mensajeVerlistaR}}</button></td></tr>
           <tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaR();" class="bttn-unite bttn-xs bttn-royal">{{list1.mensajeVerTabla}}</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-royal">{{list1.mensajeVerGrafica}}</button></td></tr>
+			<tr>  <td ><button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-royal">{{list1.coordV}}</button></td></tr>
         </table>
 
         <table id="tableP" ng-if="list1.funciones">
@@ -219,6 +220,7 @@
 					<tr><td><button id="botonListar" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary">{{list1.mensajeVerlista}}</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verTablaT();" class="bttn-unite bttn-xs bttn-primary">{{list1.mensajeVerTabla}}</button></td></tr>
 					<tr><td><button id="botonDatos"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary">{{list1.mensajeVerGrafica}}</button></td></tr>
+			<tr>  <td ><button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-primary">{{list1.coordV}}</button></td></tr>
 
 
         </table>

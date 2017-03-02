@@ -775,10 +775,10 @@ service.importXMLWp = function () {
   }
 
 //Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.
-service.cambiarTiempos = function (velocidad,fecha) {
+service.cambiarTiempos = function (velocidad,fecha,num) {
   service.velocidad = velocidad;
-  service.tracks[service.trackActivo].duracionIda=service.calcularDuracion(true).toFixed(2);
-  service.tracks[service.trackActivo].duracionVuelta=service.calcularDuracion(false).toFixed(2);
+  service.tracks[service.trackActivo].duracionIda=service.calcularDuracion(true,num).toFixed(2);
+  service.tracks[service.trackActivo].duracionVuelta=service.calcularDuracion(false,num).toFixed(2);
   service.tracks[service.trackActivo].fecha = fecha;
   //Se recorren todos los puntos y se les asiogna la nueva fecha y velocidad
   for (var item in service.puntosTrackActivo) {
@@ -797,6 +797,8 @@ service.cambiarTiempos = function (velocidad,fecha) {
 //Despues se comprueba cual de los dos tiempos calculados es mayor
 // Y el resultado seria la suma del mayor mas la mitad del menor
 service.calcularDuracion= function (ida,num) {
+      console.log(service.tracks);
+      console.log(num);
   if (ida) {
     var hDesnivelSubida = (parseFloat(service.tracks[num].desnivelP)/400).toFixed(2);
     var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[num].desnivelN)/600)).toFixed(2);

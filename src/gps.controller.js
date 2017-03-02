@@ -37,7 +37,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
     list1.modoEdicion = EntidadesService.modoEdicion;
     list1.apiMaps = true;
     list1.conection = false;
-
+    list1.coords = false;
+    list1.coordV ="ocultar Coor";
 
     list1.modoEdicionF = function () {
         list1.noError = false;
@@ -237,6 +238,26 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
             EntidadesService.borrarWp();
         }
 
+    }
+
+    list1.verCoord= function () {
+        if(list1.coords){
+            list1.coords=false;
+            list1.coordV="ocultar coord";
+        }
+        else{
+            list1.coords=true;
+            list1.coordV="ver coord";
+        }
+        var ps = $('P')
+
+        for (var i = 0, len = ps.length; i < len; ++i)
+        {
+            if(list1.coords)
+                ps[i].style.visibility= "hidden";
+            else
+                ps[i].style.visibility= "visible";
+        }
     }
 
     //Metodo que borra un track
@@ -644,7 +665,8 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
                 }
                 //Si la operacio ha sido cancelada no se ejecutara el metodo
                 if (fechas != null) {
-                    EntidadesService.cambiarTiempos(parseInt(velocidad), fecha);
+                    console.log("he llegado");
+                    EntidadesService.cambiarTiempos(parseInt(velocidad), fecha,list1.trackActivo);
                     list1.actualizarPuntosT();
                 }
             }

@@ -15,11 +15,11 @@ function Mymap(EntidadesService,MapasService) {
   this.tileSize = tileSize;
 }
 
-
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+
       var div = ownerDocument.createElement('div');
-      div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+coord+'</p>';
+       div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+coord+'</p>';
         div.style.color ='#FFFFFF';
       div.style.width = this.tileSize.width + 'px';
       div.style.height = this.tileSize.height + 'px';
@@ -27,6 +27,16 @@ function Mymap(EntidadesService,MapasService) {
       div.style.borderStyle = 'solid';
       div.style.borderWidth = '1px';
       div.style.borderColor = '#AAAAAA';
+      div.id="divTile";
+
+      for (var i in div.childNodes)
+      {
+          if(div.childNodes[i].nodeName=="P")
+              if(controller.coords)
+             div.childNodes[i].style.visibility= "hidden";
+            else
+                  div.childNodes[i].style.visibility= "visible";
+      }
       return div;
     };
 
