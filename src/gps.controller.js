@@ -37,9 +37,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
     list1.modoEdicion = EntidadesService.modoEdicion;
     list1.apiMaps = true;
     list1.conection = false;
-    list1.coords = false;
     list1.coordV ="ocultar Coor";
-
     list1.modoEdicionF = function () {
         list1.noError = false;
         list1.error = false;
@@ -241,19 +239,19 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
     }
 
     list1.verCoord= function () {
-        if(list1.coords){
-            list1.coords=false;
+        if(EntidadesService.coords){
+            EntidadesService.coords=false;
             list1.coordV="ocultar coord";
         }
         else{
-            list1.coords=true;
+            EntidadesService.coords=true;
             list1.coordV="ver coord";
         }
         var ps = $('P')
 
         for (var i = 0, len = ps.length; i < len; ++i)
         {
-            if(list1.coords)
+            if(EntidadesService.coords)
                 ps[i].style.visibility= "hidden";
             else
                 ps[i].style.visibility= "visible";

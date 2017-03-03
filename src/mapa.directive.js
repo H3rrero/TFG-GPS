@@ -19,7 +19,11 @@ function Mymap(EntidadesService,MapasService) {
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 
       var div = ownerDocument.createElement('div');
-       div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+coord+'</p>';
+      console.log(EntidadesService.coords);
+      if(EntidadesService.coords == false)
+       div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;visibility: visible !important;">'+coord+'</p>';
+      else
+          div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;visibility: hidden !important;">'+coord+'</p>';
         div.style.color ='#FFFFFF';
       div.style.width = this.tileSize.width + 'px';
       div.style.height = this.tileSize.height + 'px';
@@ -32,7 +36,7 @@ function Mymap(EntidadesService,MapasService) {
       for (var i in div.childNodes)
       {
           if(div.childNodes[i].nodeName=="P")
-              if(controller.coords)
+              if(EntidadesService.coords == true)
              div.childNodes[i].style.visibility= "hidden";
             else
                   div.childNodes[i].style.visibility= "visible";
