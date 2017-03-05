@@ -798,8 +798,7 @@ service.cambiarTiempos = function (velocidad,fecha,num) {
 //Despues se comprueba cual de los dos tiempos calculados es mayor
 // Y el resultado seria la suma del mayor mas la mitad del menor
 service.calcularDuracion= function (ida,num) {
-      console.log(service.tracks);
-      console.log(num);
+
   if (ida) {
     var hDesnivelSubida = (parseFloat(service.tracks[num].desnivelP)/400).toFixed(2);
     var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[num].desnivelN)/600)).toFixed(2);

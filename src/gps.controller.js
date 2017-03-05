@@ -6,7 +6,6 @@ angular.module('GPS')
 
 function PruebaController($scope,EntidadesService,$document) {
     var list1 = this;
-    console.log("controler");
     //track seleccionado por el usuario
     list1.trackActivo = 0;
     list1.rutaActiva = 0;
@@ -665,7 +664,6 @@ function PruebaController($scope,EntidadesService,$document) {
                 }
                 //Si la operacio ha sido cancelada no se ejecutara el metodo
                 if (fechas != null) {
-                    console.log("he llegado");
                     EntidadesService.cambiarTiempos(parseInt(velocidad), fecha,list1.trackActivo);
                     list1.actualizarPuntosT();
                 }

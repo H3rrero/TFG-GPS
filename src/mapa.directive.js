@@ -19,7 +19,6 @@ function Mymap(EntidadesService,MapasService) {
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 
       var div = ownerDocument.createElement('div');
-      console.log(EntidadesService.coords);
       if(EntidadesService.coords == false)
        div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;visibility: visible !important;">'+coord+'</p>';
       else
@@ -70,8 +69,6 @@ function Mymap(EntidadesService,MapasService) {
                     return new google.maps.ImageMapType({
 
                         getTileUrl: function (coord, zoom) {
-                            console.log(MapasService.mapas[i].nombre);
-                            console.log(nombre);
                             if(MapasService.mapas[i].nombre == nombre) {
                                 if (MapasService.mapas[i].versionWMS == "1.3.0") {
                                     return WMS3GetCoord(coord, zoom, MapasService.mapas[i].url);
@@ -140,7 +137,6 @@ function Mymap(EntidadesService,MapasService) {
              0, new CoordMapType(new google.maps.Size(256, 256)));
            //Definimos los mapas creados como dos nuevos tipos de mapas
             for(var i in MapasService.mapas){
-                console.log(MapasService.mapas[i].nombre);
                 map.mapTypes.set(MapasService.mapas[i].nombre, getMps(MapasService.mapas[i].nombre,i));
             }
 

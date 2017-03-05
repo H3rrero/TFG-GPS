@@ -5,7 +5,6 @@
         .service('MapasService',MapasService);
 
     function MapasService() {
-    console.log("Mapas");
 
         var mapaCtr = this;
         mapaCtr.mapas = [{nombre:"PNOA ES",versionWMS:"1.3.0",url:"http://www.ign.es/wms-inspire/pnoa-ma?request=GetMap&service=WMS&VERSION=1.3.0&LAYERS=OI.OrthoimageCoverage"},

@@ -21,6 +21,7 @@ describe("test de: PruebaController", function() {
         service.isTrack = true;
         service.hayEntidadesCreadas = false;
         service.wps=0;
+        service.puntoElegido=0;
         //Actualiza los puntos del track activo
         service.actualizarPuntosT = function() {
 
@@ -122,6 +123,21 @@ describe("test de: PruebaController", function() {
               }
               return service.entidad;
           }
+          //metodo que cambia el nombre a un track elegido
+          service.renombrarT = function (nombre) {
+
+                  service.tracks[service.trackActivo].nombre = nombre;
+          }
+          //Metodo que cambia el nombre a una ruta elegida
+          service.renombrarR = function (nombre) {
+
+                  service.rutas[service.rutaActiva].nombre = nombre;
+          }
+          //Metodo que cambia el nombre a un wayPoint elegido
+          service.renombrarW = function (nombre) {
+
+              service.waypoints[service.wpActivo].nombre = nombre;
+          }
           //Metodo que permote borrar un waypoint
           service.borrarWp = function () {
 
@@ -165,9 +181,214 @@ describe("test de: PruebaController", function() {
                   service.hayEntidadesCreadas=false;
               }
           };
-        service.anadirPunto = function (id,num) {
+          service.anadirPuntoRuta = function () {
+              var puntos =new Array();
+              service.puntoN = {
+                  numero:0,
+                  latitud:"43.083333",
+                  longitud: "-5.804077",
+                  elevacion: 600,
+                  fecha:"26/01/2017",
+                  hora:"1:04",
+                  desnivel:50,
+                  distancia: 1.5,
+                  velocidad: "4km/h",
+              }
+              for (var variable in service.rutas[service.rutaActiva].puntos) {
+                  puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+              }
+              //Añadimos el nuevo punto
+              puntos.splice(service.puntoElegido+1,0,service.puntoN);
+
+              //Booramos los puntos actuales
+              for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+                  service.rutas[service.rutaActiva].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              for (var i =0; i < puntos.length; i++) {
+                  service.rutas[service.rutaActiva].puntos.push(puntos[i]);
+              }
+          }
+          service.anadirPuntoTrack = function () {
+              var puntos =new Array();
+              service.puntoN = {
+                  numero:0,
+                  latitud:"43.083333",
+                  longitud: "-5.804077",
+                  elevacion: 600,
+                  fecha:"26/01/2017",
+                  hora:"1:04",
+                  desnivel:50,
+                  distancia: 1.5,
+                  velocidad: "4km/h",
+              }
+              for (var variable in service.tracks[service.trackActivo].puntos) {
+                  puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+              }
+              //Añadimos el nuevo punto
+              puntos.splice(service.puntoElegido+1,0,service.puntoN);
+
+              //Booramos los puntos actuales
+              for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+                  service.tracks[service.trackActivo].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              for (var i =0; i < puntos.length; i++) {
+                  service.tracks[service.trackActivo].puntos.push(puntos[i]);
+              }
+              //Desactivamos el modo invertir
+              service.modoInvertir = false;
+          }
+
+          service.eliminarPuntoTrack = function () {
+              var puntos =new Array();
+
+              for (var variable in service.tracks[service.trackActivo].puntos) {
+                  puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+              }
+              //Eliminamos el punto elegido d ela lista de punto a pintar
+              puntos.splice(service.puntoElegido,1);
+              //Booramos los puntos actuales
+              for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+                  service.tracks[service.trackActivo].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              for (var i =0; i < puntos.length; i++) {
+                  service.tracks[service.trackActivo].puntos.push(puntos[i]);
+              }
+
+          }
+          service.eliminarPuntoRuta = function () {
+              var puntos =new Array();
+
+              for (var variable in service.rutas[service.rutaActiva].puntos) {
+                  puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+              }
+              //Eliminamos el punto elegido d ela lista de punto a pintar
+              puntos.splice(service.puntoElegido,1);
+              //Booramos los puntos actuales
+              for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+                  service.rutas[service.rutaActiva].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              for (var i =0; i < puntos.length; i++) {
+                  service.rutas[service.rutaActiva].puntos.push(puntos[i]);
+              }
+
+          }
+          service.recortarTrack = function () {
+              //Recorremos los puntos del track seleccionado
+              for (var item in service.tracks[service.trackActivo].puntos) {
+                  //Recorremos los punto anteriores al punto elegido
+                  if (item<=service.puntoElegido) {
+                     service.tracks[service.tracks.length-2].puntos.push(service.tracks[service.trackActivo].puntos[item]);
+
+                  }
+                  //Recorremos los punto a partir del punto elegido
+                  if (item>=service.puntoElegido) {
+                      service.tracks[service.tracks.length-1].puntos.push(service.tracks[service.trackActivo].puntos[item]);
+                  }
+              }
+
+
+          }
+          service.recortarRuta = function () {
+              //Recorremos los puntos del track seleccionado
+              for (var item in service.rutas[service.rutaActiva].puntos) {
+                  //Recorremos los punto anteriores al punto elegido
+                  if (item<=service.puntoElegido) {
+                      service.rutas[service.rutas.length-2].puntos.push(service.rutas[service.rutaActiva].puntos[item]);
+
+                  }
+                  //Recorremos los punto a partir del punto elegido
+                  if (item>=service.puntoElegido) {
+                      service.rutas[service.rutas.length-1].puntos.push(service.rutas[service.rutaActiva].puntos[item]);
+                  }
+              }
+
+
+          }
+          //metodo que une dos tracks
+          service.unirTrack = function (trackElegido) {
+
+              //Recorremos los puntos del primer track
+              for (var item in service.tracks[service.trackActivo].puntos) {
+                  service.tracks[service.tracks.length-1].puntos.push(service.tracks[service.trackActivo].puntos[item]);
+              }
+              //Recorremos el segundo track
+              for (var item in service.tracks[trackElegido].puntos) {
+                  service.tracks[service.tracks.length-1].puntos.push(service.tracks[trackElegido].puntos[item]);
+              }
+          }
+          service.unirRuta = function (rutaElegida) {
+
+
+              for (var item in service.rutas[service.rutaActiva].puntos) {
+                  service.rutas[service.rutas.length-1].puntos.push(service.rutas[service.rutaActiva].puntos[item]);
+              }
+
+              for (var item in service.rutas[rutaElegida].puntos) {
+                  service.rutas[service.rutas.length-1].puntos.push(service.rutas[rutaElegida].puntos[item]);
+              }
+          }
+          //FUncion para invertir un track
+          service.invertirTrack = function () {
+
+              var puntos =new Array();
+
+              for (var variable in service.tracks[service.trackActivo].puntos) {
+                  puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+              }
+              //Booramos los puntos actuales
+              for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+                  service.tracks[service.trackActivo].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              //Asignamos una nueva fecha
+              service.tracks[service.trackActivo].fecha = new Date();
+              service.tracks[service.trackActivo].distancia= 0;
+              service.tracks[service.trackActivo].desnivelP= 0;
+              service.tracks[service.trackActivo].desnivelN=0;
+              service.tracks[service.trackActivo].elevMax=0;
+              service.tracks[service.trackActivo].elevMin=9999999;
+              service.tracks[service.trackActivo].duracionIda=0;
+              service.tracks[service.trackActivo].duracionVuelta=0;
+              //Recorremos los puntos al reves para volver a añadirlos
+              for (var i = puntos.length-1; i >= 0; i--) {
+                  service.tracks[service.trackActivo].puntos.push(puntos[i]);
+
+              }
+      }
+          service.invertirRuta = function () {
+
+              var puntos =new Array();
+
+              for (var variable in service.rutas[service.rutaActiva].puntos) {
+                  puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+              }
+              //Booramos los puntos actuales
+              for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+                  service.rutas[service.rutaActiva].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              //Asignamos una nueva fecha
+              service.rutas[service.rutaActiva].fecha = new Date();
+              service.rutas[service.rutaActiva].distancia= 0;
+              service.rutas[service.rutaActiva].desnivelP= 0;
+              service.rutas[service.rutaActiva].desnivelN=0;
+              service.rutas[service.rutaActiva].elevMax=0;
+              service.rutas[service.rutaActiva].elevMin=9999999;
+              service.rutas[service.rutaActiva].duracionIda=0;
+              service.rutas[service.rutaActiva].duracionVuelta=0;
+              //Recorremos los puntos al reves para volver a añadirlos
+              for (var i = puntos.length-1; i >= 0; i--) {
+                  service.rutas[service.rutaActiva].puntos.push(puntos[i]);
+
+              }
+          }
+        service.anadirPunto = function (id,num,nump) {
           service.punto = {
-            numero:0,
+            numero:nump,
             latitud:"43.083333",
             longitud: "-5.804077",
             elevacion: 600,
@@ -536,5 +757,272 @@ beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock,$
             pruebaController.borrarRuta();
         }
         expect(pruebaController.rutas.length).toBe(0);
+    });
+    it("comprobacion de renombramiento", function() {
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(0);
+        }
+
+        expect(pruebaController.tracks[78].nombre).toBe("Nuevo-Track78");
+        expect(pruebaController.tracks.length).toBe(100);
+        pruebaController.trackActivo=78;
+        service.trackActivo=78;
+        service.renombrarT("pedro");
+        expect(pruebaController.tracks[78].nombre).toBe("pedro");
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(1);
+        }
+
+        expect(pruebaController.rutas[64].nombre).toBe("Nueva-Ruta64");
+        expect(pruebaController.rutas.length).toBe(100);
+        pruebaController.rutaActiva=64;
+        service.rutaActiva=64;
+        service.renombrarR("pedro");
+        expect(pruebaController.rutas[64].nombre).toBe("pedro");
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(2);
+        }
+
+        expect(pruebaController.waypoints[68].nombre).toBe("Nuevo-Waypoint68");
+        expect(pruebaController.waypoints.length).toBe(100);
+        pruebaController.wpActivo=68;
+        service.wpActivo=68;
+        service.renombrarW("pedro");
+        expect(pruebaController.waypoints[68].nombre).toBe("pedro");
+    });
+    it("Eliminacion de puntos en track", function() {
+
+        pruebaController.crear(0);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoTForMap();
+        }
+
+
+        expect(pruebaController.tracks[0]['puntos'].length).toBe(100);
+        service.trackActivo=0;
+        service.puntoElegido=50;
+        service.eliminarPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(99);
+        service.trackActivo=0;
+        service.puntoElegido=56;
+        service.eliminarPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(98);
+        service.trackActivo=0;
+        service.puntoElegido=57;
+        service.eliminarPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(97);
+        service.trackActivo=0;
+        service.puntoElegido=60;
+        service.eliminarPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(96);
+
+
+    });
+    it("Eliminacion de puntos en ruta", function() {
+
+        pruebaController.crear(1);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoRForMap();
+        }
+
+
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(100);
+        service.rutaActiva=0;
+        service.puntoElegido=64;
+        service.eliminarPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(99);
+        service.rutaActiva=0;
+        service.puntoElegido=67;
+        service.eliminarPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(98);
+        service.rutaActiva=0;
+        service.puntoElegido=68;
+        service.eliminarPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(97);
+        service.rutaActiva=0;
+        service.puntoElegido=72;
+        service.eliminarPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(96);
+        service.rutaActiva=0;
+        service.puntoElegido=75;
+        service.eliminarPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(95);
+
+    });
+    it("Añadir puntos intermedios al track", function() {
+
+        pruebaController.crear(0);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoTForMap();
+        }
+
+
+        expect(pruebaController.tracks[0]['puntos'].length).toBe(100);
+        service.trackActivo=0;
+        service.puntoElegido=50;
+        service.anadirPuntoTrack();
+        expect(pruebaController.tracks[0]['puntos'].length).toBe(101);
+        service.trackActivo=0;
+        service.puntoElegido=56;
+        service.anadirPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(102);
+        service.trackActivo=0;
+        service.puntoElegido=57;
+        service.anadirPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(103);
+        service.trackActivo=0;
+        service.puntoElegido=60;
+        service.anadirPuntoTrack()
+        ;expect(pruebaController.tracks[0]['puntos'].length).toBe(104);
+
+
+    });
+    it("Añadir  puntos intermedios a la ruta", function() {
+
+        pruebaController.crear(1);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoRForMap();
+        }
+
+
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(100);
+        service.rutaActiva=0;
+        service.puntoElegido=64;
+        service.anadirPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(101);
+        service.rutaActiva=0;
+        service.puntoElegido=67;
+        service.anadirPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(102);
+        service.rutaActiva=0;
+        service.puntoElegido=68;
+        service.anadirPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(103);
+        service.rutaActiva=0;
+        service.puntoElegido=72;
+        service.anadirPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(104);
+        service.rutaActiva=0;
+        service.puntoElegido=75;
+        service.anadirPuntoRuta();
+        expect(pruebaController.rutas[0]['puntos'].length).toBe(105);
+
+    });
+    it("Recortar un track", function() {
+
+        pruebaController.crear(0);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoTForMap();
+        }
+
+        pruebaController.crear(0);
+        pruebaController.crear(0);
+        service.puntoElegido=50;
+        service.recortarTrack();
+
+        expect(service.tracks[service.tracks.length-1].puntos.length).toBe(50);
+        expect(service.tracks[service.tracks.length-2].puntos.length).toBe(51);
+        expect(service.tracks[0].puntos.length).toBe(100);
+
+
+    });
+    it("Recortar una ruta", function() {
+
+        pruebaController.crear(1);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoRForMap();
+        }
+
+        pruebaController.crear(1);
+        pruebaController.crear(1);
+        service.puntoElegido=85;
+        service.recortarRuta();
+
+        expect(service.rutas[service.rutas.length-1].puntos.length).toBe(15);
+        expect(service.rutas[service.rutas.length-2].puntos.length).toBe(86);
+        expect(service.rutas[0].puntos.length).toBe(100);
+
+
+
+    });
+    it("Unir dos tracks", function() {
+
+        pruebaController.crear(0);
+        for (var i = 0; i < 50; i++) {
+            pruebaController.anadirPuntoTForMap();
+        }
+        pruebaController.crear(0);
+        service.trackActivo=1;
+        for (var i = 0; i < 50; i++) {
+            pruebaController.anadirPuntoTForMap();
+        }
+
+        pruebaController.crear(0);
+        service.trackActivo=0;
+        service.unirTrack(1);
+
+        expect(service.tracks[service.tracks.length-1].puntos.length).toBe(100);
+        expect(service.tracks[service.tracks.length-2].puntos.length).toBe(50);
+        expect(service.tracks[0].puntos.length).toBe(50);
+
+
+    });
+    it("Unir dos rutas", function() {
+
+        pruebaController.crear(1);
+        for (var i = 0; i < 50; i++) {
+            pruebaController.anadirPuntoRForMap();
+        }
+        pruebaController.crear(1);
+        service.rutaActiva=1;
+        for (var i = 0; i < 50; i++) {
+            pruebaController.anadirPuntoRForMap();
+        }
+
+        pruebaController.crear(1);
+        service.rutaActiva=0;
+        service.unirRuta(1);
+
+        expect(service.rutas[service.rutas.length-1].puntos.length).toBe(100);
+        expect(service.rutas[service.rutas.length-2].puntos.length).toBe(50);
+        expect(service.rutas[0].puntos.length).toBe(50);
+
+
+    });
+    it("Invertir un track", function() {
+
+        pruebaController.crear(0);
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(0,0,i);
+        }
+            console.log(service.tracks[0].puntos);
+        expect(service.tracks[0].puntos[45].numero).toBe(45);
+        expect(service.tracks[0].puntos.length).toBe(50);
+        service.trackActivo=0;
+        service.invertirTrack();
+
+        expect(service.tracks[0].puntos[49].numero).toBe(0);
+        expect(service.tracks[0].puntos[0].numero).toBe(49);
+        expect(service.tracks[0].puntos.length).toBe(50);
+
+
+    });
+    it("Invertir una ruta", function() {
+
+        pruebaController.crear(1);
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(1,0,i);
+        }
+        console.log(service.rutas[0].puntos);
+        expect(service.rutas[0].puntos[45].numero).toBe(45);
+        expect(service.rutas[0].puntos.length).toBe(50);
+        service.rutaActiva=0;
+        service.invertirRuta();
+
+        expect(service.rutas[0].puntos[49].numero).toBe(0);
+        expect(service.rutas[0].puntos[0].numero).toBe(49);
+        expect(service.rutas[0].puntos.length).toBe(50);
+
+
     });
 });
