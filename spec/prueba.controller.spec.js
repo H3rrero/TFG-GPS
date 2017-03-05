@@ -20,6 +20,7 @@ describe("test de: PruebaController", function() {
         service.polyLineasR = [];
         service.isTrack = true;
         service.hayEntidadesCreadas = false;
+        service.wps=0;
         //Actualiza los puntos del track activo
         service.actualizarPuntosT = function() {
 
@@ -59,49 +60,111 @@ describe("test de: PruebaController", function() {
             service.elevaciones2 = service.actualizarElevaciones();
             service.distancias2 = service.actualizarDistancias();
           }
-        service.crear = function (id) {
+          //funcion que crea una entidad
+          service.crear = function (id) {
+              //Boolean necesario para en caso de que no haya ninguna entidad
+              // creada no se activara el evento click del mapa
 
-        switch (id) {
-          case 0:
-            service.entidad = {
-              nombre: "Nuevo-Track",
-              distancia: 0,
-              desnivelP: 0,
-              desnivelN:0,
-              elevMax:0,
-              elevMin:0,
-              puntos:[],
-              numero: service.tracks.length,
-            };
-            service.tracks.push(service.entidad);
-            break;
-          case 1:
-          service.entidad = {
-            nombre: "Nueva-Ruta",
-            distancia: 0,
-            desnivelP: 0,
-            desnivelN:0,
-            elevMax:0,
-            elevMin:0,
-            puntos:[],
-            numero:service.rutas.length,
-          };
-          service.rutas.push(service.entidad);
-            break;
-          case 2:
-          service.entidad = {
-            nombre: "Nuevo-Waypoint",
-            latitud: 0,
-            longitud:0,
-            elevacion:0,
-            numero: service.waypoints.length,
-          };
-          service.waypoints.push(service.entidad);
-            break;
-        }
-        return service.entidad;
-      }
+              switch (id) {
+                  case 0:
+                      service.hayEntidadesCreadas = true;
+                      service.entidad = {
+                          nombre: "Nuevo-Track"+service.tracks.length,
+                          distancia: 0,
+                          desnivelP: 0,
+                          desnivelN:0,
+                          elevMax:0,
+                          elevMin:9999999,
+                          puntos:[],
+                          numero: service.tracks.length,
+                          fecha: new Date(),
+                          duracionIda:0,
+                          duracionVuelta:0,
+                      };
 
+                      service.tracks.push(service.entidad);
+                      service.tienePoly.push(false);
+                      service.isTrack = true;
+                      service.isWaypoint = false;
+                      break;
+                  case 1:
+                      service.hayEntidadesCreadas = true;
+                      service.entidad = {
+                          nombre: "Nueva-Ruta"+service.rutas.length,
+                          distancia: 0,
+                          desnivelP: 0,
+                          desnivelN:0,
+                          elevMax:0,
+                          elevMin:9999999,
+                          puntos:[],
+                          numero:service.rutas.length,
+                          fecha: new Date(),
+                          duracion:0,
+                      };
+                      service.rutas.push(service.entidad);
+                      service.tienePolyR.push(false);
+                      service.isTrack = false;
+                      service.isWaypoint = false;
+                      break;
+                  case 2:
+                      service.entidad = {
+                          nombre: "Nuevo-Waypoint"+service.waypoints.length,
+                          latitud: service.latitud,
+                          longitud:service.longitud,
+                          elevacion:service.elevacion,
+                          numero: service.waypoints.length,
+                          descripcion:"Añade una descripción",
+                      };
+                      service.waypoints.push(service.entidad);
+                      service.isWaypoint = true;
+                      service.isTrack = false;
+                      break;
+              }
+              return service.entidad;
+          }
+          //Metodo que permote borrar un waypoint
+          service.borrarWp = function () {
+
+
+              //ELiminamos el waypoint
+              service.waypoints.splice(service.wpActivo,1);
+              //Si no hubiera ninguna entidad creada se pone a false el boolean que lo indica
+              if(service.tracks.length<1 && service.rutas.length<1 && service.waypoints.length<1)
+              {
+                  service.hayEntidadesCreadas=false;
+              }
+              service.wps = service.waypoints.length;
+          }
+          service.borrarRuta = function () {
+
+
+              //Marcamos la ruta como que no tiene polilinea
+              service.tienePolyR[service.rutaActiva]=false;
+              service.tienePolyR.splice(service.rutaActiva,1)
+              //Booramos los puntos actuales
+              for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+                  service.rutas[service.rutaActiva].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              service.rutas.splice(service.rutaActiva,1);
+              if(service.tracks.length<1 && service.rutas.length<1 && service.waypoints.length<1)
+              {
+                  service.hayEntidadesCreadas=false;
+              }
+          }
+          service.borrarTrack = function () {
+              //Booramos los puntos actuales
+              for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+                  service.tracks[service.trackActivo].puntos.splice(i,1);
+                  service.puntosTrackActivo.splice(i,1);
+              }
+              //Borramos el track por completo
+              service.tracks.splice(service.trackActivo,1);
+              if(service.tracks.length<1 && service.rutas.length<1 && service.waypoints.length<1)
+              {
+                  service.hayEntidadesCreadas=false;
+              }
+          };
         service.anadirPunto = function (id,num) {
           service.punto = {
             numero:0,
@@ -136,7 +199,7 @@ describe("test de: PruebaController", function() {
     module('ngAnimate');
     module('ngSanitize');
     module('ngCsv');
-    module('Prueba');
+    module('GPS');
 
   });
 
@@ -144,26 +207,30 @@ describe("test de: PruebaController", function() {
   var $controller;
 var pruebaController;
 var scope;
-beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock) {
+var documentt;
+var service;
+beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock,$document) {
   $controller = _$controller_;
   scope = $rootScope;
+  documentt = $document;
+  service = EntidadesServiceErrorMock;
   pruebaController =
     $controller('PruebaController',
-                {$scope:scope,EntidadesService: EntidadesServiceErrorMock});
+                {$scope:scope,EntidadesService: service,$document:documentt});
 
 }));
 
   it("Deberia crear un track", function() {
-
-    expect(pruebaController.crear(0)['nombre']).toBe("Nuevo-Track");
+      pruebaController.crear(0)
+    expect(pruebaController.tracks[0].nombre).toBe("Nuevo-Track"+(pruebaController.tracks.length-1));
   });
   it("Deberia crear una ruta", function() {
-
-    expect(pruebaController.crear(1)['nombre']).toBe("Nueva-Ruta");
+      pruebaController.crear(1)
+    expect(pruebaController.rutas[0].nombre).toBe("Nueva-Ruta"+(pruebaController.rutas.length-1));
   });
   it("Deberia crear un waypoint", function() {
-
-    expect(pruebaController.crear(2)['nombre']).toBe("Nuevo-Waypoint");
+      pruebaController.crear(2)
+    expect(pruebaController.waypoints[0].nombre).toBe("Nuevo-Waypoint"+(pruebaController.waypoints.length-1));
   });
   it("Deberia crear 100 tracks", function() {
     for (var i = 0; i < 100; i++) {
@@ -202,9 +269,9 @@ beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock) 
     for (var i = 0; i < 123; i++) {
       pruebaController.crear(2);
     }
-    expect(pruebaController.waypoints[201]['nombre']).toBe("Nuevo-Waypoint");
-    expect(pruebaController.rutas[121]['nombre']).toBe("Nueva-Ruta");
-    expect(pruebaController.tracks[78]['nombre']).toBe("Nuevo-Track");
+    expect(pruebaController.waypoints[201].nombre).toBe("Nuevo-Waypoint201");
+    expect(pruebaController.rutas[121].nombre).toBe("Nueva-Ruta121");
+    expect(pruebaController.tracks[78].nombre).toBe("Nuevo-Track78");
     expect(pruebaController.tracks.length).toBe(123);
     expect(pruebaController.rutas.length).toBe(154);
     expect(pruebaController.waypoints.length).toBe(223);
@@ -279,5 +346,195 @@ beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock) 
 
   expect(pruebaController.puntosTrackActivo.length).toBe(245);
   });
+    it("Creamos un track y lo borramos", function() {
 
+        pruebaController.crear(0);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoTForMap();
+        }
+        pruebaController.trackActivo=0;
+        pruebaController.borrarTrack();
+        expect(pruebaController.tracks.length).toBe(0);
+    });
+    it("Creamos varios tracks y comprobamos que se borren ", function() {
+
+
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(0);
+        }
+        pruebaController.trackActivo=35;
+        pruebaController.borrarTrack();
+        expect(pruebaController.tracks.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.trackActivo=i;
+            pruebaController.borrarTrack();
+        }
+        expect(pruebaController.tracks.length).toBe(64);
+        for (var i = 0; i < 64; i++) {
+            pruebaController.trackActivo=i;
+            pruebaController.borrarTrack();
+        }
+        expect(pruebaController.tracks.length).toBe(0);
+    });
+    it("Creamos una ruta y la borramos", function() {
+
+        pruebaController.crear(1);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.anadirPuntoRForMap();
+        }
+        pruebaController.rutaActiva=0;
+        pruebaController.borrarRuta();
+        expect(pruebaController.rutas.length).toBe(0);
+    });
+    it("Creamos varias rutas y comprobamos que se borren ", function() {
+
+
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(1);
+        }
+        pruebaController.rutaActiva=35;
+        pruebaController.borrarRuta();
+        expect(pruebaController.rutas.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.rutaActiva=i;
+            pruebaController.borrarRuta();
+        }
+        expect(pruebaController.rutas.length).toBe(64);
+        for (var i = 0; i < 64; i++) {
+            pruebaController.rutaActiva=i;
+            pruebaController.borrarRuta();
+        }
+        expect(pruebaController.rutas.length).toBe(0);
+    });
+    it("Creamos un waypoint y lo borramos", function() {
+
+        pruebaController.crear(2);
+
+        pruebaController.wpActivo=0;
+        pruebaController.borrarWp();
+        expect(pruebaController.waypoints.length).toBe(0);
+    });
+    it("Creamos varios waypoints y comprobamos que se borren ", function() {
+
+
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(2);
+        }
+        pruebaController.wpActivo=35;
+        pruebaController.borrarWp();
+        expect(pruebaController.waypoints.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.wpActivo=i;
+            pruebaController.borrarWp();
+        }
+        expect(pruebaController.waypoints.length).toBe(64);
+        for (var i = 63; i >=0; i--) {
+            pruebaController.wpActivo=i;
+            pruebaController.borrarWp();
+        }
+        expect(pruebaController.waypoints.length).toBe(0);
+    });
+
+    it("Creamos varias entidades de los tres tipos y comprobamos que se borren correctamente", function() {
+
+
+        for (var i = 0; i < 100; i++) {
+
+            pruebaController.crear(2);
+            pruebaController.crear(1);
+        }
+
+        pruebaController.wpActivo=35;
+        pruebaController.borrarWp();
+
+
+        pruebaController.rutaActiva=38;
+        pruebaController.borrarRuta();
+        expect(pruebaController.waypoints.length).toBe(99);
+        expect(pruebaController.rutas.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.wpActivo=i;
+            pruebaController.borrarWp();
+        }
+        for (var i = 0; i < 23; i++) {
+            pruebaController.rutaActiva=i;
+            pruebaController.borrarRuta();
+        }
+
+        expect(pruebaController.waypoints.length).toBe(64);
+        expect(pruebaController.rutas.length).toBe(76);
+
+        for (var i = 63; i >=0; i--) {
+            pruebaController.wpActivo=i;
+            pruebaController.borrarWp();
+        }
+        for (var i = 75; i >=0; i--) {
+            pruebaController.rutaActiva=i;
+            pruebaController.borrarRuta();
+        }
+
+        expect(pruebaController.waypoints.length).toBe(0);
+        expect(pruebaController.rutas.length).toBe(0);
+
+    });
+    it("Creamos varias entidades de los tres tipos y comprobamos que se borren correctamente", function() {
+
+
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(2);
+
+        }
+
+
+        pruebaController.wpActivo=35;
+        pruebaController.borrarWp();
+        expect(service.waypoints.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.wpActivo=i;
+            pruebaController.borrarWp();
+        }
+
+        expect(service.wps).toBe(64);
+
+        for (var i = 63; i >=0; i--) {
+            pruebaController.wpActivo=i;
+            pruebaController.borrarWp();
+        }
+
+        expect(service.waypoints.length).toBe(0);
+
+
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(0);
+        }
+        pruebaController.trackActivo=35;
+        pruebaController.borrarTrack();
+        expect(pruebaController.tracks.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.trackActivo=i;
+            pruebaController.borrarTrack();
+        }
+        expect(pruebaController.tracks.length).toBe(64);
+        for (var i = 0; i < 64; i++) {
+            pruebaController.trackActivo=i;
+            pruebaController.borrarTrack();
+        }
+        expect(pruebaController.tracks.length).toBe(0);
+        for (var i = 0; i < 100; i++) {
+            pruebaController.crear(1);
+        }
+        pruebaController.rutaActiva=35;
+        pruebaController.borrarRuta();
+        expect(pruebaController.rutas.length).toBe(99);
+        for (var i = 0; i < 35; i++) {
+            pruebaController.rutaActiva=i;
+            pruebaController.borrarRuta();
+        }
+        expect(pruebaController.rutas.length).toBe(64);
+        for (var i = 0; i < 64; i++) {
+            pruebaController.rutaActiva=i;
+            pruebaController.borrarRuta();
+        }
+        expect(pruebaController.rutas.length).toBe(0);
+    });
 });

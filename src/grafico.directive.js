@@ -24,11 +24,11 @@
         $scope.data = [EntidadesService.getPuntosGrafico()];
         $scope.colors =  [{
             backgroundColor : '#0062ff',
-            pointBackgroundColor: '#f90202',
-            pointHoverBackgroundColor: '#f90202',
-            borderColor: '#f90202',
-            pointBorderColor: '#f90202',
-            pointHoverBorderColor: '#f90202',
+            pointBackgroundColor: '#3382FF',
+            pointHoverBackgroundColor: '#3382FF',
+            borderColor: '#3382FF',
+            pointBorderColor: '#3382FF',
+            pointHoverBorderColor: '#3382FF',
             fill: true /* this option hide background-color */
         }, '#00ADF9', '#FDB45C', '#46BFBD'];
 

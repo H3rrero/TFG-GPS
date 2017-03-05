@@ -1,6 +1,6 @@
 (function () {
 'use strict';
 
-angular.module('GPS',['chart.js','ngAnimate','ngSanitize', 'ngCsv','ngFileSaver' ]);
+angular.module('GPS',['chart.js','ngAnimate','ngSanitize', 'ngCsv']);
 
 })();

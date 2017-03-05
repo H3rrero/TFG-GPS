@@ -4,7 +4,7 @@
 angular.module('GPS')
 .controller('PruebaController',PruebaController);
 
-function PruebaController($scope,EntidadesService,$document,FileSaver) {
+function PruebaController($scope,EntidadesService,$document) {
     var list1 = this;
     console.log("controler");
     //track seleccionado por el usuario
@@ -215,11 +215,12 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
     list1.borrarWp = function () {
         //Se pone el error a false para resetearlo
         list1.error = false;
-        lis1.noError = false;
+        list1.noError = false;
         EntidadesService.modoInsertar = false;
         //Se comprueba que se ha seleccionado una ruta y si no es asi salta un error
         if (EntidadesService.isTrack == true
-            || EntidadesService.waypoints[EntidadesService.wpActivo] === undefined) {
+            || EntidadesService.waypoints[list1.wpActivo] === undefined) {
+
             list1.error = true;
             list1.mensajeError = "Por favor selecciona un waypoint para eliminar";
             //Nos aseguramos de que tenga rutas creadas
@@ -227,6 +228,7 @@ function PruebaController($scope,EntidadesService,$document,FileSaver) {
             list1.error = true;
             list1.mensajeError = "Necesitas tener waypoints creados para poder eliminarlos";
         } else if (EntidadesService.modoCreacion == true) {
+
             list1.error = true;
             list1.mensajeError = "Sal del modo creacion para poder eliminar waypoints";
         }
