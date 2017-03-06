@@ -178,7 +178,7 @@ service.importXMLWp = function () {
         xml = xml + "\t<wpt lat="+'"'+service.waypoints[item].latitud+'"'
         +" lon="+'"'+service.waypoints[item].longitud+'"'+">\n"+"\t\t<ele>"+
         service.waypoints[item].elevacion+"</ele>\n"+"\t\t<name>"+
-        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
+        service.waypoints[item].nombre+"</name>\n"+"\t\t<desc>"+service.waypoints[item].descripcion+"</desc>\n"
         +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
     }
     xml = xml+"</gpx>";
@@ -1120,6 +1120,18 @@ service.actualizarPuntosR = function() {
       service.waypoints.push(service.entidad);
       service.isWaypoint = true;
       service.isTrack = false;
+          //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
+          setTimeout(function () {
+              for(var i in service.waypoints){
+                  if(i!= service.waypoints.length-1){
+                      $("#inw"+i).attr('checked', false);}
+                  else{
+                      $("#inw"+i).prop("checked",true);
+                      $("#inw"+i).click();
+
+                  }
+              }
+          },10);
         break;
     }
     return service.entidad;

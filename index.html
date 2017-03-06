@@ -137,14 +137,14 @@
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
 					<img  src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks"><input type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
+				<li ng-repeat="item in list1.tracks"><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas"><input type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+			<li ng-repeat="item in list1.rutas"><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
-		<li ng-repeat="item in list1.waypoints"><input type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
+		<li ng-repeat="item in list1.waypoints"><input id="inw{{$index}}" type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
 		</ul>
 			</div>
 			<div id="on/Off">

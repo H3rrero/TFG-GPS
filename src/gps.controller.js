@@ -1157,6 +1157,19 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlista = "ocultar lista";
         list1.mensajeVerlistaR = "ver lista";
         list1.mensajeVerlistaW = "ver lista";
+        //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
+        setTimeout(function () {
+            for(var i in list1.tracks){
+                if(i!= list1.tracks.length-1){
+                    $("#in"+i).attr('checked', false);}
+                else{
+                    $("#in"+i).prop("checked",true);
+                    $("#in"+i).click();
+
+                }
+            }
+        },10);
+
 
     }
     //Mostrar la lista de rutas
@@ -1168,6 +1181,18 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlista = "ver lista";
         list1.mensajeVerlistaR = "ocultar lista";
         list1.mensajeVerlistaW = "ver lista";
+        //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
+        setTimeout(function () {
+            for(var i in list1.rutas){
+                if(i!= list1.rutas.length-1){
+                    $("#inr"+i).attr('checked', false);}
+                else{
+                    $("#inr"+i).prop("checked",true);
+                    $("#inr"+i).click();
+
+                }
+            }
+        },10);
 
     }
     //Mostrar la lista de waypoints
@@ -1179,6 +1204,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlistaR = "ver lista";
         list1.mensajeVerlistaW = "ocultar lista";
         list1.crearWaypoint();
+
 
     }
     //Mostrar u ocultar la lista de rutas
