@@ -51,6 +51,8 @@ function Mymap(EntidadesService,MapasService) {
             var nombre=[];
             nombre.push(google.maps.MapTypeId.ROADMAP);
             nombre.push(google.maps.MapTypeId.SATELLITE);
+
+
             //opciones de inicialización
             var mapOptions = {
                 center: {lat: 40.41, lng: -3.70},
@@ -63,7 +65,6 @@ function Mymap(EntidadesService,MapasService) {
             for (var i in MapasService.mapas){
                 nombre.push(MapasService.mapas[i].nombre);
             }
-
             var getMps = function (nombre,i) {
 
                     return new google.maps.ImageMapType({
@@ -139,7 +140,6 @@ function Mymap(EntidadesService,MapasService) {
             for(var i in MapasService.mapas){
                 map.mapTypes.set(MapasService.mapas[i].nombre, getMps(MapasService.mapas[i].nombre,i));
             }
-
 
            map.setOptions(
             {
