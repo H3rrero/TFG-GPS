@@ -1025,4 +1025,179 @@ beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock,$
 
 
     });
+    it("Prueba completa con distintos tracks y rutas con las distintas funciones (union,rocorte,borrar,añadir puntos)", function() {
+
+        //Probamos a invertir una ruta y un track
+        pruebaController.crear(1);
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(1,0,i);
+        }
+        pruebaController.crear(0);
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(0,0,i);
+        }
+        expect(service.rutas[0].puntos[45].numero).toBe(45);
+        expect(service.rutas[0].puntos.length).toBe(50);
+        service.rutaActiva=0;
+        service.invertirRuta();
+
+        expect(service.rutas[0].puntos[49].numero).toBe(0);
+        expect(service.rutas[0].puntos[0].numero).toBe(49);
+        expect(service.rutas[0].puntos.length).toBe(50);
+
+        expect(service.tracks[0].puntos[45].numero).toBe(45);
+        expect(service.tracks[0].puntos.length).toBe(50);
+        service.trackActivo=0;
+        service.invertirTrack();
+
+        expect(service.tracks[0].puntos[49].numero).toBe(0);
+        expect(service.tracks[0].puntos[0].numero).toBe(49);
+        expect(service.tracks[0].puntos.length).toBe(50);
+
+        //Probamos a unir dos rutas y dos tracks
+        pruebaController.crear(1);
+        service.rutaActiva=1;
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(1,1,i);
+        }
+        service.rutaActiva=0;
+        pruebaController.crear(1);
+        service.unirRuta(1);
+
+        expect(service.rutas[service.rutas.length-1].puntos.length).toBe(100);
+        expect(service.rutas[service.rutas.length-2].puntos.length).toBe(50);
+        expect(service.rutas[0].puntos.length).toBe(50);
+
+        pruebaController.crear(0);
+        service.trackActivo=1;
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(0,1,i);
+        }
+        service.trackActivo=0;
+        pruebaController.crear(0);
+        service.unirTrack(1);
+
+        expect(service.tracks[service.tracks.length-1].puntos.length).toBe(100);
+        expect(service.tracks[service.tracks.length-2].puntos.length).toBe(50);
+        expect(service.tracks[0].puntos.length).toBe(50);
+
+        //Probamos a crear dos nuevos tracks y rutas y unirlos
+        pruebaController.crear(0);
+        service.trackActivo=3;
+        for (var i = 0; i < 50; i++) {
+            service.anadirPunto(0,3,i);
+        }
+        service.trackActivo=3;
+        pruebaController.crear(0);
+        service.unirTrack(1);
+
+        expect(service.tracks[service.tracks.length-1].puntos.length).toBe(100);
+        expect(service.tracks[service.tracks.length-2].puntos.length).toBe(50);
+        expect(service.tracks[0].puntos.length).toBe(50);
+
+        //Vamos a unir los dos tracks que han salido d elas dos uniones anteriores
+
+
+        pruebaController.crear(0);
+        service.trackActivo=4;
+        service.unirTrack(2);
+        expect(service.tracks[5].puntos.length).toBe(200);
+
+        //Vamos a recortar el track que acabamos de unir
+
+        pruebaController.crear(0);
+        pruebaController.crear(0);
+        service.puntoElegido=125;
+        service.trackActivo=5;
+        service.recortarTrack();
+
+        expect(service.tracks[service.tracks.length-1].puntos.length).toBe(75);
+        expect(service.tracks[service.tracks.length-2].puntos.length).toBe(126);
+        expect(service.tracks[5].puntos.length).toBe(200);
+        //Vamos a borrar todas las entidades
+        service.trackActivo =7;
+        service.borrarTrack();
+        service.trackActivo =6;
+        service.borrarTrack();
+        service.trackActivo =5;
+        service.borrarTrack();
+        service.trackActivo =4;
+        service.borrarTrack();
+        service.trackActivo =3;
+        service.borrarTrack();
+        service.trackActivo =2;
+        service.borrarTrack();
+        service.trackActivo =1;
+        service.borrarTrack();
+        service.trackActivo =0;
+        service.borrarTrack();
+        expect(service.tracks.length).toBe(0);
+        service.rutaActiva =2;
+        service.borrarRuta();
+        service.rutaActiva =1;
+        service.borrarRuta();
+        service.rutaActiva =0;
+        service.borrarRuta();
+        expect(service.rutas.length).toBe(0);
+        //Volvemos a crear tracks y rutas y vamos a probar a recortalos y luego unirlos
+        pruebaController.crear(1);
+        for (var i = 0; i < 100; i++) {
+            service.anadirPunto(1,0,i);
+        }
+        pruebaController.crear(0);
+        for (var i = 0; i < 100; i++) {
+            service.anadirPunto(0,0,i);
+        }
+        pruebaController.crear(0);
+        pruebaController.crear(0);
+        service.puntoElegido=54;
+        service.trackActivo=0;
+        service.recortarTrack();
+
+        expect(service.tracks[service.tracks.length-1].puntos.length).toBe(46);
+        expect(service.tracks[service.tracks.length-2].puntos.length).toBe(55);
+
+        pruebaController.crear(1);
+        pruebaController.crear(1);
+        service.puntoElegido=54;
+        service.rutaActiva=0;
+        service.recortarRuta();
+
+        expect(service.rutas[service.rutas.length-1].puntos.length).toBe(46);
+        expect(service.rutas[service.rutas.length-2].puntos.length).toBe(55);
+
+        pruebaController.crear(0);
+        service.trackActivo=2;
+        service.unirTrack(1);
+        expect(service.tracks[3].puntos.length).toBe(101);
+
+        pruebaController.crear(1);
+        service.rutaActiva=2;
+        service.unirRuta(1);
+        expect(service.rutas[3].puntos.length).toBe(101);
+
+        service.trackActivo=3;
+        service.invertirTrack();
+        console.log(service.tracks[3].puntos);
+        expect(service.tracks[3].puntos[99].numero).toBe(55);
+        expect(service.tracks[3].puntos[0].numero).toBe(54);
+        service.trackActivo =3;
+        service.borrarTrack();
+        service.trackActivo =2;
+        service.borrarTrack();
+        service.trackActivo =1;
+        service.borrarTrack();
+        service.trackActivo =0;
+        service.borrarTrack();
+        expect(service.tracks.length).toBe(0);
+        service.rutaActiva =3;
+        service.borrarRuta();
+        service.rutaActiva =2;
+        service.borrarRuta();
+        service.rutaActiva =1;
+        service.borrarRuta();
+        service.rutaActiva =0;
+        service.borrarRuta();
+        expect(service.rutas.length).toBe(0);
+    });
 });
