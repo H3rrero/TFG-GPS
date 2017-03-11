@@ -353,6 +353,7 @@ function PruebaController($scope,EntidadesService,$document) {
 
     //Funcion que obtiene de la tabla el punto seleccionado por el usuario
     list1.puntoSelec = function (index) {
+
         EntidadesService.puntoSelec(index);
         EntidadesService.puntoBorrado = true;
     }

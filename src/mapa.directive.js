@@ -618,10 +618,19 @@ function Mymap(EntidadesService,MapasService) {
                 EntidadesService.markersT[EntidadesService.tracks.length-2].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
-                marker.icon = "img/iconoFin.png";
-                marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
-                EntidadesService.markersT[EntidadesService.tracks.length-2][1].setMap(null);
-                EntidadesService.markersT[EntidadesService.tracks.length-2][1]=marker;
+                  marker.icon = "img/iconoFin.png";
+                  marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                  EntidadesService.markersT[EntidadesService.tracks.length-2]
+                      [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setIcon(EntidadesService.myIcon);
+                  if(map.getZoom()<12){
+                      EntidadesService.markersT[EntidadesService.tracks.length-2]
+                          [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(false);
+                  }
+                  else{
+                      EntidadesService.markersT[EntidadesService.tracks.length-2]
+                          [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(true);
+                  }
+                  EntidadesService.markersT[EntidadesService.tracks.length-2].push(marker);
               }
               }else if (EntidadesService.modoRecorte2 == true) {
                 //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
@@ -636,10 +645,19 @@ function Mymap(EntidadesService,MapasService) {
                 EntidadesService.markersT[EntidadesService.tracks.length-1].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
-                marker.icon = "img/iconoFin.png";
-                marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
-                EntidadesService.markersT[EntidadesService.tracks.length-1][1].setMap(null);
-                EntidadesService.markersT[EntidadesService.tracks.length-1][1]=marker;
+                  marker.icon = "img/iconoFin.png";
+                  marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                  EntidadesService.markersT[EntidadesService.tracks.length-1]
+                      [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setIcon(EntidadesService.myIcon);
+                  if(map.getZoom()<12){
+                      EntidadesService.markersT[EntidadesService.tracks.length-1]
+                          [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(false);
+                  }
+                  else{
+                      EntidadesService.markersT[EntidadesService.tracks.length-1]
+                          [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(true);
+                  }
+                  EntidadesService.markersT[EntidadesService.tracks.length-1].push(marker);
               }
               }else{
               //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
@@ -654,10 +672,19 @@ function Mymap(EntidadesService,MapasService) {
               EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
               //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
             }else{
-              marker.icon = "img/iconoFin.png";
-              marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
-              EntidadesService.markersT[EntidadesService.trackActivo][1].setMap(null);
-              EntidadesService.markersT[EntidadesService.trackActivo][1]=marker;
+                marker.icon = "img/iconoFin.png";
+                marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                EntidadesService.markersT[EntidadesService.trackActivo]
+                    [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
+                if(map.getZoom()<12){
+                    EntidadesService.markersT[EntidadesService.trackActivo]
+                        [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
+                }
+                else{
+                    EntidadesService.markersT[EntidadesService.trackActivo]
+                        [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(true);
+                }
+                EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             }
           }}else {
             var rutaACortar;
@@ -874,6 +901,21 @@ function Mymap(EntidadesService,MapasService) {
 
 
           if (EntidadesService.isTrack == true) {
+
+              map.addListener('zoom_changed', function() {
+                for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
+                    console.log(map.getZoom() );
+                    if(map.getZoom()<11 && i!=0 && i!=EntidadesService.markersT[EntidadesService.trackActivo].length-1 ){
+                        EntidadesService.markersT[EntidadesService.trackActivo][i].setVisible(false);
+                    }else{
+                        EntidadesService.markersT[EntidadesService.trackActivo][i].setVisible(true);
+                    }
+                }
+              });
+
+
+
+
             // Creamos el marcador que indicara el punto creado en el mapa
             var marker = new google.maps.Marker({
               position: event.latLng,
@@ -881,6 +923,16 @@ function Mymap(EntidadesService,MapasService) {
               icon: image,
               map: map
             });
+              marker.addListener('click', function() {
+                  console.log(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6));
+                  for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
+                      if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                          EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
+                          EntidadesService.markersT[EntidadesService.trackActivo][i].position.lng().toFixed(6)){
+                          controller.puntoSelec(i);
+                      }
+                  }
+              });
             //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
           if (EntidadesService.markersT[EntidadesService.trackActivo]===undefined) {
             var markers = [];
@@ -895,8 +947,17 @@ function Mymap(EntidadesService,MapasService) {
           }else{
             marker.icon = "img/iconoFin.png";
             marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
-            EntidadesService.markersT[EntidadesService.trackActivo][1].setMap(null);
-            EntidadesService.markersT[EntidadesService.trackActivo][1]=marker;
+            EntidadesService.markersT[EntidadesService.trackActivo]
+                [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
+            if(map.getZoom()<12){
+                EntidadesService.markersT[EntidadesService.trackActivo]
+                    [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
+            }
+            else{
+                EntidadesService.markersT[EntidadesService.trackActivo]
+                    [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(true);
+            }
+            EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
           }
         }else {
           if (EntidadesService.wpRta[EntidadesService.rutaActiva]===undefined) {

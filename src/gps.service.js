@@ -62,7 +62,14 @@ function EntidadesService (){
   service.conection = false;
   service.mapas = [];
     service.coords = false;
-
+    service.myIcon = {
+        path : google.maps.SymbolPath.CIRCLE,
+        scale : 6,
+        strokeColor : '#000000',
+        fillColor : "yellow",
+        strokeOpacity : 1,
+        strokeWeight : 2,
+    };
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {
       //Inicializamos el elemento bounds de google maps
@@ -488,8 +495,14 @@ service.importXMLWp = function () {
   service.recortarTrack = function () {
     //Recorremos los puntos del track seleccionado
     for (var item in service.tracks[service.trackActivo].puntos) {
+
+
+      console.log("punto elegido: "+service.puntoElegido);
+      console.log(typeof item);
+      console.log(typeof service.puntoElegido)
       //Recorremos los punto anteriores al punto elegido
-      if (item<=service.puntoElegido) {
+      if (parseInt(item)<=parseInt(service.puntoElegido)) {
+
         //Guardamos sus datos porque los necesitaremos cuando los pintemos en el mapa
         service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
         service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
@@ -499,11 +512,11 @@ service.importXMLWp = function () {
           service.modoRecorte1 = true;
           //Simulamos un click en el mapa para que se añada el punto
           google.maps.event.trigger(service.mapa, 'click');
-
+      console.log(item+"in recorte 1");
       }
       service.modoRecorte1 = false;
       //Recorremos los punto a partir del punto elegido
-      if (item>=service.puntoElegido) {
+      if (parseInt(item)>=parseInt(service.puntoElegido)) {
         //Guardamos sus datos
         service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
         service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
@@ -513,6 +526,7 @@ service.importXMLWp = function () {
           service.modoRecorte2 = true;
           //Simulamos un click en el mapa para que se añada el punto
           google.maps.event.trigger(service.mapa, 'click');
+          console.log(item+"in recorte 2");
       }
     }
     //Desactivamos todos los modos y ponemos a null el punto elegido
