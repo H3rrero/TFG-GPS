@@ -305,7 +305,7 @@ service.importXMLWp = function () {
       puntos.push(service.tracks[service.trackActivo].puntos[variable]);
     }
     //Añadimos el nuevo punto
-    puntos.splice(service.puntoElegido+1,0,service.puntoN);
+    puntos.splice(parseInt(service.puntoElegido)+1,0,service.puntoN);
 
     //Booramos los puntos actuales
     for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
@@ -385,7 +385,10 @@ service.importXMLWp = function () {
    service.markersT[service.trackActivo][0].setMap(null);
    //En caso de que no tenga marcador de final no accedemos a el
    if(service.markersT[service.trackActivo].length>1)
-   service.markersT[service.trackActivo][1].setMap(null);
+   service.markersT[service.trackActivo][service.markersT[service.trackActivo].length-1].setMap(null);
+    for(var i in service.markersT[service.trackActivo]){
+        service.markersT[service.trackActivo][i].setMap(null);
+    }
    //Marcamos al track como que no tiene polilinea
    service.tienePoly[service.trackActivo]=false;
    //Y tambien como que no tiene marcadores
@@ -726,8 +729,9 @@ service.importXMLWp = function () {
     }
     //ELiminamos los marcadores de inicion y fin actuales
     if(service.markersT[service.trackActivo]!==undefined){
-    service.markersT[service.trackActivo][0].setMap(null);
-    service.markersT[service.trackActivo][1].setMap(null);
+      for(var i in service.markersT[service.trackActivo]){
+          service.markersT[service.trackActivo][i].setMap(null);
+      }
     }
     //Marcamos al track como que no tiene polilinea
     service.tienePoly[service.trackActivo]=false;
@@ -1023,7 +1027,20 @@ service.getPoly = function () {
     return service.polyLineasR[service.rutaActiva];
   }
 }
+//Actualiza los puntos del track activo
+    service.actualizarMarkers = function() {
 
+        for(var i in service.tracks){
+          for(var j in service.markersT[i]){
+            if(i==service.trackActivo && service.mapa.getZoom()>=12)
+              service.markersT[i][j].setVisible(true);
+            else
+              if(j!=0 && j!= service.markersT[i].length-1)
+                service.markersT[i][j].setVisible(false);
+          }
+        }
+
+    }
 //Actualiza los puntos del track activo
 service.actualizarPuntosT = function() {
 
@@ -1031,6 +1048,7 @@ service.actualizarPuntosT = function() {
       service.puntosTrackActivo= service.tracks[service.trackActivo]["puntos"];
       service.actualizarPuntos();
       }
+
 }
 
 //Actualiza los puntos de la ruta activa

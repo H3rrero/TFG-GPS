@@ -598,6 +598,10 @@ function Mymap(EntidadesService,MapasService) {
 
 
             if (EntidadesService.isTrack == true) {
+
+                map.addListener('zoom_changed', function() {
+                    EntidadesService.actualizarMarkers();
+                });
               // Creamos el marcador que indicara el punto creado en el mapa
               var marker = new google.maps.Marker({
                 position: evento,
@@ -605,6 +609,15 @@ function Mymap(EntidadesService,MapasService) {
                 icon: image,
                 map: map
               });
+                marker.addListener('click', function() {
+                    for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
+                        if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                            EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
+                            EntidadesService.markersT[EntidadesService.trackActivo][i].position.lng().toFixed(6)){
+                            controller.puntoSelec(i);
+                        }
+                    }
+                });
               if (EntidadesService.modoRecorte1 == true) {
                 //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
               if (EntidadesService.markersT[EntidadesService.tracks.length-2]===undefined) {
@@ -628,7 +641,7 @@ function Mymap(EntidadesService,MapasService) {
                   }
                   else{
                       EntidadesService.markersT[EntidadesService.tracks.length-2]
-                          [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(true);
+                          [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(false);
                   }
                   EntidadesService.markersT[EntidadesService.tracks.length-2].push(marker);
               }
@@ -655,7 +668,7 @@ function Mymap(EntidadesService,MapasService) {
                   }
                   else{
                       EntidadesService.markersT[EntidadesService.tracks.length-1]
-                          [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(true);
+                          [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(false);
                   }
                   EntidadesService.markersT[EntidadesService.tracks.length-1].push(marker);
               }
@@ -682,7 +695,7 @@ function Mymap(EntidadesService,MapasService) {
                 }
                 else{
                     EntidadesService.markersT[EntidadesService.trackActivo]
-                        [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(true);
+                        [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
                 }
                 EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             }
@@ -903,14 +916,7 @@ function Mymap(EntidadesService,MapasService) {
           if (EntidadesService.isTrack == true) {
 
               map.addListener('zoom_changed', function() {
-                for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
-                    console.log(map.getZoom() );
-                    if(map.getZoom()<11 && i!=0 && i!=EntidadesService.markersT[EntidadesService.trackActivo].length-1 ){
-                        EntidadesService.markersT[EntidadesService.trackActivo][i].setVisible(false);
-                    }else{
-                        EntidadesService.markersT[EntidadesService.trackActivo][i].setVisible(true);
-                    }
-                }
+                EntidadesService.actualizarMarkers();
               });
 
 
@@ -924,7 +930,7 @@ function Mymap(EntidadesService,MapasService) {
               map: map
             });
               marker.addListener('click', function() {
-                  console.log(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6));
+                  console.log("holitaa");
                   for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
                       if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                           EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+

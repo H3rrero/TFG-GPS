@@ -774,6 +774,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedT = function () {
         list1.actualizarPuntosT();
+        EntidadesService.actualizarMarkers();
         EntidadesService.puntoElegido = null;
     }
     list1.changedR = function () {
@@ -796,6 +797,7 @@ function PruebaController($scope,EntidadesService,$document) {
         EntidadesService.actualizarPuntosT();
         list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
         list1.exportTabla();
+
 
     }
     //Actualiza los puntos de las rutas para que los componenetes que los
