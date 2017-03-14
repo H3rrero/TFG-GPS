@@ -68,7 +68,31 @@ function EntidadesService (){
         strokeColor : '#000000',
         fillColor : "yellow",
         strokeOpacity : 1,
-        strokeWeight : 2,
+        strokeWeight : 2
+    };
+    service.myIconR = {
+        path : google.maps.SymbolPath.CIRCLE,
+        scale : 6,
+        strokeColor : '#0C090C',
+        fillColor : "yellow",
+        strokeOpacity : 1,
+        strokeWeight : 3
+    };
+    service.myIconRIni = {
+        path : google.maps.SymbolPath.CIRCLE,
+        scale : 6,
+        strokeColor : '#FE0006',
+        fillColor : "yellow",
+        strokeOpacity : 1,
+        strokeWeight : 3
+    };
+    service.myIconRFin = {
+        path : google.maps.SymbolPath.CIRCLE,
+        scale : 6,
+        strokeColor : '#033FC9',
+        fillColor : "yellow",
+        strokeOpacity : 1,
+        strokeWeight : 3
     };
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {
@@ -265,7 +289,7 @@ service.importXMLWp = function () {
       puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
     }
     //Añadimos el nuevo punto
-    puntos.splice(service.puntoElegido+1,0,service.puntoN);
+    puntos.splice(parseInt(service.puntoElegido)+1,0,service.puntoN);
     //Booramos los puntos actuales
     for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
       service.rutas[service.rutaActiva].puntos.splice(i,1);
@@ -504,9 +528,6 @@ service.importXMLWp = function () {
     for (var item in service.tracks[service.trackActivo].puntos) {
 
 
-      console.log("punto elegido: "+service.puntoElegido);
-      console.log(typeof item);
-      console.log(typeof service.puntoElegido)
       //Recorremos los punto anteriores al punto elegido
       if (parseInt(item)<=parseInt(service.puntoElegido)) {
 
@@ -519,7 +540,6 @@ service.importXMLWp = function () {
           service.modoRecorte1 = true;
           //Simulamos un click en el mapa para que se añada el punto
           google.maps.event.trigger(service.mapa, 'click');
-      console.log(item+"in recorte 1");
       }
       service.modoRecorte1 = false;
       //Recorremos los punto a partir del punto elegido
@@ -533,7 +553,6 @@ service.importXMLWp = function () {
           service.modoRecorte2 = true;
           //Simulamos un click en el mapa para que se añada el punto
           google.maps.event.trigger(service.mapa, 'click');
-          console.log(item+"in recorte 2");
       }
     }
     //Desactivamos todos los modos y ponemos a null el punto elegido
@@ -546,7 +565,7 @@ service.importXMLWp = function () {
   service.recortarRuta = function () {
     for (var item in service.rutas[service.rutaActiva].puntos) {
       //Recorremos los puntos antes del punto elegido
-      if (item<=service.puntoElegido) {
+      if (parseInt(item)<=parseInt(service.puntoElegido)) {
         //Guardamos sus datos
         service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
         service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;
@@ -560,7 +579,7 @@ service.importXMLWp = function () {
       }
       service.modoRecorte1 = false;
       //Recorremos los puntos despues del punto elegido
-      if (item>=service.puntoElegido) {
+      if (parseInt(item)>=parseInt(service.puntoElegido)) {
         //guardamos sus datos
         service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
         service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;

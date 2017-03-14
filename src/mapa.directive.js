@@ -704,6 +704,13 @@ function Mymap(EntidadesService,MapasService) {
                 EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             }
           }}else {
+                var marker = new google.maps.Marker({
+                    position: evento,
+                    title: "",
+                    icon: EntidadesService.myIconR,
+                    map: map
+                });
+
             var rutaACortar;
             if (EntidadesService.modoRecorte1 == true) {
               rutaACortar = EntidadesService.rutas.length-2;
@@ -712,27 +719,45 @@ function Mymap(EntidadesService,MapasService) {
             }else {
               rutaACortar = EntidadesService.rutaActiva;
             }
-            if (EntidadesService.wpRta[rutaACortar]===undefined) {
-              var nombre = "Waypoint Nº"+0;
-              var marker = new google.maps.Marker({
-                position: evento,
-                title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-                icon: 'img/iconowp.png',
-                map: map
-              });
-            var wpsruta = [];
-            wpsruta.push(marker);
-            EntidadesService.wpRta[rutaACortar] = wpsruta;
-          }else {
-            var nombre = "Waypoint Nº"+EntidadesService.wpRta[rutaACortar].length;
-            var marker = new google.maps.Marker({
-              position: evento,
-              title: "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-              icon: 'img/iconowp.png',
-              map: map
-            });
-            EntidadesService.wpRta[rutaACortar].push(marker);
-          }
+                marker.addListener('click', function() {
+                    for(var i in EntidadesService.wpRta[rutaACortar]){
+                        if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                            EntidadesService.wpRta[rutaACortar][i].position.lat().toFixed(6)+
+                            EntidadesService.wpRta[rutaACortar][i].position.lng().toFixed(6)){
+                            controller.puntoSelec(i);
+                        }
+                    }
+                });
+                if (EntidadesService.wpRta[rutaACortar]===undefined) {
+                    var nombre = "Waypoint Nº"+0;
+
+                        marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                        marker.icon= EntidadesService.myIconRIni;
+                    console.log("no tengo marcadores");
+                    console.log(marker.icon.strokeColor);
+                    var wpsruta = [];
+                    wpsruta.push(marker);
+                    EntidadesService.wpRta[rutaACortar] = wpsruta;
+                }else {
+                    if(EntidadesService.wpRta[rutaACortar].length==1){
+                        var nombre = "Waypoint Nº"+EntidadesService.wpRta[rutaACortar].length;
+
+                            marker.title="Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                            marker.icon= EntidadesService.myIconRFin;
+
+                        EntidadesService.wpRta[rutaACortar].push(marker);
+                    }else{
+                        EntidadesService.wpRta[rutaACortar]
+                            [EntidadesService.wpRta[rutaACortar].length-1].setIcon(EntidadesService.myIconR);
+                        var nombre = "Waypoint Nº"+EntidadesService.wpRta[EntidadesService.rutaActiva].length;
+
+                            marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                            marker.icon= EntidadesService.myIconRFin;
+
+                        EntidadesService.wpRta[rutaACortar].push(marker);
+                    }
+
+                }
           }
 
   }
@@ -931,7 +956,6 @@ function Mymap(EntidadesService,MapasService) {
               map: map
             });
               marker.addListener('click', function() {
-                  console.log("holitaa");
                   for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
                       if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                           EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
@@ -967,26 +991,49 @@ function Mymap(EntidadesService,MapasService) {
             EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
           }
         }else {
+              var marker = new google.maps.Marker({
+                  position: event.latLng,
+                  title: "",
+                  icon: EntidadesService.myIconR,
+                  map: map
+              });
+              marker.addListener('click', function() {
+                  for(var i in EntidadesService.wpRta[EntidadesService.rutaActiva]){
+                      if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                          EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lat().toFixed(6)+
+                          EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lng().toFixed(6)){
+                          controller.puntoSelec(i);
+                      }
+                  }
+              });
           if (EntidadesService.wpRta[EntidadesService.rutaActiva]===undefined) {
             var nombre = "Waypoint Nº"+0;
-            var marker = new google.maps.Marker({
-              position: event.latLng,
-              title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-              icon: 'img/iconowp.png',
-              map: map
-            });
+
+              marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+              marker.icon=EntidadesService.myIconRIni;
+
           var wpsruta = [];
           wpsruta.push(marker);
           EntidadesService.wpRta[EntidadesService.rutaActiva] = wpsruta;
         }else {
-          var nombre = "Waypoint Nº"+EntidadesService.wpRta[EntidadesService.rutaActiva].length;
-          var marker = new google.maps.Marker({
-            position: event.latLng,
-            title: "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-            icon: 'img/iconowp.png',
-            map: map
-          });
-          EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
+              if(EntidadesService.wpRta[EntidadesService.rutaActiva].length==1){
+                  var nombre = "Waypoint Nº"+EntidadesService.wpRta[EntidadesService.rutaActiva].length;
+
+                      marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+                      marker.icon=EntidadesService.myIconRFin;
+
+                  EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
+              }else{
+                  EntidadesService.wpRta[EntidadesService.rutaActiva]
+                      [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setIcon(EntidadesService.myIconR);
+                  var nombre = "Waypoint Nº"+EntidadesService.wpRta[EntidadesService.rutaActiva].length;
+
+                      marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+                      marker.icon= EntidadesService.myIconRFin;
+
+                  EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
+              }
+
         }
         }
 }
