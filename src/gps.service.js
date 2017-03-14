@@ -300,6 +300,10 @@ service.importXMLWp = function () {
     //Marcamos al track como que no tiene polilinea
     service.tienePoly[service.trackActivo]=false;
     //Y tambien como que no tiene marcadores
+      //Booramos los marcadores actuales
+      for (var i in service.markersT[service.trackActivo]) {
+          service.markersT[service.trackActivo][i].setMap(null);
+      }
     service.markersT[service.trackActivo] = undefined;
     for (var variable in service.tracks[service.trackActivo].puntos) {
       puntos.push(service.tracks[service.trackActivo].puntos[variable]);
@@ -678,9 +682,10 @@ service.importXMLWp = function () {
     service.colorPolyNF = service.getPoly().strokeColor;
     //Eliminapos la polilinea actual
     service.getPoly().setMap(null);
-    //ELiminamos los marcadores de inicion y fin actuales
-    service.markersT[service.trackActivo][0].setMap(null);
-    service.markersT[service.trackActivo][1].setMap(null);
+    //ELiminamos los marcadores  actuales
+   for(var i in service.markersT[service.trackActivo]){
+       service.markersT[service.trackActivo][i].setMap(null);
+   }
     //Marcamos al track como que no tiene polilinea
     service.tienePoly[service.trackActivo]=false;
     //Y tambien como que no tiene marcadores
@@ -1027,6 +1032,19 @@ service.getPoly = function () {
     return service.polyLineasR[service.rutaActiva];
   }
 }
+//Actualiza los puntos del track activo
+    service.actualizarMarkerActivo = function() {
+
+            console.log(service.mapa.getZoom());
+        for(var j in service.markersT[service.trackActivo]){
+            if( service.mapa.getZoom()>=12)
+                service.markersT[service.trackActivo][j].setVisible(true);
+            else if(j!=0 && j!= service.markersT[service.trackActivo].length-1)
+                service.markersT[service.trackActivo][j].setVisible(false);
+        }
+
+
+    }
 //Actualiza los puntos del track activo
     service.actualizarMarkers = function() {
 

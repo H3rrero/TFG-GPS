@@ -251,6 +251,11 @@ function Mymap(EntidadesService,MapasService) {
 
     // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
+    map.addListener('zoom_changed', function() {
+        if(EntidadesService.isTrack == true){
+                EntidadesService.actualizarMarkerActivo();
+        }
+            });
     EntidadesService.mapa = map;
         }
         //Calcula la distancia entre dos puntos del mapa para los recortes de una ruta
@@ -311,6 +316,7 @@ function Mymap(EntidadesService,MapasService) {
             EntidadesService.distancia = 0;
         }
         }
+
         // puncion que crea las polilineas y los puntos
         function addLatLng(event,elevation) {
           if (EntidadesService.modoImportWP == true) {
@@ -599,9 +605,7 @@ function Mymap(EntidadesService,MapasService) {
 
             if (EntidadesService.isTrack == true) {
 
-                map.addListener('zoom_changed', function() {
-                    EntidadesService.actualizarMarkers();
-                });
+
               // Creamos el marcador que indicara el punto creado en el mapa
               var marker = new google.maps.Marker({
                 position: evento,
@@ -695,7 +699,7 @@ function Mymap(EntidadesService,MapasService) {
                 }
                 else{
                     EntidadesService.markersT[EntidadesService.trackActivo]
-                        [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
+                        [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(true);
                 }
                 EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             }
@@ -915,9 +919,6 @@ function Mymap(EntidadesService,MapasService) {
 
           if (EntidadesService.isTrack == true) {
 
-              map.addListener('zoom_changed', function() {
-                EntidadesService.actualizarMarkers();
-              });
 
 
 
