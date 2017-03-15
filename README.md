@@ -18,8 +18,10 @@
     - Funcion borrar un waypoint
     - Funcion importar para Ruta y Waypoint
     - Funcion cambiar posicion un waypoint
+    -Edicion de track sobre el propio track
+    -Edicion de ruta sobre la propia ruta
 ### Falta por implementar:
-    -Hacer pruebas
+    -Cambiar posicion de un punto arrastrandolo sobre el mapa (para tracks y rutas)
     -Controlar errores
     
 ## Puedes ver el avance aquí
