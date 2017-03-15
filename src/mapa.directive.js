@@ -254,6 +254,8 @@ function Mymap(EntidadesService,MapasService) {
     map.addListener('zoom_changed', function() {
         if(EntidadesService.isTrack == true){
                 EntidadesService.actualizarMarkerActivo();
+        }else if(EntidadesService.isWaypoint == false){
+            EntidadesService.actualizarMarkerActivoR();
         }
             });
     EntidadesService.mapa = map;
@@ -753,7 +755,20 @@ function Mymap(EntidadesService,MapasService) {
 
                             marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                             marker.icon= EntidadesService.myIconRFin;
+                        if(map.getZoom()<12){
+                            EntidadesService.wpRta[rutaACortar]
+                                [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
+                        }
+                        else{
+                            if(rutaACortar == EntidadesService.rutaActiva){
+                                EntidadesService.wpRta[rutaACortar]
+                                    [EntidadesService.wpRta[rutaACortar].length-1].setVisible(true);
+                            }else{
+                                EntidadesService.wpRta[rutaACortar]
+                                    [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
+                            }
 
+                        }
                         EntidadesService.wpRta[rutaACortar].push(marker);
                     }
 
@@ -1030,7 +1045,14 @@ function Mymap(EntidadesService,MapasService) {
 
                       marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
                       marker.icon= EntidadesService.myIconRFin;
-
+                  if(map.getZoom()<12){
+                      EntidadesService.wpRta[EntidadesService.rutaActiva]
+                          [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(false);
+                  }
+                  else{
+                      EntidadesService.wpRta[EntidadesService.rutaActiva]
+                          [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(true);
+                  }
                   EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
               }
 

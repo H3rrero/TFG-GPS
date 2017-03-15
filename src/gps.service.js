@@ -1064,6 +1064,32 @@ service.getPoly = function () {
 
 
     }
+    //Actualiza los puntos del track activo
+    service.actualizarMarkerActivoR = function() {
+
+        for(var j in service.wpRta[service.rutaActiva]){
+            if( service.mapa.getZoom()>=12)
+                service.wpRta[service.rutaActiva][j].setVisible(true);
+            else if(j!=0 && j!= service.wpRta[service.rutaActiva].length-1)
+                service.wpRta[service.rutaActiva][j].setVisible(false);
+        }
+
+
+    }
+    //Actualiza los puntos de la ruta activo
+    service.actualizarMarkersR = function() {
+
+        for(var i in service.rutas){
+            for(var j in service.wpRta[i]){
+                if(i==service.rutaActiva && service.mapa.getZoom()>=12)
+                    service.wpRta[i][j].setVisible(true);
+                else
+                if(j!=0 && j!= service.wpRta[i].length-1)
+                    service.wpRta[i][j].setVisible(false);
+            }
+        }
+
+    }
 //Actualiza los puntos del track activo
     service.actualizarMarkers = function() {
 

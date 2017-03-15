@@ -779,6 +779,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedR = function () {
         list1.actualizarPuntosR();
+        EntidadesService.actualizarMarkersR();
         EntidadesService.puntoElegido = null;
     }
     list1.changedW = function () {
