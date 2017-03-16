@@ -20,8 +20,8 @@
     - Funcion cambiar posicion un waypoint
     -Edicion de track sobre el propio track
     -Edicion de ruta sobre la propia ruta
-### Falta por implementar:
     -Cambiar posicion de un punto arrastrandolo sobre el mapa (para tracks y rutas)
+### Falta por implementar:
     -Controlar errores
     
 ## Puedes ver el avance aquí
