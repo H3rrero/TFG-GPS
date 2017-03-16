@@ -313,6 +313,99 @@ service.importXMLWp = function () {
     service.modoInvertir = false;
   }
 
+    service.moverPuntoRuta = function(posicion,longitud,latitud,elevacion) {
+        var puntos =new Array();
+        service.colorPolyNF = service.getPoly().strokeColor;
+        //Eliminapos la polilinea actual
+        service.getPoly().setMap(null);
+        //ELiminamos los marcadores actuales
+        for (var item in service.wpRta[service.rutaActiva]) {
+            service.wpRta[service.rutaActiva][item].setMap(null);
+        }
+
+
+        //Marcamos la ruta como que no tiene polilinea
+        service.tienePolyR[service.rutaActiva]=false;
+        //Y tambien como que no tiene marcadores
+        service.wpRta[service.rutaActiva] = undefined;
+        for (var variable in service.rutas[service.rutaActiva].puntos) {
+            if(variable == posicion){
+                service.rutas[service.rutaActiva].puntos[variable].elevacion=elevacion;
+                service.rutas[service.rutaActiva].puntos[variable].longitud=longitud;
+                service.rutas[service.rutaActiva].puntos[variable].latitud=latitud;
+            }
+            puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
+        }
+
+        //Booramos los puntos actuales
+        for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+            service.rutas[service.rutaActiva].puntos.splice(i,1);
+            service.puntosTrackActivo.splice(i,1);
+        }
+        //Asignamos una nueva fecha
+        service.rutas[service.rutaActiva].fecha = new Date();
+        //Recorremos los puntos para volver a añadirlos
+        for (var i = 0; i <puntos.length; i++) {
+            //Guardamos la longitud y laltitud para pasarsela al mapa
+            service.longitudPInv = puntos[i].longitud;
+            service.latitudPInv = puntos[i].latitud;
+            service.elevacionP = puntos[i].elevacion;
+            //Activamos el modo invertir
+            service.modoInvertir = true;
+
+            //Simulamos un click el mapa para añadir el punto
+            google.maps.event.trigger(service.mapa, 'click');
+        }
+        //Desactivamos el modo invertir
+        service.modoInvertir = false;
+    }
+  service.moverPuntoTrack = function(posicion,longitud,latitud,elevacion){
+      var puntos =new Array();
+      service.colorPolyNF = service.getPoly().strokeColor;
+      //Eliminapos la polilinea actual
+      service.getPoly().setMap(null);
+      //ELiminamos los marcadores de inicion y fin actuales
+      service.markersT[service.trackActivo][0].setMap(null);
+      service.markersT[service.trackActivo][1].setMap(null);
+      //Marcamos al track como que no tiene polilinea
+      service.tienePoly[service.trackActivo]=false;
+      //Y tambien como que no tiene marcadores
+      //Borramos los marcadores actuales
+      for (var i in service.markersT[service.trackActivo]) {
+          service.markersT[service.trackActivo][i].setMap(null);
+      }
+      service.markersT[service.trackActivo] = undefined;
+      for (var variable in service.tracks[service.trackActivo].puntos) {
+          if(variable == posicion){
+              service.tracks[service.trackActivo].puntos[variable].elevacion=elevacion;
+              service.tracks[service.trackActivo].puntos[variable].longitud=longitud;
+              service.tracks[service.trackActivo].puntos[variable].latitud=latitud;
+          }
+          puntos.push(service.tracks[service.trackActivo].puntos[variable]);
+      }
+
+      //Booramos los puntos actuales
+      for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+          service.tracks[service.trackActivo].puntos.splice(i,1);
+          service.puntosTrackActivo.splice(i,1);
+      }
+      //Asignamos una nueva fecha
+      service.tracks[service.trackActivo].fecha = new Date();
+      for (var i =0; i < puntos.length; i++) {
+          //Guardamos la longitud y laltitud para pasarsela al mapa
+          service.longitudPInv = puntos[i].longitud;
+          service.latitudPInv = puntos[i].latitud;
+          service.elevacionP = puntos[i].elevacion;
+          //Activamos el modo invertir (usamos este modo ya que nos sirve
+          //perfectamente simplemente llamandolo sin invertir los puntos anteriormente)
+          service.modoInvertir = true;
+
+          //Simulamos un click el mapa para añadir el punto
+          google.maps.event.trigger(service.mapa, 'click');
+      }
+      //Desactivamos el modo invertir
+      service.modoInvertir = false;
+  }
   service.anadirPuntoTrack = function () {
     var puntos =new Array();
     service.colorPolyNF = service.getPoly().strokeColor;
@@ -324,7 +417,7 @@ service.importXMLWp = function () {
     //Marcamos al track como que no tiene polilinea
     service.tienePoly[service.trackActivo]=false;
     //Y tambien como que no tiene marcadores
-      //Booramos los marcadores actuales
+      //Borramos los marcadores actuales
       for (var i in service.markersT[service.trackActivo]) {
           service.markersT[service.trackActivo][i].setMap(null);
       }

@@ -613,6 +613,7 @@ function Mymap(EntidadesService,MapasService) {
                 position: evento,
                 title: "Inicio del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
                 icon: image,
+                  draggable:true,
                 map: map
               });
                 marker.addListener('click', function() {
@@ -624,6 +625,34 @@ function Mymap(EntidadesService,MapasService) {
                         }
                     }
                 });
+                marker.addListener('dragend', function (e) {
+                    console.log("estoy dentro");
+                    for (var item in EntidadesService.markersT[EntidadesService.trackActivo]) {
+                        if (EntidadesService.markersT[EntidadesService.trackActivo][item].title
+                            == marker.title) {
+
+                            var posicion = item;
+                            var longitud = e.latLng.lng().toFixed(6);
+                            var latitud= e.latLng.lat().toFixed(6);
+                            elevator.getElevationForLocations({
+                                'locations': [e.latLng]
+                            }, function(results, status) {
+                                if (status === google.maps.ElevationStatus.OK) {
+                                    if (results[0]) {
+                                        var elevacion = results[0].elevation.toFixed(2);
+                                        EntidadesService.moverPuntoTrack(posicion,longitud,latitud,elevacion);
+                                        scope.$apply();
+                                    } else {
+                                        console.log("no result found");
+                                    }
+                                } else {
+                                    console.log("elevation service failed");
+                                }
+                            });
+                        }
+                    }
+                    scope.$apply();
+                });
               if (EntidadesService.modoRecorte1 == true) {
                 //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
               if (EntidadesService.markersT[EntidadesService.tracks.length-2]===undefined) {
@@ -633,12 +662,12 @@ function Mymap(EntidadesService,MapasService) {
                 //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
               } else if(EntidadesService.markersT[EntidadesService.tracks.length-2].length==1){
                 marker.icon = "img/iconoFin.png";
-                marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-2].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
                   marker.icon = "img/iconoFin.png";
-                  marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                  marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-2]
                       [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setIcon(EntidadesService.myIcon);
                   if(map.getZoom()<12){
@@ -660,12 +689,12 @@ function Mymap(EntidadesService,MapasService) {
                 //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
               } else if(EntidadesService.markersT[EntidadesService.tracks.length-1].length==1){
                 marker.icon = "img/iconoFin.png";
-                marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-1].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
                   marker.icon = "img/iconoFin.png";
-                  marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                  marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-1]
                       [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setIcon(EntidadesService.myIcon);
                   if(map.getZoom()<12){
@@ -687,12 +716,12 @@ function Mymap(EntidadesService,MapasService) {
               //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
             } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
               marker.icon = "img/iconoFin.png";
-              marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+              marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
               EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
               //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
             }else{
                 marker.icon = "img/iconoFin.png";
-                marker.title = "Final del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
+                marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
                 if(map.getZoom()<12){
@@ -710,6 +739,7 @@ function Mymap(EntidadesService,MapasService) {
                     position: evento,
                     title: "",
                     icon: EntidadesService.myIconR,
+                    draggable:true,
                     map: map
                 });
 
@@ -729,6 +759,34 @@ function Mymap(EntidadesService,MapasService) {
                             controller.puntoSelec(i);
                         }
                     }
+                });
+                marker.addListener('dragend', function (e) {
+                    console.log("estoy dentro");
+                    for (var item in EntidadesService.wpRta[rutaACortar]) {
+                        if (EntidadesService.wpRta[rutaACortar][item].title
+                            == marker.title) {
+
+                            var posicion = item;
+                            var longitud = e.latLng.lng().toFixed(6);
+                            var latitud= e.latLng.lat().toFixed(6);
+                            elevator.getElevationForLocations({
+                                'locations': [e.latLng]
+                            }, function(results, status) {
+                                if (status === google.maps.ElevationStatus.OK) {
+                                    if (results[0]) {
+                                        var elevacion = results[0].elevation.toFixed(2);
+                                        EntidadesService.moverPuntoRuta(posicion,longitud,latitud,elevacion);
+                                        scope.$apply();
+                                    } else {
+                                        console.log("no result found");
+                                    }
+                                } else {
+                                    console.log("elevation service failed");
+                                }
+                            });
+                        }
+                    }
+                    scope.$apply();
                 });
                 if (EntidadesService.wpRta[rutaACortar]===undefined) {
                     var nombre = "Waypoint Nº"+0;
@@ -968,6 +1026,7 @@ function Mymap(EntidadesService,MapasService) {
               position: event.latLng,
               title: "Inicio del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
               icon: image,
+                draggable:true,
               map: map
             });
               marker.addListener('click', function() {
@@ -979,6 +1038,34 @@ function Mymap(EntidadesService,MapasService) {
                       }
                   }
               });
+              marker.addListener('dragend', function (e) {
+                  console.log("estoy dentro");
+                  for (var item in EntidadesService.markersT[EntidadesService.trackActivo]) {
+                      if (EntidadesService.markersT[EntidadesService.trackActivo][item].title
+                          == marker.title) {
+
+                          var posicion = item;
+                          var longitud = e.latLng.lng().toFixed(6);
+                          var latitud= e.latLng.lat().toFixed(6);
+                          elevator.getElevationForLocations({
+                              'locations': [e.latLng]
+                          }, function(results, status) {
+                              if (status === google.maps.ElevationStatus.OK) {
+                                  if (results[0]) {
+                                      var elevacion = results[0].elevation.toFixed(2);
+                                      EntidadesService.moverPuntoTrack(posicion,longitud,latitud,elevacion);
+                                      scope.$apply();
+                                  } else {
+                                      console.log("no result found");
+                                  }
+                              } else {
+                                  console.log("elevation service failed");
+                              }
+                          });
+                      }
+                  }
+                  scope.$apply();
+              });
             //Si no tiene ningun marcador todavia le añadimos el nuevo marcador
           if (EntidadesService.markersT[EntidadesService.trackActivo]===undefined) {
             var markers = [];
@@ -987,12 +1074,12 @@ function Mymap(EntidadesService,MapasService) {
             //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
           } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
             marker.icon = "img/iconoFin.png";
-            marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+            marker.title = "Latitud:"+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
           }else{
             marker.icon = "img/iconoFin.png";
-            marker.title = "Final del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
+            marker.title = "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
             if(map.getZoom()<12){
@@ -1010,6 +1097,7 @@ function Mymap(EntidadesService,MapasService) {
                   position: event.latLng,
                   title: "",
                   icon: EntidadesService.myIconR,
+                  draggable:true,
                   map: map
               });
               marker.addListener('click', function() {
@@ -1020,6 +1108,34 @@ function Mymap(EntidadesService,MapasService) {
                           controller.puntoSelec(i);
                       }
                   }
+              });
+              marker.addListener('dragend', function (e) {
+                  console.log("estoy dentro");
+                  for (var item in EntidadesService.wpRta[EntidadesService.rutaActiva]) {
+                      if (EntidadesService.wpRta[EntidadesService.rutaActiva][item].title
+                          == marker.title) {
+
+                          var posicion = item;
+                          var longitud = e.latLng.lng().toFixed(6);
+                          var latitud= e.latLng.lat().toFixed(6);
+                          elevator.getElevationForLocations({
+                              'locations': [e.latLng]
+                          }, function(results, status) {
+                              if (status === google.maps.ElevationStatus.OK) {
+                                  if (results[0]) {
+                                      var elevacion = results[0].elevation.toFixed(2);
+                                      EntidadesService.moverPuntoRuta(posicion,longitud,latitud,elevacion);
+                                      scope.$apply();
+                                  } else {
+                                      console.log("no result found");
+                                  }
+                              } else {
+                                  console.log("elevation service failed");
+                              }
+                          });
+                      }
+                  }
+                  scope.$apply();
               });
           if (EntidadesService.wpRta[EntidadesService.rutaActiva]===undefined) {
             var nombre = "Waypoint Nº"+0;
