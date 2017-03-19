@@ -1161,6 +1161,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlista = "ocultar lista";
         list1.mensajeVerlistaR = "ver lista";
         list1.mensajeVerlistaW = "ver lista";
+        EntidadesService.actualizarMarkersR();
         //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
         setTimeout(function () {
             for(var i in list1.tracks){
@@ -1169,7 +1170,6 @@ function PruebaController($scope,EntidadesService,$document) {
                 else{
                     $("#in"+i).prop("checked",true);
                     $("#in"+i).click();
-
                 }
             }
         },10);
@@ -1185,6 +1185,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlista = "ver lista";
         list1.mensajeVerlistaR = "ocultar lista";
         list1.mensajeVerlistaW = "ver lista";
+        EntidadesService.actualizarMarkers();
         //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
         setTimeout(function () {
             for(var i in list1.rutas){
@@ -1193,7 +1194,6 @@ function PruebaController($scope,EntidadesService,$document) {
                 else{
                     $("#inr"+i).prop("checked",true);
                     $("#inr"+i).click();
-
                 }
             }
         },10);
@@ -1229,6 +1229,8 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.mensajeVerlistaW = "ver lista";
             list1.mensajeVerlista = "ver lista";
             EntidadesService.isTrack = false;
+            EntidadesService.actualizarMarkers();
+            EntidadesService.actualizarMarkersR();
             EntidadesService.puntoElegido = null;
             EntidadesService.isWaypoint = false;
             if (list1.mostrarTabla == true)
@@ -1274,6 +1276,8 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.mensajeVerlistaR = "ver lista";
             list1.mensajeVerlistaW = "ver lista";
             EntidadesService.isTrack = true;
+            EntidadesService.actualizarMarkersR();
+            EntidadesService.actualizarMarkers();
             EntidadesService.puntoElegido = null;
             EntidadesService.isWaypoint = false;
             list1.modoCreacion = false;

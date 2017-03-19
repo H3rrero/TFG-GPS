@@ -121,7 +121,8 @@
 			<div id="grafica"   ng-controller="LineCtrl as line" ng-click="line.superponerGrafica()"  ng-hide="!list1.mostrarGrafica">
 
 
-				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}"  id="btn-download"  ng-hide="!list1.isChrome" download="my-file-name.png"><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">descargar grafica</button></a>
+				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}"  id="btn-download"  ng-hide="!list1.isChrome"
+					download="my-file-name.png"><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">descargar grafica</button></a>
 				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}"  id="btn-download"  ng-hide="!list1.isFirefox" download="my-file-name.png"><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">descargar grafica</button></a>
 				<a  ng-click="list1.dowImage()"   id="btn-download" ng-hide="!list1.esIE" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">descargar grafica</button></a>
 				<a  ng-click="list1.dowImage()" ng-href="{{list1.dataUrl}}" target="_blank"  id="btn-downloadSA" ng-hide="!list1.isSafari" ><button id="downBt" type="button"  class="bttn-gradient bttn-xs bttn-danger">descargar grafica</button></a>

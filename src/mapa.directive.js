@@ -761,7 +761,6 @@ function Mymap(EntidadesService,MapasService) {
                     }
                 });
                 marker.addListener('dragend', function (e) {
-                    console.log("estoy dentro");
                     for (var item in EntidadesService.wpRta[rutaACortar]) {
                         if (EntidadesService.wpRta[rutaACortar][item].title
                             == marker.title) {
@@ -793,8 +792,6 @@ function Mymap(EntidadesService,MapasService) {
 
                         marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                         marker.icon= EntidadesService.myIconRIni;
-                    console.log("no tengo marcadores");
-                    console.log(marker.icon.strokeColor);
                     var wpsruta = [];
                     wpsruta.push(marker);
                     EntidadesService.wpRta[rutaACortar] = wpsruta;
@@ -1039,7 +1036,6 @@ function Mymap(EntidadesService,MapasService) {
                   }
               });
               marker.addListener('dragend', function (e) {
-                  console.log("estoy dentro");
                   for (var item in EntidadesService.markersT[EntidadesService.trackActivo]) {
                       if (EntidadesService.markersT[EntidadesService.trackActivo][item].title
                           == marker.title) {
@@ -1110,7 +1106,6 @@ function Mymap(EntidadesService,MapasService) {
                   }
               });
               marker.addListener('dragend', function (e) {
-                  console.log("estoy dentro");
                   for (var item in EntidadesService.wpRta[EntidadesService.rutaActiva]) {
                       if (EntidadesService.wpRta[EntidadesService.rutaActiva][item].title
                           == marker.title) {

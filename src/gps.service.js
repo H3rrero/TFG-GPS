@@ -272,6 +272,7 @@ service.importXMLWp = function () {
 
   service.anadirPuntoRuta = function () {
     var puntos =new Array();
+    service.puntosTrackActivo = service.rutas[service.rutaActiva].puntos;
     service.colorPolyNF = service.getPoly().strokeColor;
     //Eliminapos la polilinea actual
     service.getPoly().setMap(null);
@@ -408,6 +409,7 @@ service.importXMLWp = function () {
   }
   service.anadirPuntoTrack = function () {
     var puntos =new Array();
+    service.puntosTrackActivo = service.tracks[service.trackActivo].puntos;
     service.colorPolyNF = service.getPoly().strokeColor;
     //Eliminapos la polilinea actual
     service.getPoly().setMap(null);
@@ -454,6 +456,7 @@ service.importXMLWp = function () {
   //Metodo que elimina un punto de una ruta
   service.eliminarPuntoRuta = function () {
     var puntos =new Array();
+    service.puntosTrackActivo = service.rutas[service.rutaActiva].puntos;
     //Guardamos el color de la ruta
     service.colorPolyNF = service.getPoly().strokeColor;
     //Eliminapos la polilinea actual
@@ -498,6 +501,7 @@ service.importXMLWp = function () {
 
  service.eliminarPuntoTrack = function () {
    var puntos =new Array();
+   service.puntosTrackActivo = service.tracks[service.trackActivo].puntos;
    //Guardamos el color de la polilinea
    service.colorPolyNF = service.getPoly().strokeColor;
    //Eliminapos la polilinea actual
@@ -704,6 +708,8 @@ service.importXMLWp = function () {
       google.maps.event.trigger(service.mapa, 'click');
     }else{
       //Guardamos los datos del punto
+        console.log(service.rutas[service.rutaActiva]);
+        console.log(index);
       service.latitudSelec = service.rutas[service.rutaActiva].puntos[index].latitud;
       service.longitudSelec = service.rutas[service.rutaActiva].puntos[index].longitud;
       //Simulamos un click el mapa para añadir el marcado del punto elegido
@@ -1147,7 +1153,6 @@ service.getPoly = function () {
 //Actualiza los puntos del track activo
     service.actualizarMarkerActivo = function() {
 
-            console.log(service.mapa.getZoom());
         for(var j in service.markersT[service.trackActivo]){
             if( service.mapa.getZoom()>=12)
                 service.markersT[service.trackActivo][j].setVisible(true);
@@ -1171,10 +1176,9 @@ service.getPoly = function () {
     }
     //Actualiza los puntos de la ruta activo
     service.actualizarMarkersR = function() {
-
         for(var i in service.rutas){
             for(var j in service.wpRta[i]){
-                if(i==service.rutaActiva && service.mapa.getZoom()>=12)
+                if(i==service.rutaActiva && service.mapa.getZoom()>=12 && service.isTrack==false)
                     service.wpRta[i][j].setVisible(true);
                 else
                 if(j!=0 && j!= service.wpRta[i].length-1)
@@ -1185,10 +1189,9 @@ service.getPoly = function () {
     }
 //Actualiza los puntos del track activo
     service.actualizarMarkers = function() {
-
         for(var i in service.tracks){
           for(var j in service.markersT[i]){
-            if(i==service.trackActivo && service.mapa.getZoom()>=12)
+            if(i==service.trackActivo && service.mapa.getZoom()>=12 && service.isTrack==true)
               service.markersT[i][j].setVisible(true);
             else
               if(j!=0 && j!= service.markersT[i].length-1)
