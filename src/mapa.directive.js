@@ -5,12 +5,12 @@ angular.module('GPS')
 .directive('myMap', Mymap);
 
 function Mymap(EntidadesService,MapasService) {
-
     // directive link function
     var link = function(scope, element, attrs,controller) {
         var map;
         var poly;
         var elevator;
+        var tile =0;
         function CoordMapType(tileSize) {
   this.tileSize = tileSize;
 }
@@ -18,29 +18,82 @@ function Mymap(EntidadesService,MapasService) {
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 
-      var div = ownerDocument.createElement('div');
-      if(EntidadesService.coords == false)
-       div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;visibility: visible !important;">'+coord+'</p>';
-      else
-          div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;visibility: hidden !important;">'+coord+'</p>';
-        div.style.color ='#FFFFFF';
-      div.style.width = this.tileSize.width + 'px';
-      div.style.height = this.tileSize.height + 'px';
-      div.style.fontSize = '10px';
-      div.style.borderStyle = 'solid';
-      div.style.borderWidth = '1px';
-      div.style.borderColor = '#AAAAAA';
-      div.id="divTile";
 
-      for (var i in div.childNodes)
-      {
-          if(div.childNodes[i].nodeName=="P")
-              if(EntidadesService.coords == true)
-             div.childNodes[i].style.visibility= "hidden";
-            else
-                  div.childNodes[i].style.visibility= "visible";
-      }
-      return div;
+        if (zoom == 10) {
+            this.tileSize.width = 39;
+            this.tileSize.height = 39;
+        }
+        if (zoom == 11) {
+            this.tileSize.width = 31;
+            this.tileSize.height = 31;
+        }
+        if (zoom == 12) {
+            this.tileSize.width = 64;
+            this.tileSize.height = 64;
+        }
+        if (zoom == 13) {
+            this.tileSize.width = 64;
+            this.tileSize.height = 64;
+        }
+        if (zoom == 14) {
+            this.tileSize.width = 64;
+            this.tileSize.height = 64;
+        }
+        if (zoom == 15) {
+            this.tileSize.width = 51;
+            this.tileSize.height = 51;
+        }
+        if (zoom == 16) {
+            this.tileSize.width = 51;
+            this.tileSize.height = 51;
+        }
+        if (zoom == 17) {
+            this.tileSize.width = 51;
+            this.tileSize.height = 51;
+        }
+        if (zoom == 18) {
+            this.tileSize.width = 40;
+            this.tileSize.height = 40;
+        }
+        if (zoom == 19) {
+            this.tileSize.width = 40;
+            this.tileSize.height = 40;
+        }
+        if (zoom == 20) {
+            this.tileSize.width = 40;
+            this.tileSize.height = 40;
+        }
+        if (zoom == 21) {
+            this.tileSize.width = 30;
+            this.tileSize.height = 30;
+        }
+        if (zoom == 22) {
+            this.tileSize.width = 66;
+            this.tileSize.height = 66;
+        }
+
+
+        var div = ownerDocument.createElement('div');
+        if(zoom>=8) {
+        div.style.color = '#FFFFFF';
+        div.style.width = this.tileSize.width + 'px';
+        div.style.height = this.tileSize.height + 'px';
+        div.style.fontSize = '10px';
+        div.style.borderStyle = 'solid';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = '#AAAAAA';
+        div.id = "divTile";
+
+        for (var i in div.childNodes) {
+            if (div.childNodes[i].nodeName == "P")
+                if (EntidadesService.coords == true)
+                    div.childNodes[i].style.visibility = "hidden";
+                else
+                    div.childNodes[i].style.visibility = "visible";
+        }
+    }
+            return div;
+
     };
 
 
@@ -56,7 +109,7 @@ function Mymap(EntidadesService,MapasService) {
             //opciones de inicialización
             var mapOptions = {
                 center: {lat: 40.41, lng: -3.70},
-                zoom: 8,
+                zoom: 10,
                 disableDefaultUI: true,
                 mapTypeControl: true,
                 scaleControl: true,
