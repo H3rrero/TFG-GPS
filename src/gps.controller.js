@@ -37,6 +37,7 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.apiMaps = true;
     list1.conection = false;
     list1.coordV ="ocultar Coor";
+    list1.tablaT = false;
     list1.modoEdicionF = function () {
         list1.noError = false;
         list1.error = false;
@@ -1106,6 +1107,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     //Mostar u ocultar la tabla
     list1.verTablaT = function () {
+        list1.tablaT = true;
         if (list1.mostrarTabla == true) {
             list1.mostrarTabla = false;
             list1.mensajeVerTabla = "ver tabla"
@@ -1123,7 +1125,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     //Mostar u ocultar la tabla
     list1.verTablaR = function () {
-
+        list1.tablaT=false;
         if (list1.mostrarTabla == true) {
             list1.mostrarTabla = false;
             list1.mensajeVerTabla = "ver tabla"

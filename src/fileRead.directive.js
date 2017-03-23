@@ -38,7 +38,7 @@ function ImportFunction(EntidadesService) {
              }
              else {
                EntidadesService.crear(1);
-               EntidadesService.importXML();
+               EntidadesService.importXMLRuta();
                EntidadesService.centrarRuta();
              }
              };

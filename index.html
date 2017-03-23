@@ -81,7 +81,7 @@
 				<div id="puntos">
 
 
-				<table  class="table table-hover table-condensed">
+				<table class="table table-hover table-condensed">
 					<tbody>
 						<thead >
 
@@ -90,11 +90,11 @@
 					<th>Latitud</th>
 					<th>Longitud</th>
 					<th>Elevación</th>
-					<th>Fecha</th>
-					<th>Hora</th>
+					<th ng-hide="!list1.tablaT">Fecha</th>
+					<th ng-hide="!list1.tablaT">Hora</th>
 					<th>Desnivel</th>
 					<th>Distancia</th>
-					<th>Velocidad</th>
+					<th ng-hide="!list1.tablaT">Velocidad</th>
 				</tr>
 				</thead>
 				<tr ng-repeat="item in list1.puntosTrackActivo" ng-click="list1.puntoSelec($index);">
@@ -102,11 +102,11 @@
 					<td>{{item["latitud"]}}</td>
 					<td>{{item["longitud"]}}</td>
 					<td>{{item["elevacion"]}}m</td>
-					<td>{{item["fecha"]}}</td>
-					<td>{{item["hora"]}}</td>
+					<td ng-hide="!list1.tablaT">{{item["fecha"]}}</td>
+					<td ng-hide="!list1.tablaT">{{item["hora"]}}</td>
 					<td>{{item["desnivel"]}}m</td>
 					<td>{{item["distancia"]}}m</td>
-					<td>{{item["velocidad"]}}km/h</td>
+					<td ng-hide="!list1.tablaT">{{item["velocidad"]}}km/h</td>
 
 				</tr>
 

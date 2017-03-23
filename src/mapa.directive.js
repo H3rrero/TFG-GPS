@@ -723,7 +723,7 @@ function Mymap(EntidadesService,MapasService) {
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-2]
                       [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setIcon(EntidadesService.myIcon);
-                  if(map.getZoom()<12){
+                  if(map.getZoom()<14){
                       EntidadesService.markersT[EntidadesService.tracks.length-2]
                           [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(false);
                   }
@@ -750,7 +750,7 @@ function Mymap(EntidadesService,MapasService) {
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-1]
                       [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setIcon(EntidadesService.myIcon);
-                  if(map.getZoom()<12){
+                  if(map.getZoom()<14){
                       EntidadesService.markersT[EntidadesService.tracks.length-1]
                           [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(false);
                   }
@@ -777,7 +777,7 @@ function Mymap(EntidadesService,MapasService) {
                 marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
-                if(map.getZoom()<12){
+                if(map.getZoom()<14){
                     EntidadesService.markersT[EntidadesService.trackActivo]
                         [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
                 }
@@ -863,7 +863,7 @@ function Mymap(EntidadesService,MapasService) {
 
                             marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                             marker.icon= EntidadesService.myIconRFin;
-                        if(map.getZoom()<12){
+                        if(map.getZoom()<14){
                             EntidadesService.wpRta[rutaACortar]
                                 [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
                         }
@@ -1131,7 +1131,7 @@ function Mymap(EntidadesService,MapasService) {
             marker.title = "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
-            if(map.getZoom()<12){
+            if(map.getZoom()<14){
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
             }
@@ -1209,7 +1209,7 @@ function Mymap(EntidadesService,MapasService) {
 
                       marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
                       marker.icon= EntidadesService.myIconRFin;
-                  if(map.getZoom()<12){
+                  if(map.getZoom()<14){
                       EntidadesService.wpRta[EntidadesService.rutaActiva]
                           [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(false);
                   }

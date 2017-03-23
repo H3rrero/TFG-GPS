@@ -194,6 +194,27 @@ service.importXMLWp = function () {
     service.modoInvertir = false;
     service.modoRecorte2 = false;
   }
+    service.importXMLRuta = function () {
+        var puntos=service.xmlImportado.getElementsByTagName("rtept");
+        //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
+        service.modoInvertir = true;
+        //Recorremos los puntos del primer track
+        for (var item in puntos) {
+            if(item <puntos.length){
+                //Guardamos los datos de los puntos
+                service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
+                service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
+                service.elevacionP = parseFloat(puntos[item].firstElementChild.textContent);
+                //EL modo segundo recorte nos viene que ni pintado para esta situación
+                service.modoRecorte2=true;
+
+                //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
+                google.maps.event.trigger(service.mapa, 'click');
+            }}
+        //Desactivamos los modos activados durante este metodo
+        service.modoInvertir = false;
+        service.modoRecorte2 = false;
+    }
 
   //Funcion que genera y devuelve un gpx con los waypoints
   service.getWaypoints = function () {
@@ -244,28 +265,20 @@ service.importXMLWp = function () {
 
   //Si es una ruta
   }else {
-    //Se añaden los puntos de la ruta a gpx como waypoints
-    for (var item in service.rutas[service.rutaActiva].puntos) {
-        xml = xml + "\t<wpt lat="+'"'+service.rutas[service.rutaActiva].puntos[item].latitud+'"'
-        +" lon="+'"'+service.rutas[service.rutaActiva].puntos[item].longitud+'"'+">\n"+"\t\t<ele>"+
-        service.rutas[service.rutaActiva].puntos[item].elevacion+"</ele>\n"+"\t\t<name>"+
-        "Waypoint de ruta Nº"+item+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
-        +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</wpt>\n";
-    }
 
 
-        xml = xml+"\t<trk>\n"+"\t\t<name>"+service.rutas[service.rutaActiva].nombre+"</name>\n"+
-              "\t\t<trkseg>\n";
+
+        xml = xml+"\t<rte>\n"+"\t\t<name>"+service.rutas[service.rutaActiva].nombre+"</name>\n";
         //Se añade la ruta al gpx
+        //Se añaden los puntos de la ruta a gpx como waypoints
         for (var item in service.rutas[service.rutaActiva].puntos) {
-        xml = xml+"\t\t\t<trkpt lat="+'"'+service.rutas[service.rutaActiva].puntos[item].latitud+'"'+" lon="+'"'+
-              service.rutas[service.rutaActiva].puntos[item].longitud+'"'+">\n"+
-              "\t\t\t\t<ele>"+service.rutas[service.rutaActiva].puntos[item].elevacion+"</ele>\n"+
-              "\t\t\t\t<time>"+service.rutas[service.rutaActiva].puntos[item].fecha+"T"+
-              service.rutas[service.rutaActiva].puntos[item].hora+"</time>\n"+
-              "\t\t\t</trkpt>\n";
+            xml = xml + "\t<rtept lat="+'"'+service.rutas[service.rutaActiva].puntos[item].latitud+'"'
+                +" lon="+'"'+service.rutas[service.rutaActiva].puntos[item].longitud+'"'+">\n"+"\t\t<ele>"+
+                service.rutas[service.rutaActiva].puntos[item].elevacion+"</ele>\n"+"\t\t<name>"+
+                "Waypoint de ruta Nº"+item+"</name>\n"+"\t\t<desc>"+"prueba"+"</desc>\n"
+                +"\t\t<sym>"+"generic"+"</sym>\n"+"\t\t<type>"+"Generic"+"</type>\n"+"\t</rtept>\n";
         }
-        xml = xml+"\t\t</trkseg>\n"+"\t</trk>\n"+"</gpx>";
+        xml = xml+"\t</rte>\n"+"</gpx>";
   }
     return xml;
   }
@@ -1154,7 +1167,7 @@ service.getPoly = function () {
     service.actualizarMarkerActivo = function() {
 
         for(var j in service.markersT[service.trackActivo]){
-            if( service.mapa.getZoom()>=12)
+            if( service.mapa.getZoom()>=14)
                 service.markersT[service.trackActivo][j].setVisible(true);
             else if(j!=0 && j!= service.markersT[service.trackActivo].length-1)
                 service.markersT[service.trackActivo][j].setVisible(false);
@@ -1166,7 +1179,7 @@ service.getPoly = function () {
     service.actualizarMarkerActivoR = function() {
 
         for(var j in service.wpRta[service.rutaActiva]){
-            if( service.mapa.getZoom()>=12)
+            if( service.mapa.getZoom()>=14)
                 service.wpRta[service.rutaActiva][j].setVisible(true);
             else if(j!=0 && j!= service.wpRta[service.rutaActiva].length-1)
                 service.wpRta[service.rutaActiva][j].setVisible(false);
@@ -1178,7 +1191,7 @@ service.getPoly = function () {
     service.actualizarMarkersR = function() {
         for(var i in service.rutas){
             for(var j in service.wpRta[i]){
-                if(i==service.rutaActiva && service.mapa.getZoom()>=12 && service.isTrack==false)
+                if(i==service.rutaActiva && service.mapa.getZoom()>=14 && service.isTrack==false)
                     service.wpRta[i][j].setVisible(true);
                 else
                 if(j!=0 && j!= service.wpRta[i].length-1)
@@ -1191,7 +1204,7 @@ service.getPoly = function () {
     service.actualizarMarkers = function() {
         for(var i in service.tracks){
           for(var j in service.markersT[i]){
-            if(i==service.trackActivo && service.mapa.getZoom()>=12 && service.isTrack==true)
+            if(i==service.trackActivo && service.mapa.getZoom()>=14 && service.isTrack==true)
               service.markersT[i][j].setVisible(true);
             else
               if(j!=0 && j!= service.markersT[i].length-1)
