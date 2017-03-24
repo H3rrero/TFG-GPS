@@ -23,6 +23,7 @@
     <link href="css/main.css" rel="stylesheet" type="text/css">
 		<link href="css/unite.css" rel="stylesheet" type="text/css">
 	  <link href="css/gradient.css" rel="stylesheet" type="text/css">
+		<link href="css/jelly.css" rel="stylesheet" type="text/css">
 		<link href="css/material-circle.css" rel="stylesheet" type="text/css">
 
 
@@ -148,14 +149,16 @@
 		<li ng-repeat="item in list1.waypoints"><input id="inw{{$index}}" type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
 		</ul>
 			</div>
+
 			<div id="on/Off">
-				<button class="btMediOn" ng-click="list1.modoEdicionF()" data-toggle="modal" data-target="#modalMS" ng-if="list1.modoEdicion">On</button>
-				<button class="btMedi" ng-click="list1.modoEdicionF()" data-toggle="modal" data-target="#modalMS" ng-if="!list1.modoEdicion">Off</button>
+				<button id="btZoom" title="Medida de los cuadros de la rejilla" type="button" class="bttn-jelly bttn-xs bttn-default" ng-click="list1.zoomBt()" >{{list1.escala}}</button>
+				<button class="btMediOn" title="Si pulsas desactivaras el modo edición" ng-click="list1.modoEdicionF()" data-toggle="modal" data-target="#modalMS" ng-if="list1.modoEdicion">On</button>
+				<button class="btMedi" title="Si pulsas activaras el modo edición" ng-click="list1.modoEdicionF()" data-toggle="modal" data-target="#modalMS" ng-if="!list1.modoEdicion">Off</button>
 			</div>
 			<div id="botones">
-				<button id="boton-t"type="button" ng-click="list1.listarFunciones();" class="bttn-material-circle bttn-xs bttn-primary">T</button>
-				<button id="boton-r"type="button" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-royal">R</button>
-				<button id="boton-w"type="button" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-success">W</button>
+				<button id="boton-t"type="button" title="Edicion de tracks" ng-click="list1.listarFunciones();" class="bttn-material-circle bttn-xs bttn-primary">T</button>
+				<button id="boton-r"type="button" title="Edicion de rutas" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-royal">R</button>
+				<button id="boton-w"type="button" title="Edicion de waypoints" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-success">W</button>
 			</div>
       <div id="funciones" >
 				<table id="tableS"  class="sample-show-hide" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesW">

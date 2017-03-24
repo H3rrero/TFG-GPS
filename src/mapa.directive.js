@@ -19,6 +19,7 @@ function Mymap(EntidadesService,MapasService) {
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 
 
+
         if (zoom == 10) {
             this.tileSize.width = 39;
             this.tileSize.height = 39;
@@ -26,50 +27,62 @@ function Mymap(EntidadesService,MapasService) {
         if (zoom == 11) {
             this.tileSize.width = 31;
             this.tileSize.height = 31;
+
         }
         if (zoom == 12) {
             this.tileSize.width = 64;
             this.tileSize.height = 64;
+
         }
         if (zoom == 13) {
             this.tileSize.width = 64;
             this.tileSize.height = 64;
+
         }
         if (zoom == 14) {
             this.tileSize.width = 64;
             this.tileSize.height = 64;
+
         }
         if (zoom == 15) {
             this.tileSize.width = 51;
             this.tileSize.height = 51;
+
         }
         if (zoom == 16) {
             this.tileSize.width = 51;
             this.tileSize.height = 51;
+
         }
         if (zoom == 17) {
             this.tileSize.width = 51;
             this.tileSize.height = 51;
+
         }
         if (zoom == 18) {
             this.tileSize.width = 40;
             this.tileSize.height = 40;
+
         }
         if (zoom == 19) {
             this.tileSize.width = 40;
             this.tileSize.height = 40;
+
         }
         if (zoom == 20) {
             this.tileSize.width = 40;
             this.tileSize.height = 40;
+
         }
         if (zoom == 21) {
             this.tileSize.width = 30;
             this.tileSize.height = 30;
+
         }
         if (zoom == 22) {
             this.tileSize.width = 66;
             this.tileSize.height = 66;
+
         }
 
 
@@ -92,6 +105,7 @@ function Mymap(EntidadesService,MapasService) {
                     div.childNodes[i].style.visibility = "visible";
         }
     }
+            scope.$apply();
             return div;
 
     };
@@ -209,7 +223,6 @@ function Mymap(EntidadesService,MapasService) {
             }
           );
 
-
             var onOff = /** @type {!HTMLDivElement} */(
                 document.getElementById('on/Off'));
           //botones de seleccion de entidad (T,R,W)
@@ -305,6 +318,7 @@ function Mymap(EntidadesService,MapasService) {
     // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
+        $('#btZoom').click();
         if(EntidadesService.isTrack == true){
                 EntidadesService.actualizarMarkerActivo();
         }else if(EntidadesService.isWaypoint == false){

@@ -38,6 +38,7 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.conection = false;
     list1.coordV ="ocultar Coor";
     list1.tablaT = false;
+    list1.escala = "5km";
     list1.modoEdicionF = function () {
         list1.noError = false;
         list1.error = false;
@@ -77,7 +78,53 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.importXML();
         }
     }
-
+    list1.zoomBt = function () {
+        if(EntidadesService.mapa.getZoom()== 8){
+            list1.escala = "20km";
+        }
+        if(EntidadesService.mapa.getZoom()== 9){
+            list1.escala = "10km";
+        }
+        if (EntidadesService.mapa.getZoom() == 10) {
+            list1.escala = "5km";
+        }
+        if (EntidadesService.mapa.getZoom() == 11) {
+            list1.escala = "2km";
+        }
+        if (EntidadesService.mapa.getZoom() == 12) {
+            list1.escala = "2km";
+        }
+        if (EntidadesService.mapa.getZoom() == 13) {
+            list1.escala = "1km";
+        }
+        if (EntidadesService.mapa.getZoom() == 14) {
+            list1.escala = "0.5km";
+        }
+        if (EntidadesService.mapa.getZoom() == 15) {
+            list1.escala = "0.2km";
+        }
+        if (EntidadesService.mapa.getZoom() == 16) {
+            list1.escala = "0.1km";
+        }
+        if (EntidadesService.mapa.getZoom() == 17) {
+            list1.escala = "50m";
+        }
+        if (EntidadesService.mapa.getZoom() == 18) {
+            list1.escala = "20m";
+        }
+        if (EntidadesService.mapa.getZoom() == 19) {
+            list1.escala = "10m";
+        }
+        if (EntidadesService.mapa.getZoom() == 20) {
+            list1.escala = "5m";
+        }
+        if (EntidadesService.mapa.getZoom() == 21) {
+            list1.escala = "2m";
+        }
+        if (EntidadesService.mapa.getZoom() == 22) {
+            list1.escala = "2m";
+        }
+    }
     list1.activarImport = function () {
         list1.error = false;
         if (EntidadesService.xmlImportado == undefined) {
