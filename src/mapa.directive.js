@@ -18,74 +18,70 @@ function Mymap(EntidadesService,MapasService) {
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 
-
-
-        if (zoom == 10) {
-            this.tileSize.width = 39;
-            this.tileSize.height = 39;
-        }
-        if (zoom == 11) {
-            this.tileSize.width = 31;
-            this.tileSize.height = 31;
-
-        }
-        if (zoom == 12) {
-            this.tileSize.width = 64;
-            this.tileSize.height = 64;
-
-        }
-        if (zoom == 13) {
-            this.tileSize.width = 64;
-            this.tileSize.height = 64;
-
-        }
-        if (zoom == 14) {
-            this.tileSize.width = 64;
-            this.tileSize.height = 64;
-
-        }
-        if (zoom == 15) {
-            this.tileSize.width = 51;
-            this.tileSize.height = 51;
-
-        }
-        if (zoom == 16) {
-            this.tileSize.width = 51;
-            this.tileSize.height = 51;
-
-        }
-        if (zoom == 17) {
-            this.tileSize.width = 51;
-            this.tileSize.height = 51;
-
-        }
-        if (zoom == 18) {
-            this.tileSize.width = 40;
-            this.tileSize.height = 40;
-
-        }
-        if (zoom == 19) {
-            this.tileSize.width = 40;
-            this.tileSize.height = 40;
-
-        }
-        if (zoom == 20) {
-            this.tileSize.width = 40;
-            this.tileSize.height = 40;
-
-        }
-        if (zoom == 21) {
-            this.tileSize.width = 30;
-            this.tileSize.height = 30;
-
-        }
-        if (zoom == 22) {
-            this.tileSize.width = 66;
-            this.tileSize.height = 66;
+        switch(zoom) {
+            case 8:
+                this.tileSize.width = 39;
+                this.tileSize.height = 39;
+                break;
+            case 9:
+                this.tileSize.width = 39;
+                this.tileSize.height = 39;
+                break;
+            case 10:
+                this.tileSize.width = 39;
+                this.tileSize.height = 39;
+                break;
+            case 11:
+                this.tileSize.width = 31;
+                this.tileSize.height = 31;
+                break;
+            case 12:
+                this.tileSize.width = 64;
+                this.tileSize.height = 64;
+                break;
+            case 13:
+                this.tileSize.width = 64;
+                this.tileSize.height = 64;
+                break;
+            case 14:
+                this.tileSize.width = 64;
+                this.tileSize.height = 64;
+                break;
+            case 15:
+                this.tileSize.width = 51;
+                this.tileSize.height = 51;
+                break;
+            case 16:
+                this.tileSize.width = 51;
+                this.tileSize.height = 51;
+                break;
+            case 17:
+                this.tileSize.width = 51;
+                this.tileSize.height = 51;
+                break;
+            case 18:
+                this.tileSize.width = 40;
+                this.tileSize.height = 40;
+                break;
+            case 19:
+                this.tileSize.width = 40;
+                this.tileSize.height = 40;
+                break;
+            case 20:
+                this.tileSize.width = 40;
+                this.tileSize.height = 40;
+                break;
+            case 21:
+                this.tileSize.width = 30;
+                this.tileSize.height = 30;
+                break;
+            case 22:
+                this.tileSize.width = 66;
+                this.tileSize.height = 66;
+                break;
 
         }
-
-
+        
         var div = ownerDocument.createElement('div');
         if(zoom>=8) {
         div.style.color = '#FFFFFF';

@@ -79,50 +79,53 @@ function PruebaController($scope,EntidadesService,$document) {
         }
     }
     list1.zoomBt = function () {
-        if(EntidadesService.mapa.getZoom()== 8){
-            list1.escala = "20km";
-        }
-        if(EntidadesService.mapa.getZoom()== 9){
-            list1.escala = "10km";
-        }
-        if (EntidadesService.mapa.getZoom() == 10) {
-            list1.escala = "5km";
-        }
-        if (EntidadesService.mapa.getZoom() == 11) {
-            list1.escala = "2km";
-        }
-        if (EntidadesService.mapa.getZoom() == 12) {
-            list1.escala = "2km";
-        }
-        if (EntidadesService.mapa.getZoom() == 13) {
-            list1.escala = "1km";
-        }
-        if (EntidadesService.mapa.getZoom() == 14) {
-            list1.escala = "0.5km";
-        }
-        if (EntidadesService.mapa.getZoom() == 15) {
-            list1.escala = "0.2km";
-        }
-        if (EntidadesService.mapa.getZoom() == 16) {
-            list1.escala = "0.1km";
-        }
-        if (EntidadesService.mapa.getZoom() == 17) {
-            list1.escala = "50m";
-        }
-        if (EntidadesService.mapa.getZoom() == 18) {
-            list1.escala = "20m";
-        }
-        if (EntidadesService.mapa.getZoom() == 19) {
-            list1.escala = "10m";
-        }
-        if (EntidadesService.mapa.getZoom() == 20) {
-            list1.escala = "5m";
-        }
-        if (EntidadesService.mapa.getZoom() == 21) {
-            list1.escala = "2m";
-        }
-        if (EntidadesService.mapa.getZoom() == 22) {
-            list1.escala = "2m";
+        switch(EntidadesService.mapa.getZoom()) {
+            case 8:
+                list1.escala = "20km";
+                break;
+            case 9:
+                list1.escala = "10km";
+                break;
+            case 10:
+                list1.escala = "5km";
+                break;
+            case 11:
+                list1.escala = "2km";
+                break;
+            case 12:
+                list1.escala = "2km";
+                break;
+            case 13:
+                list1.escala = "1km";
+                break;
+            case 14:
+                list1.escala = "0.5km";
+                break;
+            case 15:
+                list1.escala = "0.2km";
+                break;
+            case 16:
+                list1.escala = "0.1km";
+                break;
+            case 17:
+                list1.escala = "50m";
+                break;
+            case 18:
+                list1.escala = "20m";
+                break;
+            case 19:
+                list1.escala = "10m";
+                break;
+            case 20:
+                list1.escala = "5m";
+                break;
+            case 21:
+                list1.escala = "2m";
+                break;
+            case 22:
+                list1.escala = "2m";
+                break;
+
         }
     }
     list1.activarImport = function () {
