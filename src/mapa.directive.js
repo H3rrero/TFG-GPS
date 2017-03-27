@@ -19,71 +19,57 @@ function Mymap(EntidadesService,MapasService) {
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 
         switch(zoom) {
-            case 8:
-                this.tileSize.width = 39;
-                this.tileSize.height = 39;
-                break;
-            case 9:
-                this.tileSize.width = 39;
-                this.tileSize.height = 39;
-                break;
-            case 10:
-                this.tileSize.width = 39;
-                this.tileSize.height = 39;
-                break;
-            case 11:
-                this.tileSize.width = 31;
-                this.tileSize.height = 31;
-                break;
             case 12:
-                this.tileSize.width = 64;
-                this.tileSize.height = 64;
+                this.tileSize.width = 32;
+                this.tileSize.height = 32;
                 break;
             case 13:
                 this.tileSize.width = 64;
                 this.tileSize.height = 64;
                 break;
             case 14:
-                this.tileSize.width = 64;
-                this.tileSize.height = 64;
+                this.tileSize.width = 128;
+                this.tileSize.height = 128;
                 break;
             case 15:
-                this.tileSize.width = 51;
-                this.tileSize.height = 51;
+                this.tileSize.width = 255;
+                this.tileSize.height = 255;
                 break;
             case 16:
-                this.tileSize.width = 51;
-                this.tileSize.height = 51;
+                this.tileSize.width = 510;
+                this.tileSize.height = 510;
                 break;
             case 17:
-                this.tileSize.width = 51;
-                this.tileSize.height = 51;
+                this.tileSize.width = 1020;
+                this.tileSize.height = 1020;
                 break;
             case 18:
-                this.tileSize.width = 40;
-                this.tileSize.height = 40;
+                this.tileSize.width = 2000;
+                this.tileSize.height = 2000;
                 break;
             case 19:
-                this.tileSize.width = 40;
-                this.tileSize.height = 40;
+                this.tileSize.width = 4000;
+                this.tileSize.height = 4000;
                 break;
             case 20:
-                this.tileSize.width = 40;
-                this.tileSize.height = 40;
+                this.tileSize.width = 8000;
+                this.tileSize.height = 8000;
                 break;
             case 21:
-                this.tileSize.width = 30;
-                this.tileSize.height = 30;
+                this.tileSize.width = 15000;
+                this.tileSize.height = 15000;
                 break;
             case 22:
-                this.tileSize.width = 66;
-                this.tileSize.height = 66;
+                this.tileSize.width = 33000;
+                this.tileSize.height = 33000;
                 break;
 
         }
-        
+
         var div = ownerDocument.createElement('div');
-        if(zoom>=8) {
+        if(zoom>=12) {
+
+           // div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+coord+'</p>';
         div.style.color = '#FFFFFF';
         div.style.width = this.tileSize.width + 'px';
         div.style.height = this.tileSize.height + 'px';
@@ -92,13 +78,14 @@ function Mymap(EntidadesService,MapasService) {
         div.style.borderWidth = '1px';
         div.style.borderColor = '#AAAAAA';
         div.id = "divTile";
-
+        div.className="tile";
         for (var i in div.childNodes) {
+
             if (div.childNodes[i].nodeName == "P")
-                if (EntidadesService.coords == true)
-                    div.childNodes[i].style.visibility = "hidden";
-                else
+                if (EntidadesService.coords == false )
                     div.childNodes[i].style.visibility = "visible";
+                else
+                    div.childNodes[i].style.visibility = "hidden";
         }
     }
             scope.$apply();
@@ -119,7 +106,7 @@ function Mymap(EntidadesService,MapasService) {
             //opciones de inicialización
             var mapOptions = {
                 center: {lat: 40.41, lng: -3.70},
-                zoom: 10,
+                zoom: 12,
                 disableDefaultUI: true,
                 mapTypeControl: true,
                 scaleControl: true,
@@ -314,12 +301,12 @@ function Mymap(EntidadesService,MapasService) {
     // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
-        $('#btZoom').click();
         if(EntidadesService.isTrack == true){
                 EntidadesService.actualizarMarkerActivo();
         }else if(EntidadesService.isWaypoint == false){
             EntidadesService.actualizarMarkerActivoR();
         }
+
             });
     EntidadesService.mapa = map;
         }
@@ -733,7 +720,7 @@ function Mymap(EntidadesService,MapasService) {
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-2]
                       [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setIcon(EntidadesService.myIcon);
-                  if(map.getZoom()<14){
+                  if(map.getZoom()<16){
                       EntidadesService.markersT[EntidadesService.tracks.length-2]
                           [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(false);
                   }
@@ -760,7 +747,7 @@ function Mymap(EntidadesService,MapasService) {
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-1]
                       [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setIcon(EntidadesService.myIcon);
-                  if(map.getZoom()<14){
+                  if(map.getZoom()<16){
                       EntidadesService.markersT[EntidadesService.tracks.length-1]
                           [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(false);
                   }
@@ -787,7 +774,7 @@ function Mymap(EntidadesService,MapasService) {
                 marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
-                if(map.getZoom()<14){
+                if(map.getZoom()<16){
                     EntidadesService.markersT[EntidadesService.trackActivo]
                         [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
                 }
@@ -873,7 +860,7 @@ function Mymap(EntidadesService,MapasService) {
 
                             marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                             marker.icon= EntidadesService.myIconRFin;
-                        if(map.getZoom()<14){
+                        if(map.getZoom()<16){
                             EntidadesService.wpRta[rutaACortar]
                                 [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
                         }
@@ -1141,7 +1128,7 @@ function Mymap(EntidadesService,MapasService) {
             marker.title = "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
-            if(map.getZoom()<14){
+            if(map.getZoom()<16){
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
             }
@@ -1219,7 +1206,7 @@ function Mymap(EntidadesService,MapasService) {
 
                       marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
                       marker.icon= EntidadesService.myIconRFin;
-                  if(map.getZoom()<14){
+                  if(map.getZoom()<16){
                       EntidadesService.wpRta[EntidadesService.rutaActiva]
                           [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(false);
                   }

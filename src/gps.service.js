@@ -1167,7 +1167,7 @@ service.getPoly = function () {
     service.actualizarMarkerActivo = function() {
 
         for(var j in service.markersT[service.trackActivo]){
-            if( service.mapa.getZoom()>=14)
+            if( service.mapa.getZoom()>=16)
                 service.markersT[service.trackActivo][j].setVisible(true);
             else if(j!=0 && j!= service.markersT[service.trackActivo].length-1)
                 service.markersT[service.trackActivo][j].setVisible(false);
@@ -1179,7 +1179,7 @@ service.getPoly = function () {
     service.actualizarMarkerActivoR = function() {
 
         for(var j in service.wpRta[service.rutaActiva]){
-            if( service.mapa.getZoom()>=14)
+            if( service.mapa.getZoom()>=16)
                 service.wpRta[service.rutaActiva][j].setVisible(true);
             else if(j!=0 && j!= service.wpRta[service.rutaActiva].length-1)
                 service.wpRta[service.rutaActiva][j].setVisible(false);
@@ -1191,7 +1191,7 @@ service.getPoly = function () {
     service.actualizarMarkersR = function() {
         for(var i in service.rutas){
             for(var j in service.wpRta[i]){
-                if(i==service.rutaActiva && service.mapa.getZoom()>=14 && service.isTrack==false)
+                if(i==service.rutaActiva && service.mapa.getZoom()>=16 && service.isTrack==false)
                     service.wpRta[i][j].setVisible(true);
                 else
                 if(j!=0 && j!= service.wpRta[i].length-1)
@@ -1204,7 +1204,7 @@ service.getPoly = function () {
     service.actualizarMarkers = function() {
         for(var i in service.tracks){
           for(var j in service.markersT[i]){
-            if(i==service.trackActivo && service.mapa.getZoom()>=14 && service.isTrack==true)
+            if(i==service.trackActivo && service.mapa.getZoom()>=16 && service.isTrack==true)
               service.markersT[i][j].setVisible(true);
             else
               if(j!=0 && j!= service.markersT[i].length-1)

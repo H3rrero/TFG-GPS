@@ -78,56 +78,6 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.importXML();
         }
     }
-    list1.zoomBt = function () {
-        switch(EntidadesService.mapa.getZoom()) {
-            case 8:
-                list1.escala = "20km";
-                break;
-            case 9:
-                list1.escala = "10km";
-                break;
-            case 10:
-                list1.escala = "5km";
-                break;
-            case 11:
-                list1.escala = "2km";
-                break;
-            case 12:
-                list1.escala = "2km";
-                break;
-            case 13:
-                list1.escala = "1km";
-                break;
-            case 14:
-                list1.escala = "0.5km";
-                break;
-            case 15:
-                list1.escala = "0.2km";
-                break;
-            case 16:
-                list1.escala = "0.1km";
-                break;
-            case 17:
-                list1.escala = "50m";
-                break;
-            case 18:
-                list1.escala = "20m";
-                break;
-            case 19:
-                list1.escala = "10m";
-                break;
-            case 20:
-                list1.escala = "5m";
-                break;
-            case 21:
-                list1.escala = "2m";
-                break;
-            case 22:
-                list1.escala = "2m";
-                break;
-
-        }
-    }
     list1.activarImport = function () {
         list1.error = false;
         if (EntidadesService.xmlImportado == undefined) {
@@ -291,6 +241,8 @@ function PruebaController($scope,EntidadesService,$document) {
     }
 
     list1.verCoord= function () {
+
+
         if(EntidadesService.coords){
             EntidadesService.coords=false;
             list1.coordV="ocultar coord";
