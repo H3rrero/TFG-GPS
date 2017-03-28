@@ -110,6 +110,7 @@ function EntidadesService (){
       //Aplicamos el zoom en relazion al track importado
       service.mapa.setZoom(service.getZoomByBounds(service.mapa,bounds));
   };
+
     //Centra el mapa en la ruta importada
     service.centrarRuta = function () {
         var bounds = new google.maps.LatLngBounds();

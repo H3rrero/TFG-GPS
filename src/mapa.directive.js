@@ -205,7 +205,6 @@ function Mymap(EntidadesService,MapasService) {
               }
             }
           );
-
             var onOff = /** @type {!HTMLDivElement} */(
                 document.getElementById('on/Off'));
           //botones de seleccion de entidad (T,R,W)
@@ -1231,6 +1230,7 @@ function Mymap(EntidadesService,MapasService) {
 
         // LLamamos a la función que inicializa el mapa
         initMap();
+
 
     };
 

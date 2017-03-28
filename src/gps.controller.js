@@ -39,6 +39,16 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.coordV ="ocultar Coor";
     list1.tablaT = false;
     list1.escala = "5km";
+
+    //Cuando el documento este listo aumentamos el tamaño de la escala
+    angular.element(document).ready(function () {
+        list1.gr =$('#map');
+        list1.gr.children().children().children()[16].style.right='220px';
+        list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontSize='16px';
+        list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontWeight='bold';
+    });
+
+
     list1.modoEdicionF = function () {
         list1.noError = false;
         list1.error = false;
