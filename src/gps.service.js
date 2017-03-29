@@ -374,53 +374,68 @@ service.importXMLWp = function () {
         //Desactivamos el modo invertir
         service.modoInvertir = false;
     }
-  service.moverPuntoTrack = function(posicion,longitud,latitud,elevacion){
-      var puntos =new Array();
-      service.colorPolyNF = service.getPoly().strokeColor;
-      //Eliminapos la polilinea actual
-      service.getPoly().setMap(null);
-      //ELiminamos los marcadores de inicion y fin actuales
-      service.markersT[service.trackActivo][0].setMap(null);
-      service.markersT[service.trackActivo][1].setMap(null);
-      //Marcamos al track como que no tiene polilinea
-      service.tienePoly[service.trackActivo]=false;
-      //Y tambien como que no tiene marcadores
-      //Borramos los marcadores actuales
-      for (var i in service.markersT[service.trackActivo]) {
-          service.markersT[service.trackActivo][i].setMap(null);
-      }
-      service.markersT[service.trackActivo] = undefined;
-      for (var variable in service.tracks[service.trackActivo].puntos) {
-          if(variable == posicion){
-              service.tracks[service.trackActivo].puntos[variable].elevacion=elevacion;
-              service.tracks[service.trackActivo].puntos[variable].longitud=longitud;
-              service.tracks[service.trackActivo].puntos[variable].latitud=latitud;
-          }
-          puntos.push(service.tracks[service.trackActivo].puntos[variable]);
-      }
 
-      //Booramos los puntos actuales
-      for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
-          service.tracks[service.trackActivo].puntos.splice(i,1);
-          service.puntosTrackActivo.splice(i,1);
-      }
-      //Asignamos una nueva fecha
-      service.tracks[service.trackActivo].fecha = new Date();
-      for (var i =0; i < puntos.length; i++) {
-          //Guardamos la longitud y laltitud para pasarsela al mapa
-          service.longitudPInv = puntos[i].longitud;
-          service.latitudPInv = puntos[i].latitud;
-          service.elevacionP = puntos[i].elevacion;
-          //Activamos el modo invertir (usamos este modo ya que nos sirve
-          //perfectamente simplemente llamandolo sin invertir los puntos anteriormente)
-          service.modoInvertir = true;
+    service.moverPuntoTrack2 = function(posicion,longitud,latitud,elevacion){
+        service.getPoly().getPath().setAt(posicion, new google.maps.LatLng(latitud,longitud));
+        service.tracks[service.trackActivo]["puntos"][posicion].latitud = latitud;
+        service.tracks[service.trackActivo]["puntos"][posicion].longitud = longitud;
+        service.tracks[service.trackActivo]["puntos"][posicion].elevacion = elevacion;
+        service.puntosTrackActivo = service.tracks[service.trackActivo]["puntos"];
+        //Calcular las nuevas distancias entre el punto que se ha movido y sus hermanos
+        if(posicion == 0){
+            var coorPSelec = new google.maps.LatLng(latitud,longitud);
+            var cooPPosterior = new google.maps.LatLng(service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)+1)].latitud
+                ,service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)+1)].longitud);
+            service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)+1)].distancia=
+                google.maps.geometry.spherical.computeDistanceBetween(coorPSelec , cooPPosterior).toFixed(2);
+            //Calculamos los nuevos desniveles
+            service.tracks[service.trackActivo]["puntos"][parseInt(posicion)+1].desnivel = (service.tracks
+                [service.trackActivo]["puntos"][parseInt(posicion)+1].elevacion-elevacion).toFixed(2);
+        }else if(posicion == service.tracks[service.trackActivo]["puntos"].length-1){
+            var cooPAnterior = new google.maps.LatLng(service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)-1)].latitud
+                ,service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)-1)].longitud);
+            var coorPSelec = new google.maps.LatLng(latitud,longitud);
+            service.tracks[service.trackActivo]["puntos"][posicion].distancia=
+                google.maps.geometry.spherical.computeDistanceBetween(cooPAnterior , coorPSelec).toFixed(2);
+            //Calculamos los nuevos desniveles
+            service.tracks[service.trackActivo]["puntos"][posicion].desnivel = (elevacion-service.tracks
+                [service.trackActivo]["puntos"][(parseInt(posicion)-1)].elevacion).toFixed(2);
+        }else{
+        var cooPAnterior = new google.maps.LatLng(service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)-1)].latitud
+                                                ,service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)-1)].longitud);
+        var coorPSelec = new google.maps.LatLng(latitud,longitud);
+        var cooPPosterior = new google.maps.LatLng(service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)+1)].latitud
+            ,service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)+1)].longitud);
+        service.tracks[service.trackActivo]["puntos"][posicion].distancia=
+            google.maps.geometry.spherical.computeDistanceBetween(cooPAnterior , coorPSelec).toFixed(2);
+        service.tracks[service.trackActivo]["puntos"][(parseInt(posicion)+1)].distancia=
+            google.maps.geometry.spherical.computeDistanceBetween(coorPSelec , cooPPosterior).toFixed(2);
+        //Calculamos los nuevos desniveles
+        service.tracks[service.trackActivo]["puntos"][posicion].desnivel = (elevacion-service.tracks
+                                                    [service.trackActivo]["puntos"][(parseInt(posicion)-1)].elevacion).toFixed(2);
+        service.tracks[service.trackActivo]["puntos"][parseInt(posicion)+1].desnivel = (service.tracks
+                                    [service.trackActivo]["puntos"][parseInt(posicion)+1].elevacion-elevacion).toFixed(2);}
+        service.tracks[service.trackActivo].fecha = new Date();
+        service.tracks[service.trackActivo].distancia=0;
+            service.tracks[service.trackActivo].desnivelP= 0;
+            service.tracks[service.trackActivo].desnivelN=0;
+            service.tracks[service.trackActivo].elevMax=0;
+            service.tracks[service.trackActivo].elevMin=9999999;
+            service.tracks[service.trackActivo].duracionIda=0;
+            service.tracks[service.trackActivo].duracionVuelta=0;
+        for(var i in service.tracks[service.trackActivo]["puntos"]){
+            service.calcularDatosTrack(0,service.tracks[service.trackActivo]["puntos"][i],service.trackActivo);
+            service.tracks[service.trackActivo].duracionIda = parseFloat(service.calcularDuracion(true,service.trackActivo)).toFixed(2);
+            service.tracks[service.trackActivo].duracionVuelta = parseFloat(service.calcularDuracion(false,service.trackActivo)).toFixed(2);
+            service.calcularFecha(service.trackActivo,service.calcularDuracionPuntos(service.tracks[service.trackActivo]["puntos"][i]));
+            service.tracks[service.trackActivo]["puntos"][i].fecha
+                =service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
+            service.tracks[service.trackActivo]["puntos"][i].hora
+                =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
+        }
 
-          //Simulamos un click el mapa para añadir el punto
-          google.maps.event.trigger(service.mapa, 'click');
-      }
-      //Desactivamos el modo invertir
-      service.modoInvertir = false;
-  }
+        service.actualizarPuntosT();
+    }
   service.anadirPuntoTrack = function () {
     var puntos =new Array();
     service.puntosTrackActivo = service.tracks[service.trackActivo].puntos;
@@ -1028,7 +1043,7 @@ service.calcularDuracionPuntos= function (punto) {
     return duracionRecorrido;
   }
 }
-//Suma a la fecha del track activo la horas que revibe como parametro
+//Suma a la fecha del track activo la horas que recibe como parametro
 service.calcularFecha = function (num,horas) {
   var segundos = parseFloat(horas)*parseFloat(3600);
   service.tracks[num].fecha.setSeconds(segundos);
