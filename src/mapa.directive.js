@@ -823,7 +823,7 @@ function Mymap(EntidadesService,MapasService) {
                                 if (status === google.maps.ElevationStatus.OK) {
                                     if (results[0]) {
                                         var elevacion = results[0].elevation.toFixed(2);
-                                        EntidadesService.moverPuntoRuta(posicion,longitud,latitud,elevacion);
+                                        EntidadesService.moverPuntoRuta2(posicion,longitud,latitud,elevacion);
                                         scope.$apply();
                                     } else {
                                         console.log("no result found");
@@ -1168,7 +1168,7 @@ function Mymap(EntidadesService,MapasService) {
                               if (status === google.maps.ElevationStatus.OK) {
                                   if (results[0]) {
                                       var elevacion = results[0].elevation.toFixed(2);
-                                      EntidadesService.moverPuntoRuta(posicion,longitud,latitud,elevacion);
+                                      EntidadesService.moverPuntoRuta2(posicion,longitud,latitud,elevacion);
                                       scope.$apply();
                                   } else {
                                       console.log("no result found");

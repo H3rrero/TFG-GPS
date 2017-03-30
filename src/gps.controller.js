@@ -469,7 +469,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //En caso de ir todo bien...
         } else {
             //se llama al metodo del service
-            EntidadesService.eliminarPuntoRuta();
+            EntidadesService.eliminarPuntoRuta2();
             //Se quita el modo borrar
             EntidadesService.puntoBorrado = false;
             //Se resetea el punto elegido
@@ -569,9 +569,9 @@ function PruebaController($scope,EntidadesService,$document) {
         } else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length < 1) {
             list1.error = true;
             list1.mensajeError = "El track no dispone de puntos que eliminar";
-            //SI todo esta bien llamamos al metodo del service
+            //SI  esta bien llamamos al metodo del service
         } else {
-            EntidadesService.eliminarPuntoTrack();
+            EntidadesService.eliminarPuntoTrack2();
             EntidadesService.puntoBorrado = false;
             EntidadesService.puntoElegido = null;
         }
