@@ -485,13 +485,110 @@ function Mymap(EntidadesService,MapasService) {
                   EntidadesService.puntoN.elevacion = results[0].elevation.toFixed(2);
                   EntidadesService.modoInsertar = false;
                   if(EntidadesService.isTrack==true){
-                  EntidadesService.anadirPuntoTrack();
-                  controller.actualizarPuntosT();
-                  scope.$apply();
+                      // Creamos el marcador que indicara el punto creado en el mapa
+                      var marker = new google.maps.Marker({
+                          position: event.latLng,
+                          title:"Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
+                          icon: EntidadesService.myIcon,
+                          draggable:true,
+                          map: map
+                      });
+
+                                  EntidadesService.elevacionPtAnadido = results[0].elevation.toFixed(2);
+
+                      marker.addListener('click', function() {
+                          for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
+                              if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[EntidadesService.trackActivo][i].position.lng().toFixed(6)){
+                                  controller.puntoSelec(i);
+                              }
+                          }
+                      });
+                      marker.addListener('dragend', function (e) {
+                          for (var item in EntidadesService.markersT[EntidadesService.trackActivo]) {
+                              if (EntidadesService.markersT[EntidadesService.trackActivo][item].title
+                                  == marker.title) {
+
+                                  var posicion = item;
+                                  var longitud = e.latLng.lng().toFixed(6);
+                                  var latitud= e.latLng.lat().toFixed(6);
+                                  elevator.getElevationForLocations({
+                                      'locations': [e.latLng]
+                                  }, function(results, status) {
+                                      if (status === google.maps.ElevationStatus.OK) {
+                                          if (results[0]) {
+                                              var elevacion = results[0].elevation.toFixed(2);
+                                              EntidadesService.moverPuntoTrack2(posicion,longitud,latitud,elevacion);
+                                              scope.$apply();
+                                          } else {
+                                              console.log("no result found");
+                                          }
+                                      } else {
+                                          console.log("elevation service failed");
+                                      }
+                                  });
+                              }
+                          }
+                          scope.$apply();
+                      });
+                  EntidadesService.anadirPuntoTrack2(marker);
+                      setTimeout(function () {
+                          EntidadesService.actualizarPuntosT();
+                          scope.$apply();
+                      },15);
+
                 }else {
-                    EntidadesService.anadirPuntoRuta();
-                    controller.actualizarPuntosR();
-                    scope.$apply();
+                      var marker = new google.maps.Marker({
+                          position: event.latLng,
+                          title: "",
+                          icon: EntidadesService.myIconR,
+                          draggable:true,
+                          map: map
+                      });
+                      marker.addListener('click', function() {
+                          for(var i in EntidadesService.wpRta[EntidadesService.rutaActiva]){
+                              if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lng().toFixed(6)){
+                                  controller.puntoSelec(i);
+                              }
+                          }
+                      });
+                      EntidadesService.elevacionPtAnadido = results[0].elevation.toFixed(2);
+                      marker.addListener('dragend', function (e) {
+                          for (var item in EntidadesService.wpRta[EntidadesService.rutaActiva]) {
+                              if (EntidadesService.wpRta[EntidadesService.rutaActiva][item].title
+                                  == marker.title) {
+
+                                  var posicion = item;
+                                  var longitud = e.latLng.lng().toFixed(6);
+                                  var latitud= e.latLng.lat().toFixed(6);
+                                  elevator.getElevationForLocations({
+                                      'locations': [e.latLng]
+                                  }, function(results, status) {
+                                      if (status === google.maps.ElevationStatus.OK) {
+                                          if (results[0]) {
+                                              var elevacion = results[0].elevation.toFixed(2);
+                                              EntidadesService.moverPuntoRuta2(posicion,longitud,latitud,elevacion);
+                                              scope.$apply();
+                                          } else {
+                                              console.log("no result found");
+                                          }
+                                      } else {
+                                          console.log("elevation service failed");
+                                      }
+                                  });
+                              }
+                          }
+                          scope.$apply();
+                      });
+                    EntidadesService.anadirPuntoRuta2(marker);
+                      setTimeout(function () {
+                          controller.actualizarPuntosR();
+                          scope.$apply();
+                      },15);
+
                   }
                 } else {
                 console.log("no result found");

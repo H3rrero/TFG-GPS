@@ -502,6 +502,10 @@ function PruebaController($scope,EntidadesService,$document) {
         } else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length < 2) {
             list1.error = true;
             list1.mensajeError = "La ruta no dispone de puntos entre los que insertar";
+        }else if (EntidadesService.puntoElegido == EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length -1) {
+            list1.error = true;
+            list1.mensajeError = "Para añadir un punto a continuacion del ultimo simplemente haga click en el mapa" +
+                ", este modo es para añadir un punto intermedio";
         }
         //Si no hay errores activamos el modo inserccion y avisamos al usuario
         else {
@@ -539,8 +543,12 @@ function PruebaController($scope,EntidadesService,$document) {
         } else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length < 2) {
             list1.error = true;
             list1.mensajeError = "El track no dispone de puntos entre los que insertar";
+        }else if (EntidadesService.puntoElegido == EntidadesService.tracks[EntidadesService.trackActivo].puntos.length -1) {
+            list1.error = true;
+            list1.mensajeError = "Para añadir un punto a continuacion del ultimo simplemente haga click en el mapa" +
+                ", este modo es para añadir un punto intermedio";
         }
-        //Si todo esta bien activamos el modo insertar y avisamos al usuario
+        //Si  esta bien activamos el modo insertar y avisamos al usuario
         else {
             EntidadesService.modoInsertar = true;
             list1.noError = true;
