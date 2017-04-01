@@ -186,6 +186,7 @@ service.importXMLWp = function () {
       service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
       service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
       service.elevacionP = parseFloat(puntos[item].firstElementChild.textContent);
+      service.elevacionP = service.elevacionP.toFixed(2);
       //EL modo segundo recorte nos viene que ni pintado para esta situación
       service.modoRecorte2=true;
 
@@ -833,31 +834,84 @@ service.importXMLWp = function () {
     service.modoInvertir = false;
   }
 
-  //FUncion para invertir un track
-  service.invertirTrack = function () {
 
-    var puntos =new Array();
-    service.colorPolyNF = service.getPoly().strokeColor;
-    //Eliminapos la polilinea actual
-    service.getPoly().setMap(null);
-    //ELiminamos los marcadores  actuales
-   for(var i in service.markersT[service.trackActivo]){
-       service.markersT[service.trackActivo][i].setMap(null);
-   }
-    //Marcamos al track como que no tiene polilinea
-    service.tienePoly[service.trackActivo]=false;
-    //Y tambien como que no tiene marcadores
-    service.markersT[service.trackActivo] = undefined;
-    for (var variable in service.tracks[service.trackActivo].puntos) {
-      puntos.push(service.tracks[service.trackActivo].puntos[variable]);
-    }
-    //Booramos los puntos actuales
-    for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
-      service.tracks[service.trackActivo].puntos.splice(i,1);
-      service.puntosTrackActivo.splice(i,1);
-    }
-    //Asignamos una nueva fecha
-    service.tracks[service.trackActivo].fecha = new Date();
+  service.invertirTrack2 = function () {
+         var lineSymbolarrow;
+         var arrow;
+        if(service.tracks[service.trackActivo].direccionOriginal){
+             lineSymbolarrow = {
+                path : google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                strokeColor : service.getPoly().strokeColor,
+                strokeOpacity : 0.7,
+                strokeWeight : 2.9,
+                scale : 2.7
+            };
+             arrow = {
+                icon : lineSymbolarrow,
+                offset : '50%',
+                repeat : '80px'
+            };
+            service.tracks[service.trackActivo].direccionOriginal = false;
+        }else{
+            lineSymbolarrow = {
+                path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                strokeColor : service.getPoly().strokeColor,
+                strokeOpacity : 0.7,
+                strokeWeight : 2.9,
+                scale : 2.7
+            };
+            arrow = {
+                icon : lineSymbolarrow,
+                offset : '50%',
+                repeat : '80px'
+            };
+            service.tracks[service.trackActivo].direccionOriginal = true;
+        }
+
+      var puntos =new Array();
+      var markers = new Array();
+      var poly = service.getPoly();
+      poly.setOptions({
+          strokeColor: service.getPoly().strokeColor,
+          strokeOpacity: 1.0,
+          strokeWeight: 3,
+          icons : [arrow]
+      });
+      for (var i = service.tracks[service.trackActivo]["puntos"].length-1; i >= 0; i--) {
+        puntos.push(service.tracks[service.trackActivo]["puntos"][i]);
+        markers.push(service.markersT[service.trackActivo][i]);
+      }
+      //Booramos los puntos actuales
+      for (var i = service.tracks[service.trackActivo].puntos.length-1; i>=0; i--) {
+          service.tracks[service.trackActivo].puntos.splice(i,1);
+          service.puntosTrackActivo.splice(i,1);
+          service.markersT[service.trackActivo][i].setMap(null);
+          service.markersT[service.trackActivo].splice(i,1);
+      }
+      for(var i in puntos){
+          if(i == 0){
+              puntos[i].desnivel = 0;
+              puntos[i].distancia = 0;
+              puntos[i].numero = 0;
+             markers[i].setIcon('img/icono.png');
+          }else{
+              var pActual = new google.maps.LatLng(puntos[i].latitud,puntos[i].longitud);
+              var pAnterior = new google.maps.LatLng(puntos[i-1].latitud,puntos[i-1].longitud);
+             puntos[i].distancia = google.maps.geometry.spherical.computeDistanceBetween(pAnterior,pActual).toFixed(2);
+                puntos[i].numero = i;
+             puntos[i].desnivel = (puntos[i].elevacion-puntos[i-1].elevacion).toFixed(2);
+          }
+
+          if(i == puntos.length-1)
+              markers[i].setIcon('img/iconoFin.png');
+          service.markersT[service.trackActivo].push(markers[i]);
+          service.markersT[service.trackActivo][i].setMap(service.mapa);
+          service.tracks[service.trackActivo]["puntos"].push(puntos[i]);
+      }
+
+      service.puntosTrackActivo = service.tracks[service.trackActivo]["puntos"];
+      //Asignamos una nueva fecha
+      service.tracks[service.trackActivo].fecha = new Date();
       service.tracks[service.trackActivo].distancia= 0;
       service.tracks[service.trackActivo].desnivelP= 0;
       service.tracks[service.trackActivo].desnivelN=0;
@@ -865,24 +919,20 @@ service.importXMLWp = function () {
       service.tracks[service.trackActivo].elevMin=9999999;
       service.tracks[service.trackActivo].duracionIda=0;
       service.tracks[service.trackActivo].duracionVuelta=0;
-    //Recorremos los puntos al reves para volver a añadirlos
-    for (var i = puntos.length-1; i >= 0; i--) {
-      //Guardamos la longitud y laltitud para pasarsela al mapa
-      service.longitudPInv = puntos[i].longitud;
-      service.latitudPInv = puntos[i].latitud;
-      service.elevacionP = puntos[i].elevacion;
-      //Activamos el modo invertir
-        service.modoInvertir = true;
+      for(var i in service.tracks[service.trackActivo]["puntos"]){
+          service.calcularDatosTrack(0,service.tracks[service.trackActivo]["puntos"][i],service.trackActivo);
+          service.tracks[service.trackActivo].duracionIda = parseFloat(service.calcularDuracion(true,service.trackActivo)).toFixed(2);
+          service.tracks[service.trackActivo].duracionVuelta = parseFloat(service.calcularDuracion(false,service.trackActivo)).toFixed(2);
+          service.calcularFecha(service.trackActivo,service.calcularDuracionPuntos(service.tracks[service.trackActivo]["puntos"][i]));
+          service.tracks[service.trackActivo]["puntos"][i].fecha
+              =service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
+          service.tracks[service.trackActivo]["puntos"][i].hora
+              =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
+      }
+      service.actualizarPuntosT();
 
-      //Simulamos un click el mapa para añadir el punto
-      google.maps.event.trigger(service.mapa, 'click');
 
 
-
-    }
-
-    //Desactivamos el modo invertir
-    service.modoInvertir = false;
   }
   service.borrarTrack = function () {
     //Eliminapos la polilinea actual
@@ -1228,6 +1278,29 @@ service.getPoly = function () {
         }
 
     }
+    //Actualiza los puntos del track activo
+    service.actualizarMarkers2 = function() {
+        var hacerInvisible = 0;
+        for(var i in service.tracks){
+            if(service.markersT[i] != undefined)
+            if(service.markersT[i].length>1)
+            if(service.markersT[i][1].getVisible()){
+                hacerInvisible = i;
+            }}
+
+        for(var i in service.markersT[service.trackActivo]){
+            if(service.mapa.getZoom()>=16 && service.isTrack==true)
+                    service.markersT[service.trackActivo][i].setVisible(true);
+
+            }
+        for(var i in service.markersT[hacerInvisible]){
+
+            if(i!=0 && i!= service.markersT[hacerInvisible].length-1)
+                    service.markersT[hacerInvisible][i].setVisible(false);
+            }
+
+
+    }
 //Actualiza los puntos del track activo
     service.actualizarMarkers = function() {
         for(var i in service.tracks){
@@ -1314,6 +1387,7 @@ service.actualizarPuntosR = function() {
           fecha: new Date(),
           duracionIda:0,
           duracionVuelta:0,
+          direccionOriginal: true
         };
 
         service.tracks.push(service.entidad);
@@ -1334,6 +1408,7 @@ service.actualizarPuntosR = function() {
         numero:service.rutas.length,
         fecha: new Date(),
         duracion:0,
+        direccionOriginal: true
       };
       service.rutas.push(service.entidad);
       service.tienePolyR.push(false);

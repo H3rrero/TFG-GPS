@@ -602,8 +602,13 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.mensajeError = "El track no dispone de puntos que invertir";
         } else {
             //Si todo es correcto llamamos al metodo del service
-            EntidadesService.invertirTrack();
+            EntidadesService.invertirTrack2();
         }
+    }
+
+    list1.actualizarError = function () {
+        $scope.errors = true;
+        $scope.msj = "La especificación del archivo no se correconde con la de una ruta";
     }
     //Metodo que permite invertir el sentido de una ruta
     list1.invertirRuta = function () {
@@ -795,7 +800,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedT = function () {
         list1.actualizarPuntosT();
-        EntidadesService.actualizarMarkers();
+        EntidadesService.actualizarMarkers2();
         EntidadesService.puntoElegido = null;
     }
     list1.changedR = function () {
