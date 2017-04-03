@@ -627,7 +627,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.mensajeError = "La ruta no dispone de puntos que invertir";
         } else {
             //Si todo esta bien se llam al metodo dek service
-            EntidadesService.invertirRuta();
+            EntidadesService.invertirRuta2();
         }
     }
 
@@ -805,7 +805,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedR = function () {
         list1.actualizarPuntosR();
-        EntidadesService.actualizarMarkersR();
+        EntidadesService.actualizarMarkersR2();
         EntidadesService.puntoElegido = null;
     }
     list1.changedW = function () {
@@ -1188,7 +1188,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlista = "ocultar lista";
         list1.mensajeVerlistaR = "ver lista";
         list1.mensajeVerlistaW = "ver lista";
-        EntidadesService.actualizarMarkersR();
+        EntidadesService.actualizarMarkersR2();
         //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
         setTimeout(function () {
             for(var i in list1.tracks){
@@ -1212,7 +1212,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.mensajeVerlista = "ver lista";
         list1.mensajeVerlistaR = "ocultar lista";
         list1.mensajeVerlistaW = "ver lista";
-        EntidadesService.actualizarMarkers();
+        EntidadesService.actualizarMarkers2();
         //Le metemos un tiempo de espera para que el input se cree antes d eque este metodo se ejecute
         setTimeout(function () {
             for(var i in list1.rutas){
@@ -1256,8 +1256,8 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.mensajeVerlistaW = "ver lista";
             list1.mensajeVerlista = "ver lista";
             EntidadesService.isTrack = false;
-            EntidadesService.actualizarMarkers();
-            EntidadesService.actualizarMarkersR();
+            EntidadesService.actualizarMarkers2();
+            EntidadesService.actualizarMarkersR2();
             EntidadesService.puntoElegido = null;
             EntidadesService.isWaypoint = false;
             if (list1.mostrarTabla == true)
@@ -1303,8 +1303,8 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.mensajeVerlistaR = "ver lista";
             list1.mensajeVerlistaW = "ver lista";
             EntidadesService.isTrack = true;
-            EntidadesService.actualizarMarkersR();
-            EntidadesService.actualizarMarkers();
+            EntidadesService.actualizarMarkersR2();
+            EntidadesService.actualizarMarkers2();
             EntidadesService.puntoElegido = null;
             EntidadesService.isWaypoint = false;
             list1.modoCreacion = false;

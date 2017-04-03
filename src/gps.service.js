@@ -61,6 +61,7 @@ function EntidadesService (){
   service.modoEdicion = true;
   service.conection = false;
   service.elevacionPtAnadido=0;
+  service.segundosAnadir = 0;
   service.mapas = [];
     service.coords = false;
     service.myIcon = {
@@ -196,7 +197,24 @@ service.importXMLWp = function () {
     //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
-  }
+
+      var lineSymbolarrow = {
+          path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          strokeColor : service.colorPoly(),
+          strokeOpacity : 0.7,
+          strokeWeight : 2.9,
+          scale : 2.7
+      };
+     var arrow = {
+          icon : lineSymbolarrow,
+          offset : '50%',
+          repeat : '80px'
+      };
+    service.getPoly().setOptions({
+        strokeColor: service.colorPoly(),
+        icons : [arrow]
+    });
+  };
     service.importXMLRuta = function () {
         var puntos=service.xmlImportado.getElementsByTagName("rtept");
         //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
@@ -217,6 +235,23 @@ service.importXMLWp = function () {
         //Desactivamos los modos activados durante este metodo
         service.modoInvertir = false;
         service.modoRecorte2 = false;
+
+        var lineSymbolarrow = {
+            path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            strokeColor : service.colorPoly(),
+            strokeOpacity : 0.7,
+            strokeWeight : 2.9,
+            scale : 2.7
+        };
+        var arrow = {
+            icon : lineSymbolarrow,
+            offset : '50%',
+            repeat : '80px'
+        };
+        service.getPoly().setOptions({
+            strokeColor: service.colorPoly(),
+            icons : [arrow]
+        });
     }
 
   //Funcion que genera y devuelve un gpx con los waypoints
@@ -779,61 +814,96 @@ service.importXMLWp = function () {
     service.waypoints[service.wpActivo].nombre = nombre;
   }
 
-  //FUncion para invertir un track
-  service.invertirRuta = function () {
 
-    var puntos =new Array();
+  service.invertirRuta2 = function () {
+      var lineSymbolarrow;
+      var arrow;
+      if(service.rutas[service.rutaActiva].direccionOriginal){
+          lineSymbolarrow = {
+              path : google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+              strokeColor : service.getPoly().strokeColor,
+              strokeOpacity : 0.7,
+              strokeWeight : 2.9,
+              scale : 2.7
+          };
+          arrow = {
+              icon : lineSymbolarrow,
+              offset : '50%',
+              repeat : '80px'
+          };
+          service.rutas[service.rutaActiva].direccionOriginal = false;
+      }else{
+          lineSymbolarrow = {
+              path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+              strokeColor : service.getPoly().strokeColor,
+              strokeOpacity : 0.7,
+              strokeWeight : 2.9,
+              scale : 2.7
+          };
+          arrow = {
+              icon : lineSymbolarrow,
+              offset : '50%',
+              repeat : '80px'
+          };
+          service.rutas[service.rutaActiva].direccionOriginal = true;
+      }
 
-    service.colorPolyNF = service.getPoly().strokeColor;
-    //Eliminapos la polilinea actual
-    service.getPoly().setMap(null);
-    //ELiminamos los marcadores actuales
-    for (var item in service.wpRta[service.rutaActiva]) {
-        service.wpRta[service.rutaActiva][item].setMap(null);
-    }
+      var puntos =new Array();
+      var markers = new Array();
+      var poly = service.getPoly();
+      poly.setOptions({
+          strokeColor: service.getPoly().strokeColor,
+          strokeOpacity: 1.0,
+          strokeWeight: 3,
+          icons : [arrow]
+      });
+      for (var i = service.rutas[service.rutaActiva]["puntos"].length-1; i >= 0; i--) {
+          puntos.push(service.rutas[service.rutaActiva]["puntos"][i]);
+          markers.push(service.wpRta[service.rutaActiva][i]);
+      }
+      //Booramos los puntos actuales
+      for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
+          service.rutas[service.rutaActiva].puntos.splice(i,1);
+          service.puntosTrackActivo.splice(i,1);
+          service.wpRta[service.rutaActiva][i].setMap(null);
+          service.wpRta[service.rutaActiva].splice(i,1);
+      }
+      for(var i in puntos){
+          if(i == 0){
+              puntos[i].desnivel = 0;
+              puntos[i].distancia = 0;
+              puntos[i].numero = 0;
+              markers[i].setIcon(service.myIconRIni);
+          }else{
+              var pActual = new google.maps.LatLng(puntos[i].latitud,puntos[i].longitud);
+              var pAnterior = new google.maps.LatLng(puntos[i-1].latitud,puntos[i-1].longitud);
+              puntos[i].distancia = google.maps.geometry.spherical.computeDistanceBetween(pAnterior,pActual).toFixed(2);
+              puntos[i].numero = i;
+              puntos[i].desnivel = (puntos[i].elevacion-puntos[i-1].elevacion).toFixed(2);
+          }
 
+          if(i == puntos.length-1)
+              markers[i].setIcon(service.myIconRFin);
+          service.wpRta[service.rutaActiva].push(markers[i]);
+          service.wpRta[service.rutaActiva][i].setMap(service.mapa);
+          service.rutas[service.rutaActiva]["puntos"].push(puntos[i]);
+      }
 
-    //Marcamos la ruta como que no tiene polilinea
-    service.tienePolyR[service.rutaActiva]=false;
-    //Y tambien como que no tiene marcadores
-      service.wpRta[service.rutaActiva] = undefined;
-    for (var variable in service.rutas[service.rutaActiva].puntos) {
-      puntos.push(service.rutas[service.rutaActiva].puntos[variable]);
-    }
-    //Booramos los puntos actuales
-    for (var i = service.rutas[service.rutaActiva].puntos.length-1; i>=0; i--) {
-      service.rutas[service.rutaActiva].puntos.splice(i,1);
-      service.puntosTrackActivo.splice(i,1);
-    }
-    //Asignamos una nueva fecha
-    service.rutas[service.rutaActiva].fecha = new Date();
+      service.puntosTrackActivo = service.rutas[service.rutaActiva]["puntos"];
+
+      service.rutas[service.rutaActiva].fecha = new Date();
       service.rutas[service.rutaActiva].distancia= 0;
       service.rutas[service.rutaActiva].desnivelP= 0;
       service.rutas[service.rutaActiva].desnivelN=0;
       service.rutas[service.rutaActiva].elevMax=0;
       service.rutas[service.rutaActiva].elevMin=9999999;
-      service.rutas[service.rutaActiva].duracionIda=0;
-      service.rutas[service.rutaActiva].duracionVuelta=0;
-    //Recorremos los puntos al reves para volver a añadirlos
-    for (var i = puntos.length-1; i >= 0; i--) {
-      //Guardamos la longitud y laltitud para pasarsela al mapa
-      service.longitudPInv = puntos[i].longitud;
-      service.latitudPInv = puntos[i].latitud;
-      service.elevacionP = puntos[i].elevacion;
-      //Activamos el modo invertir
-        service.modoInvertir = true;
-
-      //Simulamos un click el mapa para añadir el punto
-      google.maps.event.trigger(service.mapa, 'click');
+      for(var i in service.rutas[service.rutaActiva]["puntos"]){
+          service.calcularDatosTrack(1,service.rutas[service.rutaActiva]["puntos"][i],service.rutaActiva);
+      }
+      service.actualizarPuntosR();
 
 
-
-    }
-
-    //Desactivamos el modo invertir
-    service.modoInvertir = false;
   }
-
 
   service.invertirTrack2 = function () {
          var lineSymbolarrow;
@@ -1034,8 +1104,8 @@ service.calcularDuracion= function (ida,num) {
     var hDesnivelSubida = (parseFloat(service.tracks[num].desnivelP)/400).toFixed(2);
     var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[num].desnivelN)/600)).toFixed(2);
   } else {
-    var hDesnivelSubida = (parseFloat(service.tracks[num].desnivelN)/400).toFixed(2);
-    var hDesnivelBajada = (Math.abs(parseFloat(service.tracks[num].desnivelP)/600)).toFixed(2);
+    var hDesnivelSubida = Math.abs((parseFloat(service.tracks[num].desnivelN)/400)).toFixed(2);
+    var hDesnivelBajada = (parseFloat(service.tracks[num].desnivelP)/600).toFixed(2);
   }
   var hDistanciaHori = (parseFloat(service.tracks[num].distancia)/parseFloat(service.velocidad)).toFixed(2);
   var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
@@ -1068,47 +1138,45 @@ service.calcularDuracion= function (ida,num) {
     return duracionRecorrido;
   }
 }
-//Calcula la duracion del tramo entre dos puntos de un track
-//Usamos una formula de montañismo
-//Se calcula el tiempo en subida y bajada  y se suman
-//Se calcula el tiempo en recorrer la distancia del track en linea recta sin elevaciones
-//Despues se comprueba cual de los dos tiempos calculados es mayor
-// Y el resultado seria la suma del mayor mas la mitad del menor
+
 service.calcularDuracionPuntos= function (punto) {
-  var hDesnivelSubida = (parseFloat(punto.desnivel)/400).toFixed(2);
-  var hDesnivelBajada = (Math.abs(parseFloat(punto.desnivel)/600)).toFixed(2);
-  if (punto.desnivel>0) {
-    hDesnivelBajada = 0;
-  } else {
-    hDesnivelSubida = 0;
-  }
-  var distanciakm =punto.distancia/1000;
-  var hDistanciaHori = (parseFloat(distanciakm)/parseFloat(service.velocidad)).toFixed(2);
-  var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
-  if (hDistanciaHori>=hdesnivelGeneral ) {
-    var menor = parseFloat(hdesnivelGeneral*0.5).toFixed(2);
-    if (menor=="NaN") {
-      menor=0;
+    var hDesnivelSubida = (parseFloat(punto.desnivel)/400);
+    var hDesnivelBajada = (Math.abs(parseFloat(punto.desnivel)/600));
+    if (punto.desnivel>0) {
+        hDesnivelBajada = 0;
+    } else {
+        hDesnivelSubida = 0;
     }
-    var horasFinales = parseFloat(hDistanciaHori)+parseFloat(menor);
-    var minutosDescanso = horasFinales*10;
-    var minutosFInales = (horasFinales*60)+minutosDescanso;
-    var duracionRecorrido = minutosFInales/60;
-    return duracionRecorrido;
-  } else {
-    var menor = parseFloat(hDistanciaHori*0.5).toFixed(2);
-    var horasFinales = parseFloat(hdesnivelGeneral)+parseFloat(menor);
-    var minutosDescanso = horasFinales*10;
-    var minutosFInales = (horasFinales*60)+minutosDescanso;
-    var duracionRecorrido = minutosFInales/60;
-    return duracionRecorrido;
-  }
+    var distanciakm =punto.distancia/1000;
+    var hDistanciaHori = (parseFloat(distanciakm)/parseFloat(service.velocidad));
+    var hdesnivelGeneral = parseFloat(hDesnivelBajada)+parseFloat(hDesnivelSubida);
+    if (hDistanciaHori>=hdesnivelGeneral ) {
+        var menor = parseFloat(hdesnivelGeneral*0.5);
+        if (menor=="NaN") {
+            menor=0;
+        }
+        var horasFinales = parseFloat(hDistanciaHori)+parseFloat(menor);
+        var minutosDescanso = horasFinales*10;
+        var minutosFInales = (horasFinales*60)+minutosDescanso;
+        var duracionRecorrido = minutosFInales/60;
+        return duracionRecorrido;
+    } else {
+        var menor = parseFloat(hDistanciaHori*0.5);
+        var horasFinales = parseFloat(hdesnivelGeneral)+parseFloat(menor);
+        var minutosDescanso = horasFinales*10;
+        var minutosFInales = (horasFinales*60)+minutosDescanso;
+        var duracionRecorrido = minutosFInales/60;
+        return duracionRecorrido;
+    }
+
 }
 //Suma a la fecha del track activo la horas que recibe como parametro
 service.calcularFecha = function (num,horas) {
+  service.segundosAnadir = service.segundosAnadir+(parseFloat(horas)*parseFloat(3600));
+  if(service.segundosAnadir>=60){
+  service.tracks[num].fecha.setSeconds(service.segundosAnadir);
+  service.segundosAnadir =0;}
 
-  var segundos = parseFloat(horas)*parseFloat(3600);
-  service.tracks[num].fecha.setSeconds(segundos);
 }
 //Calcula la fecha a partir de una velocidad
 service.calcularFechaR = function (ritmo) {
@@ -1265,19 +1333,29 @@ service.getPoly = function () {
 
 
     }
-    //Actualiza los puntos de la ruta activo
-    service.actualizarMarkersR = function() {
+    service.actualizarMarkersR2 = function() {
+        var hacerInvisible = 0;
         for(var i in service.rutas){
-            for(var j in service.wpRta[i]){
-                if(i==service.rutaActiva && service.mapa.getZoom()>=16 && service.isTrack==false)
-                    service.wpRta[i][j].setVisible(true);
-                else
-                if(j!=0 && j!= service.wpRta[i].length-1)
-                    service.wpRta[i][j].setVisible(false);
-            }
+            if(service.wpRta[i] != undefined)
+                if(service.wpRta[i].length>1)
+                    if(service.wpRta[i][1].getVisible()){
+                        hacerInvisible = i;
+                    }}
+
+        for(var i in service.wpRta[service.rutaActiva]){
+            if(service.mapa.getZoom()>=16 && service.isTrack==false)
+                service.wpRta[service.rutaActiva][i].setVisible(true);
+
+        }
+        for(var i in service.wpRta[hacerInvisible]){
+
+            if(i!=0 && i!= service.wpRta[hacerInvisible].length-1)
+                service.wpRta[hacerInvisible][i].setVisible(false);
         }
 
+
     }
+
     //Actualiza los puntos del track activo
     service.actualizarMarkers2 = function() {
         var hacerInvisible = 0;
@@ -1301,19 +1379,7 @@ service.getPoly = function () {
 
 
     }
-//Actualiza los puntos del track activo
-    service.actualizarMarkers = function() {
-        for(var i in service.tracks){
-          for(var j in service.markersT[i]){
-            if(i==service.trackActivo && service.mapa.getZoom()>=16 && service.isTrack==true)
-              service.markersT[i][j].setVisible(true);
-            else
-              if(j!=0 && j!= service.markersT[i].length-1)
-                service.markersT[i][j].setVisible(false);
-          }
-        }
 
-    }
 //Actualiza los puntos del track activo
 service.actualizarPuntosT = function() {
 
