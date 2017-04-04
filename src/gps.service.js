@@ -63,6 +63,7 @@ function EntidadesService (){
   service.elevacionPtAnadido=0;
   service.segundosAnadir = 0;
   service.mapas = [];
+  service.infowindow2;
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,

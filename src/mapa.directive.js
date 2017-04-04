@@ -307,6 +307,20 @@ function Mymap(EntidadesService,MapasService) {
         }
 
             });
+            map.addListener('mousemove', function(event) {
+                if(EntidadesService.coords==false) {
+                    $('#map').tooltip();
+                    $('#map').attr('title', "lat: " + event.latLng.lat().toFixed(6) + "\n" + "lng: " + event.latLng.lng().toFixed(6));
+                    $('#map').tooltip();
+                    $('#map').mouseover();
+                }else{
+                    $('#map').attr('title', "");
+                }
+
+
+            });
+
+
     EntidadesService.mapa = map;
         }
         //Calcula la distancia entre dos puntos del mapa para los recortes de una ruta
@@ -392,7 +406,7 @@ function Mymap(EntidadesService,MapasService) {
 
                       if (EntidadesService.waypoints[item].latitud+EntidadesService.waypoints[item].longitud
                           == marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6)) {
-
+                        console.log("he llegado");
                           var contentString = '<div id="content">'+
                               '<label for="nombre" style="    color: #8a9499;">'+
                               'Nombre:'+
@@ -1333,7 +1347,7 @@ function Mymap(EntidadesService,MapasService) {
 
     return {
         restrict: 'E',
-        template: '<div id="map"></div>',
+        template: '<div id="map"  title=""></div>',
         replace: true,
         controller: 'PruebaController',
         link: link

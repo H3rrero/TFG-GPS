@@ -256,6 +256,7 @@ function PruebaController($scope,EntidadesService,$document) {
         if(EntidadesService.coords){
             EntidadesService.coords=false;
             list1.coordV="ocultar coord";
+
         }
         else{
             EntidadesService.coords=true;
