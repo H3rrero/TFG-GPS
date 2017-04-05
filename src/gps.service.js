@@ -67,7 +67,7 @@ function EntidadesService (){
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,
-        scale : 6,
+        scale : 2,
         strokeColor : '#000000',
         fillColor : "yellow",
         strokeOpacity : 1,
@@ -75,7 +75,7 @@ function EntidadesService (){
     };
     service.myIconR = {
         path : google.maps.SymbolPath.CIRCLE,
-        scale : 6,
+        scale : 2,
         strokeColor : '#0C090C',
         fillColor : "yellow",
         strokeOpacity : 1,
@@ -1310,14 +1310,20 @@ service.getPoly = function () {
     return service.polyLineasR[service.rutaActiva];
   }
 }
+
 //Actualiza los puntos del track activo
     service.actualizarMarkerActivo = function() {
 
-        for(var j in service.markersT[service.trackActivo]){
-            if( service.mapa.getZoom()>=16)
+        if( service.mapa.getZoom()>=17 && service.markersT[service.trackActivo][service.markersT[service.trackActivo].length-2].getVisible() == false){
+            for(var j in service.markersT[service.trackActivo]){
                 service.markersT[service.trackActivo][j].setVisible(true);
-            else if(j!=0 && j!= service.markersT[service.trackActivo].length-1)
-                service.markersT[service.trackActivo][j].setVisible(false);
+            }
+        }
+        if(service.mapa.getZoom()<17 && service.markersT[service.trackActivo][service.markersT[service.trackActivo].length-2].getVisible() == true){
+            for(var j in service.markersT[service.trackActivo]){
+                if(j!=0 && j!= service.markersT[service.trackActivo].length-1)
+                    service.markersT[service.trackActivo][j].setVisible(false);
+            }
         }
 
 
@@ -1325,12 +1331,18 @@ service.getPoly = function () {
     //Actualiza los puntos del track activo
     service.actualizarMarkerActivoR = function() {
 
-        for(var j in service.wpRta[service.rutaActiva]){
-            if( service.mapa.getZoom()>=16)
+        if( service.mapa.getZoom()>=17 && service.wpRta[service.rutaActiva][service.wpRta[service.rutaActiva].length-2].getVisible() == false){
+            for(var j in service.wpRta[service.rutaActiva]){
                 service.wpRta[service.rutaActiva][j].setVisible(true);
-            else if(j!=0 && j!= service.wpRta[service.rutaActiva].length-1)
-                service.wpRta[service.rutaActiva][j].setVisible(false);
+            }
         }
+        if(service.mapa.getZoom()<17 && service.wpRta[service.rutaActiva][service.wpRta[service.rutaActiva].length-2].getVisible() == true){
+            for(var j in service.wpRta[service.rutaActiva]){
+                if(j!=0 && j!= service.wpRta[service.rutaActiva].length-1)
+                    service.wpRta[service.rutaActiva][j].setVisible(false);
+            }
+        }
+
 
 
     }
@@ -1344,7 +1356,7 @@ service.getPoly = function () {
                     }}
 
         for(var i in service.wpRta[service.rutaActiva]){
-            if(service.mapa.getZoom()>=16 && service.isTrack==false)
+            if(service.mapa.getZoom()>=17 && service.isTrack==false)
                 service.wpRta[service.rutaActiva][i].setVisible(true);
 
         }
@@ -1368,7 +1380,7 @@ service.getPoly = function () {
             }}
 
         for(var i in service.markersT[service.trackActivo]){
-            if(service.mapa.getZoom()>=16 && service.isTrack==true)
+            if(service.mapa.getZoom()>=17 && service.isTrack==true)
                     service.markersT[service.trackActivo][i].setVisible(true);
 
             }

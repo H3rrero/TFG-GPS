@@ -801,6 +801,7 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedT = function () {
         list1.actualizarPuntosT();
+        if(EntidadesService.mapa.getZoom()>=17)
         EntidadesService.actualizarMarkers2();
         EntidadesService.puntoElegido = null;
     }
