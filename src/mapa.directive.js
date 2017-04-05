@@ -304,14 +304,14 @@ function Mymap(EntidadesService,MapasService) {
     // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
-        if(EntidadesService.isTrack == true &&  ((EntidadesService.mapa.getZoom()>=17 && EntidadesService.markersT[EntidadesService.trackActivo]
+        if(EntidadesService.isTrack == true &&  ((EntidadesService.mapa.getZoom()>=16 && EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-2].getVisible() == false) ||(
-            EntidadesService.mapa.getZoom()<17 && EntidadesService.markersT[EntidadesService.trackActivo]
+            EntidadesService.mapa.getZoom()<16 && EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-2].getVisible() == true))){
             EntidadesService.actualizarMarkerActivo();
-        }else if(EntidadesService.isTrack == false &&  ((EntidadesService.mapa.getZoom()>=17 && EntidadesService.wpRta[EntidadesService.rutaActiva]
+        }else if(EntidadesService.isTrack == false &&  ((EntidadesService.mapa.getZoom()>=16 && EntidadesService.wpRta[EntidadesService.rutaActiva]
                 [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == false) ||(
-            EntidadesService.mapa.getZoom()<17 && EntidadesService.wpRta[EntidadesService.rutaActiva]
+            EntidadesService.mapa.getZoom()<16 && EntidadesService.wpRta[EntidadesService.rutaActiva]
                 [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == true))){
             EntidadesService.actualizarMarkerActivoR();
         }
@@ -840,7 +840,7 @@ function Mymap(EntidadesService,MapasService) {
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-2]
                       [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setIcon(EntidadesService.myIcon);
-                  if(map.getZoom()<17){
+                  if(map.getZoom()<16){
                       EntidadesService.markersT[EntidadesService.tracks.length-2]
                           [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setVisible(false);
                   }
@@ -867,7 +867,7 @@ function Mymap(EntidadesService,MapasService) {
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-1]
                       [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setIcon(EntidadesService.myIcon);
-                  if(map.getZoom()<17){
+                  if(map.getZoom()<16){
                       EntidadesService.markersT[EntidadesService.tracks.length-1]
                           [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setVisible(false);
                   }
@@ -894,7 +894,7 @@ function Mymap(EntidadesService,MapasService) {
                 marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
-                if(map.getZoom()<17){
+                if(map.getZoom()<16){
                     EntidadesService.markersT[EntidadesService.trackActivo]
                         [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
                 }
@@ -980,7 +980,7 @@ function Mymap(EntidadesService,MapasService) {
 
                             marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                             marker.icon= EntidadesService.myIconRFin;
-                        if(map.getZoom()<17){
+                        if(map.getZoom()<16){
                             EntidadesService.wpRta[rutaACortar]
                                 [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
                         }
@@ -1248,7 +1248,7 @@ function Mymap(EntidadesService,MapasService) {
             marker.title = "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
-            if(map.getZoom()<17){
+            if(map.getZoom()<16){
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setVisible(false);
             }
@@ -1326,7 +1326,7 @@ function Mymap(EntidadesService,MapasService) {
 
                       marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
                       marker.icon= EntidadesService.myIconRFin;
-                  if(map.getZoom()<17){
+                  if(map.getZoom()<16){
                       EntidadesService.wpRta[EntidadesService.rutaActiva]
                           [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(false);
                   }

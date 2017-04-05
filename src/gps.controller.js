@@ -36,7 +36,8 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.modoEdicion = EntidadesService.modoEdicion;
     list1.apiMaps = true;
     list1.conection = false;
-    list1.coordV ="ocultar Coor";
+    list1.coordV ="ocultar coor";
+    list1.verMarker ="ocultar pts";
     list1.tablaT = false;
     list1.escala = "5km";
 
@@ -48,6 +49,17 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontWeight='bold';
     });
 
+    list1.vermarkers = function () {
+        if(EntidadesService.ver){
+            EntidadesService.ver = false;
+            list1.verMarker ="ver pts";
+            EntidadesService.vermarkers();
+        }else{
+            EntidadesService.ver = true;
+            list1.verMarker ="ocultar pts";
+            EntidadesService.vermarkers();
+        }
+    }
 
     list1.modoEdicionF = function () {
         list1.noError = false;
@@ -801,12 +813,13 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedT = function () {
         list1.actualizarPuntosT();
-        if(EntidadesService.mapa.getZoom()>=17)
+        if(EntidadesService.mapa.getZoom()>=16 && EntidadesService.ver)
         EntidadesService.actualizarMarkers2();
         EntidadesService.puntoElegido = null;
     }
     list1.changedR = function () {
         list1.actualizarPuntosR();
+        if(EntidadesService.mapa.getZoom()>=16 && EntidadesService.ver)
         EntidadesService.actualizarMarkersR2();
         EntidadesService.puntoElegido = null;
     }
