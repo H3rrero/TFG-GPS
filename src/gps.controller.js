@@ -804,13 +804,13 @@ function PruebaController($scope,EntidadesService,$document) {
     }
     list1.changedT = function () {
         list1.actualizarPuntosT();
-        if(EntidadesService.mapa.getZoom()>=16 && EntidadesService.ver)
+        if(EntidadesService.mapa.getZoom()>=17 && EntidadesService.ver)
         EntidadesService.actualizarMarkers2();
         EntidadesService.puntoElegido = null;
     }
     list1.changedR = function () {
         list1.actualizarPuntosR();
-        if(EntidadesService.mapa.getZoom()>=16 && EntidadesService.ver)
+        if(EntidadesService.mapa.getZoom()>=17 && EntidadesService.ver)
         EntidadesService.actualizarMarkersR2();
         EntidadesService.puntoElegido = null;
     }
