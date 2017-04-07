@@ -83,16 +83,9 @@ function Mymap(EntidadesService,MapasService) {
         div.style.borderColor = '#AAAAAA';
         div.id = "divTile";
         div.className="tile";
-        for (var i in div.childNodes) {
 
-            if (div.childNodes[i].nodeName == "P")
-                if (EntidadesService.coords == false )
-                    div.childNodes[i].style.visibility = "visible";
-                else
-                    div.childNodes[i].style.visibility = "hidden";
-        }
     }
-            scope.$apply();
+
             return div;
 
     };
@@ -304,19 +297,24 @@ function Mymap(EntidadesService,MapasService) {
     // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
-
+        if(EntidadesService.markersT[EntidadesService.trackActivo]!=undefined )
+            if(EntidadesService.markersT[EntidadesService.trackActivo].length>2)
         if(EntidadesService.isTrack == true &&  ((EntidadesService.mapa.getZoom()>=16 && EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-2].getVisible() == false) ||(
             EntidadesService.mapa.getZoom()<16 && EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-2].getVisible() == true))){
             EntidadesService.actualizarMarkerActivo();
-        }else if(EntidadesService.isTrack == false &&   ((EntidadesService.mapa.getZoom()>=16 && EntidadesService.wpRta[EntidadesService.rutaActiva]
+        }
+
+        if(EntidadesService.wpRta[EntidadesService.rutaActiva]!=undefined )
+                if(EntidadesService.wpRta[EntidadesService.rutaActiva].length>2)
+            if(EntidadesService.isTrack == false &&   ((EntidadesService.mapa.getZoom()>=16 && EntidadesService.wpRta[EntidadesService.rutaActiva]
                 [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == false) ||(
             EntidadesService.mapa.getZoom()<16 && EntidadesService.wpRta[EntidadesService.rutaActiva]
                 [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == true))){
             EntidadesService.actualizarMarkerActivoR();
         }
-            console.log(EntidadesService.mapa.getZoom());
+
             });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
@@ -333,6 +331,7 @@ function Mymap(EntidadesService,MapasService) {
 
 
     EntidadesService.mapa = map;
+
         }
         //Calcula la distancia entre dos puntos del mapa para los recortes de una ruta
         var calcularDistanciasRR = function (latlng) {
@@ -531,6 +530,7 @@ function Mymap(EntidadesService,MapasService) {
                           }
                       });
                       marker.addListener('dragend', function (e) {
+
                           for (var item in EntidadesService.markersT[EntidadesService.trackActivo]) {
                               if (EntidadesService.markersT[EntidadesService.trackActivo][item].title
                                   == marker.title) {
@@ -797,7 +797,6 @@ function Mymap(EntidadesService,MapasService) {
                     }
                 });
                 marker.addListener('dragend', function (e) {
-                    console.log("estoy dentro");
                     for (var item in EntidadesService.markersT[EntidadesService.trackActivo]) {
                         if (EntidadesService.markersT[EntidadesService.trackActivo][item].title
                             == marker.title) {

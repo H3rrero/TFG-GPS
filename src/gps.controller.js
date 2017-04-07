@@ -274,15 +274,6 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.coords=true;
             list1.coordV="ver coord";
         }
-        var ps = $('P')
-
-        for (var i = 0, len = ps.length; i < len; ++i)
-        {
-            if(EntidadesService.coords)
-                ps[i].style.visibility= "hidden";
-            else
-                ps[i].style.visibility= "visible";
-        }
     }
 
     //Metodo que borra un track

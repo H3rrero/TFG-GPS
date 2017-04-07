@@ -60,8 +60,7 @@ function EntidadesService (){
   service.puntosGrafico = [];
   service.modoEdicion = true;
   service.conection = false;
-    service.markerCluster;
-    service.ver = true;
+  service.ver = true;
   service.elevacionPtAnadido=0;
   service.segundosAnadir = 0;
   service.mapas = [];
@@ -217,26 +216,7 @@ service.importXMLWp = function () {
         strokeColor: service.colorPoly(),
         icons : [arrow]
     });
-      var clusterStyles = [
-          {
 
-              url: 'img/m1.png',
-              height: 57,
-              width: 51,
-              anchor:[12,0],
-              textColor: "transparent"
-
-          },
-
-      ];
-      var mcOptions = {
-          styles: clusterStyles,
-          maxZoom: 18,
-          minimumClusterSize:20,
-          gridSize:100
-      };
-     service.markerCluster = new MarkerClusterer(service.mapa, service.markersT[service.trackActivo],
-         mcOptions);
   };
     service.importXMLRuta = function () {
         var puntos=service.xmlImportado.getElementsByTagName("rtept");
@@ -1339,6 +1319,7 @@ service.vermarkers = function () {
             service.markersT[service.trackActivo][j].setVisible(service.ver);
         }
     }
+
 }
 //Actualiza los puntos del track activo
     service.actualizarMarkerActivo = function() {

@@ -24,7 +24,7 @@ function ImportFunction(EntidadesService) {
                         //Guardamos el contenido del xml en el service
                         EntidadesService.xmlImportado = xml;
                         if (EntidadesService.isTrackImport) {
-                            EntidadesService.crear(0);
+                            controller.listaActiva();
                             EntidadesService.importXML();
                             EntidadesService.centrarMapa();
                         }else if (EntidadesService.isWpImport) {
@@ -33,7 +33,7 @@ function ImportFunction(EntidadesService) {
                         }
                         else {
                             if(EntidadesService.xmlImportado.getElementsByTagName("rtept").length>0){
-                                EntidadesService.crear(1);
+                                controller.listaActivaR();
                                 EntidadesService.importXMLRuta();
                                 EntidadesService.centrarRuta();
                             }else{
