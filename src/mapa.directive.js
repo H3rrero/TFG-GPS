@@ -85,7 +85,6 @@ function Mymap(EntidadesService,MapasService) {
         div.className="tile";
 
     }
-
             return div;
 
     };
@@ -133,7 +132,7 @@ function Mymap(EntidadesService,MapasService) {
                         tileSize: new google.maps.Size(256, 256)
                     });
 
-            }
+            };
 
             function WMS3GetCoord(tile, zoom,url) {
 
@@ -356,7 +355,7 @@ function Mymap(EntidadesService,MapasService) {
             } else {
                 EntidadesService.distancia = 0;
             }
-        }
+        };
         //Calcula la distancia entre dos puntos del mapa para los recortes de un track
         var calcularDistanciasR = function (latlng) {
             if(EntidadesService.modoRecorte1 == true && EntidadesService.
@@ -380,7 +379,7 @@ function Mymap(EntidadesService,MapasService) {
             } else {
                 EntidadesService.distancia = 0;
             }
-        }
+        };
         //Calcula la distancia entre dos puntos del mapa
         var calcularDistancias = function (latlng) {
           if(EntidadesService.puntosTrackActivo.length>0){
@@ -390,7 +389,7 @@ function Mymap(EntidadesService,MapasService) {
         }else{
             EntidadesService.distancia = 0;
         }
-        }
+        };
 
         // puncion que crea las polilineas y los puntos
         function addLatLng(event,elevation) {
@@ -501,8 +500,8 @@ function Mymap(EntidadesService,MapasService) {
                     hora:0,
                     desnivel:0,
                     distancia: 0,
-                    velocidad: 4,
-                  }
+                    velocidad: 4
+                  };
 
                   EntidadesService.puntoN.longitud = event.latLng.lng().toFixed(6);
                   EntidadesService.puntoN.latitud = event.latLng.lat().toFixed(6);

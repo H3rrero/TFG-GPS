@@ -20,7 +20,7 @@
 	position: relative;
 }
 
-#inputIE{
+.inputIESt{
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -145,11 +145,11 @@ width: 7.5%;
 	margin-top: 10px;
 
 }
-#tableP{
+.tableP{
 	position: absolute;
 	right: 0;
 }
-#tableS{
+.tableS{
 	position: absolute;
 	right: 130px;
 	margin-top: 4%;
@@ -167,7 +167,17 @@ table th{
 
 }
 
-#importarW,#botonVerMar,#botonCoord,#botonDesc,#label,#inputBt,#importarR,#importarT,#botonCrear,#botonCrearW,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv,#downBt{
+.stiloBtns{
+	background-color: #fff !important;
+
+	font-size: 11px !important;
+
+	margin-right: 12px !important;
+	text-overflow: ellipsis !important;
+	margin-top: 4px !important;
+}
+
+#importarW,#botonVerMar,#botonCoord,#botonDesc,#label,#inputBt,#importarR,#importarT,#botonCrear,#botonCrearW,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv,#downPt,#downBt{
   background-color: #fff;
 
   font-size: 11px;
@@ -177,7 +187,7 @@ table th{
 	margin-top: 4px;
 }
 
-#inputImport{
+.inputImportSt{
 	position: absolute;
   top: 0;
   right: 0;

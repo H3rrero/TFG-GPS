@@ -40,6 +40,8 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.verMarker ="ocultar pts";
     list1.tablaT = false;
     list1.escala = "5km";
+    list1.capturaUrl="";
+    list1.pant = true;
 
     //Cuando el documento este listo aumentamos el tamaño de la escala
     angular.element(document).ready(function () {
@@ -59,8 +61,22 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.verMarker ="ocultar pts";
             EntidadesService.vermarkers();
         }
-    }
+    };
 
+    list1.capPant = function () {
+
+        if(list1.pant)
+            html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
+                useCORS: true,
+                onrendered: function(canvas) {
+                    console.log(canvas);
+                    list1.capturaUrl = canvas.toDataURL("image/png");
+                    list1.pant = false;
+                    $("#downPt").click();
+                }
+            });
+
+    };
     list1.modoEdicionF = function () {
         list1.noError = false;
         list1.error = false;
@@ -76,7 +92,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.modoEdicion = true;
             EntidadesService.modoEdicion = true;
         }
-    }
+    };
 
     list1.activarImportWp = function functionName() {
         list1.error = false;
@@ -87,7 +103,7 @@ function PruebaController($scope,EntidadesService,$document) {
         } else {
             EntidadesService.importXMLWp();
         }
-    }
+    };
 
     list1.activarImportRuta = function () {
         list1.error = false;
@@ -99,7 +115,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.crear(1);
             EntidadesService.importXML();
         }
-    }
+    };
     list1.activarImport = function () {
         list1.error = false;
         if (EntidadesService.xmlImportado == undefined) {
@@ -110,7 +126,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.crear(0);
             EntidadesService.importXML();
         }
-    }
+    };
 
     //Metodo que llama al metodo unir del service
     list1.unirRutas = function () {
@@ -160,7 +176,7 @@ function PruebaController($scope,EntidadesService,$document) {
                 EntidadesService.unirRuta(elegido);
             }
         }
-    }
+    };
     //metodo que llama a la funcion unir tracks del service
     list1.unirTracks = function () {
         //Desactivamos el error
@@ -208,7 +224,7 @@ function PruebaController($scope,EntidadesService,$document) {
                 EntidadesService.unirTrack(elegido);
             }
         }
-    }
+    };
 
     //Metodo que permite borrar una ruta
     list1.borrarRuta = function () {
@@ -232,7 +248,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.borrarRuta();
         }
 
-    }
+    };
     //Metodo que permite borrar una ruta
     list1.borrarWp = function () {
         //Se pone el error a false para resetearlo
@@ -260,7 +276,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.borrarWp();
         }
 
-    }
+    };
 
     list1.verCoord= function () {
 
@@ -274,7 +290,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.coords=true;
             list1.coordV="ver coord";
         }
-    }
+    };
 
     //Metodo que borra un track
     list1.borrarTrack = function () {
@@ -297,7 +313,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.borrarTrack();
         }
 
-    }
+    };
 
     //Metodo que recorta una ruta
     list1.recortarRuta = function () {
@@ -316,7 +332,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Se comprueba que se haya seleccionado el punto a partir del cual se recorta
         } else if (EntidadesService.puntoElegido == null) {
             list1.error = true;
-            list1.mensajeError = "Antes de cortar tienes que seleccionar en la tabla el punto a partir del cual quieres realizar el corte";
+            list1.mensajeError = "Antes de cortar tienes que seleccionar en la tabla o sobre el track el punto a partir del cual quieres realizar el corte";
             //Se comprueba que la ruta tenga mas de un punto creado
         } else if (list1.rutas[list1.rutaActiva].puntos.length < 2) {
             list1.error = true;
@@ -332,7 +348,7 @@ function PruebaController($scope,EntidadesService,$document) {
             // Y llamamos al metodo del service
             EntidadesService.recortarRuta();
         }
-    }
+    };
 
     //Metodo que recorta un track
     list1.recortarTrack = function () {
@@ -350,7 +366,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Se comprueba que se haya selccionado un punto
         } else if (EntidadesService.puntoElegido == null) {
             list1.error = true;
-            list1.mensajeError = "Antes de cortar tienes que seleccionar en la tabla el punto a partir del cual quieres realizar el corte";
+            list1.mensajeError = "Antes de cortar tienes que seleccionar en la tabla o sobre el track el punto a partir del cual quieres realizar el corte";
             //Se comprueba que el track tiene al menos dos puntos creados
         } else if (list1.tracks[list1.trackActivo].puntos.length < 2) {
             list1.error = true;
@@ -373,7 +389,7 @@ function PruebaController($scope,EntidadesService,$document) {
 
         EntidadesService.puntoSelec(index);
         EntidadesService.puntoBorrado = true;
-    }
+    };
 
     list1.descripcion = function () {
         list1.error = false;
@@ -389,7 +405,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Se llama al metodo del service para cambiar la descripción
             EntidadesService.cambiarDescripcion(nombre);
         }
-    }
+    };
     //funcion que permite cambiar el nombre a un track
     list1.renombrarT = function () {
         list1.error = false;
@@ -406,7 +422,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.renombrarT(nombre);
         }
 
-    }
+    };
     //Metodo que cambia el nombre a una ruta
     list1.renombrarR = function () {
         list1.error = false;
@@ -423,7 +439,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.renombrarR(nombre);
         }
 
-    }
+    };
     //Metodo que cambia el nombre a un waypoint
     list1.renombrarW = function () {
         list1.error = false;
@@ -448,7 +464,7 @@ function PruebaController($scope,EntidadesService,$document) {
             }
         }
 
-    }
+    };
 
     //Metodo que permite eliminar un punto de una ruta
     list1.eliminarPuntoRuta = function () {
@@ -465,7 +481,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Se comprueba que se haya seleccionado el punto a borrar
         } else if (EntidadesService.puntoBorrado == false || EntidadesService.puntoElegido == null) {
             list1.error = true;
-            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos  para poder borrarlo";
+            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos o sobre el track  para poder borrarlo";
             //Se comprueba que la ruta tenga puntos creados
         } else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length < 1) {
             list1.error = true;
@@ -480,7 +496,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.puntoElegido = null;
         }
 
-    }
+    };
 
     //Metodo que añade un punto intermedio a una ruta
     list1.anadirPuntoRuta = function () {
@@ -501,7 +517,7 @@ function PruebaController($scope,EntidadesService,$document) {
             // del cual se insertara el nuevo punto
         } else if (EntidadesService.puntoElegido == null) {
             list1.error = true;
-            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos para poder insertar a continuación";
+            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos o sobre el track para poder insertar a continuación";
             //Se comprueba que la ruta tenga puntos creados
         } else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length < 2) {
             list1.error = true;
@@ -521,7 +537,7 @@ function PruebaController($scope,EntidadesService,$document) {
                 "quieras añadir el nuevo punto";
         }
 
-    }
+    };
 
     //Metodo que añade un punto a un track
     list1.anadirPuntoTrack = function () {
@@ -542,7 +558,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Comprobamos que tenga un punto seleccionado
         } else if (EntidadesService.puntoElegido == null) {
             list1.error = true;
-            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos para poder insertar a continuación";
+            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos o sobre el track para poder insertar a continuación";
             //COmprobamos que el track tenga puntos creados
         } else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length < 2) {
             list1.error = true;
@@ -561,7 +577,7 @@ function PruebaController($scope,EntidadesService,$document) {
                 "Selecciona el punto de origen y después pincha donde " +
                 "quieras añadir el nuevo punto";
         }
-    }
+    };
 
     //Metodo que elimina un punto de un track
     list1.eliminarPuntoTrack = function () {
@@ -576,7 +592,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Comprobamos que se haya seleccionado un punto
         } else if (EntidadesService.puntoBorrado == false || EntidadesService.puntoElegido == null) {
             list1.error = true;
-            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos para poder borrarlo";
+            list1.mensajeError = "Debes seleccionar un punto en la tabla de puntos o sobre el track para poder borrarlo";
             //Comprobamos que el track tenga puntos creados
         } else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length < 1) {
             list1.error = true;
@@ -588,7 +604,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.puntoElegido = null;
         }
 
-    }
+    };
     //Metodo que invierte el sentido de un track
     list1.invertirTrack = function () {
         //Reseteamos el error
@@ -608,12 +624,13 @@ function PruebaController($scope,EntidadesService,$document) {
             //Si todo es correcto llamamos al metodo del service
             EntidadesService.invertirTrack2();
         }
-    }
+    };
 
     list1.actualizarError = function () {
-        $scope.errors = true;
-        $scope.msj = "La especificación del archivo no se correconde con la de una ruta";
-    }
+        list1.error = true;
+        console.log(list1.error);
+        list1.mensajeError = "La especificación del archivo no se corresponde con la de una ruta";
+    };
     //Metodo que permite invertir el sentido de una ruta
     list1.invertirRuta = function () {
         //Reseteamos el error
@@ -633,7 +650,7 @@ function PruebaController($scope,EntidadesService,$document) {
             //Si todo esta bien se llam al metodo dek service
             EntidadesService.invertirRuta2();
         }
-    }
+    };
 
     //FUncion que activa o desactiva el modo creacion de los waypoints
     list1.crearWaypoint = function () {
@@ -647,7 +664,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.modoCreacion = false;
             EntidadesService.modoCreacion = false;
         }
-    }
+    };
 
     //Detectamos si pulsa la tecla escape y si el modo creacion de waypoints esta actuivado pues lo desactivamos
     $document.bind("keydown", function (e) {
@@ -700,7 +717,7 @@ function PruebaController($scope,EntidadesService,$document) {
                 }
             }
         }
-    }
+    };
     //Metodo que crea entidades
     list1.crear = function (id) {
         //Actualizamos la entidad que esta activa antes de llamar al servicio
@@ -731,7 +748,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.puntoElegido = null;
             list1.verTablaR();
         }
-    }
+    };
     //Es llamado desde el evento click del mapa y añade un punto al track activo
     list1.anadirPuntoTForMapR = function (track, latitud, longitud) {
         //Actualizamos el track activo antes de realizar las operaciones
@@ -742,7 +759,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.actualizarPuntosT();
 
 
-    }
+    };
 
     //Es llamado desde el evento click del mapa y añade un punto al track activo
     list1.anadirPuntoTForMapI = function (latitud, longitud) {
@@ -754,7 +771,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.actualizarPuntosT();
 
 
-    }
+    };
 
     //Es llamado desde el evento click del mapa y añade un punto al track activo
     list1.anadirPuntoTForMap = function (latitud, longitud) {
@@ -767,7 +784,7 @@ function PruebaController($scope,EntidadesService,$document) {
         $scope.$apply();
 
 
-    }
+    };
     //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
     list1.anadirPuntoRForMapR = function (ruta, latitud, longitud) {
         //Actualizamosla ruta activa antes de realizar las operaciones
@@ -778,7 +795,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.actualizarPuntosR();
 
 
-    }
+    };
     //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
     list1.anadirPuntoRForMapI = function (latitud, longitud) {
         //Actualizamosla ruta activa antes de realizar las operaciones
@@ -789,7 +806,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.actualizarPuntosR();
 
 
-    }
+    };
     //Es llamado desde el evento click del mapa y añade un punto a la ruta activa
     list1.anadirPuntoRForMap = function (latitud, longitud) {
         //Actualizamosla ruta activa antes de realizar las operaciones
@@ -801,22 +818,22 @@ function PruebaController($scope,EntidadesService,$document) {
         $scope.$apply();
 
 
-    }
+    };
     list1.changedT = function () {
         list1.actualizarPuntosT();
         if(EntidadesService.mapa.getZoom()>=17 && EntidadesService.ver)
         EntidadesService.actualizarMarkers2();
         EntidadesService.puntoElegido = null;
-    }
+    };
     list1.changedR = function () {
         list1.actualizarPuntosR();
         if(EntidadesService.mapa.getZoom()>=17 && EntidadesService.ver)
         EntidadesService.actualizarMarkersR2();
         EntidadesService.puntoElegido = null;
-    }
+    };
     list1.changedW = function () {
         EntidadesService.wpActivo = list1.wpActivo;
-    }
+    };
     //Actualiza los puntos de los tracks para que los componenetes que los
     // necesiten tengan la ultima version de los puntos
     list1.actualizarPuntosT = function () {
@@ -832,7 +849,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.exportTabla();
 
 
-    }
+    };
     //Actualiza los puntos de las rutas para que los componenetes que los
     // necesiten tengan la ultima version de los puntos
     list1.actualizarPuntosR = function () {
@@ -845,7 +862,7 @@ function PruebaController($scope,EntidadesService,$document) {
         EntidadesService.actualizarPuntosR();
         list1.puntosTrackActivo = EntidadesService.puntosTrackActivo;
         list1.exportTabla();
-    }
+    };
     //Comprobamos desde que navegador accede el usuario a nuestra aplicación
     list1.esIE = /*@cc_on!@*/false || !!document.documentMode;
     list1.isEdge = /Edge\/\d./i.test(navigator.userAgent);
@@ -917,7 +934,7 @@ function PruebaController($scope,EntidadesService,$document) {
                 + encodeURIComponent(xml);
 
         }
-    }
+    };
     list1.dowXmlForR = function () {
         var isIE = /*@cc_on!@*/false || !!document.documentMode;
         list1.noError = false;
@@ -954,7 +971,7 @@ function PruebaController($scope,EntidadesService,$document) {
 
         }
 
-    }
+    };
     list1.dowXml = function () {
         var isIE = /*@cc_on!@*/false || !!document.documentMode;
         list1.noError = false;
@@ -994,7 +1011,7 @@ function PruebaController($scope,EntidadesService,$document) {
 
         }
 
-    }
+    };
 
     //Funcion para la descarga de la imagen de tabla
     list1.dowImage = function () {
@@ -1025,7 +1042,7 @@ function PruebaController($scope,EntidadesService,$document) {
             var canvas = document.getElementById("canvas");
             list1.dataUrl = canvas.toDataURL("image/png");
         }
-    }
+    };
 
     list1.exportTabla = function () {
         var array = [];
@@ -1043,7 +1060,7 @@ function PruebaController($scope,EntidadesService,$document) {
             array.push(e);
         }
         $scope.getArray = array;
-    }
+    };
 
 
     //Cabecera que tendrá la tabla en formato csv
@@ -1078,14 +1095,14 @@ function PruebaController($scope,EntidadesService,$document) {
 //Funcion que oculta el alerte que indica si el modoc reacion esta activado o desactivado
     list1.noVerAlert = function () {
         list1.mostrarAlert = false;
-    }
+    };
     //oculta los botones que estan en archivo
     list1.noVerBotones = function () {
         list1.mostrarBotones = false;
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         $("#funciones").css("width", "8.5%");
-    }
+    };
     //Mostar botones de rutas
     list1.verBotonesR = function () {
         if (list1.mostrarBotonesR == true) {
@@ -1096,7 +1113,7 @@ function PruebaController($scope,EntidadesService,$document) {
             $("#funciones").css("width", "30%");
         }
 
-    }
+    };
     //Mostar botones de waypoints
     list1.verBotonesW = function () {
         if (list1.mostrarBotonesW == true) {
@@ -1107,7 +1124,7 @@ function PruebaController($scope,EntidadesService,$document) {
             $("#funciones").css("width", "30%");
         }
 
-    }
+    };
     //Mostrar botones de track
     list1.verBotones = function () {
         if (list1.mostrarBotones == true) {
@@ -1118,24 +1135,24 @@ function PruebaController($scope,EntidadesService,$document) {
             $("#funciones").css("width", "30%");
         }
 
-    }
+    };
     //superpone la tabla a la gráfica
     list1.superponerLista = function () {
         $("#lista").css("z-index", 2);
         $("#datos").css("z-index", 1);
         $("#grafica").css("z-index", 0);
-    }
+    };
     //superpone la tabla a la gráfica
     list1.superponerTabla = function () {
         $("#lista").css("z-index", 0);
         $("#datos").css("z-index", 1);
         $("#grafica").css("z-index", 0);
-    }
+    };
     //Superpone la gráfica a la tabla
     list1.superponerGrafica = function () {
         $("#datos").css("z-index", 0);
         $("#grafica").css("z-index", 1);
-    }
+    };
     //Mostar u ocultar la tabla
     list1.verTablaT = function () {
         list1.tablaT = true;
@@ -1153,7 +1170,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.superponerTabla();
         }
 
-    }
+    };
     //Mostar u ocultar la tabla
     list1.verTablaR = function () {
         list1.tablaT=false;
@@ -1172,7 +1189,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.superponerTabla();
         }
 
-    }
+    };
     //Mostar u ocultar la gráfica
     list1.verGrafica = function () {
         if (list1.mostrarGrafica == true) {
@@ -1184,7 +1201,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.superponerGrafica();
         }
 
-    }
+    };
     //Mostar la lista de track
     list1.listaActiva = function () {
         list1.crear(0);
@@ -1208,7 +1225,7 @@ function PruebaController($scope,EntidadesService,$document) {
         },10);
 
 
-    }
+    };
     //Mostrar la lista de rutas
     list1.listaActivaR = function () {
         list1.crear(1);
@@ -1231,7 +1248,7 @@ function PruebaController($scope,EntidadesService,$document) {
             }
         },10);
 
-    }
+    };
     //Mostrar la lista de waypoints
     list1.listaActivaW = function () {
         list1.activarListaR = false;
@@ -1243,7 +1260,7 @@ function PruebaController($scope,EntidadesService,$document) {
         list1.crearWaypoint();
 
 
-    }
+    };
     //Mostrar u ocultar la lista de rutas
     list1.listaR = function () {
         list1.activarListaW = false;
@@ -1274,7 +1291,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.verTablaR();
         }
 
-    }
+    };
     //Mostar u ocultar la lista de waypoints
     list1.listaW = function () {
         list1.activarListaR = false;
@@ -1290,7 +1307,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.isWaypoint = false;
         }
 
-    }
+    };
     //Mostrar u ocultar la lista de track
     list1.listaT = function () {
         list1.activarListaR = false;
@@ -1323,7 +1340,7 @@ function PruebaController($scope,EntidadesService,$document) {
             list1.verTablaT();
         }
 
-    }
+    };
     //Muestra u coulta la lista de botones relacionados con los track
     list1.listarFunciones = function () {
         list1.funcionesR = false;
@@ -1340,7 +1357,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.isWpImport = false;
         }
 
-    }
+    };
     //Muestra u coulta la lista de botones relacionados con las rutas
     list1.listarFuncionesR = function () {
         list1.funciones = false;
@@ -1357,7 +1374,7 @@ function PruebaController($scope,EntidadesService,$document) {
             EntidadesService.isWpImport = false;
         }
 
-    }
+    };
     //Muestra u coulta la lista de botones relacionados con los waypoints
     list1.listarFuncionesW = function () {
         list1.funciones = false;

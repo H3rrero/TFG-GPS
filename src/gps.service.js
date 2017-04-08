@@ -158,7 +158,7 @@ function EntidadesService (){
                 return zoom;
         }
         return 0;
-    }
+    };
 service.importXMLWp = function () {
   var puntos=service.xmlImportado.getElementsByTagName("wpt");
   service.modoImportWP = true;
@@ -176,7 +176,7 @@ service.importXMLWp = function () {
   }}
   //Desactivamos los modos activados durante este metodo
     service.modoImportWP = false;
-}
+};
 
   service.importXML = function () {
     var puntos=service.xmlImportado.getElementsByTagName("trkpt");
@@ -255,7 +255,7 @@ service.importXMLWp = function () {
             strokeColor: service.colorPoly(),
             icons : [arrow]
         });
-    }
+    };
 
   //Funcion que genera y devuelve un gpx con los waypoints
   service.getWaypoints = function () {
@@ -276,7 +276,7 @@ service.importXMLWp = function () {
     }
     xml = xml+"</gpx>";
     return xml;
-  }
+  };
 
   //FUncion que crea un gpx para un track o una ruta segun sea el caso
   service.getXml = function (track) {
@@ -322,7 +322,7 @@ service.importXMLWp = function () {
         xml = xml+"\t</rte>\n"+"</gpx>";
   }
     return xml;
-  }
+  };
 
   service.anadirPuntoRuta2 = function (marker) {
       setTimeout(function () {
@@ -358,7 +358,7 @@ service.importXMLWp = function () {
           }
       },10);
 
-  }
+  };
 
     service.moverPuntoRuta2 = function(posicion,longitud,latitud,elevacion){
         service.getPoly().getPath().setAt(posicion, new google.maps.LatLng(latitud,longitud));
@@ -411,7 +411,7 @@ service.importXMLWp = function () {
         }
 
         service.actualizarPuntosR();
-    }
+    };
 
     service.moverPuntoTrack2 = function(posicion,longitud,latitud,elevacion){
         service.getPoly().getPath().setAt(posicion, new google.maps.LatLng(latitud,longitud));
@@ -473,7 +473,7 @@ service.importXMLWp = function () {
         }
 
         service.actualizarPuntosT();
-    }
+    };
 
 
   service.anadirPuntoTrack2 = function (marker) {
@@ -525,7 +525,7 @@ service.importXMLWp = function () {
 
 
 
-  }
+  };
 
 
     service.eliminarPuntoRuta2 = function () {
@@ -570,7 +570,7 @@ service.importXMLWp = function () {
         }else{
             service.wpRta[service.rutaActiva]=undefined;
         }
-    }
+    };
     service.eliminarPuntoTrack2 = function () {
         service.getPoly().getPath().removeAt(service.puntoElegido);
         service.markersT[service.trackActivo][service.puntoElegido].setMap(null);
@@ -622,7 +622,7 @@ service.importXMLWp = function () {
     }else{
             service.markersT[service.trackActivo]=undefined;
         }
-    }
+    };
 
  //Metodo que devuelve la posicion de una ruta a partir de su nombre
   service.buscarRutaPorNombre = function (nombre) {
@@ -632,7 +632,7 @@ service.importXMLWp = function () {
       }
     }
     return null;
-  }
+  };
    //Metodo que devuelve la posicion de un track a partir de su nombre
   service.buscarTrackPorNombre = function (nombre) {
     for (var item in service.tracks) {
@@ -641,7 +641,7 @@ service.importXMLWp = function () {
       }
     }
     return null;
-  }
+  };
   //Metodo que une dos rutas
   service.unirRuta = function (rutaElegida) {
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
@@ -669,7 +669,7 @@ service.importXMLWp = function () {
     //Desactivamos los modos activados durante el metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
-  }
+  };
 
   //metodo que une dos tracks
   service.unirTrack = function (trackElegido) {
@@ -698,7 +698,7 @@ service.importXMLWp = function () {
     //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
-  }
+  };
   service.recortarTrack = function () {
     //Recorremos los puntos del track seleccionado
     for (var item in service.tracks[service.trackActivo].puntos) {
@@ -737,7 +737,7 @@ service.importXMLWp = function () {
     service.modoRecorte2 = false;
     service.puntoElegido = null;
 
-  }
+  };
   service.recortarRuta = function () {
     for (var item in service.rutas[service.rutaActiva].puntos) {
       //Recorremos los puntos antes del punto elegido
@@ -796,26 +796,26 @@ service.importXMLWp = function () {
     }
     //Desactivamos el modo selecion
     service.seleccion = false;
-  }
+  };
 
     service.cambiarDescripcion = function (descripcion) {
         service.waypoints[service.wpActivo].descripcion = descripcion;
-    }
+    };
   //metodo que cambia el nombre a un track elegido
   service.renombrarT = function (nombre) {
     if(service.isTrack == true)
     service.tracks[service.trackActivo].nombre = nombre;
-  }
+  };
   //Metodo que cambia el nombre a una ruta elegida
   service.renombrarR = function (nombre) {
     if (service.isTrack == false)
     service.rutas[service.rutaActiva].nombre = nombre;
-  }
+  };
   //Metodo que cambia el nombre a un wayPoint elegido
   service.renombrarW = function (nombre) {
 
     service.waypoints[service.wpActivo].nombre = nombre;
-  }
+  };
 
 
   service.invertirRuta2 = function () {
@@ -908,7 +908,7 @@ service.importXMLWp = function () {
       service.actualizarPuntosR();
 
 
-  }
+  };
 
   service.invertirTrack2 = function () {
          var lineSymbolarrow;
@@ -1009,7 +1009,7 @@ service.importXMLWp = function () {
 
 
 
-  }
+  };
   service.borrarTrack = function () {
     //Eliminapos la polilinea actual
     if(service.polyLineas[service.trackActivo]!==undefined){
@@ -1039,7 +1039,7 @@ service.importXMLWp = function () {
     {
       service.hayEntidadesCreadas=false;
     }
-  }
+  };
   service.borrarRuta = function () {
     //Eliminapos la polilinea actual
   service.polyLineasR[service.rutaActiva].setMap(null);
@@ -1064,7 +1064,7 @@ service.importXMLWp = function () {
     {
       service.hayEntidadesCreadas=false;
     }
-  }
+  };
   //Metodo que permote borrar un waypoint
   service.borrarWp = function () {
 
@@ -1080,7 +1080,7 @@ service.importXMLWp = function () {
       service.hayEntidadesCreadas=false;
     }
 
-  }
+  };
 
 //Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.
 service.cambiarTiempos = function (velocidad,fecha,num) {
@@ -1096,7 +1096,7 @@ service.cambiarTiempos = function (velocidad,fecha,num) {
     service.puntosTrackActivo[item].hora =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
     service.puntosTrackActivo[item].velocidad=service.velocidad;
   }
-}
+};
 
 //Calcula la duracion del tramo entre dos puntos de un track
 //Usamos una formula de montañismo
@@ -1143,7 +1143,7 @@ service.calcularDuracion= function (ida,num) {
     }
     return duracionRecorrido;
   }
-}
+};
 
 service.calcularDuracionPuntos= function (punto) {
     var hDesnivelSubida = (parseFloat(punto.desnivel)/400);
@@ -1175,7 +1175,7 @@ service.calcularDuracionPuntos= function (punto) {
         return duracionRecorrido;
     }
 
-}
+};
 //Suma a la fecha del track activo la horas que recibe como parametro
 service.calcularFecha = function (num,horas) {
   service.segundosAnadir = service.segundosAnadir+(parseFloat(horas)*parseFloat(3600));
@@ -1183,14 +1183,14 @@ service.calcularFecha = function (num,horas) {
   service.tracks[num].fecha.setSeconds(service.segundosAnadir);
   service.segundosAnadir =0;}
 
-}
+};
 //Calcula la fecha a partir de una velocidad
 service.calcularFechaR = function (ritmo) {
   var smet = ritmo/1000;
   var min = service.distancia*smet;
   var segundos = parseInt(min*60);
   service.rutas[service.rutaActiva].fecha.setSeconds(segundos);
-}
+};
 //Añade un cero a los minutos que son menores de 10
 service.ordenarMinutos = function () {
   var minutos;
@@ -1199,7 +1199,7 @@ service.ordenarMinutos = function () {
   else
       minutos=service.tracks[service.trackActivo].fecha.getMinutes();
   return minutos;
-}
+};
 //Añade un cero a los minutos que son menores de 10
 service.ordenarMinutosR = function () {
   var minutos;
@@ -1208,7 +1208,7 @@ service.ordenarMinutosR = function () {
   else
       minutos=service.rutas[service.rutaActiva].fecha.getMinutes();
   return minutos;
-}
+};
 //Calcula todos los datos del track que son mostrados en la lista al lado de su nombre
 service.calcularDatosTrack = function (id,punto,track) {
   if (id==0) {
@@ -1238,7 +1238,7 @@ service.calcularDatosTrack = function (id,punto,track) {
      service.rutas[track].elevMin=parseFloat(punto.elevacion).toFixed(2);
     }
   }
-}
+};
 //FUncion que retorna true o false si la entidad activa actual ya tiene
 // una polilinea asignada o no la tiene
 service.tienePolyF = function () {
@@ -1247,7 +1247,7 @@ service.tienePolyF = function () {
   } else {
     return service.tienePolyR[service.rutaActiva];
   }
-}
+};
 //FUncion que retorna true o false si la entidad activa actual ya tiene
 // una polilinea asignada o no la tiene
 service.tienePolyFR = function (num) {
@@ -1256,7 +1256,7 @@ service.tienePolyFR = function (num) {
   } else {
     return service.tienePolyR[num];
   }
-}
+};
 //Cambia el color de las polilineas de los track y las rutas
 service.colorPoly= function () {
   if (service.isTrack) {
@@ -1264,7 +1264,7 @@ service.colorPoly= function () {
   } else {
     return '#C004F9';
   }
-}
+};
 //Añade una polilinea a la entidad que esta activa actualmente
 service.addPolyR = function (poly,num) {
   if (service.isTrack) {
@@ -1278,7 +1278,7 @@ service.addPolyR = function (poly,num) {
 
     service.tienePolyR[num]=true;
   }
-}
+};
 //Añade una polilinea a la entidad que esta activa actualmente
 service.addPoly = function (poly) {
   if (service.isTrack) {
@@ -1292,7 +1292,7 @@ service.addPoly = function (poly) {
 
     service.tienePolyR[service.rutaActiva]=true;
   }
-}
+};
 //devuelve la polilinea de la entidad activa actualmente
 service.getPolyR = function (num) {
   if (service.isTrack) {
@@ -1303,7 +1303,7 @@ service.getPolyR = function (num) {
 
     return service.polyLineasR[num];
   }
-}
+};
 //devuelve la polilinea de la entidad activa actualmente
 service.getPoly = function () {
   if (service.isTrack) {
@@ -1314,7 +1314,7 @@ service.getPoly = function () {
 
     return service.polyLineasR[service.rutaActiva];
   }
-}
+};
 service.vermarkers = function () {
     if( service.mapa.getZoom()>=17 ){
         for(var j in service.markersT[service.trackActivo]){
@@ -1322,7 +1322,7 @@ service.vermarkers = function () {
         }
     }
 
-}
+};
 //Actualiza los puntos del track activo
     service.actualizarMarkerActivo = function() {
 
@@ -1339,7 +1339,7 @@ service.vermarkers = function () {
         }
 
 
-    }
+    };
     //Actualiza los puntos del track activo
     service.actualizarMarkerActivoR = function() {
 
@@ -1357,7 +1357,7 @@ service.vermarkers = function () {
 
 
 
-    }
+    };
     service.actualizarMarkersR2 = function() {
         var hacerInvisible = 0;
         for(var i in service.rutas){
@@ -1379,7 +1379,7 @@ service.vermarkers = function () {
         }
 
 
-    }
+    };
 
     //Actualiza los puntos del track activo
     service.actualizarMarkers2 = function() {
@@ -1403,7 +1403,7 @@ service.vermarkers = function () {
             }
 
 
-    }
+    };
 
 //Actualiza los puntos del track activo
 service.actualizarPuntosT = function() {
@@ -1413,7 +1413,7 @@ service.actualizarPuntosT = function() {
       service.actualizarPuntos();
       }
 
-}
+};
 
 //Actualiza los puntos de la ruta activa
 service.actualizarPuntosR = function() {
@@ -1421,7 +1421,7 @@ service.actualizarPuntosR = function() {
        service.puntosTrackActivo= service.rutas[service.rutaActiva]["puntos"];
        service.actualizarPuntos();
      }
-}
+};
 //Actualiza una lista de distacias que es necesaria para actualizar la grafica
   service.actualizarDistancias= function () {
     service.distancias.length = 0;
@@ -1430,7 +1430,7 @@ service.actualizarPuntosR = function() {
 
     }
     return service.distancias;
-  }
+  };
   //Actualiza una lista de elevaciones(de los puntos) que es necesaria para la grafica
   service.actualizarElevaciones= function () {
     service.elevaciones.length = 0;
@@ -1438,14 +1438,14 @@ service.actualizarPuntosR = function() {
       service.elevaciones.push(service.puntosTrackActivo[item]['elevacion']);
     }
     return service.elevaciones;
-  }
+  };
 
   //LLama a las dos funciones anteriores
   service.actualizarPuntos= function () {
     service.elevaciones2 = service.actualizarElevaciones();
     service.distancias2 = service.actualizarDistancias();
     service.calcularPuntosGrafico();
-  }
+  };
   service.calcularPuntosGrafico = function () {
       var distancia = 0;
       service.puntosGrafico.length = 0;
@@ -1454,10 +1454,10 @@ service.actualizarPuntosR = function() {
       var obj = {x:parseFloat(distancia/1000).toFixed(2),y:service.elevaciones[item]};
       service.puntosGrafico.push(obj);
       }
-  }
+  };
   service.getPuntosGrafico = function () {
       return service.puntosGrafico;
-  }
+  };
   //funcion que crea una entidad
   service.crear = function (id) {
     //Boolean necesario para en caso de que no haya ninguna entidad
@@ -1533,7 +1533,7 @@ service.actualizarPuntosR = function() {
         break;
     }
     return service.entidad;
-  }
+  };
 
     service.calcularDesnivelR = function ()
     { if(service.modoRecorte1 == true ){
@@ -1557,7 +1557,7 @@ service.actualizarPuntosR = function() {
     else {
         return 0;
     }
-    }
+    };
   service.calcularDesnivel = function ()
   { if(service.modoRecorte1 == true ){
       if(service.
@@ -1580,7 +1580,7 @@ service.actualizarPuntosR = function() {
     else {
       return 0;
     }
-  }
+  };
   //Añade un punto a la entidad activada actualmente
   service.anadirPunto = function (id,num,latitud,longitud) {
 
@@ -1595,8 +1595,8 @@ service.actualizarPuntosR = function() {
         hora:service.tracks[num].fecha.getHours()+":"+service.ordenarMinutos(),
         desnivel:service.calcularDesnivel(),
         distancia: service.distancia,
-        velocidad: 4,
-      }
+        velocidad: 4
+      };
         if (service.tracks.length>0){
           service.punto.numero = service.tracks[num]["puntos"].length;
         service.tracks[num]["puntos"].push(service.punto);
@@ -1619,8 +1619,8 @@ service.actualizarPuntosR = function() {
         hora:service.rutas[service.rutaActiva].fecha.getHours()+":"+service.ordenarMinutosR(),
         desnivel:service.calcularDesnivelR(),
         distancia: service.distancia,
-        velocidad: 4,
-      }
+        velocidad: 4
+      };
           if (service.rutas.length>0){
             service.punto.numero = service.rutas[num]["puntos"].length;
             service.rutas[num]["puntos"].push(service.punto);
