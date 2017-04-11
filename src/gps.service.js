@@ -65,6 +65,7 @@ function EntidadesService (){
   service.segundosAnadir = 0;
   service.mapas = [];
   service.infowindow2;
+  service.ownerDo;
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,

@@ -17,7 +17,7 @@ function Mymap(EntidadesService,MapasService) {
 
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-
+        EntidadesService.ownerDo = ownerDocument;
         switch(zoom) {
             case 12:
                 this.tileSize.width = 32;

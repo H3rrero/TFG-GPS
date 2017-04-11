@@ -64,10 +64,10 @@ function PruebaController($scope,EntidadesService,$document) {
     };
 
     list1.capPant = function () {
-
         if(list1.pant)
             html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
+                logging:true,
                 onrendered: function(canvas) {
                     console.log(canvas);
                     list1.capturaUrl = canvas.toDataURL("image/png");
