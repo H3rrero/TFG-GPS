@@ -22,6 +22,7 @@
     -Edicion de ruta sobre la propia ruta
     -Cambiar posicion de un punto arrastrandolo sobre el mapa (para tracks y rutas)
 ### Falta por implementar:
+    -Imprimir imagen del mapa
     -Controlar errores
     
 ## Puedes ver el avance aquí
