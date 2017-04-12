@@ -79,7 +79,8 @@
 			 placeholder="Enter a location">
 			<my-map ></my-map>
 <div id="datos" ng-hide="!list1.mostrarTabla" ng-click="list1.superponerTabla()">
-<button id="tablaCsv"type="button" ng-click="list1.exportTabla();" class="bttn-gradient bttn-xs bttn-danger"  ng-csv="getArray" csv-header="getHeader()"  filename="test.csv">exportar tabla</button>
+<button id="tablaCsv"type="button" ng-if="list1.whyCvsExport" ng-click="list1.exportTabla();" class="bttn-gradient bttn-xs bttn-danger stiloBtns"  ng-csv="getArray" csv-header="getHeader()"  filename="test.csv">exportar tabla</button>
+	<button id="tablaCsvR"type="button" ng-if="!list1.whyCvsExport" ng-click="list1.exportTablaR();" class="bttn-gradient bttn-xs bttn-danger stiloBtns"  ng-csv="getArray" csv-header="getHeaderR()"  filename="test.csv">exportar tabla</button>
 				<div id="puntos">
 
 
@@ -195,9 +196,9 @@
 
 				</table>
         <table id="tablePW"class="tableP" ng-if="list1.funcionesW">
-        <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success">archivo</button></td></tr>
-					<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success">{{list1.mensajeVerlistaW}}</button></td></tr>
-			<tr>  <td ><button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-success">{{list1.coordV}}</button></td></tr>
+        <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success stiloBtns">archivo</button></td></tr>
+					<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success stiloBtns">{{list1.mensajeVerlistaW}}</button></td></tr>
+			<tr>  <td ><button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-success stiloBtns">{{list1.coordV}}</button></td></tr>
         </table>
         <table id="tablePR" class="tableP" ng-if="list1.funcionesR">
 
@@ -227,7 +228,7 @@
 			<tr>  <td ><button id="botonCoordT" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.coordV}}</button></td></tr>
 			<tr>  <td ><button id="botonVerMar" type="button" ng-click="list1.vermarkers();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.verMarker}}</button></td></tr>
 			<tr>  <td ><a  ng-click="list1.capPant()" ng-href="{{list1.capturaUrl}}"  id="btn-downloadT"
-				download="my-file-name.png"><button id="downPt" type="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns">capPant</button></a></td></tr>
+				download="my-file-name.jpeg"><button id="downPt" type="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns">capPant</button></a></td></tr>
 
         </table>
 

@@ -177,16 +177,6 @@ table th{
 	margin-top: 4px !important;
 }
 
-#importarW,#botonVerMar,#botonCoord,#botonDesc,#label,#inputBt,#importarR,#importarT,#botonCrear,#botonCrearW,#botonBor,#botonRen,#botonEli,#botonIns,#botonRec,#botonUnir,#botonInv,#botonTim,#botonDes,#botonListar,#botonDatos,#botonBotones,#tablaCsv,#downPt,#downBt{
-  background-color: #fff;
-
-  font-size: 11px;
-
-  margin-right: 12px;
-  text-overflow: ellipsis;
-	margin-top: 4px;
-}
-
 .inputImportSt{
 	position: absolute;
   top: 0;

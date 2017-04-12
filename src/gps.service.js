@@ -539,12 +539,14 @@ service.importXMLWp = function () {
             if (service.puntoElegido == 0) {
 
                 service.wpRta[service.rutaActiva][service.puntoElegido].setIcon(service.myIconRIni);
+                service.wpRta[service.rutaActiva][service.puntoElegido].setVisible(true);
                 service.rutas[service.rutaActiva]["puntos"][service.puntoElegido].distancia = 0;
                 //Calculamos los nuevos desniveles
                 service.rutas[service.rutaActiva]["puntos"][service.puntoElegido].desnivel = 0;
             } else if ((parseInt(service.puntoElegido) - 1) == service.rutas[service.rutaActiva]["puntos"].length - 1 &&
                 service.rutas[service.rutaActiva].puntos.length>1) {
                 service.wpRta[service.rutaActiva][service.rutas[service.rutaActiva]["puntos"].length - 1].setIcon(service.myIconRFin);
+                service.wpRta[service.rutaActiva][service.rutas[service.rutaActiva]["puntos"].length - 1].setVisible(true);
 
             } else if( service.rutas[service.rutaActiva].puntos.length>1){
                 var cooPAnterior = new google.maps.LatLng(service.rutas[service.rutaActiva]["puntos"][(parseInt(service.puntoElegido) - 1)].latitud
@@ -582,12 +584,14 @@ service.importXMLWp = function () {
         if (service.puntoElegido == 0) {
 
             service.markersT[service.trackActivo][service.puntoElegido].setIcon("img/icono.png");
+            service.markersT[service.trackActivo][service.puntoElegido].setVisible(true);
             service.tracks[service.trackActivo]["puntos"][service.puntoElegido].distancia = 0;
             //Calculamos los nuevos desniveles
             service.tracks[service.trackActivo]["puntos"][service.puntoElegido].desnivel = 0;
         } else if ((parseInt(service.puntoElegido) - 1) == service.tracks[service.trackActivo]["puntos"].length - 1 &&
              service.tracks[service.trackActivo].puntos.length>1) {
             service.markersT[service.trackActivo][service.tracks[service.trackActivo]["puntos"].length - 1].setIcon("img/iconoFin.png");
+            service.markersT[service.trackActivo][service.tracks[service.trackActivo]["puntos"].length - 1].setVisible(true);
 
         } else if( service.tracks[service.trackActivo].puntos.length>1){
             var cooPAnterior = new google.maps.LatLng(service.tracks[service.trackActivo]["puntos"][(parseInt(service.puntoElegido) - 1)].latitud

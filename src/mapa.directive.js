@@ -79,7 +79,7 @@ function Mymap(EntidadesService,MapasService) {
         div.style.height = this.tileSize.height + 'px';
         div.style.fontSize = '10px';
         div.style.borderStyle = 'solid';
-        div.style.borderWidth = '1px';
+        div.style.borderWidth = '2px';
         div.style.borderColor = '#AAAAAA';
         div.id = "divTile";
         div.className="tile";
@@ -88,6 +88,7 @@ function Mymap(EntidadesService,MapasService) {
             return div;
 
     };
+
 
 
 
@@ -293,7 +294,6 @@ function Mymap(EntidadesService,MapasService) {
 
 
 
-    // evento click para añadir puntos
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
         if(EntidadesService.markersT[EntidadesService.trackActivo]!=undefined )

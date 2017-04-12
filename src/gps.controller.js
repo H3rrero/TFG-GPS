@@ -42,15 +42,19 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.escala = "5km";
     list1.capturaUrl="";
     list1.pant = true;
+    list1.whyCvsExport = false;
 
     //Cuando el documento este listo aumentamos el tamaño de la escala
     angular.element(document).ready(function () {
+        setTimeout(list1.actuTamano,500);
+
+    });
+    list1.actuTamano = function () {
         list1.gr =$('#map');
         list1.gr.children().children().children()[16].style.right='220px';
         list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontSize='16px';
         list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontWeight='bold';
-    });
-
+    };
     list1.vermarkers = function () {
         if(EntidadesService.ver){
             EntidadesService.ver = false;
@@ -68,15 +72,17 @@ function PruebaController($scope,EntidadesService,$document) {
             html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
                 logging:true,
+                allowTaint: false,
+                letterRendering: true,
                 onrendered: function(canvas) {
-                    console.log(canvas);
-                    list1.capturaUrl = canvas.toDataURL("image/png");
+                    list1.capturaUrl = canvas.toDataURL("image/jpeg");
                     list1.pant = false;
+                    $scope.$apply();
                     $("#downPt").click();
                 }
             });
-
     };
+
     list1.modoEdicionF = function () {
         list1.noError = false;
         list1.error = false;
@@ -1068,6 +1074,29 @@ function PruebaController($scope,EntidadesService,$document) {
         return ["Punto nº", "Latitud", "Longitud", "Elevación", "Fecha", "Hora", "Desnivel", "Distancia", "Velocidad"]
     };
 
+    list1.exportTablaR = function () {
+        var array = [];
+        console.log(list1.isTrack);
+        for (var item in list1.puntosTrackActivo) {
+            var e = {
+                a: item,
+                b: list1.puntosTrackActivo[item].latitud,
+                c: list1.puntosTrackActivo[item].longitud,
+                d: list1.puntosTrackActivo[item].elevacion,
+                e: list1.puntosTrackActivo[item].desnivel,
+                f: list1.puntosTrackActivo[item].distancia
+            };
+            array.push(e);
+        }
+        $scope.getArray = array;
+    };
+
+
+    //Cabecera que tendrá la tabla en formato csv
+    $scope.getHeaderR = function () {
+        return ["Punto nº", "Latitud", "Longitud", "Elevación","Desnivel", "Distancia"]
+    };
+
     //Activar la funciones de los track
     list1.funciones = false;
     //Activar la funciones de las rutas
@@ -1156,6 +1185,7 @@ function PruebaController($scope,EntidadesService,$document) {
     //Mostar u ocultar la tabla
     list1.verTablaT = function () {
         list1.tablaT = true;
+        list1.whyCvsExport = true;
         if (list1.mostrarTabla == true) {
             list1.mostrarTabla = false;
             list1.mensajeVerTabla = "ver tabla"
@@ -1174,6 +1204,7 @@ function PruebaController($scope,EntidadesService,$document) {
     //Mostar u ocultar la tabla
     list1.verTablaR = function () {
         list1.tablaT=false;
+        list1.whyCvsExport = false;
         if (list1.mostrarTabla == true) {
             list1.mostrarTabla = false;
             list1.mensajeVerTabla = "ver tabla"
