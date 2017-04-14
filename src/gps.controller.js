@@ -4,7 +4,7 @@
 angular.module('GPS')
 .controller('PruebaController',PruebaController);
 
-function PruebaController($scope,EntidadesService,$document) {
+function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
     var list1 = this;
     //track seleccionado por el usuario
     list1.trackActivo = 0;
@@ -44,6 +44,15 @@ function PruebaController($scope,EntidadesService,$document) {
     list1.pant = true;
     list1.whyCvsExport = false;
 
+
+
+    list1.startSpin = function() {
+            usSpinnerService.spin('spinner-1');
+    };
+
+    list1.stopSpin = function() {
+            usSpinnerService.stop('spinner-1');
+    };
     //Cuando el documento este listo aumentamos el tamaño de la escala
     angular.element(document).ready(function () {
         setTimeout(list1.actuTamano,500);
@@ -68,19 +77,33 @@ function PruebaController($scope,EntidadesService,$document) {
     };
 
     list1.capPant = function () {
-        if(list1.pant)
+        if(list1.pant){
+            list1.capturaUrl = "";
+        list1.startSpin();
+        var divs = $('div.tile');
+        for(var i in divs){
+            if(i<divs.length)
+            divs[i].style.borderWidth = '2px';
+        }
+
             html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
                 logging:true,
-                allowTaint: false,
-                letterRendering: true,
+                timeout:2000,
                 onrendered: function(canvas) {
                     list1.capturaUrl = canvas.toDataURL("image/jpeg");
                     list1.pant = false;
                     $scope.$apply();
+                    list1.stopSpin();
                     $("#downPt").click();
                 }
             });
+        for(var i in divs){
+            if(i<divs.length)
+                divs[i].style.borderWidth = '1px';
+        }}else{
+            list1.pant = true;
+        }
     };
 
     list1.modoEdicionF = function () {
