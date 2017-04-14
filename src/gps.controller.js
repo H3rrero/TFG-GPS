@@ -91,7 +91,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
                 logging:true,
                 timeout:2000,
                 onrendered: function(canvas) {
-                    list1.capturaUrl = canvas.toDataURL("image/jpeg");
+                    list1.capturaUrl = canvas.toDataURL("image/jpg");
                     list1.pant = false;
                     $scope.$apply();
                     list1.stopSpin();
