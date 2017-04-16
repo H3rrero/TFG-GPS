@@ -81,21 +81,37 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
             list1.capturaUrl = "";
         list1.startSpin();
         var divs = $('div.tile');
-        for(var i in divs){
-            if(i<divs.length)
-            divs[i].style.borderWidth = '2px';
-        }
-
+            if(list1.isChrome || list1.isFirefox)
+            for(var i in divs){
+                if(i<divs.length)
+                    divs[i].style.borderWidth = '2px';
+            }
             html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
                 logging:true,
                 timeout:2000,
                 onrendered: function(canvas) {
+                    if(list1.isChrome || list1.isFirefox){
+                        list1.pant = false;
                     list1.capturaUrl = canvas.toDataURL("image/jpg");
                     list1.pant = false;
                     $scope.$apply();
                     list1.stopSpin();
-                    $("#downPt").click();
+                    $("#downPt").click();}
+                    if (list1.esIE || list1.isEdge) {
+                        list1.capturaUrl = canvas.toDataURL("image/webp");
+                        var data = atob(list1.capturaUrl.substring("data:image/png;base64,".length)),
+                            asArray = new Uint8Array(data.length);
+
+                        for (var i = 0, len = data.length; i < len; ++i) {
+                            asArray[i] = data.charCodeAt(i);
+                        }
+                        //creamos un objeto blob cuyo parámetro es una matriz que incluye el contenido deseado y el tipo del contenido
+                        var blob = new Blob([asArray.buffer], {type: "image/png"});
+                        //Usamos msSaveBlob para proporcionar la opción de descarga d ela imagen
+                        window.navigator.msSaveBlob(blob, 'prueba.png');
+                        list1.stopSpin();
+                    }
                 }
             });
         for(var i in divs){
@@ -900,7 +916,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
     list1.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) {
             return p.toString() === "[object SafariRemoteNotification]";
         })(!window['safari'] || safari.pushNotification);
-    if (list1.isIE) {
+    if (list1.esIE) {
         list1.esIE = true;
         list1.isSafari = false;
         list1.isChrome = false;

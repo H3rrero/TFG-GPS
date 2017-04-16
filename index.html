@@ -228,9 +228,10 @@
 					<tr><td><button id="botonDatosGraficaT"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.mensajeVerGrafica}}</button></td></tr>
 			<tr>  <td ><button id="botonCoordT" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.coordV}}</button></td></tr>
 			<tr>  <td ><button id="botonVerMar" type="button" ng-click="list1.vermarkers();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.verMarker}}</button></td></tr>
-			<tr>  <td ><a  ng-click="list1.capPant()" ng-href="{{list1.capturaUrl}}"  id="btn-downloadT"
+			<tr>  <td ><a  ng-click="list1.capPant()" ng-href="{{list1.capturaUrl}}" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-downloadT"
 				download="my-file-name.jpg"><button id="downPt" type="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns">capPant</button></a></td></tr>
-
+			<tr><td><a  ng-click="list1.capPant()"   id="btn-downloadTIE" ng-hide="!list1.esIE" >
+				<button id="downPtIE" type="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns">capPant</button></a></td></tr>
         </table>
 
 			</div>

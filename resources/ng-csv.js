@@ -227,6 +227,9 @@ angular.module('ngCsv.directives').
       ],
       link: function (scope, element, attrs) {
         function doClick() {
+            var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) {
+                    return p.toString() === "[object SafariRemoteNotification]";
+                })(!window['safari'] || safari.pushNotification);
           var charset = scope.charset || "utf-8";
           var blob = new Blob([scope.csv], {
             type: "text/csv;charset="+ charset + ";"
@@ -234,11 +237,20 @@ angular.module('ngCsv.directives').
 
           if (window.navigator.msSaveOrOpenBlob) {
             navigator.msSaveBlob(blob, scope.getFilename());
-          } else {
+          }else if(isSafari){
+              var downloadLink = angular.element('<a></a>');
+              downloadLink.attr('href', window.URL.createObjectURL(blob));
+              downloadLink.attr('id', 'exptabla');
+              $document.find('body').append(downloadLink);
+              console.log(downloadLink.attr('href'));
+              window.open(downloadLink.attr('href'));
+          }
+          else {
 
             var downloadLink = angular.element('<a></a>');
             downloadLink.attr('href', window.URL.createObjectURL(blob));
             downloadLink.attr('download', scope.getFilename());
+              downloadLink.attr('id', 'exptabla');
             downloadLink.attr('target', '_blank');
 
             $document.find('body').append(downloadLink);
