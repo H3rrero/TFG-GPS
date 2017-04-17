@@ -76,7 +76,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
         }
     };
 
-    list1.capPant = function () {
+    list1.capPant = function (isTrack) {
         if(list1.pant){
             list1.capturaUrl = "";
         list1.startSpin();
@@ -88,7 +88,6 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
             }
             html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
-                logging:true,
                 timeout:2000,
                 onrendered: function(canvas) {
                     if(list1.isChrome || list1.isFirefox){
@@ -97,7 +96,11 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
                     list1.pant = false;
                     $scope.$apply();
                     list1.stopSpin();
-                    $("#downPt").click();}
+                    if(isTrack)
+                    $("#downPt").click();
+                    else
+                        $("#downPtR").click()
+                    }
                     if (list1.esIE || list1.isEdge) {
                         list1.capturaUrl = canvas.toDataURL("image/webp");
                         var data = atob(list1.capturaUrl.substring("data:image/png;base64,".length)),

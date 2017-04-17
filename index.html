@@ -213,6 +213,10 @@
           <tr><td><button id="botonDatosTablaR"type="button" ng-click="list1.verTablaR();" class="bttn-unite bttn-xs bttn-royal stiloBtns">{{list1.mensajeVerTabla}}</button></td></tr>
 					<tr><td><button id="botonDatosGraficaR"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-royal stiloBtns">{{list1.mensajeVerGrafica}}</button></td></tr>
 			<tr>  <td ><button id="botonCoordR" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-royal stiloBtns">{{list1.coordV}}</button></td></tr>
+			<tr>  <td ><a  ng-click="list1.capPant(false)" ng-href="{{list1.capturaUrl}}" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-downloadR"
+						   download="my-file-name.jpg"><button id="downPtR" type="button"  class="bttn-unite bttn-xs bttn-royal stiloBtns">capPant</button></a></td></tr>
+			<tr><td><a  ng-click="list1.capPant(false)"   id="btn-downloadRIE" ng-hide="!list1.esIE" >
+				<button id="downPtRIE" type="button"  class="bttn-unite bttn-xs bttn-royal stiloBtns">capPant</button></a></td></tr>
         </table>
 
         <table id="tableP" class="tableP" ng-if="list1.funciones">
@@ -228,9 +232,9 @@
 					<tr><td><button id="botonDatosGraficaT"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.mensajeVerGrafica}}</button></td></tr>
 			<tr>  <td ><button id="botonCoordT" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.coordV}}</button></td></tr>
 			<tr>  <td ><button id="botonVerMar" type="button" ng-click="list1.vermarkers();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.verMarker}}</button></td></tr>
-			<tr>  <td ><a  ng-click="list1.capPant()" ng-href="{{list1.capturaUrl}}" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-downloadT"
+			<tr>  <td ><a  ng-click="list1.capPant(true)" ng-href="{{list1.capturaUrl}}" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-downloadT"
 				download="my-file-name.jpg"><button id="downPt" type="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns">capPant</button></a></td></tr>
-			<tr><td><a  ng-click="list1.capPant()"   id="btn-downloadTIE" ng-hide="!list1.esIE" >
+			<tr><td><a  ng-click="list1.capPant(true)"   id="btn-downloadTIE" ng-hide="!list1.esIE" >
 				<button id="downPtIE" type="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns">capPant</button></a></td></tr>
         </table>
 
