@@ -242,7 +242,6 @@ angular.module('ngCsv.directives').
               downloadLink.attr('href', window.URL.createObjectURL(blob));
               downloadLink.attr('id', 'exptabla');
               $document.find('body').append(downloadLink);
-              console.log(downloadLink.attr('href'));
               window.open(downloadLink.attr('href'));
           }
           else {

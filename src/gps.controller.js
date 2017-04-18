@@ -92,6 +92,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
                 onrendered: function(canvas) {
                     if(list1.isChrome || list1.isFirefox){
                         list1.pant = false;
+                        console.log(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0]);
                     list1.capturaUrl = canvas.toDataURL("image/jpg");
                     list1.pant = false;
                     $scope.$apply();
@@ -113,6 +114,12 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
                         var blob = new Blob([asArray.buffer], {type: "image/png"});
                         //Usamos msSaveBlob para proporcionar la opción de descarga d ela imagen
                         window.navigator.msSaveBlob(blob, 'prueba.png');
+                        list1.stopSpin();
+                    }
+                    if(list1.isSafari){
+                        console.log(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0]);
+                        list1.capturaUrl = canvas.toDataURL("image/png");
+                       $('#btn-downloadTS').attr('href', list1.capturaUrl);
                         list1.stopSpin();
                     }
                 }
