@@ -790,14 +790,16 @@ service.importXMLWp = function () {
       service.longitudSelec = service.tracks[service.trackActivo].puntos[index].longitud;
       //Simulamos un click el mapa para añadir el marcado del punto elegido
       google.maps.event.trigger(service.mapa, 'click');
+        service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
+        service.mapa.setZoom(17);
     }else{
       //Guardamos los datos del punto
-        console.log(service.rutas[service.rutaActiva]);
-        console.log(index);
       service.latitudSelec = service.rutas[service.rutaActiva].puntos[index].latitud;
       service.longitudSelec = service.rutas[service.rutaActiva].puntos[index].longitud;
       //Simulamos un click el mapa para añadir el marcado del punto elegido
       google.maps.event.trigger(service.mapa, 'click');
+        service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
+        service.mapa.setZoom(17);
     }
     //Desactivamos el modo selecion
     service.seleccion = false;
