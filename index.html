@@ -21,14 +21,18 @@
 		<script src="src/mapas.service.js"></script>
 		<script src="js/markerclusterer.js"></script>
 		<script src="js/html2canvas.js"></script>
-		<script src="jsColor/jscolor.js"></script>
 		<script src="angular-spinner/dist/angular-spinner.min.js"></script>
     <link href="css/main.css" rel="stylesheet" type="text/css">
 		<link href="css/unite.css" rel="stylesheet" type="text/css">
 	  <link href="css/gradient.css" rel="stylesheet" type="text/css">
 		<link href="css/jelly.css" rel="stylesheet" type="text/css">
 		<link href="css/material-circle.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="angularjs-color-picker/dist/angularjs-color-picker.min.css" />
+		<!-- only include if you use bootstrap -->
+		<link rel="stylesheet" href="angularjs-color-picker/dist/themes/angularjs-color-picker-bootstrap.min.css" />
 
+		<script src="tinycolor2/dist/tinycolor-min.js"></script>
+		<script src="angularjs-color-picker/dist/angularjs-color-picker.min.js"></script>
 
 		<!-- CSS de Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -198,9 +202,8 @@
 						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-downloadCFT" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.gpx" ><button id="botonDesCFT" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary stiloBtns">descargar</button></a></td></tr>
 						<tr><td ><button id="inputBtT" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" name="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns"><input id='inputImportGT'  ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt"   type='file' fileread="list1.fichero">seleccione fichero</button></td></tr>
 						<tr><td><label id="labelT"  ng-if="(list1.esIE||list1.isFirefox)" class="bttn-unite bttn-xs bttn-primary stiloBtns">seleccione ficheros<input id='inputIET' ng-if="(list1.esIE||list1.isFirefox)" class="inputIESt"  type='file' fileread="list1.fichero"></label></td></tr>
-					<tr>  <td ><button id="botonPropiedadesT" type="button" ng-click="list1.openPopup();" class="bttn-unite bttn-xs bttn-primary stiloBtns">propiedades</button></td></tr>
-						<tr><td><input name="color1" class="jscolor"  ng-model="list1.colorTrack" ng-change="list1.changedColor()">
-						</td></tr>
+					<tr>  <td ><button id="botonPropiedadesT" data-toggle="modal" data-target="#modalMS" type="button" ng-click="list1.openPopup();" class="bttn-unite bttn-xs bttn-primary stiloBtns">propiedades</button></td></tr>
+
 
 				</table>
         <table id="tablePW"class="tableP" ng-if="list1.funcionesW">

@@ -45,22 +45,41 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     list1.whyCvsExport = false;
     list1.colorTrack = "";
 
-    list1.openPopup = function () {
+    $scope.color = '#FF0000';
+    $scope.options = {
+        format:'hex'
+    };
+    $scope.eventApi = {
+        onChange:  function (api, color, $event) {
+            console.log("eventapi");
+            EntidadesService.changedColor(color);
+            $("#li"+list1.trackActivo)[0].style.color = color;
+        }
 
+    };
+    list1.openPopup = function () {
+        list1.noError = false;
+        list1.error = false;
+        if (EntidadesService.isTrack == false
+            || EntidadesService.tracks[EntidadesService.trackActivo] === undefined) {
+            list1.error = true;
+            list1.mensajeError = "Por favor selecciona un track";
+            //Se comprueba que se haya selccionado un punto
+        } else if (list1.tracks[list1.trackActivo].puntos.length < 2) {
+            list1.error = true;
+            list1.mensajeError = "El track necesita tener al menos dos puntos para que exista una polilinea a la cual cambiar el color";
+        }else{
         ngDialog.open({
-            template: 'propiedades.html',
-            plain:false,
+            template:
+            '<color-picker ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
+            plain:true,
             showClose: true,
-            className: 'ngdialog-theme-default',
             controllerAs: 'list1',
             controller: 'PruebaController'
-        });
+        });}
     };
 
-    list1.changedColor = function () {
-        EntidadesService.changedColor(list1.colorTrack);
-        $("#li"+list1.trackActivo)[0].style.color = "#"+list1.colorTrack;
-    };
+
 
 
     list1.startSpin = function() {

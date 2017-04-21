@@ -102,9 +102,10 @@ function EntidadesService (){
 
 
     service.changedColor = function (color) {
+        console.log(color);
         var lineSymbolarrow = {
             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-            strokeColor : "#"+color,
+            strokeColor : color,
             strokeOpacity : 0.7,
             strokeWeight : 2.9,
             scale : 2.7
@@ -115,7 +116,7 @@ function EntidadesService (){
             repeat : '80px'
         };
         service.getPoly().setOptions({
-            strokeColor: "#"+color,
+            strokeColor: color,
             icons : [arrow]
         });
     };
