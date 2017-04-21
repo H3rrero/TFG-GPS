@@ -99,6 +99,27 @@ function EntidadesService (){
         strokeOpacity : 1,
         strokeWeight : 3
     };
+
+
+    service.changedColor = function (color) {
+        var lineSymbolarrow = {
+            path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            strokeColor : "#"+color,
+            strokeOpacity : 0.7,
+            strokeWeight : 2.9,
+            scale : 2.7
+        };
+        var arrow = {
+            icon : lineSymbolarrow,
+            offset : '50%',
+            repeat : '80px'
+        };
+        service.getPoly().setOptions({
+            strokeColor: "#"+color,
+            icons : [arrow]
+        });
+    };
+
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {
       //Inicializamos el elemento bounds de google maps

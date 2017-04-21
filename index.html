@@ -21,6 +21,7 @@
 		<script src="src/mapas.service.js"></script>
 		<script src="js/markerclusterer.js"></script>
 		<script src="js/html2canvas.js"></script>
+		<script src="jsColor/jscolor.js"></script>
 		<script src="angular-spinner/dist/angular-spinner.min.js"></script>
     <link href="css/main.css" rel="stylesheet" type="text/css">
 		<link href="css/unite.css" rel="stylesheet" type="text/css">
@@ -35,6 +36,9 @@
     <script src="https://code.jquery.com/jquery.js"></script>
 		<!-- Todos los plugins JavaScript de Bootstrap  -->
 	 <script src="js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="ng-dialog/css/ngDialog.min.css">
+		<link rel="stylesheet" href="ng-dialog/css/ngDialog-theme-default.min.css">
+		<script src="ng-dialog/js/ngDialog.min.js"></script>
 		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 		<meta charset="utf-8">
 		<style>
@@ -142,11 +146,11 @@
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-if="list1.activarLista">
 					<img  src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks"><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
+				<li ng-repeat="item in list1.tracks" id="li{{$index}}"><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
 			<img src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas"><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+			<li ng-repeat="item in list1.rutas" ><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
 		<li ng-repeat="item in list1.waypoints"><input id="inw{{$index}}" type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
@@ -194,6 +198,9 @@
 						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-downloadCFT" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.gpx" ><button id="botonDesCFT" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary stiloBtns">descargar</button></a></td></tr>
 						<tr><td ><button id="inputBtT" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" name="button"  class="bttn-unite bttn-xs bttn-primary stiloBtns"><input id='inputImportGT'  ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt"   type='file' fileread="list1.fichero">seleccione fichero</button></td></tr>
 						<tr><td><label id="labelT"  ng-if="(list1.esIE||list1.isFirefox)" class="bttn-unite bttn-xs bttn-primary stiloBtns">seleccione ficheros<input id='inputIET' ng-if="(list1.esIE||list1.isFirefox)" class="inputIESt"  type='file' fileread="list1.fichero"></label></td></tr>
+					<tr>  <td ><button id="botonPropiedadesT" type="button" ng-click="list1.openPopup();" class="bttn-unite bttn-xs bttn-primary stiloBtns">propiedades</button></td></tr>
+						<tr><td><input name="color1" class="jscolor"  ng-model="list1.colorTrack" ng-change="list1.changedColor()">
+						</td></tr>
 
 				</table>
         <table id="tablePW"class="tableP" ng-if="list1.funcionesW">

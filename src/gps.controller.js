@@ -4,7 +4,7 @@
 angular.module('GPS')
 .controller('PruebaController',PruebaController);
 
-function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
+function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngDialog) {
     var list1 = this;
     //track seleccionado por el usuario
     list1.trackActivo = 0;
@@ -43,7 +43,24 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService) {
     list1.capturaUrl="";
     list1.pant = true;
     list1.whyCvsExport = false;
+    list1.colorTrack = "";
 
+    list1.openPopup = function () {
+
+        ngDialog.open({
+            template: 'propiedades.html',
+            plain:false,
+            showClose: true,
+            className: 'ngdialog-theme-default',
+            controllerAs: 'list1',
+            controller: 'PruebaController'
+        });
+    };
+
+    list1.changedColor = function () {
+        EntidadesService.changedColor(list1.colorTrack);
+        $("#li"+list1.trackActivo)[0].style.color = "#"+list1.colorTrack;
+    };
 
 
     list1.startSpin = function() {
