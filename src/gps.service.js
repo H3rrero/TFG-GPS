@@ -835,6 +835,30 @@ service.importXMLWp = function () {
     if(service.isTrack == true)
     service.tracks[service.trackActivo].nombre = nombre;
   };
+    service.grosor = function (grosor) {
+        var lineSymbolarrow;
+        var arrow;
+        console.log("grosor");
+        lineSymbolarrow = {
+            path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            strokeColor : service.getPoly().strokeColor,
+            strokeOpacity : 0.7,
+            strokeWeight : grosor,
+            scale : 2.7
+        };
+        arrow = {
+            icon : lineSymbolarrow,
+            offset : '50%',
+            repeat : '80px'
+        };
+        var poly = service.getPoly();
+        poly.setOptions({
+            strokeColor: service.getPoly().strokeColor,
+            strokeOpacity: 1.0,
+            strokeWeight:grosor,
+            icons : [arrow]
+        });
+    };
   //Metodo que cambia el nombre a una ruta elegida
   service.renombrarR = function (nombre) {
     if (service.isTrack == false)

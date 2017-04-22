@@ -153,8 +153,8 @@
 				<li ng-repeat="item in list1.tracks" id="li{{$index}}"><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
 			</ul>
 			<ul ng-if="list1.activarListaR">
-			<img src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas" ><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
+			<img src="img/informacion.png" title="nombre de la ruta, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
+			<li ng-repeat="item in list1.rutas" id="lir{{$index}}" ><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
 		<li ng-repeat="item in list1.waypoints"><input id="inw{{$index}}" type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" >{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</li>
@@ -185,18 +185,16 @@
 				<table id="tableSR" class="sample-show-hide tableS" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesR">
 					<tr>  <td ><button id="botonCrearR" type="button" data-toggle="modal" data-target="#modalTR"  ng-click="list1.listaActivaR();" class="bttn-unite bttn-xs bttn-royal stiloBtns">crear</button></td></tr>
 						<tr><td><button id="botonBorR" type="button" data-toggle="modal" data-target="#modalMS" ng-click="  list1.borrarRuta();" class="bttn-unite bttn-xs bttn-royal stiloBtns">borrar</button></td></tr>
-						<tr><td><button id="botonRenR" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarR();" class="bttn-unite bttn-xs bttn-royal stiloBtns">renombrar</button></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()"   ng-hide="!list1.esIE"  id="btn-downloadRIET"    ><button id="botonDesRIET" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal stiloBtns">descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()" ng-href="{{list1.dataUrl}}"   ng-hide="!list1.isSafari" id="btn-downloadRS" download="my-file-name.gpx"   ><button id="botonDesRS" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal stiloBtns">descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXmlForR()" ng-hide="!(list1.isChrome||list1.isFirefox)" ng-href="{{list1.dataUrl}}"  id="btn-downloadRSF"   download="my-file-name.gpx" ><button id="botonDesRSF" type="button" data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-royal stiloBtns">descargar</button></a></td></tr>
 						<tr><td ><button id="inputBtR" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" name="button"  class="bttn-unite bttn-xs bttn-royal stiloBtns"><input id='inputImportRSF'  ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt"  type='file' fileread="list1.fichero">seleccione fichero</button></td></tr>
 						<tr><td><label id="labelR"  ng-if="(list1.esIE||list1.isFirefox)" class="bttn-unite bttn-xs bttn-royal stiloBtns">seleccione fichero<input id='inputIER' ng-if="(list1.esIE||list1.isFirefox)" class="inputIESt"  type='file' fileread="list1.fichero"></label></td></tr>
-
+					<tr>  <td ><button id="botonPropiedadesR" data-toggle="modal" data-target="#modalMS" type="button" ng-click="list1.openPopupR();" class="bttn-unite bttn-xs bttn-royal stiloBtns">propiedades</button></td></tr>
 				</table>
 				<table id="tableST" class="sample-show-hide tableS" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotones">
 					<tr>  <td ><button id="botonCrearT" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaActiva();" class="bttn-unite bttn-xs bttn-primary stiloBtns">crear</button></td></tr>
 						<tr><td><button id="botonBorT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="  list1.borrarTrack();" class="bttn-unite bttn-xs bttn-primary stiloBtns">borrar</button></td></tr>
-						<tr><td><button id="botonRenT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.renombrarT();" class="bttn-unite bttn-xs bttn-primary stiloBtns">renombrar</button></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()"  id="btn-downloadIET"  ng-hide="!list1.esIE"  ><button id="botonDesIET" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary stiloBtns">descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}" id="btn-downloadST"  ng-hide="!list1.isSafari"  download="my-file-name.gpx"><button id="botonDesST" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary stiloBtns">descargar</button></a></td></tr>
 						<tr><td><a  ng-click="list1.dowXml()" ng-href="{{list1.dataUrl}}"  id="btn-downloadCFT" ng-hide="!(list1.isChrome||list1.isFirefox)"  download="my-file-name.gpx" ><button id="botonDesCFT" type="button"  data-toggle="modal" data-target="#modalMS" class="bttn-unite bttn-xs bttn-primary stiloBtns">descargar</button></a></td></tr>

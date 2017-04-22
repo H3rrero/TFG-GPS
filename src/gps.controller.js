@@ -44,16 +44,21 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     list1.pant = true;
     list1.whyCvsExport = false;
     list1.colorTrack = "";
-
+    list1.nombre = "";
     $scope.color = '#FF0000';
+    list1.grosor = 0;
     $scope.options = {
         format:'hex'
     };
     $scope.eventApi = {
         onChange:  function (api, color, $event) {
-            console.log("eventapi");
+            if(EntidadesService.isTrack){
             EntidadesService.changedColor(color);
-            $("#li"+list1.trackActivo)[0].style.color = color;
+            $("#li"+list1.trackActivo)[0].style.color = color;}
+            else{
+                EntidadesService.changedColor(color);
+                $("#lir"+list1.rutaActiva)[0].style.color = color;
+            }
         }
 
     };
@@ -71,7 +76,12 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }else{
         ngDialog.open({
             template:
-            '<color-picker ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
+            '<label for="nombre" class="prlabel">nombre:</label>'+
+            '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarT()">'+
+            '<label for="grosor" class="prlabel">grosor:</label>'+
+            '<input type="number"   id="grosor" ng-model="list1.grosor" ng-change="list1.cambiarGrosorR()">'+
+            '<label for="picker" class="prlabel">color:</label>'+
+            '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
             plain:true,
             showClose: true,
             controllerAs: 'list1',
@@ -79,8 +89,48 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         });}
     };
 
+    list1.openPopupR = function () {
+        list1.noError = false;
+        list1.error = false;
+        if (EntidadesService.isTrack == true
+            || EntidadesService.rutas[EntidadesService.rutaActiva] === undefined
+            || EntidadesService.modoCreacion == true) {
+            list1.error = true;
+            list1.mensajeError = "Por favor selecciona una ruta";
+
+        } else if (list1.rutas[list1.rutaActiva].puntos.length < 2) {
+            list1.error = true;
+            list1.mensajeError = "La ruta necesita tener al menos dos puntos para que exista una polilinea a la cual cambiar las propiedades";
+        }else{
+            ngDialog.open({
+                template:
+                '<label for="nombre" class="prlabel">nombre:</label>'+
+                '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarR()">'+
+                '<label for="grosor" class="prlabel">grosor:</label>'+
+                '<input type="number"   id="grosor" ng-model="list1.grosor" ng-change="list1.cambiarGrosorR()">'+
+                '<label for="grosor" class="prlabel">color:</label>'+
+                '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
+                plain:true,
+                showClose: true,
+                controllerAs: 'list1',
+                controller: 'PruebaController'
+            });}
+    };
 
 
+    list1.cambiarGrosor = function () {
+        if (list1.grosor != null && list1.grosor>0 && EntidadesService.tracks.length > 0) {
+
+            EntidadesService.grosor(list1.grosor);
+        }
+    };
+
+    list1.cambiarGrosorR = function () {
+        if (list1.grosor != null && list1.grosor>0 && EntidadesService.rutas.length > 0) {
+
+            EntidadesService.grosor(list1.grosor);
+        }
+    };
 
     list1.startSpin = function() {
             usSpinnerService.spin('spinner-1');
@@ -507,10 +557,9 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "No tienes ningun track creado";
         }
-        var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
-        if (nombre != null && EntidadesService.tracks.length > 0) {
+        if (list1.nombre != null && EntidadesService.tracks.length > 0) {
             //Se llama al metodo del service para cambiar el nombre
-            EntidadesService.renombrarT(nombre);
+            EntidadesService.renombrarT(list1.nombre);
         }
 
     };
@@ -524,10 +573,9 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "No tienes ninguna ruta creada";
         }
-        var nombre = prompt("Introduzca el nuevo nombre", "Nuevo nombre");
-        if (nombre != null && EntidadesService.rutas.length > 0) {
+        if (list1.nombre != null && EntidadesService.rutas.length > 0) {
             //Se llama al metodo del service para cambiar el nombre
-            EntidadesService.renombrarR(nombre);
+            EntidadesService.renombrarR(list1.nombre);
         }
 
     };
