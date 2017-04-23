@@ -870,6 +870,28 @@ service.importXMLWp = function () {
     service.waypoints[service.wpActivo].nombre = nombre;
   };
 
+  service.changeMarkerPosition = function (latitud,longitud) {
+      var posicion = service.wpActivo;
+      var elevator = new google.maps.ElevationService;
+      var latlng = new google.maps.LatLng(latitud,longitud);
+      service.waypoints[posicion].longitud = parseFloat(longitud).toFixed(6);
+      service.waypoints[posicion].latitud = parseFloat(latitud).toFixed(6);
+      service.markers[posicion].setPosition(latlng);
+      elevator.getElevationForLocations({
+          'locations': [latlng]
+      }, function(results, status) {
+          if (status === google.maps.ElevationStatus.OK) {
+              if (results[0]) {
+                  service.waypoints[posicion].elevacion = results[0].elevation.toFixed(2);
+              } else {
+                  console.log("no result found");
+              }
+          } else {
+              console.log("elevation service failed");
+          }
+      });
+      service.markers[posicion].title= "Latitud: "+parseFloat(latitud).toFixed(6)+"\nLongitud: "+parseFloat(longitud).toFixed(6);
+  };
 
   service.invertirRuta2 = function () {
       var lineSymbolarrow;
