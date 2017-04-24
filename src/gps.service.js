@@ -61,6 +61,7 @@ function EntidadesService (){
   service.modoEdicion = true;
   service.conection = false;
   service.ver = true;
+  service.modoInsertarWp = false;
   service.elevacionPtAnadido=0;
   service.segundosAnadir = 0;
   service.mapas = [];
@@ -835,6 +836,16 @@ service.importXMLWp = function () {
     if(service.isTrack == true)
     service.tracks[service.trackActivo].nombre = nombre;
   };
+
+  service.anadirWaypoint = function (lat,lng) {
+      service.latitud = parseFloat(lat).toFixed(6);
+      service.longitud =parseFloat(lng).toFixed(6);
+      service.modoInsertarWp = true;
+      google.maps.event.trigger(service.mapa, 'click');
+      service.modoInsertarWp = false;
+
+  };
+
     service.grosor = function (grosor) {
         var lineSymbolarrow;
         var arrow;

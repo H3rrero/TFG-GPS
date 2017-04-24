@@ -65,7 +65,7 @@
 		<div id="body-wrapper"  ng-controller='PruebaController as list1'  >
 <div class="modal fade bs-example-modal-sm" id="modalW" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
   <div class="modal-dialog modal-sm" role="document">
-    <div class="alert alert-success" role="alert" ng-hide="!list1.modoCreacion">El modo creación de Waypoints ha sido ativado, pincha en el mapa para crear Waypoints</div>
+    <div class="alert alert-success" role="alert" ng-hide="!list1.modoCreacion">El modo creación de Waypoints ha sido ativado, pincha en el mapa o en insertar para crear Waypoints</div>
 		<div class="alert alert-danger" role="alert"  ng-hide="list1.modoCreacion">El modo creación de Waypoints ha sido desactivado.</div>
   </div>
 </div>
@@ -203,7 +203,8 @@
 				</table>
         <table id="tablePW"class="tableP" ng-if="list1.funcionesW">
         <tr>  <td ><button id="botonBotones" type="button" ng-click="  list1.verBotonesW();" class="bttn-unite bttn-xs bttn-success stiloBtns">archivo</button></td></tr>
-					<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success stiloBtns">{{list1.mensajeVerlistaW}}</button></td></tr>
+			<tr>  <td ><button id="botonAnadirWp" data-toggle="modal" data-target="#modalMS" type="button" ng-click="list1.openPopupNW();" class="bttn-unite bttn-xs bttn-success stiloBtns">insertar waypoint</button></td></tr>
+			<tr><td><button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success stiloBtns">{{list1.mensajeVerlistaW}}</button></td></tr>
 			<tr>  <td ><button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-success stiloBtns">{{list1.coordV}}</button></td></tr>
         </table>
         <table id="tablePR" class="tableP" ng-if="list1.funcionesR">

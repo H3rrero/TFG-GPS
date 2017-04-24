@@ -50,6 +50,8 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     list1.grosor = 0;
     list1.lng="";
     list1.lat ="";
+    list1.lngNW="";
+    list1.latNW ="";
     $scope.options = {
         format:'hex'
     };
@@ -150,6 +152,42 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             });}
     };
 
+    list1.openPopupNW = function () {
+
+            ngDialog.open({
+                template:
+                '<label for="coord" class="prlabel">Latitud y longitud:</label>'+
+                '<input type="text"   id="coord"  ng-model="list1.latNW" >'+
+                '<input type="text"  style="margin-left: 2%"  id="coordlng" ng-model="list1.lngNW" >'+
+                '<button id="botonAnadirWp" type="button"  style="margin-left: 2%;margin-top: 2%" ' +
+                'ng-click="list1.anadirWaypoint()" class="bttn-unite bttn-xs bttn-success stiloBtns">crear</button>',
+                plain:true,
+                showClose: true,
+                controllerAs: 'list1',
+                controller: 'PruebaController'
+            });
+    };
+
+    list1.anadirWaypoint = function () {
+
+
+                list1.activarListaR = false;
+                list1.activarLista = false;
+                list1.activarListaW = true;
+                list1.mensajeVerlista = "ver lista";
+                list1.mensajeVerlistaR = "ver lista";
+                list1.mensajeVerlistaW = "ocultar lista";
+                EntidadesService.isWaypoint = true;
+                EntidadesService.isTrack = false;
+                list1.modoCreacion = true;
+                EntidadesService.modoCreacion = true;
+
+
+
+            EntidadesService.anadirWaypoint(list1.latNW,list1.lngNW);
+
+
+    };
     list1.cambiarGrosor = function () {
         if (list1.grosor != null && list1.grosor>0 && EntidadesService.tracks.length > 0) {
 

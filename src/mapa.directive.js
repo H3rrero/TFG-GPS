@@ -1029,6 +1029,7 @@ function Mymap(EntidadesService,MapasService) {
 
 
           } else if(EntidadesService.isWaypoint == true){
+            if(EntidadesService.modoInsertarWp == false){
             EntidadesService.latitud = event.latLng.lat().toFixed(6);
             EntidadesService.longitud = event.latLng.lng().toFixed(6);
             elevator.getElevationForLocations({
@@ -1050,7 +1051,29 @@ function Mymap(EntidadesService,MapasService) {
               controller.crear(2);
                scope.$apply();
               }
-            });
+            });}else{
+                var latLng = new google.maps.LatLng(EntidadesService.latitud,EntidadesService.longitud);
+                elevator.getElevationForLocations({
+                    'locations': [latLng]
+                }, function(results, status) {
+                    if (status === google.maps.ElevationStatus.OK) {
+                        if (results[0]) {
+
+                            EntidadesService.elevacion = results[0].elevation.toFixed(2);
+                            controller.crear(2);
+                            scope.$apply();
+                        } else {
+                            console.log("no result found");
+                            controller.crear(2);
+                            scope.$apply();
+                        }
+                    } else {
+                        console.log("elevation service failed");
+                        controller.crear(2);
+                        scope.$apply();
+                    }
+                });
+            }
           }
           else{
             elevator.getElevationForLocations({
@@ -1075,14 +1098,24 @@ function Mymap(EntidadesService,MapasService) {
           if(EntidadesService.isWaypoint == true){
             var nombre = "Nuevo-Waypoint"+EntidadesService.cont;
             EntidadesService.cont = EntidadesService.cont+1;
-            var marker = new google.maps.Marker({
-              position: event.latLng,
-              title: "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-              icon: 'img/iconowp.png',
-              draggable:true,
-              map: map
-            });
-
+              if(EntidadesService.modoInsertarWp == true){
+                  var latLng = new google.maps.LatLng(EntidadesService.latitud,EntidadesService.longitud);
+                  var marker = new google.maps.Marker({
+                      position: latLng,
+                      title: "Latitud: "+ parseFloat(EntidadesService.latitud).toFixed(6)+"\nLongitud: "+parseFloat(EntidadesService.longitud).toFixed(6),
+                      icon: 'img/iconowp.png',
+                      draggable:true,
+                      map: map
+                  });
+                 }else {
+                  var marker = new google.maps.Marker({
+                      position: event.latLng,
+                      title: "Latitud: " + event.latLng.lat().toFixed(6) + "\nLongitud: " + event.latLng.lng().toFixed(6),
+                      icon: 'img/iconowp.png',
+                      draggable: true,
+                      map: map
+                  });
+              }
               marker.addListener('click', function() {
                   for (var item in EntidadesService.waypoints) {
 
