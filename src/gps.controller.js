@@ -210,6 +210,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     };
 
     list1.startSpin = function() {
+
             usSpinnerService.spin('spinner-1');
     };
 
@@ -590,8 +591,9 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "El track necesita tener mas de un punto creado para poder ser cortado";
         }
-        //Si todo esta bien...
+        //Si  esta bien...
         else {
+            list1.startSpin();
             //Creamos dos tracks para almacenar los dos recortes
             list1.crear(0);
             list1.crear(0);
@@ -599,9 +601,15 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             EntidadesService.puntoElegido = punto;
             //Y llamaos al metodo del service
             EntidadesService.recortarTrack();
+            list1.stopSpin();
         }
-    }
-
+    };
+    //Funcion que obtiene de la tabla el punto seleccionado por el usuario
+    list1.puntoSelecTG = function (index) {
+        EntidadesService.clicTabGraf = true;
+        EntidadesService.puntoSelec(index);
+        EntidadesService.puntoBorrado = true;
+    };
     //Funcion que obtiene de la tabla el punto seleccionado por el usuario
     list1.puntoSelec = function (index) {
 
@@ -1037,12 +1045,14 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         list1.actualizarPuntosT();
         if(EntidadesService.mapa.getZoom()>=17 && EntidadesService.ver)
         EntidadesService.actualizarMarkers2();
+        EntidadesService.superponerPolylinea();
         EntidadesService.puntoElegido = null;
     };
     list1.changedR = function () {
         list1.actualizarPuntosR();
-        if(EntidadesService.mapa.getZoom()>=17 && EntidadesService.ver)
+        if( EntidadesService.ver)
         EntidadesService.actualizarMarkersR2();
+        EntidadesService.superponerPolylineaR();
         EntidadesService.puntoElegido = null;
     };
     list1.changedW = function () {

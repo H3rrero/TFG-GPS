@@ -34,6 +34,7 @@
 
         $scope.onClick = function (points, evt) {
             if(points.length>0){
+                EntidadesService.clicTabGraf = true;
                 EntidadesService.puntoSelec(points[0]._index);
                 EntidadesService.puntoBorrado = true;
             }

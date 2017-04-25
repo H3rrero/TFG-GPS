@@ -305,15 +305,6 @@ function Mymap(EntidadesService,MapasService) {
             EntidadesService.actualizarMarkerActivo();
         }
 
-        if(EntidadesService.wpRta[EntidadesService.rutaActiva]!=undefined )
-                if(EntidadesService.wpRta[EntidadesService.rutaActiva].length>2)
-            if(EntidadesService.isTrack == false &&   ((EntidadesService.mapa.getZoom()>=17 && EntidadesService.wpRta[EntidadesService.rutaActiva]
-                [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == false) ||(
-            EntidadesService.mapa.getZoom()<17 && EntidadesService.wpRta[EntidadesService.rutaActiva]
-                [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == true))){
-            EntidadesService.actualizarMarkerActivoR();
-        }
-
             });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
@@ -979,11 +970,7 @@ function Mymap(EntidadesService,MapasService) {
 
                             marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                             marker.icon= EntidadesService.myIconRFin;
-                        if(map.getZoom()<17){
-                            EntidadesService.wpRta[rutaACortar]
-                                [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
-                        }
-                        else{
+
                             if(rutaACortar == EntidadesService.rutaActiva){
                                 EntidadesService.wpRta[rutaACortar]
                                     [EntidadesService.wpRta[rutaACortar].length-1].setVisible(true);
@@ -992,7 +979,7 @@ function Mymap(EntidadesService,MapasService) {
                                     [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
                             }
 
-                        }
+
                         EntidadesService.wpRta[rutaACortar].push(marker);
                     }
 
@@ -1360,14 +1347,10 @@ function Mymap(EntidadesService,MapasService) {
 
                       marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
                       marker.icon= EntidadesService.myIconRFin;
-                  if(map.getZoom()<17){
-                      EntidadesService.wpRta[EntidadesService.rutaActiva]
-                          [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(false);
-                  }
-                  else{
+
                       EntidadesService.wpRta[EntidadesService.rutaActiva]
                           [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(true);
-                  }
+
                   EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
               }
 
