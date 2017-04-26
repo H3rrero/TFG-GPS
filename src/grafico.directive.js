@@ -23,17 +23,18 @@
         $scope.series = ['Elevacion'];
         $scope.data = [EntidadesService.getPuntosGrafico()];
         $scope.colors =  [{
-            backgroundColor : '#0062ff',
-            pointBackgroundColor: '#3382FF',
-            pointHoverBackgroundColor: '#3382FF',
-            borderColor: '#3382FF',
-            pointBorderColor: '#3382FF',
-            pointHoverBorderColor: '#3382FF',
+            backgroundColor : '#3382FF',
+            pointBackgroundColor: '#0062ff',
+            pointHoverBackgroundColor: '#0062ff',
+            borderColor: '#0062ff',
+            pointBorderColor: '#0062ff',
+            pointHoverBorderColor: '#0062ff',
             fill: true /* this option hide background-color */
         }, '#00ADF9', '#FDB45C', '#46BFBD'];
 
         $scope.onClick = function (points, evt) {
             if(points.length>0){
+                EntidadesService.clicTabGraf = true;
                 EntidadesService.puntoSelec(points[0]._index);
                 EntidadesService.puntoBorrado = true;
             }

@@ -20,48 +20,81 @@ function Mymap(EntidadesService,MapasService) {
         EntidadesService.ownerDo = ownerDocument;
         switch(zoom) {
             case 12:
-                this.tileSize.width = 32;
-                this.tileSize.height = 32;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(32, 32)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 13:
-                this.tileSize.width = 64;
-                this.tileSize.height = 64;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(64, 64)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 14:
-                this.tileSize.width = 128;
-                this.tileSize.height = 128;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(128, 128)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 15:
-                this.tileSize.width = 255;
-                this.tileSize.height = 255;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(255, 255)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 16:
-                this.tileSize.width = 510;
-                this.tileSize.height = 510;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(510, 510)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 17:
-                this.tileSize.width = 1020;
-                this.tileSize.height = 1020;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(1020, 1020)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 18:
-                this.tileSize.width = 2000;
-                this.tileSize.height = 2000;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(2000, 2000)));
+                    EntidadesService.cuadricula = false;
+                };
                 break;
             case 19:
-                this.tileSize.width = 4000;
-                this.tileSize.height = 4000;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(4000, 4000)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 20:
-                this.tileSize.width = 8000;
-                this.tileSize.height = 8000;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(8000, 8000)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 21:
-                this.tileSize.width = 15000;
-                this.tileSize.height = 15000;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(15000, 15000)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
             case 22:
-                this.tileSize.width = 33000;
-                this.tileSize.height = 33000;
+                if(EntidadesService.cuadricula==true) {
+                    map.overlayMapTypes.setAt(
+                        0, new CoordMapType(new google.maps.Size(33000, 33000)));
+                    EntidadesService.cuadricula = false;
+                }
                 break;
 
         }
@@ -304,16 +337,7 @@ function Mymap(EntidadesService,MapasService) {
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-2].getVisible() == true))){
             EntidadesService.actualizarMarkerActivo();
         }
-
-        if(EntidadesService.wpRta[EntidadesService.rutaActiva]!=undefined )
-                if(EntidadesService.wpRta[EntidadesService.rutaActiva].length>2)
-            if(EntidadesService.isTrack == false &&   ((EntidadesService.mapa.getZoom()>=17 && EntidadesService.wpRta[EntidadesService.rutaActiva]
-                [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == false) ||(
-            EntidadesService.mapa.getZoom()<17 && EntidadesService.wpRta[EntidadesService.rutaActiva]
-                [EntidadesService.wpRta[EntidadesService.rutaActiva].length-2].getVisible() == true))){
-            EntidadesService.actualizarMarkerActivoR();
-        }
-
+        EntidadesService.cuadricula = true;
             });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
@@ -979,11 +1003,7 @@ function Mymap(EntidadesService,MapasService) {
 
                             marker.title= "Nombre: "+nombre+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                             marker.icon= EntidadesService.myIconRFin;
-                        if(map.getZoom()<17){
-                            EntidadesService.wpRta[rutaACortar]
-                                [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
-                        }
-                        else{
+
                             if(rutaACortar == EntidadesService.rutaActiva){
                                 EntidadesService.wpRta[rutaACortar]
                                     [EntidadesService.wpRta[rutaACortar].length-1].setVisible(true);
@@ -992,7 +1012,7 @@ function Mymap(EntidadesService,MapasService) {
                                     [EntidadesService.wpRta[rutaACortar].length-1].setVisible(false);
                             }
 
-                        }
+
                         EntidadesService.wpRta[rutaACortar].push(marker);
                     }
 
@@ -1360,14 +1380,10 @@ function Mymap(EntidadesService,MapasService) {
 
                       marker.title= "Nombre: "+nombre+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
                       marker.icon= EntidadesService.myIconRFin;
-                  if(map.getZoom()<17){
-                      EntidadesService.wpRta[EntidadesService.rutaActiva]
-                          [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(false);
-                  }
-                  else{
+
                       EntidadesService.wpRta[EntidadesService.rutaActiva]
                           [EntidadesService.wpRta[EntidadesService.rutaActiva].length-1].setVisible(true);
-                  }
+
                   EntidadesService.wpRta[EntidadesService.rutaActiva].push(marker);
               }
 

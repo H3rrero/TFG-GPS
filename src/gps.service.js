@@ -64,7 +64,10 @@ function EntidadesService (){
   service.modoInsertarWp = false;
   service.elevacionPtAnadido=0;
   service.segundosAnadir = 0;
+  service.clicTabGraf = false;
+  service.cuadricula = true;
   service.mapas = [];
+  service.colorGrafica = '#0062ff';
   service.infowindow2;
   service.ownerDo;
     service.coords = false;
@@ -109,7 +112,8 @@ function EntidadesService (){
             strokeColor : color,
             strokeOpacity : 0.7,
             strokeWeight : 2.9,
-            scale : 2.7
+            scale : 2.7,
+
         };
         var arrow = {
             icon : lineSymbolarrow,
@@ -118,10 +122,33 @@ function EntidadesService (){
         };
         service.getPoly().setOptions({
             strokeColor: color,
-            icons : [arrow]
+            icons : [arrow],
         });
-    };
 
+
+    };
+    service.superponerPolylineaR = function () {
+        for(var i in service.polyLineasR){
+            service.polyLineasR[i].setOptions({
+                zIndex:1
+            });
+        }
+        if(service.getPoly() != undefined){
+        service.getPoly().setOptions({
+            zIndex:4
+        });}
+    };
+    service.superponerPolylinea = function () {
+      for(var i in service.polyLineas){
+          service.polyLineas[i].setOptions({
+              zIndex:1
+          });
+      }
+        if(service.getPoly() != undefined){
+        service.getPoly().setOptions({
+            zIndex:4
+        });}
+    };
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {
       //Inicializamos el elemento bounds de google maps
@@ -813,19 +840,23 @@ service.importXMLWp = function () {
       service.longitudSelec = service.tracks[service.trackActivo].puntos[index].longitud;
       //Simulamos un click el mapa para añadir el marcado del punto elegido
       google.maps.event.trigger(service.mapa, 'click');
-        service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
-        service.mapa.setZoom(17);
+        if(service.clicTabGraf){
+            service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
+            service.mapa.setZoom(17);}
     }else{
       //Guardamos los datos del punto
       service.latitudSelec = service.rutas[service.rutaActiva].puntos[index].latitud;
       service.longitudSelec = service.rutas[service.rutaActiva].puntos[index].longitud;
       //Simulamos un click el mapa para añadir el marcado del punto elegido
       google.maps.event.trigger(service.mapa, 'click');
+      if(service.clicTabGraf){
         service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
-        service.mapa.setZoom(17);
+        service.mapa.setZoom(17);}
+
     }
     //Desactivamos el modo selecion
     service.seleccion = false;
+      service.clicTabGraf = false;
   };
 
     service.cambiarDescripcion = function (descripcion) {
@@ -1393,7 +1424,6 @@ service.getPolyR = function (num) {
 //devuelve la polilinea de la entidad activa actualmente
 service.getPoly = function () {
   if (service.isTrack) {
-
     return service.polyLineas[service.trackActivo];
   } else {
 
@@ -1429,12 +1459,12 @@ service.vermarkers = function () {
     //Actualiza los puntos del track activo
     service.actualizarMarkerActivoR = function() {
 
-        if( service.mapa.getZoom()>=17 && service.wpRta[service.rutaActiva][service.wpRta[service.rutaActiva].length-2].getVisible() == false){
+        if(  service.wpRta[service.rutaActiva][service.wpRta[service.rutaActiva].length-2].getVisible() == false){
             for(var j in service.wpRta[service.rutaActiva]){
                 service.wpRta[service.rutaActiva][j].setVisible(true);
             }
         }
-        if(service.mapa.getZoom()<17 && service.wpRta[service.rutaActiva][service.wpRta[service.rutaActiva].length-2].getVisible() == true){
+        if( service.wpRta[service.rutaActiva][service.wpRta[service.rutaActiva].length-2].getVisible() == true){
             for(var j in service.wpRta[service.rutaActiva]){
                 if(j!=0 && j!= service.wpRta[service.rutaActiva].length-1)
                     service.wpRta[service.rutaActiva][j].setVisible(false);
@@ -1454,7 +1484,7 @@ service.vermarkers = function () {
                     }}
 
         for(var i in service.wpRta[service.rutaActiva]){
-            if(service.mapa.getZoom()>=17 && service.isTrack==false)
+            if( service.isTrack==false)
                 service.wpRta[service.rutaActiva][i].setVisible(true);
 
         }
