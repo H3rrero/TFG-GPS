@@ -124,8 +124,6 @@ function EntidadesService (){
             strokeColor: color,
             icons : [arrow],
         });
-
-
     };
     service.superponerPolylineaR = function () {
         for(var i in service.polyLineasR){
@@ -148,6 +146,7 @@ function EntidadesService (){
         service.getPoly().setOptions({
             zIndex:4
         });}
+
     };
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {

@@ -594,7 +594,6 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }
         //Si  esta bien...
         else {
-
             //Creamos dos tracks para almacenar los dos recortes
             list1.crear(0);
             list1.crear(0);
@@ -602,7 +601,6 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             EntidadesService.puntoElegido = punto;
             //Y llamaos al metodo del service
             EntidadesService.recortarTrack();
-
         }
     };
     //Funcion que obtiene de la tabla el punto seleccionado por el usuario

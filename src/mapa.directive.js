@@ -338,6 +338,7 @@ function Mymap(EntidadesService,MapasService) {
             EntidadesService.actualizarMarkerActivo();
         }
         EntidadesService.cuadricula = true;
+
             });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
