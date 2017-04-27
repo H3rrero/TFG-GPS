@@ -52,6 +52,8 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     list1.lat ="";
     list1.lngNW="";
     list1.latNW ="";
+    list1.velocidad = 4;
+    list1.fecha;
     $scope.options = {
         format:'hex'
     };
@@ -131,7 +133,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
 
             list1.error = true;
             list1.mensajeError = "Por favor selecciona un waypoint";
-            //Nos aseguramos de que tenga rutas creadas
+
         } else if (EntidadesService.waypoints.length < 1) {
             list1.error = true;
             list1.mensajeError = "Necesitas tener waypoints creados para poder editarlos";
@@ -898,45 +900,55 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
 
     });
 
+     list1.openPopupTiempos = function () {
+        list1.noError = false;
+        list1.error = false;
+        if (EntidadesService.isTrack == false
+            || EntidadesService.tracks[EntidadesService.trackActivo] === undefined) {
+            list1.error = true;
+            list1.mensajeError = "Por favor selecciona un track";
+            //Se comprueba que se haya selccionado un punto
+        } else{
+        ngDialog.open({
+            template:
+            '<label for="velocidad" class="prlabel">Velocidad:</label>'+
+            '<input type="number"   id="velocidad" ng-model="list1.velocidad">'+
+            '<label for="fecha" class="prlabel">Fecha:</label>'+
+            '<input type="datetime-local"   id="fecha" ng-model="list1.fecha" >'+
+            '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>',
+            plain:true,
+            showClose: true,
+            controllerAs: 'list1',
+            controller: 'PruebaController'
+        });}
+    };
+
+
     //FUncion que pide al usuario una fecha y una velocidad y calcula los tiempos del track a partir de esos datos
     list1.cambiarTiempos = function () {
+        list1.error = false;
+        list1.noError = false;
         //Solo ejecutamos la funcion si hay algun tracl creado y si en el momento actual se esta modificando un track
         if (EntidadesService.tracks.length > 0 && EntidadesService.isTrack == true) {
-            var velocidad = prompt("Velocidad del recorrido en km/h (no incluya la unidad, solo el numero)", "4");
+            var velocidad = list1.velocidad;
             var velocidadInt = parseInt(velocidad);
-            //Si la velocidad introducida no es correcta y la operacion no se ha cancelado se vuelve a pedir la velocidad
-            while (isNaN(velocidadInt) == true && velocidad != null) {
-                velocidad = prompt("Por favor introduzca una velocidad correcta en km/h (no incluya la unidad, solo el numero)", "4");
-                velocidadInt = parseInt(velocidad);
-                //Si la operacion es cancelada por el usuario se sale del while
-                if (velocidad == null) {
-                    break;
-                }
+            var fechas =list1.fecha;
+            //Si la velocidad introducida no es introducida se usa la velocidad por defecto
+            if (velocidad== null) {
+              velocidad = EntidadesService.tracks[EntidadesService.trackActivo].velocidad;
+              velocidadInt = parseInt(velocidad);
             }
-            //Si la operacion no ha sido cancelada se pide la fecha al ususario
-            if (velocidad != null)
-                var fechas = prompt("Introduca año,mes,dia,hora,minutos separados por comas", "2017,01,01,00,00");
-            //Si la operacion ha sido cancelada no se ejecutara este if
-            if (fechas != null && velocidad != null) {
-                var cadena = fechas.split(",");
-                var fecha = new Date(cadena[0], cadena[1], cadena[2], cadena[3], cadena[4], "00", "00");
-                //Si la fecha es incorrecta  se vuelve a pedir
-                while (fecha == "Invalid Date") {
-                    fechas = prompt("La fecha no se ha introducido en el formato indicado por favor introduca año,mes,dia,hora,minutos separados por comas", "2017,01,01,00,00");
-                    //Si se cancela la operacion se sale del while
-                    if (fechas == null) {
-                        break;
-                    } else {
-                        cadena = fechas.split(",");
-                        fecha = new Date(cadena[0], cadena[1], cadena[2], cadena[3], cadena[4], "00", "00");
-                    }
-                }
-                //Si la operacio ha sido cancelada no se ejecutara el metodo
-                if (fechas != null) {
-                    EntidadesService.cambiarTiempos(parseInt(velocidad), fecha,list1.trackActivo);
+            //si la fecha no es introducida se usa la fecha por defecto
+            if(fechas == null){
+              fechas = new Date();}
+               
+          
+                    fechas.setMonth(fechas.getMonth()+1);
+                    EntidadesService.cambiarTiempos(parseInt(velocidad), fechas,list1.trackActivo);
                     list1.actualizarPuntosT();
-                }
-            }
+                     ngDialog.close();
+           
+            
         }
     };
     //Metodo que crea entidades

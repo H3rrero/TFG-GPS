@@ -234,7 +234,7 @@
         <tr><td><button id="botonRecT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.recortarTrack();" class="bttn-unite bttn-xs bttn-primary stiloBtns">cortar</button></td></tr>
           <tr><td><button id="botonUnirT" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.unirTracks();" class="bttn-unite bttn-xs bttn-primary stiloBtns">unir</button></td></tr>
           <tr><td><button id="botonInvT" type="button" data-toggle="modal" data-target="#modalMS"  ng-click="list1.invertirTrack();" class="bttn-unite bttn-xs bttn-primary stiloBtns">invertir</button></td></tr>
-					<tr><td>  <button id="botonTim" type="button" ng-click="list1.cambiarTiempos();" class="bttn-unite bttn-xs bttn-primary stiloBtns">tiempos</button></td></tr>
+					<tr><td>  <button id="botonTim" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.openPopupTiempos();" class="bttn-unite bttn-xs bttn-primary stiloBtns">tiempos</button></td></tr>
 					<tr><td><button id="botonListarT" type="button" data-toggle="modal" data-target="#modalTR" ng-click="list1.listaT();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.mensajeVerlista}}</button></td></tr>
 					<tr><td><button id="botonDatosTablaT"type="button" ng-click="list1.verTablaT();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.mensajeVerTabla}}</button></td></tr>
 					<tr><td><button id="botonDatosGraficaT"type="button" ng-click="list1.verGrafica();" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.mensajeVerGrafica}}</button></td></tr>
