@@ -253,13 +253,16 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 if(i<divs.length)
                     divs[i].style.borderWidth = '2px';
             }
-            html2canvas(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
+            console.log(document.body.childNodes[3].childNodes[8].childNodes[0].childNodes[0].childNodes[0]);
+            html2canvas(document.body.childNodes[3].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
                 timeout:2000,
+                height:2480,
+                width:3508,
                 onrendered: function(canvas) {
                     if(list1.isChrome || list1.isFirefox){
                         list1.pant = false;
-                        console.log(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0]);
+                        
                     list1.capturaUrl = canvas.toDataURL("image/jpg");
                     list1.pant = false;
                     $scope.$apply();
@@ -911,11 +914,15 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         } else{
         ngDialog.open({
             template:
+            '<div>'+
             '<label for="velocidad" class="prlabel">Velocidad:</label>'+
-            '<input type="number"   id="velocidad" ng-model="list1.velocidad">'+
+            '<input type="number"   id="velocidad" ng-model="list1.velocidad">min/km'+
             '<label for="fecha" class="prlabel">Fecha:</label>'+
-            '<input type="datetime-local"   id="fecha" ng-model="list1.fecha" >'+
-            '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>',
+            '<datepicker>'+
+            '<input ng-model="date" type="text"/>'+
+            '</datepicker>'+
+            '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>'
+               +'</div>',
             plain:true,
             showClose: true,
             controllerAs: 'list1',
@@ -931,8 +938,8 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         //Solo ejecutamos la funcion si hay algun tracl creado y si en el momento actual se esta modificando un track
         if (EntidadesService.tracks.length > 0 && EntidadesService.isTrack == true) {
             var velocidad = list1.velocidad;
-            var velocidadInt = parseInt(velocidad);
-            var fechas =list1.fecha;
+            var velocidadInt = parseFloat(velocidad);
+            var fechas = $scope.date;
             //Si la velocidad introducida no es introducida se usa la velocidad por defecto
             if (velocidad== null) {
               velocidad = EntidadesService.tracks[EntidadesService.trackActivo].velocidad;
@@ -941,10 +948,14 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             //si la fecha no es introducida se usa la fecha por defecto
             if(fechas == null){
               fechas = new Date();}
+              else{
+                  var fechas =new Date($scope.date);
+              }
                
-          
+                    console.log(fechas);
+                    velocidad = (60/velocidad).toFixed(2);
                     fechas.setMonth(fechas.getMonth()+1);
-                    EntidadesService.cambiarTiempos(parseInt(velocidad), fechas,list1.trackActivo);
+                    EntidadesService.cambiarTiempos(parseFloat(velocidad), fechas,list1.trackActivo);
                     list1.actualizarPuntosT();
                      ngDialog.close();
            

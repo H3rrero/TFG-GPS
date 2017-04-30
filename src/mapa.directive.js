@@ -1197,9 +1197,15 @@ function Mymap(EntidadesService,MapasService) {
           }else{
           //Si no tiene polilinea la creamos
           if (EntidadesService.tienePolyF()==false) {
+              var color = EntidadesService.colorPoly();
+               if(EntidadesService.isTrack){
+            $("#li"+EntidadesService.trackActivo)[0].style.color = color;}
+            else{
+                $("#lir"+EntidadesService.rutaActiva)[0].style.color = color;
+            }
             var lineSymbolarrow = {
 			             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-			             strokeColor : EntidadesService.colorPoly(),
+			             strokeColor : color,
 			             strokeOpacity : 0.7,
 			             strokeWeight : 2.9,
 			             scale : 2.7
@@ -1210,7 +1216,7 @@ function Mymap(EntidadesService,MapasService) {
 			          repeat : '80px'
 		            };
             poly = new google.maps.Polyline({
-              strokeColor: EntidadesService.colorPoly(),
+              strokeColor:color,
               strokeOpacity: 1.0,
               strokeWeight: 3,
               	icons : [arrow]

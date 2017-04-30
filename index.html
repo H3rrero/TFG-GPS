@@ -4,6 +4,7 @@
 		<title>GPS Proyect</title>
   	<script src="angular/angular.min.js"></script>
 		<script src="chart.js/dist/Chart.min.js"></script>
+		 <link href="angularjs-datepicker/src/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
 <script src="angular-chart.js/dist/angular-chart.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="angular-animate/angular-animate.js"></script>
@@ -60,7 +61,7 @@
 			></script>
 		</head>
 	<body ng-app = 'GPS'>
-
+<script src="angularjs-datepicker/src/js/angular-datepicker.js"></script>
 
 		<div id="body-wrapper"  ng-controller='PruebaController as list1'  >
 <div class="modal fade bs-example-modal-sm" id="modalW" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -118,7 +119,7 @@
 					<td ng-hide="!list1.tablaT">{{item["hora"]}}</td>
 					<td>{{item["desnivel"]}}m</td>
 					<td>{{item["distancia"]}}m</td>
-					<td ng-hide="!list1.tablaT">{{item["velocidad"]}}km/h</td>
+					<td ng-hide="!list1.tablaT">{{item["velocidad"]}}min/Km</td>
 
 				</tr>
 
@@ -148,11 +149,11 @@
 
 
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
-				<ul ng-if="list1.activarLista">
+				<ul ng-hide="!list1.activarLista">
 					<img  src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
 				<li ng-repeat="item in list1.tracks" id="li{{$index}}"><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</li>
 			</ul>
-			<ul ng-if="list1.activarListaR">
+			<ul ng-hide="!list1.activarListaR">
 			<img src="img/informacion.png" title="nombre de la ruta, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
 			<li ng-repeat="item in list1.rutas" id="lir{{$index}}" ><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</li>
 			</ul>

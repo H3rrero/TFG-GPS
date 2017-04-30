@@ -148,6 +148,22 @@ function EntidadesService (){
         });}
 
     };
+
+    service.aleatorio= function(inferior,superior){ 
+   var numPosibilidades = superior - inferior 
+   var aleat = Math.random() * numPosibilidades 
+   aleat = Math.floor(aleat) 
+   return parseInt(inferior) + aleat 
+}
+   service.colorAleatorio= function (){ 
+   var hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F") 
+   var color_aleatorio = "#"; 
+   for (var i=0;i<6;i++){ 
+      var posarray = service.aleatorio(0,hexadecimal.length) 
+      color_aleatorio += hexadecimal[posarray] 
+   } 
+   return color_aleatorio 
+}
   //Centra el mapa segun el track importado
   service.centrarMapa = function () {
       //Inicializamos el elemento bounds de google maps
@@ -1200,6 +1216,7 @@ service.importXMLWp = function () {
 
 //Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.
 service.cambiarTiempos = function (velocidad,fecha,num) {
+    console.log(velocidad);
   service.velocidad = velocidad;
   service.tracks[service.trackActivo].duracionIda=service.calcularDuracion(true,num).toFixed(2);
   service.tracks[service.trackActivo].duracionVuelta=service.calcularDuracion(false,num).toFixed(2);
@@ -1210,7 +1227,7 @@ service.cambiarTiempos = function (velocidad,fecha,num) {
     service.calcularFecha(service.trackActivo,service.calcularDuracionPuntos(service.puntosTrackActivo[item]));
     service.puntosTrackActivo[item].fecha=service.tracks[service.trackActivo].fecha.getDate()+"/"+service.tracks[service.trackActivo].fecha.getMonth()+"/"+service.tracks[service.trackActivo].fecha.getFullYear();
     service.puntosTrackActivo[item].hora =service.tracks[service.trackActivo].fecha.getHours()+":"+service.ordenarMinutos();
-    service.puntosTrackActivo[item].velocidad=service.velocidad;
+    service.puntosTrackActivo[item].velocidad=(60/service.velocidad);
   }
 };
 
@@ -1376,9 +1393,9 @@ service.tienePolyFR = function (num) {
 //Cambia el color de las polilineas de los track y las rutas
 service.colorPoly= function () {
   if (service.isTrack) {
-    return '#3D04F9';
+    return service.colorAleatorio();
   } else {
-    return '#C004F9';
+    return service.colorAleatorio();
   }
 };
 //Añade una polilinea a la entidad que esta activa actualmente
@@ -1710,7 +1727,7 @@ service.actualizarPuntosR = function() {
         hora:service.tracks[num].fecha.getHours()+":"+service.ordenarMinutos(),
         desnivel:service.calcularDesnivel(),
         distancia: service.distancia,
-        velocidad: 4
+        velocidad: 15
       };
         if (service.tracks.length>0){
           service.punto.numero = service.tracks[num]["puntos"].length;
