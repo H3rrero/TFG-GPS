@@ -257,8 +257,6 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             html2canvas(document.body.childNodes[3].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
                 useCORS: true,
                 timeout:2000,
-                height:2480,
-                width:3508,
                 onrendered: function(canvas) {
                     if(list1.isChrome || list1.isFirefox){
                         list1.pant = false;
