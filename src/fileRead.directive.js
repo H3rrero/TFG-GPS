@@ -7,7 +7,7 @@ angular.module('GPS')
 
 //Funcion de la directiva de importacion
 function ImportFunction(EntidadesService,usSpinnerService) {
-
+    
  
     var link= function (scope, element,attributes, controller) {
     
@@ -17,22 +17,24 @@ function ImportFunction(EntidadesService,usSpinnerService) {
  usSpinnerService.spin('spinner-2');
 
             scope.$apply(function () {
+            
                 scope.fileread = changeEvent.target.files[0];
                 var reader = new FileReader();
-
                 reader.onload = (function(theFile) {
+                    if(theFile.name.includes(".gpx"))
                     return function(e) {
 
-
-
+                        
+                       
                         var xml = $.parseXML( e.target.result);
+                        
                         //Guardamos el contenido del xml en el service
                         EntidadesService.xmlImportado = xml;
-                        if (EntidadesService.isTrackImport) {
+                        if (EntidadesService.isTrackImport && EntidadesService.xmlImportado.getElementsByTagName("trkpt").length>0) {
                             controller.listaActiva();
                             EntidadesService.importXML();
                             EntidadesService.centrarMapa();
-                        }else if (EntidadesService.isWpImport) {
+                        }else if (EntidadesService.isWpImport &&  EntidadesService.xmlImportado.getElementsByTagName("wpt").length>0) {
                             EntidadesService.importXMLWp();
                             EntidadesService.centrarWP();
                         }
@@ -42,7 +44,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
                                 EntidadesService.importXMLRuta();
                                 EntidadesService.centrarRuta();
                             }else{
-                                controller.actualizarError();
+                                
                             }
                         }
                     };

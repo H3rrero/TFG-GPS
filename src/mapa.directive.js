@@ -440,7 +440,7 @@ function Mymap(EntidadesService,MapasService) {
 
                       if (EntidadesService.waypoints[item].latitud+EntidadesService.waypoints[item].longitud
                           == marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6)) {
-                        console.log("he llegado");
+                       
                           var contentString = '<div id="content">'+
                               '<label for="nombre" style="    color: #8a9499;">'+
                               'Nombre:'+
@@ -479,10 +479,10 @@ function Mymap(EntidadesService,MapasService) {
                                       EntidadesService.waypoints[posicion].elevacion = results[0].elevation.toFixed(2);
                                       scope.$apply();
                                   } else {
-                                      console.log("no result found");
+                                     
                                   }
                               } else {
-                                  console.log("elevation service failed");
+                                 
                               }
                           });
                       }
@@ -571,10 +571,10 @@ function Mymap(EntidadesService,MapasService) {
                                               EntidadesService.moverPuntoTrack2(posicion,longitud,latitud,elevacion);
                                               scope.$apply();
                                           } else {
-                                              console.log("no result found");
+                                             
                                           }
                                       } else {
-                                          console.log("elevation service failed");
+                                          
                                       }
                                   });
                               }
@@ -622,10 +622,10 @@ function Mymap(EntidadesService,MapasService) {
                                               EntidadesService.moverPuntoRuta2(posicion,longitud,latitud,elevacion);
                                               scope.$apply();
                                           } else {
-                                              console.log("no result found");
+                                             
                                           }
                                       } else {
-                                          console.log("elevation service failed");
+                                          
                                       }
                                   });
                               }
@@ -640,10 +640,10 @@ function Mymap(EntidadesService,MapasService) {
 
                   }
                 } else {
-                console.log("no result found");
+                
                 }
               } else {
-              console.log("elevation service failed");
+              
               }
             });
 
@@ -837,10 +837,10 @@ function Mymap(EntidadesService,MapasService) {
                                         EntidadesService.moverPuntoTrack2(posicion,longitud,latitud,elevacion);
                                         scope.$apply();
                                     } else {
-                                        console.log("no result found");
+                                      
                                     }
                                 } else {
-                                    console.log("elevation service failed");
+                                    
                                 }
                             });
                         }
@@ -971,10 +971,10 @@ function Mymap(EntidadesService,MapasService) {
                                         EntidadesService.moverPuntoRuta2(posicion,longitud,latitud,elevacion);
                                         scope.$apply();
                                     } else {
-                                        console.log("no result found");
+                                      
                                     }
                                 } else {
-                                    console.log("elevation service failed");
+                                    
                                 }
                             });
                         }
@@ -1039,11 +1039,11 @@ function Mymap(EntidadesService,MapasService) {
                   calcularDistancias(event.latLng);
                   controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
                 } else {
-                console.log("no result found");
+                
                 controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
                 }
               } else {
-              console.log("elevation service failed");
+              
               controller.anadirPuntoTForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
               }
             });
@@ -1063,12 +1063,12 @@ function Mymap(EntidadesService,MapasService) {
                   controller.crear(2);
                    scope.$apply();
                 } else {
-                console.log("no result found");
+               
                 controller.crear(2);
                  scope.$apply();
                 }
               } else {
-              console.log("elevation service failed");
+              
               controller.crear(2);
                scope.$apply();
               }
@@ -1084,12 +1084,12 @@ function Mymap(EntidadesService,MapasService) {
                             controller.crear(2);
                             scope.$apply();
                         } else {
-                            console.log("no result found");
+                          
                             controller.crear(2);
                             scope.$apply();
                         }
                     } else {
-                        console.log("elevation service failed");
+                       
                         controller.crear(2);
                         scope.$apply();
                     }
@@ -1107,11 +1107,11 @@ function Mymap(EntidadesService,MapasService) {
                   calcularDistancias(event.latLng);
                   controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
                 } else {
-                console.log("no result found");
+               
                 controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
                 }
               } else {
-              console.log("elevation service failed");
+             
               controller.anadirPuntoRForMap(event.latLng.lat().toFixed(6),event.latLng.lng().toFixed(6));
               }
             });
@@ -1181,10 +1181,10 @@ function Mymap(EntidadesService,MapasService) {
                       EntidadesService.waypoints[posicion].elevacion = results[0].elevation.toFixed(2);
                       scope.$apply();
                       } else {
-                      console.log("no result found");
+                      
                       }
                     } else {
-                    console.log("elevation service failed");
+                    
                     }
                   });
                 }
@@ -1281,10 +1281,10 @@ function Mymap(EntidadesService,MapasService) {
                                       EntidadesService.moverPuntoTrack2(posicion,longitud,latitud,elevacion);
                                       scope.$apply();
                                   } else {
-                                      console.log("no result found");
+                                      
                                   }
                               } else {
-                                  console.log("elevation service failed");
+                                  
                               }
                           });
                       }
@@ -1353,10 +1353,10 @@ function Mymap(EntidadesService,MapasService) {
                                       EntidadesService.moverPuntoRuta2(posicion,longitud,latitud,elevacion);
                                       scope.$apply();
                                   } else {
-                                      console.log("no result found");
+                                      
                                   }
                               } else {
-                                  console.log("elevation service failed");
+                                 
                               }
                           });
                       }

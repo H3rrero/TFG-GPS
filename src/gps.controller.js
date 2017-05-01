@@ -253,8 +253,8 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 if(i<divs.length)
                     divs[i].style.borderWidth = '2px';
             }
-            console.log(document.body.childNodes[3].childNodes[8].childNodes[0].childNodes[0].childNodes[0]);
-            html2canvas(document.body.childNodes[3].childNodes[8].childNodes[0].childNodes[0].childNodes[0], {
+           
+            html2canvas($(".gm-style")[0].childNodes[0], {
                 useCORS: true,
                 timeout:2000,
                 onrendered: function(canvas) {
@@ -285,7 +285,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                         list1.stopSpin();
                     }
                     if(list1.isSafari){
-                        console.log(document.body.childNodes[1].childNodes[8].childNodes[0].childNodes[0].childNodes[0]);
+                       
                         list1.capturaUrl = canvas.toDataURL("image/png");
                        $('#btn-downloadTS').attr('href', list1.capturaUrl);
                         list1.stopSpin();
@@ -716,7 +716,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         } else {
             if (list1.nombre != null && EntidadesService.waypoints.length > 0) {
                 //SE guarda el waypoint seleccionado
-                console.log(list1.wpActivo)
+              
                 //Se llama al metodo del service para cambiar el nombre
                 EntidadesService.renombrarW(list1.nombre);
             }
@@ -886,7 +886,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
 
     list1.actualizarError = function () {
         list1.error = true;
-        console.log(list1.error);
+       
         list1.mensajeError = "La especificación del archivo no se corresponde con la de una ruta";
     };
     //Metodo que permite invertir el sentido de una ruta
@@ -986,7 +986,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                     if (velocidad== null || isNaN(velocidad)|| velocidad == undefined) {
               velocidad = EntidadesService.tracks[EntidadesService.trackActivo]["puntos"][0].velocidad;
               velocidadInt = parseFloat(velocidad);
-              console.log(EntidadesService.tracks[EntidadesService.trackActivo]["puntos"][0].velocidad);
+            
             }
                     velocidad = (60/velocidad);
                     fechas.setMonth(fechas.getMonth()+1);
@@ -1354,7 +1354,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
 
     list1.exportTablaR = function () {
         var array = [];
-        console.log(list1.isTrack);
+       
         for (var item in list1.puntosTrackActivo) {
             var e = {
                 a: item,

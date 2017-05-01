@@ -107,7 +107,7 @@ function EntidadesService (){
 
 
     service.changedColor = function (color) {
-        console.log(color);
+       
         var lineSymbolarrow = {
             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
             strokeColor : color,
@@ -914,7 +914,8 @@ service.fin = true;
     service.grosor = function (grosor) {
         var lineSymbolarrow;
         var arrow;
-        console.log("grosor");
+      
+      
         lineSymbolarrow = {
             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
             strokeColor : service.getPoly().strokeColor,
@@ -961,10 +962,12 @@ service.fin = true;
               if (results[0]) {
                   service.waypoints[posicion].elevacion = results[0].elevation.toFixed(2);
               } else {
-                  console.log("no result found");
+                 
+                 
               }
           } else {
-              console.log("elevation service failed");
+            
+            
           }
       });
       service.markers[posicion].title= "Latitud: "+parseFloat(latitud).toFixed(6)+"\nLongitud: "+parseFloat(longitud).toFixed(6);
@@ -1237,7 +1240,8 @@ service.fin = true;
 
 //Funcion que recalcula la duracion del track y de sus puntos en funcion de una velocidad y fecha dadas.
 service.cambiarTiempos = function (velocidad,fecha,num) {
-    console.log(velocidad);
+  
+  
   service.velocidad = velocidad;
   service.tracks[service.trackActivo].duracionIda=service.calcularDuracion(true,num).toFixed(2);
   service.tracks[service.trackActivo].duracionVuelta=service.calcularDuracion(false,num).toFixed(2);
@@ -1523,7 +1527,7 @@ service.vermarkers = function () {
         for(var i in service.wpRta[service.rutaActiva]){
             if( service.isTrack==false){
                 service.wpRta[service.rutaActiva][i].setVisible(true);
-                 console.log("dentro");}
+                }
         }
         if(hacerInvisible!=-1)
         for(var i in service.wpRta[hacerInvisible]){
