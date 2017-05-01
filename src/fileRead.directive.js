@@ -6,11 +6,16 @@ angular.module('GPS')
 
 
 //Funcion de la directiva de importacion
-function ImportFunction(EntidadesService) {
+function ImportFunction(EntidadesService,usSpinnerService) {
 
+ 
     var link= function (scope, element,attributes, controller) {
+    
         //Evento change del input de importacion
         element.bind("change", function (changeEvent) {
+             
+ usSpinnerService.spin('spinner-2');
+
             scope.$apply(function () {
                 scope.fileread = changeEvent.target.files[0];
                 var reader = new FileReader();
@@ -46,8 +51,13 @@ function ImportFunction(EntidadesService) {
                 //Leemos el contendo del fichero
                 reader.readAsText(changeEvent.target.files[0],"UTF-8");
             });
+               setTimeout(function() {
+ usSpinnerService.stop('spinner-2');
+}, 11);
         });
+       
     }
+    
     return {
         scope: {
             fileread: "="

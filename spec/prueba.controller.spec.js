@@ -416,12 +416,10 @@ describe("test de: PruebaController", function() {
 
       });
     });
-    module('chart.js');
-    module('ngAnimate');
-    module('ngSanitize');
-    module('ngCsv');
-    module('GPS');
-
+      module('ngDialog');
+     module('angularSpinner');
+    
+  module('GPS');
   });
 
 
@@ -430,14 +428,19 @@ var pruebaController;
 var scope;
 var documentt;
 var service;
-beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock,$document) {
+var spin;
+var ngDialogInstance;
+beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock,$document,_usSpinnerService_) {
+  
   $controller = _$controller_;
+  
   scope = $rootScope;
-  documentt = $document;
   service = EntidadesServiceErrorMock;
+  documentt = $document;
+  spin = _usSpinnerService_;
   pruebaController =
     $controller('PruebaController',
-                {$scope:scope,EntidadesService: service,$document:documentt});
+                {$scope:scope,EntidadesService: service,$document:documentt,_usSpinnerService_:spin,ngDialog:ngDialogInstance});
 
 }));
 

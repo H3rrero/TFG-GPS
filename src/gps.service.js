@@ -66,6 +66,7 @@ function EntidadesService (){
   service.segundosAnadir = 0;
   service.clicTabGraf = false;
   service.cuadricula = true;
+  service.fin = false;
   service.mapas = [];
   service.colorGrafica = '#0062ff';
   service.infowindow2;
@@ -279,10 +280,10 @@ service.importXMLWp = function () {
           repeat : '80px'
       };
     service.getPoly().setOptions({
-        strokeColor: service.colorPoly(),
+        strokeColor:  lineSymbolarrow.strokeColor,
         icons : [arrow]
     });
-
+    
   };
     service.importXMLRuta = function () {
         var puntos=service.xmlImportado.getElementsByTagName("rtept");
@@ -318,7 +319,7 @@ service.importXMLWp = function () {
             repeat : '80px'
         };
         service.getPoly().setOptions({
-            strokeColor: service.colorPoly(),
+            strokeColor: lineSymbolarrow.strokeColor,
             icons : [arrow]
         });
     };
@@ -736,6 +737,10 @@ service.importXMLWp = function () {
         //Simulamos el click para añadir los puntos a la nueva ruta y al mapa
       google.maps.event.trigger(service.mapa, 'click');
     }
+    setTimeout(function(){
+         $("#lir"+(service.rutas.length-1))[0].style.color = '#FF3399';
+    },500);
+    
     //Desactivamos los modos activados durante el metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
@@ -765,6 +770,9 @@ service.importXMLWp = function () {
       //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
       google.maps.event.trigger(service.mapa, 'click');
     }
+     setTimeout(function(){
+         $("#li"+(service.tracks.length-1))[0].style.color = '#FF3399';
+    },500);
     //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
@@ -801,6 +809,11 @@ service.importXMLWp = function () {
           google.maps.event.trigger(service.mapa, 'click');
       }
     }
+    setTimeout(function(){
+    $("#li"+(service.trackActivo+1))[0].style.color = '#00FF00';
+    $("#li"+(service.trackActivo+2))[0].style.color = '#FF3399';
+},500);
+service.fin = true;
     //Desactivamos todos los modos y ponemos a null el punto elegido
     service.modoInvertir = false;
     service.modoRecorte1 = false;
@@ -836,6 +849,10 @@ service.importXMLWp = function () {
           google.maps.event.trigger(service.mapa, 'click');
       }
     }
+     setTimeout(function(){
+    $("#lir"+(service.rutaActiva+1))[0].style.color = '#00FF00';
+    $("#lir"+(service.rutaActiva+2))[0].style.color = '#FF3399';
+    },500);
     //Deesactivamos todos los modos y ponemos el punto elegido como null
     service.modoInvertir = false;
     service.modoRecorte1 = false;
@@ -884,12 +901,14 @@ service.importXMLWp = function () {
   };
 
   service.anadirWaypoint = function (lat,lng) {
+      var latlng = new google.maps.LatLng(lat,lng);
+       if(!isNaN(latlng.lat())&&!isNaN(latlng.lng())){
       service.latitud = parseFloat(lat).toFixed(6);
       service.longitud =parseFloat(lng).toFixed(6);
       service.modoInsertarWp = true;
       google.maps.event.trigger(service.mapa, 'click');
       service.modoInsertarWp = false;
-
+       }
   };
 
     service.grosor = function (grosor) {
@@ -931,6 +950,7 @@ service.importXMLWp = function () {
       var posicion = service.wpActivo;
       var elevator = new google.maps.ElevationService;
       var latlng = new google.maps.LatLng(latitud,longitud);
+     if(!isNaN(latlng.lat())&&!isNaN(latlng.lng())){
       service.waypoints[posicion].longitud = parseFloat(longitud).toFixed(6);
       service.waypoints[posicion].latitud = parseFloat(latitud).toFixed(6);
       service.markers[posicion].setPosition(latlng);
@@ -948,6 +968,7 @@ service.importXMLWp = function () {
           }
       });
       service.markers[posicion].title= "Latitud: "+parseFloat(latitud).toFixed(6)+"\nLongitud: "+parseFloat(longitud).toFixed(6);
+  }
   };
 
   service.invertirRuta2 = function () {
@@ -1491,19 +1512,20 @@ service.vermarkers = function () {
 
     };
     service.actualizarMarkersR2 = function() {
-        var hacerInvisible = 0;
+        var hacerInvisible = -1;
         for(var i in service.rutas){
             if(service.wpRta[i] != undefined)
                 if(service.wpRta[i].length>1)
                     if(service.wpRta[i][1].getVisible()){
                         hacerInvisible = i;
                     }}
-
+                   
         for(var i in service.wpRta[service.rutaActiva]){
-            if( service.isTrack==false)
+            if( service.isTrack==false){
                 service.wpRta[service.rutaActiva][i].setVisible(true);
-
+                 console.log("dentro");}
         }
+        if(hacerInvisible!=-1)
         for(var i in service.wpRta[hacerInvisible]){
 
             if(i!=0 && i!= service.wpRta[hacerInvisible].length-1)
@@ -1515,7 +1537,7 @@ service.vermarkers = function () {
 
     //Actualiza los puntos del track activo
     service.actualizarMarkers2 = function() {
-        var hacerInvisible = 0;
+        var hacerInvisible = -1;
         for(var i in service.tracks){
             if(service.markersT[i] != undefined)
             if(service.markersT[i].length>1)
@@ -1528,6 +1550,8 @@ service.vermarkers = function () {
                     service.markersT[service.trackActivo][i].setVisible(true);
 
             }
+
+            if(hacerInvisible!=-1)
         for(var i in service.markersT[hacerInvisible]){
 
             if(i!=0 && i!= service.markersT[hacerInvisible].length-1)
@@ -1747,8 +1771,8 @@ service.actualizarPuntosR = function() {
         latitud:latitud,
         longitud: longitud,
         elevacion: service.elevacion,
-        fecha:service.rutas[service.rutaActiva].fecha.getDate()+"/"+service.rutas[service.rutaActiva].fecha.getMonth()+"/"+service.rutas[service.rutaActiva].fecha.getFullYear(),
-        hora:service.rutas[service.rutaActiva].fecha.getHours()+":"+service.ordenarMinutosR(),
+        fecha:service.rutas[num].fecha.getDate()+"/"+service.rutas[num].fecha.getMonth()+"/"+service.rutas[num].fecha.getFullYear(),
+        hora:service.rutas[num].fecha.getHours()+":"+service.ordenarMinutosR(),
         desnivel:service.calcularDesnivelR(),
         distancia: service.distancia,
         velocidad: 4
@@ -1756,7 +1780,7 @@ service.actualizarPuntosR = function() {
           if (service.rutas.length>0){
             service.punto.numero = service.rutas[num]["puntos"].length;
             service.rutas[num]["puntos"].push(service.punto);
-            service.calcularDatosTrack(1,service.punto,service.rutaActiva);
+            service.calcularDatosTrack(1,service.punto,num);
       }
         break;
     }

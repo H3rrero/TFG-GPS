@@ -50,8 +50,8 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     list1.grosor = 0;
     list1.lng="";
     list1.lat ="";
-    list1.lngNW="";
-    list1.latNW ="";
+    list1.lngNW;
+    list1.latNW ;
     list1.velocidad = 4;
     list1.fecha;
     $scope.options = {
@@ -186,9 +186,9 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 EntidadesService.modoCreacion = true;
 
 
-
+            if(list1.latNW!=null && list1.lngNW!=null)
             EntidadesService.anadirWaypoint(list1.latNW,list1.lngNW);
-
+            ngDialog.close();
 
     };
     list1.cambiarGrosor = function () {
@@ -353,6 +353,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
 
     //Metodo que llama al metodo unir del service
     list1.unirRutas = function () {
+        list1.startSpin();
         //Desactivamos el boolean error
         list1.noError = false;
         list1.error = false;
@@ -395,13 +396,21 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             else {
                 //Creamos la ruta que almacenara los puntos de la union
                 list1.crear(1);
-                //Llamamos al metodo unir rutas del service
+                   setTimeout(function(){
+            //Llamamos al metodo unir rutas del service
                 EntidadesService.unirRuta(elegido);
+                $scope.$apply();
+                  list1.stopSpin();
+            },100);
+              
             }
         }
+        if(list1.error == true)
+        list1.stopSpin();
     };
     //metodo que llama a la funcion unir tracks del service
     list1.unirTracks = function () {
+        list1.startSpin();
         //Desactivamos el error
         list1.noError = false;
         list1.error = false;
@@ -443,10 +452,17 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             else {
                 //Creamos el track que almacenara los puntos de la union
                 list1.crear(0);
-                //llamamos al metodo unir del service
+                
+                 setTimeout(function(){
+           //llamamos al metodo unir del service
                 EntidadesService.unirTrack(elegido);
+                $scope.$apply();
+                  list1.stopSpin();
+            },100);
             }
         }
+        if(list1.error== true)
+        list1.stopSpin();
     };
 
     //Metodo que permite borrar una ruta
@@ -540,6 +556,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
 
     //Metodo que recorta una ruta
     list1.recortarRuta = function () {
+        list1.startSpin();
         //Reseteamos el error
         list1.error = false;
         list1.noError = false;
@@ -566,15 +583,23 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             //Creamos dos nuevas rutas que almacenaran los dos recortes creados
             list1.crear(1);
             list1.crear(1);
-            //Guardamos el punto elegido
+             setTimeout(function(){
+           //Guardamos el punto elegido
             EntidadesService.puntoElegido = punto;
             // Y llamamos al metodo del service
             EntidadesService.recortarRuta();
+                $scope.$apply();
+                  list1.stopSpin();
+            },100);
+            
         }
+         if(list1.error == true)
+    list1.stopSpin();
     };
 
     //Metodo que recorta un track
     list1.recortarTrack = function () {
+        list1.startSpin();
         //Reseteamos el error
         list1.error = false;
         list1.noError = false;
@@ -600,11 +625,20 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             //Creamos dos tracks para almacenar los dos recortes
             list1.crear(0);
             list1.crear(0);
+             setTimeout(function(){
             //Guardamos el punto elegido
             EntidadesService.puntoElegido = punto;
             //Y llamaos al metodo del service
-            EntidadesService.recortarTrack();
+            
+                 EntidadesService.recortarTrack();
+                $scope.$apply();
+                  list1.stopSpin();
+            },100);
         }
+   
+    if(list1.error == true)
+    list1.stopSpin();
+
     };
     //Funcion que obtiene de la tabla el punto seleccionado por el usuario
     list1.puntoSelecTG = function (index) {
@@ -939,19 +973,22 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             var velocidadInt = parseFloat(velocidad);
             var fechas = $scope.date;
             //Si la velocidad introducida no es introducida se usa la velocidad por defecto
-            if (velocidad== null) {
-              velocidad = EntidadesService.tracks[EntidadesService.trackActivo].velocidad;
-              velocidadInt = parseInt(velocidad);
-            }
+            
             //si la fecha no es introducida se usa la fecha por defecto
-            if(fechas == null){
+            if(fechas == null || isNaN(fechas)){
               fechas = new Date();}
               else{
                   var fechas =new Date($scope.date);
               }
                
-                    console.log(fechas);
-                    velocidad = (60/velocidad).toFixed(2);
+                    
+                    
+                    if (velocidad== null || isNaN(velocidad)|| velocidad == undefined) {
+              velocidad = EntidadesService.tracks[EntidadesService.trackActivo]["puntos"][0].velocidad;
+              velocidadInt = parseFloat(velocidad);
+              console.log(EntidadesService.tracks[EntidadesService.trackActivo]["puntos"][0].velocidad);
+            }
+                    velocidad = (60/velocidad);
                     fechas.setMonth(fechas.getMonth()+1);
                     EntidadesService.cambiarTiempos(parseFloat(velocidad), fechas,list1.trackActivo);
                     list1.actualizarPuntosT();
@@ -1562,6 +1599,11 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             }
             list1.verTablaR();
         }
+          setTimeout(function(){
+          for(var i in EntidadesService.rutas){
+              $("#lir"+(i))[0].style.color = EntidadesService.polyLineasR[i].strokeColor;
+          }
+    },10);
 
     };
     //Mostar u ocultar la lista de waypoints
@@ -1610,7 +1652,13 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 list1.mostrarTabla = true;
             }
             list1.verTablaT();
+           
         }
+        setTimeout(function(){
+          for(var i in EntidadesService.tracks){
+              $("#li"+(i))[0].style.color = EntidadesService.polyLineas[i].strokeColor;
+          }
+    },10);
 
     };
     //Muestra u coulta la lista de botones relacionados con los track
