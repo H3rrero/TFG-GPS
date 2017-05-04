@@ -61,16 +61,16 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         onChange:  function (api, color, $event) {
             if(EntidadesService.isTrack){
             EntidadesService.changedColor(color);
-            $("#li"+EntidadesService.trackActivo)[0].style.color = color;}
+            $("#li"+EntidadesService.trackNombre)[0].style.color = color;}
             else{
-                EntidadesService.changedColor(color);
-                $("#lir"+EntidadesService.rutaActiva)[0].style.color = color;
+                EntidadesService.changedColorR(color);
+                $("#lir"+EntidadesService.rutaNombre)[0].style.color = color;
             }
 
         }
 
     };
-    list1.openPopup = function () {
+    list1.openPopup = function (track) {
         list1.noError = false;
         list1.error = false;
         if (EntidadesService.isTrack == false
@@ -82,6 +82,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "El track necesita tener al menos dos puntos para que exista una polilinea a la cual cambiar el color";
         }else{
+             EntidadesService.trackNombre=track;
         ngDialog.open({
             template:
             '<label for="nombre" class="prlabel">nombre:</label>'+
@@ -97,7 +98,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         });}
     };
 
-    list1.openPopupR = function () {
+    list1.openPopupR = function (track) {
         list1.noError = false;
         list1.error = false;
         if (EntidadesService.isTrack == true
@@ -110,6 +111,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "La ruta necesita tener al menos dos puntos para que exista una polilinea a la cual cambiar las propiedades";
         }else{
+            EntidadesService.rutaNombre = track;
             ngDialog.open({
                 template:
                 '<label for="nombre" class="prlabel">nombre:</label>'+
@@ -125,7 +127,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             });}
     };
 
-    list1.openPopupW = function () {
+    list1.openPopupW = function (track) {
         list1.noError = false;
         list1.error = false;
         if (EntidadesService.isTrack == true
@@ -138,7 +140,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "Necesitas tener waypoints creados para poder editarlos";
         }else{
-
+             EntidadesService.wptNombre = track;
             ngDialog.open({
                 template:
                 '<label for="nombre" class="prlabel">nombre:</label>'+
@@ -208,7 +210,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     list1.cambiarGrosorR = function () {
         if (list1.grosor != null && list1.grosor>0 && EntidadesService.rutas.length > 0) {
 
-            EntidadesService.grosor(list1.grosor);
+            EntidadesService.grosorR(list1.grosor);
         }
     };
 
@@ -256,7 +258,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
            
             html2canvas($(".gm-style")[0].childNodes[0], {
                 useCORS: true,
-                timeout:2000,
+                logging:true,
                 onrendered: function(canvas) {
                     if(list1.isChrome || list1.isFirefox){
                         list1.pant = false;
@@ -678,6 +680,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.mensajeError = "No tienes ningun track creado";
         }
         if (list1.nombre != null && EntidadesService.tracks.length > 0) {
+            console.log( list1.trackNombre);
             //Se llama al metodo del service para cambiar el nombre
             EntidadesService.renombrarT(list1.nombre);
         }
@@ -715,9 +718,6 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.mensajeError = "No tienes ningun waypoint seleccionado";
         } else {
             if (list1.nombre != null && EntidadesService.waypoints.length > 0) {
-                //SE guarda el waypoint seleccionado
-              
-                //Se llama al metodo del service para cambiar el nombre
                 EntidadesService.renombrarW(list1.nombre);
             }
         }
@@ -951,7 +951,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             '<input type="number"   id="velocidad" ng-model="list1.velocidad">min/km'+
             '<label for="fecha" class="prlabel">Fecha:</label>'+
             '<datepicker>'+
-            '<input ng-model="date" type="text"/>'+
+            '<input ng-model="date" style="width:100%" type="text"/>'+
             '</datepicker>'+
             '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>'
                +'</div>',

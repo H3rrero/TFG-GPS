@@ -71,6 +71,9 @@ function EntidadesService (){
   service.colorGrafica = '#0062ff';
   service.infowindow2;
   service.ownerDo;
+  service.trackNombre;
+   service.rutaNombre;
+   service.wptNombre;
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,
@@ -105,7 +108,26 @@ function EntidadesService (){
         strokeWeight : 3
     };
 
+  service.changedColorR = function (color) {
+       
+        var lineSymbolarrow = {
+            path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            strokeColor : color,
+            strokeOpacity : 0.7,
+            strokeWeight : 2.9,
+            scale : 2.7,
 
+        };
+        var arrow = {
+            icon : lineSymbolarrow,
+            offset : '50%',
+            repeat : '80px'
+        };
+        service.getPolyR(service.rutaNombre).setOptions({
+            strokeColor: color,
+            icons : [arrow],
+        });
+    };
     service.changedColor = function (color) {
        
         var lineSymbolarrow = {
@@ -121,7 +143,7 @@ function EntidadesService (){
             offset : '50%',
             repeat : '80px'
         };
-        service.getPoly().setOptions({
+        service.getPolyR(service.trackNombre).setOptions({
             strokeColor: color,
             icons : [arrow],
         });
@@ -892,12 +914,12 @@ service.fin = true;
   };
 
     service.cambiarDescripcion = function (descripcion) {
-        service.waypoints[service.wpActivo].descripcion = descripcion;
+        service.waypoints[service.wptNombre].descripcion = descripcion;
     };
   //metodo que cambia el nombre a un track elegido
   service.renombrarT = function (nombre) {
     if(service.isTrack == true)
-    service.tracks[service.trackActivo].nombre = nombre;
+    service.tracks[service.trackNombre].nombre = nombre;
   };
 
   service.anadirWaypoint = function (lat,lng) {
@@ -911,14 +933,14 @@ service.fin = true;
        }
   };
 
-    service.grosor = function (grosor) {
+  service.grosorR = function (grosor) {
         var lineSymbolarrow;
         var arrow;
       
       
         lineSymbolarrow = {
             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-            strokeColor : service.getPoly().strokeColor,
+            strokeColor : service.getPolyR(service.rutaNombre).strokeColor,
             strokeOpacity : 0.7,
             strokeWeight : grosor,
             scale : 2.7
@@ -928,9 +950,35 @@ service.fin = true;
             offset : '50%',
             repeat : '80px'
         };
-        var poly = service.getPoly();
+        var poly = service.getPolyR(service.rutaNombre);
         poly.setOptions({
-            strokeColor: service.getPoly().strokeColor,
+            strokeColor: service.getPolyR(service.rutaNombre).strokeColor,
+            strokeOpacity: 1.0,
+            strokeWeight:grosor,
+            icons : [arrow]
+        });
+    };
+
+    service.grosor = function (grosor) {
+        var lineSymbolarrow;
+        var arrow;
+      
+      
+        lineSymbolarrow = {
+            path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            strokeColor : service.getPolyR(service.trackNombre).strokeColor,
+            strokeOpacity : 0.7,
+            strokeWeight : grosor,
+            scale : 2.7
+        };
+        arrow = {
+            icon : lineSymbolarrow,
+            offset : '50%',
+            repeat : '80px'
+        };
+        var poly = service.getPolyR(service.trackNombre);
+        poly.setOptions({
+            strokeColor: service.getPolyR(service.trackNombre).strokeColor,
             strokeOpacity: 1.0,
             strokeWeight:grosor,
             icons : [arrow]
@@ -939,16 +987,16 @@ service.fin = true;
   //Metodo que cambia el nombre a una ruta elegida
   service.renombrarR = function (nombre) {
     if (service.isTrack == false)
-    service.rutas[service.rutaActiva].nombre = nombre;
+    service.rutas[service.rutaNombre].nombre = nombre;
   };
   //Metodo que cambia el nombre a un wayPoint elegido
   service.renombrarW = function (nombre) {
 
-    service.waypoints[service.wpActivo].nombre = nombre;
+    service.waypoints[service.wptNombre].nombre = nombre;
   };
 
   service.changeMarkerPosition = function (latitud,longitud) {
-      var posicion = service.wpActivo;
+      var posicion = service.wptNombre;
       var elevator = new google.maps.ElevationService;
       var latlng = new google.maps.LatLng(latitud,longitud);
      if(!isNaN(latlng.lat())&&!isNaN(latlng.lng())){
