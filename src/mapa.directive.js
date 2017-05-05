@@ -98,7 +98,7 @@ function Mymap(EntidadesService,MapasService) {
                 break;
 
         }
-
+            
         var div = ownerDocument.createElement('div');
         if(zoom >=15 && (coord.x % 2 == 0)){
 

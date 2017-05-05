@@ -58,7 +58,7 @@ function EntidadesService (){
   service.isRuteImport = false;
   service.isWpImport = false;
   service.puntosGrafico = [];
-  service.modoEdicion = true;
+  service.modoEdicion = false;
   service.conection = false;
   service.ver = true;
   service.modoInsertarWp = false;
