@@ -264,6 +264,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                         list1.pant = false;
                         
                     list1.capturaUrl = canvas.toDataURL("image/jpg");
+                    window.open(list1.capturaUrl );
                     list1.pant = false;
                     $scope.$apply();
                     list1.stopSpin();
@@ -421,33 +422,31 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         if (EntidadesService.isTrack == false
             || EntidadesService.tracks[EntidadesService.trackActivo] === undefined) {
             list1.error = true;
-            list1.mensajeError = "Por favor selecciona un track para unir";
+            list1.mensajeError = "Por favor muestra la lista de tracks(ver lista) para activar el modo track y poder acceder a sus funcionalidades";
             //Activamos el error si el track no dispone de al menos dos puntos
         } else if (EntidadesService.tracks.length < 2) {
             list1.error = true;
             list1.mensajeError = "Se necesitan al menos dos tracks para poder realizar la unión";
         }
+        else if(EntidadesService.trackElegidoInicial==-1||EntidadesService.trackElegidoFinal==-1){
+             list1.error = true;
+            list1.mensajeError = "Debes seleccionar el punto final del primer track de la uniónn y el punto inicial del segundo track de la unión y despues darle a unir"
+        }
         else {
-            //Pedimos el track al usuario
-            var trackElegido = prompt("Introduczca el nombre o el nº(el primer track seria el nº 0) del track que quiere unir", "0");
-            //Lo pasamos a entero
-            var elegido = parseInt(trackElegido);
-            //Si ha metido su nombre en lugar de su posicion
-            if (isNaN(elegido)) {
-                //Buscamos el track por el nombre
-                elegido = EntidadesService.buscarTrackPorNombre(trackElegido);
-            }
+          
+            var elegido = EntidadesService.trackElegidoInicial;
+            var elegidoFinal = EntidadesService.trackElegidoFinal;
+          
             //Activamos el error si el track no exitiera
             if (elegido == null || EntidadesService.tracks[elegido] == undefined) {
                 list1.error = true;
                 list1.mensajeError = "El track elegido no existe";
                 //Activamos el error si el track no tiene al menos dos puntos
-            } else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length < 2 || EntidadesService.tracks[elegido].puntos.length < 2) {
+            } else if (EntidadesService.tracks[elegidoFinal].puntos.length < 2 || EntidadesService.tracks[elegido].puntos.length < 2) {
                 list1.error = true;
                 list1.mensajeError = "Alguno de los dos tracks no dispone de al menos dos puntos creados";
                 //Activamos el error si el usuario ha intentado unir el track con el mismo
-            } else if (elegido == EntidadesService.trackActivo
-                || elegido == EntidadesService.tracks[EntidadesService.trackActivo].nombre) {
+            } else if (elegido == elegidoFinal) {
                 list1.error = true;
                 list1.mensajeError = "Elige otro track, no puedes unir un track con el mismo";
             }
@@ -457,7 +456,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 
                  setTimeout(function(){
            //llamamos al metodo unir del service
-                EntidadesService.unirTrack(elegido);
+                EntidadesService.unirTrack(elegido,elegidoFinal);
                 $scope.$apply();
                   list1.stopSpin();
             },100);
@@ -465,6 +464,12 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }
         if(list1.error== true)
         list1.stopSpin();
+        EntidadesService.trackElegidoFinal=-1;
+        EntidadesService.trackElegidoInicial=-1;
+        if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
     };
 
     //Metodo que permite borrar una ruta

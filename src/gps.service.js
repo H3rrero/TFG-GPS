@@ -74,6 +74,10 @@ function EntidadesService (){
   service.trackNombre;
    service.rutaNombre;
    service.wptNombre;
+   service.trackElegidoFinal=-1;
+   service.trackElegidoInicial=-1;
+    service.trackElegidoFinalMarker;
+   service.trackElegidoInicialMarker;
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,
@@ -671,14 +675,14 @@ service.importXMLWp = function () {
         if(service.tracks[service.trackActivo].puntos.length>0){
         if (service.puntoElegido == 0) {
 
-            service.markersT[service.trackActivo][service.puntoElegido].setIcon("img/icono.png");
+            service.markersT[service.trackActivo][service.puntoElegido].setIcon(service.myIconRIni);
             service.markersT[service.trackActivo][service.puntoElegido].setVisible(true);
             service.tracks[service.trackActivo]["puntos"][service.puntoElegido].distancia = 0;
             //Calculamos los nuevos desniveles
             service.tracks[service.trackActivo]["puntos"][service.puntoElegido].desnivel = 0;
         } else if ((parseInt(service.puntoElegido) - 1) == service.tracks[service.trackActivo]["puntos"].length - 1 &&
              service.tracks[service.trackActivo].puntos.length>1) {
-            service.markersT[service.trackActivo][service.tracks[service.trackActivo]["puntos"].length - 1].setIcon("img/iconoFin.png");
+            service.markersT[service.trackActivo][service.tracks[service.trackActivo]["puntos"].length - 1].setIcon(service.myIconRFin);
             service.markersT[service.trackActivo][service.tracks[service.trackActivo]["puntos"].length - 1].setVisible(true);
 
         } else if( service.tracks[service.trackActivo].puntos.length>1){
@@ -769,15 +773,15 @@ service.importXMLWp = function () {
   };
 
   //metodo que une dos tracks
-  service.unirTrack = function (trackElegido) {
+  service.unirTrack = function (trackElegido,elegidoFinal) {
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
     //Recorremos los puntos del primer track
-    for (var item in service.tracks[service.trackActivo].puntos) {
+    for (var item in service.tracks[elegidoFinal].puntos) {
       //Guardamos los datos de los puntos
-      service.longitudPInv = service.tracks[service.trackActivo].puntos[item].longitud;
-      service.latitudPInv = service.tracks[service.trackActivo].puntos[item].latitud;
-      service.elevacionP = service.tracks[service.trackActivo].puntos[item].elevacion;
+      service.longitudPInv = service.tracks[elegidoFinal].puntos[item].longitud;
+      service.latitudPInv = service.tracks[elegidoFinal].puntos[item].latitud;
+      service.elevacionP = service.tracks[elegidoFinal].puntos[item].elevacion;
       //EL modo segundo recorte nos viene que ni pintado para esta situación
       service.modoRecorte2=true;
       //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
@@ -798,6 +802,8 @@ service.importXMLWp = function () {
     //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
+    service.trackElegidoFinalMarker.setMap(null);
+    service.trackElegidoInicialMarker.setMap(null);
   };
   service.recortarTrack = function () {
     //Recorremos los puntos del track seleccionado
@@ -1172,7 +1178,7 @@ service.fin = true;
               puntos[i].desnivel = 0;
               puntos[i].distancia = 0;
               puntos[i].numero = 0;
-             markers[i].setIcon('img/icono.png');
+             markers[i].setIcon(service.myIconRIni);
           }else{
               var pActual = new google.maps.LatLng(puntos[i].latitud,puntos[i].longitud);
               var pAnterior = new google.maps.LatLng(puntos[i-1].latitud,puntos[i-1].longitud);
@@ -1182,7 +1188,7 @@ service.fin = true;
           }
 
           if(i == puntos.length-1)
-              markers[i].setIcon('img/iconoFin.png');
+              markers[i].setIcon(service.myIconRFin);
           service.markersT[service.trackActivo].push(markers[i]);
           service.markersT[service.trackActivo][i].setMap(service.mapa);
           service.tracks[service.trackActivo]["puntos"].push(puntos[i]);

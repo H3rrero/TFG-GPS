@@ -504,7 +504,8 @@ function Mymap(EntidadesService,MapasService) {
               draggable: true,
               animation: google.maps.Animation.DROP,
               position: evento,
-              icon : "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+              icon : "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+              zIndex:8
             });
             EntidadesService.markerPunto = marker;
           }
@@ -539,12 +540,51 @@ function Mymap(EntidadesService,MapasService) {
                           title:"Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
                           icon: EntidadesService.myIcon,
                           draggable:true,
-                          map: map
+                          map: map,
+                          zIndex:1
                       });
 
                                   EntidadesService.elevacionPtAnadido = results[0].elevation.toFixed(2);
 
                       marker.addListener('click', function() {
+                         
+                            
+                          for(var i in EntidadesService.tracks){
+                            if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position.lng().toFixed(6))){
+                                      EntidadesService.trackElegidoFinal=i;
+                                        if(EntidadesService.trackElegidoFinalMarker !=null){
+                              EntidadesService.trackElegidoFinalMarker.setMap(null);
+                                 }
+                                        var markerF = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position:EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position,
+                                          icon : "img/primero.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.trackElegidoFinalMarker = markerF;
+                                  }
+                                   if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[i][0].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[i][0].position.lng().toFixed(6))){
+                                      EntidadesService.trackElegidoInicial=i;
+                                       if(EntidadesService.trackElegidoInicialMarker !=null){
+                              EntidadesService.trackElegidoInicialMarker.setMap(null);
+                                 }
+                                      var markerI = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position: EntidadesService.markersT[i][0].position,
+                                          icon : "img/segundo.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.trackElegidoInicialMarker = markerI;
+                                  }
+                          }
                           for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
                               if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                                   EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
@@ -807,11 +847,48 @@ function Mymap(EntidadesService,MapasService) {
               var marker = new google.maps.Marker({
                 position: evento,
                 title: "Inicio del track"+"\nLatitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-                icon: image,
+                icon: EntidadesService.myIconRIni,
                   draggable:true,
-                map: map
+                map: map,
+                zIndex:1
               });
                 marker.addListener('click', function() {
+                      for(var i in EntidadesService.tracks){
+                            if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position.lng().toFixed(6))){
+                                      EntidadesService.trackElegidoFinal=i;
+                                        if(EntidadesService.trackElegidoFinalMarker !=null){
+                              EntidadesService.trackElegidoFinalMarker.setMap(null);
+                                 }
+                                        var markerF = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position:EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position,
+                                          icon : "img/primero.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.trackElegidoFinalMarker = markerF;
+                                  }
+                                   if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[i][0].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[i][0].position.lng().toFixed(6))){
+                                      EntidadesService.trackElegidoInicial=i;
+                                       if(EntidadesService.trackElegidoInicialMarker !=null){
+                              EntidadesService.trackElegidoInicialMarker.setMap(null);
+                                 }
+                                      var markerI = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position: EntidadesService.markersT[i][0].position,
+                                          icon : "img/segundo.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.trackElegidoInicialMarker = markerI;
+                                  }
+                          }
                     for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
                         if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                             EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
@@ -855,12 +932,12 @@ function Mymap(EntidadesService,MapasService) {
                 EntidadesService.markersT[EntidadesService.tracks.length-2] = markers;
                 //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
               } else if(EntidadesService.markersT[EntidadesService.tracks.length-2].length==1){
-                marker.icon = "img/iconoFin.png";
+                marker.icon = EntidadesService.myIconRFin;
                 marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-2].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
-                  marker.icon = "img/iconoFin.png";
+                  marker.icon = EntidadesService.myIconRFin;
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-2]
                       [EntidadesService.markersT[EntidadesService.tracks.length-2].length-1].setIcon(EntidadesService.myIcon);
@@ -882,12 +959,12 @@ function Mymap(EntidadesService,MapasService) {
                 EntidadesService.markersT[EntidadesService.tracks.length-1] = markers;
                 //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
               } else if(EntidadesService.markersT[EntidadesService.tracks.length-1].length==1){
-                marker.icon = "img/iconoFin.png";
+                marker.icon = EntidadesService.myIconRFin;
                 marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.tracks.length-1].push(marker);
                 //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
               }else{
-                  marker.icon = "img/iconoFin.png";
+                  marker.icon = EntidadesService.myIconRFin;
                   marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                   EntidadesService.markersT[EntidadesService.tracks.length-1]
                       [EntidadesService.markersT[EntidadesService.tracks.length-1].length-1].setIcon(EntidadesService.myIcon);
@@ -909,12 +986,12 @@ function Mymap(EntidadesService,MapasService) {
               EntidadesService.markersT[EntidadesService.trackActivo] = markers;
               //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
             } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
-              marker.icon = "img/iconoFin.png";
+              marker.icon = EntidadesService.myIconRFin;
               marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
               EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
               //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
             }else{
-                marker.icon = "img/iconoFin.png";
+                marker.icon = EntidadesService.myIconRFin;
                 marker.title = "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6);
                 EntidadesService.markersT[EntidadesService.trackActivo]
                     [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
@@ -1251,11 +1328,48 @@ function Mymap(EntidadesService,MapasService) {
             var marker = new google.maps.Marker({
               position: event.latLng,
               title: "Inicio del track"+"\nLatitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6),
-              icon: image,
+              icon: EntidadesService.myIconRIni,
                 draggable:true,
-              map: map
+              map: map,
+              zIndex:1
             });
               marker.addListener('click', function() {
+                     for(var i in EntidadesService.tracks){
+                            if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position.lng().toFixed(6))){
+                                      EntidadesService.trackElegidoFinal=i;
+                                        if(EntidadesService.trackElegidoFinalMarker !=null){
+                              EntidadesService.trackElegidoFinalMarker.setMap(null);
+                                 }
+                                        var markerF = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position:EntidadesService.markersT[i][EntidadesService.markersT[i].length-1].position,
+                                          icon : "img/primero.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.trackElegidoFinalMarker = markerF;
+                                  }
+                                   if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.markersT[i][0].position.lat().toFixed(6)+
+                                  EntidadesService.markersT[i][0].position.lng().toFixed(6))){
+                                      EntidadesService.trackElegidoInicial=i;
+                                       if(EntidadesService.trackElegidoInicialMarker !=null){
+                              EntidadesService.trackElegidoInicialMarker.setMap(null);
+                                 }
+                                      var markerI = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position: EntidadesService.markersT[i][0].position,
+                                          icon : "img/segundo.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.trackElegidoInicialMarker = markerI;
+                                  }
+                          }
                   for(var i in EntidadesService.markersT[EntidadesService.trackActivo]){
                       if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                           EntidadesService.markersT[EntidadesService.trackActivo][i].position.lat().toFixed(6)+
@@ -1298,12 +1412,12 @@ function Mymap(EntidadesService,MapasService) {
             EntidadesService.markersT[EntidadesService.trackActivo] = markers;
             //Si ya tiene un marcador(el de inicio) le añadimos el marcador de final
           } else if(EntidadesService.markersT[EntidadesService.trackActivo].length==1){
-            marker.icon = "img/iconoFin.png";
+            marker.icon =EntidadesService.myIconRFin;
             marker.title = "Latitud:"+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo].push(marker);
             //Si ya tiene los dos marcadores pues sustituimos el marcador que indica el final por el nuevo marcador que inidicara el nuevo final del track
           }else{
-            marker.icon = "img/iconoFin.png";
+            marker.icon =EntidadesService.myIconRFin;
             marker.title = "Latitud: "+event.latLng.lat().toFixed(6)+"\nLongitud: "+event.latLng.lng().toFixed(6);
             EntidadesService.markersT[EntidadesService.trackActivo]
                 [EntidadesService.markersT[EntidadesService.trackActivo].length-1].setIcon(EntidadesService.myIcon);
