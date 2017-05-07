@@ -163,8 +163,10 @@
 			</div>
 
 			<div id="on/Off">
-		<a  ng-click="list1.capPant(true)" ng-hide="!(list1.isChrome||list1.isFirefox)"  id="btn-downloadT"
-				><button id="downPt" type="button" class="bttn-material-circle bttn-xs bttn-primary"   title="captura la imagen del mapa"><img src="img/camera.png" style="left: 0;position: absolute;top: 0;" height="30" width="30"></button></a>
+				<a  ng-click="list1.capPant(true)"  ng-hide="!(list1.isChrome)"  id="btn-downloadT"
+			><button id="downPtC" type="button" class="bttn-material-circle bttn-xs bttn-primary"   title="captura la imagen del mapa"><img src="img/camera.png" style="left: 0;position: absolute;top: 0;" height="30" width="30"></button></a>
+		<a  ng-click="list1.capPant(true)"  download="captura.jpg" ng-hide="!(list1.isFirefox)"  id="btn-downloadT"
+				ng-href="{{list1.capturaUrl}}"><button id="downPt" type="button" class="bttn-material-circle bttn-xs bttn-primary"   title="captura la imagen del mapa"><img src="img/camera.png" style="left: 0;position: absolute;top: 0;" height="30" width="30"></button></a>
 			<a  ng-click="list1.capPant(true)"   id="btn-downloadTIE" ng-hide="!(list1.esIE || list1.isEdge)" >
 				<button id="downPtIE" type="button"  class="bttn-material-circle bttn-xs bttn-primary" title="captura la imagen del mapa"><img src="img/camera.png" style="left: 0;position: absolute;top: 0;" height="30" width="30"></button></a>
 		<a  ng-click="list1.capPant(true)"   id="btn-downloadTS" ng-hide="!list1.isSafari" >

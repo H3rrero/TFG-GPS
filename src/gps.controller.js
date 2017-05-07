@@ -260,11 +260,11 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 useCORS: true,
                 logging:true,
                 onrendered: function(canvas) {
-                    if(list1.isChrome || list1.isFirefox){
+                    if( list1.isFirefox){
                         list1.pant = false;
                         
                     list1.capturaUrl = canvas.toDataURL("image/jpg");
-                    window.open(list1.capturaUrl );
+                    //window.open(list1.capturaUrl );
                     list1.pant = false;
                     $scope.$apply();
                     list1.stopSpin();
@@ -292,6 +292,11 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                         list1.capturaUrl = canvas.toDataURL("image/png");
                        $('#btn-downloadTS').attr('href', list1.capturaUrl);
                         list1.stopSpin();
+                    }
+                    if(list1.isChrome ){
+                        list1.capturaUrl = canvas.toDataURL("image/jpg");
+                         list1.stopSpin();
+                        window.open( list1.capturaUrl);
                     }
                 }
             });
@@ -366,50 +371,55 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             || EntidadesService.rutas[EntidadesService.rutaActiva] === undefined
             || EntidadesService.modoCreacion == true) {
             list1.error = true;
-            list1.mensajeError = "Por favor selecciona una ruta para unir";
+            list1.mensajeError ="Por favor muestra la lista de rutas(ver lista) para activar el modo ruta y poder acceder a sus funcionalidades";
             //SI la ruta no tiene al menos dos puntos activamos el error
         } else if (EntidadesService.rutas.length < 2) {
             list1.error = true;
             list1.mensajeError = "Se necesitan al menos dos rutas para poder realizar la unión";
+        }  else if(EntidadesService.rutaElegidoInicial==-1||EntidadesService.rutaElegidoFinal==-1){
+             list1.error = true;
+            list1.mensajeError = "Debes seleccionar el punto final de la primera ruta de la uniónn y el punto inicial de la segunda ruta de la unión y despues darle a unir"
         }
         else {
-            //Pedimos la ruta con la que se quiere unir
-            var rutaElegida = prompt("Introduczca el nombre o el nº(la primera ruta seria el nº 0) de la ruta que quiere unir", "0");
-            //Pasamos el index a int
-            var elegido = parseInt(rutaElegida);
-            //SI en lugar de posicion nos mete el nombre
-            if (isNaN(elegido)) {
-                //Entonces lo buscamos por el nombre
-                elegido = EntidadesService.buscarRutaPorNombre(rutaElegida);
-            }
-            //Si la ruta no exitiera activamos el error
+           var elegido = EntidadesService.rutaElegidoInicial;
+            var elegidoFinal = EntidadesService.rutaElegidoFinal;
+            //Activamos el error si el track no exitiera
             if (elegido == null || EntidadesService.rutas[elegido] == undefined) {
                 list1.error = true;
-                list1.mensajeError = "La ruta elegido no existe";
-                //Si alguna de las dos rutas no tiene al menos dos puntos creados activamos el error
-            } else if (EntidadesService.rutas[EntidadesService.rutaActiva].puntos.length < 2 || EntidadesService.rutas[elegido].puntos.length < 2) {
+                list1.mensajeError = "La ruta elegida no existe";
+                //Activamos el error si el track no tiene al menos dos puntos
+            } else if (EntidadesService.rutas[elegidoFinal].puntos.length < 2 || EntidadesService.rutas[elegido].puntos.length < 2) {
                 list1.error = true;
-                list1.mensajeError = "Algunas de las dos rutas no dispone de al menos dos puntos creados";
-                //Si el usuario intenta unir una rita con ella misma activamos el error
-            } else if (elegido == EntidadesService.rutaActiva
-                || elegido == EntidadesService.rutas[EntidadesService.rutaActiva].nombre) {
+                list1.mensajeError = "Alguna de las dos rutas no dispone de al menos dos puntos creados";
+                //Activamos el error si el usuario ha intentado unir el track con el mismo
+            } else if (elegido == elegidoFinal) {
                 list1.error = true;
-                list1.mensajeError = "Elige otra ruta, no puede unir una ruta con ella misma";
+                list1.mensajeError = "Elige otra ruta, no se puede unir una ruta con ella misma";
             }
             else {
-                //Creamos la ruta que almacenara los puntos de la union
+                           //Creamos el track que almacenara los puntos de la union
                 list1.crear(1);
-                   setTimeout(function(){
-            //Llamamos al metodo unir rutas del service
-                EntidadesService.unirRuta(elegido);
+                
+                 setTimeout(function(){
+           //llamamos al metodo unir del service
+             if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
+                EntidadesService.unirRuta(elegido,elegidoFinal);
                 $scope.$apply();
                   list1.stopSpin();
             },100);
-              
             }
         }
         if(list1.error == true)
         list1.stopSpin();
+        EntidadesService.rutaElegidoFinal=-1;
+        EntidadesService.rutaElegidoInicial=-1;
+        if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
     };
     //metodo que llama a la funcion unir tracks del service
     list1.unirTracks = function () {
@@ -456,6 +466,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 
                  setTimeout(function(){
            //llamamos al metodo unir del service
+             if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
                 EntidadesService.unirTrack(elegido,elegidoFinal);
                 $scope.$apply();
                   list1.stopSpin();
@@ -491,6 +505,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }
         //En caso de estar todo correcto llamamos al metodo del service
         else {
+            if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
             EntidadesService.borrarRuta();
         }
 
@@ -556,6 +574,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }
         //Si todo esta correcto llamamos al metodo del service
         else {
+            if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
             EntidadesService.borrarTrack();
         }
 
@@ -593,6 +615,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
              setTimeout(function(){
            //Guardamos el punto elegido
             EntidadesService.puntoElegido = punto;
+            if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
             // Y llamamos al metodo del service
             EntidadesService.recortarRuta();
                 $scope.$apply();
@@ -636,7 +662,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             //Guardamos el punto elegido
             EntidadesService.puntoElegido = punto;
             //Y llamaos al metodo del service
-            
+              if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
                  EntidadesService.recortarTrack();
                 $scope.$apply();
                   list1.stopSpin();
@@ -751,6 +780,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.mensajeError = "La ruta no dispone de puntos que eliminar";
             //En caso de ir todo bien...
         } else {
+            if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
             //se llama al metodo del service
             EntidadesService.eliminarPuntoRuta2();
             //Se quita el modo borrar
@@ -792,6 +825,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }
         //Si no hay errores activamos el modo inserccion y avisamos al usuario
         else {
+            if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
             EntidadesService.modoInsertar = true;
             list1.noError = true;
             list1.mensajeError = "Has entrado en el modo insertar punto intermedio, " +
@@ -833,6 +870,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         }
         //Si  esta bien activamos el modo insertar y avisamos al usuario
         else {
+              if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
             EntidadesService.modoInsertar = true;
             list1.noError = true;
             list1.mensajeError = "Has entrado en el modo insertar punto intermedio, " +
@@ -862,6 +903,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.mensajeError = "El track no dispone de puntos que eliminar";
             //SI  esta bien llamamos al metodo del service
         } else {
+              if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
             EntidadesService.eliminarPuntoTrack2();
             EntidadesService.puntoBorrado = false;
             EntidadesService.puntoElegido = null;
@@ -884,6 +929,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "El track no dispone de puntos que invertir";
         } else {
+              if( EntidadesService.trackElegidoFinalMarker!=null)
+        EntidadesService.trackElegidoFinalMarker.setMap(null);
+        if( EntidadesService.trackElegidoInicialMarker!=null)
+        EntidadesService.trackElegidoInicialMarker.setMap(null);
             //Si todo es correcto llamamos al metodo del service
             EntidadesService.invertirTrack2();
         }
@@ -910,6 +959,10 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.error = true;
             list1.mensajeError = "La ruta no dispone de puntos que invertir";
         } else {
+            if( EntidadesService.rutaElegidoFinalMarker!=null)
+        EntidadesService.rutaElegidoFinalMarker.setMap(null);
+        if( EntidadesService.rutaElegidoInicialMarker!=null)
+        EntidadesService.rutaElegidoInicialMarker.setMap(null);
             //Si todo esta bien se llam al metodo dek service
             EntidadesService.invertirRuta2();
         }

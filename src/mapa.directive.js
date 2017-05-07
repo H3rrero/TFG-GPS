@@ -18,6 +18,7 @@ function Mymap(EntidadesService,MapasService) {
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
         EntidadesService.ownerDo = ownerDocument;
+        
         switch(zoom) {
             case 12:
                 if(EntidadesService.cuadricula==true) {
@@ -431,7 +432,7 @@ function Mymap(EntidadesService,MapasService) {
             var marker = new google.maps.Marker({
               position: evento,
               title: "Latitud: "+evento.lat().toFixed(6)+"\nLongitud: "+evento.lng().toFixed(6),
-              icon: 'img/iconowp.png',
+              icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
               map: map
             });
             EntidadesService.markers.push(marker);
@@ -636,6 +637,42 @@ function Mymap(EntidadesService,MapasService) {
                           map: map
                       });
                       marker.addListener('click', function() {
+                               for(var i in EntidadesService.rutas){
+                            if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position.lng().toFixed(6))){
+                                      EntidadesService.rutaElegidoFinal=i;
+                                        if(EntidadesService.rutaElegidoFinalMarker !=null){
+                              EntidadesService.rutaElegidoFinalMarker.setMap(null);
+                                 }
+                                        var markerF = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position:EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position,
+                                          icon : "img/primero.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.rutaElegidoFinalMarker = markerF;
+                                  }
+                                   if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[i][0].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[i][0].position.lng().toFixed(6))){
+                                      EntidadesService.rutaElegidoInicial=i;
+                                       if(EntidadesService.rutaElegidoInicialMarker !=null){
+                              EntidadesService.rutaElegidoInicialMarker.setMap(null);
+                                 }
+                                      var markerI = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position: EntidadesService.wpRta[i][0].position,
+                                          icon : "img/segundo.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.rutaElegidoInicialMarker = markerI;
+                                  }
+                          }
                           for(var i in EntidadesService.wpRta[EntidadesService.rutaActiva]){
                               if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                                   EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lat().toFixed(6)+
@@ -1023,6 +1060,42 @@ function Mymap(EntidadesService,MapasService) {
               rutaACortar = EntidadesService.rutaActiva;
             }
                 marker.addListener('click', function() {
+                        for(var i in EntidadesService.rutas){
+                            if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position.lng().toFixed(6))){
+                                      EntidadesService.rutaElegidoFinal=i;
+                                        if(EntidadesService.rutaElegidoFinalMarker !=null){
+                              EntidadesService.rutaElegidoFinalMarker.setMap(null);
+                                 }
+                                        var markerF = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position:EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position,
+                                          icon : "img/primero.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.rutaElegidoFinalMarker = markerF;
+                                  }
+                                   if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[i][0].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[i][0].position.lng().toFixed(6))){
+                                      EntidadesService.rutaElegidoInicial=i;
+                                       if(EntidadesService.rutaElegidoInicialMarker !=null){
+                              EntidadesService.rutaElegidoInicialMarker.setMap(null);
+                                 }
+                                      var markerI = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position: EntidadesService.wpRta[i][0].position,
+                                          icon : "img/segundo.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.rutaElegidoInicialMarker = markerI;
+                                  }
+                          }
                     for(var i in EntidadesService.wpRta[rutaACortar]){
                         if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                             EntidadesService.wpRta[rutaACortar][i].position.lat().toFixed(6)+
@@ -1201,7 +1274,7 @@ function Mymap(EntidadesService,MapasService) {
                   var marker = new google.maps.Marker({
                       position: latLng,
                       title: "Latitud: "+ parseFloat(EntidadesService.latitud).toFixed(6)+"\nLongitud: "+parseFloat(EntidadesService.longitud).toFixed(6),
-                      icon: 'img/iconowp.png',
+                      icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
                       draggable:true,
                       map: map
                   });
@@ -1209,7 +1282,7 @@ function Mymap(EntidadesService,MapasService) {
                   var marker = new google.maps.Marker({
                       position: event.latLng,
                       title: "Latitud: " + event.latLng.lat().toFixed(6) + "\nLongitud: " + event.latLng.lng().toFixed(6),
-                      icon: 'img/iconowp.png',
+                      icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
                       draggable: true,
                       map: map
                   });
@@ -1442,6 +1515,42 @@ function Mymap(EntidadesService,MapasService) {
                   map: map
               });
               marker.addListener('click', function() {
+                      for(var i in EntidadesService.rutas){
+                            if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position.lng().toFixed(6))){
+                                      EntidadesService.rutaElegidoFinal=i;
+                                        if(EntidadesService.rutaElegidoFinalMarker !=null){
+                              EntidadesService.rutaElegidoFinalMarker.setMap(null);
+                                 }
+                                        var markerF = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position:EntidadesService.wpRta[i][EntidadesService.wpRta[i].length-1].position,
+                                          icon : "img/primero.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.rutaElegidoFinalMarker = markerF;
+                                  }
+                                   if((marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
+                                  EntidadesService.wpRta[i][0].position.lat().toFixed(6)+
+                                  EntidadesService.wpRta[i][0].position.lng().toFixed(6))){
+                                      EntidadesService.rutaElegidoInicial=i;
+                                       if(EntidadesService.rutaElegidoInicialMarker !=null){
+                              EntidadesService.rutaElegidoInicialMarker.setMap(null);
+                                 }
+                                      var markerI = new google.maps.Marker({
+                                          map: map,
+                                          draggable: true,
+                                          animation: google.maps.Animation.DROP,
+                                          position: EntidadesService.wpRta[i][0].position,
+                                          icon : "img/segundo.png",
+                                          zIndex:9
+                                        });
+                                        EntidadesService.rutaElegidoInicialMarker = markerI;
+                                  }
+                          }
                   for(var i in EntidadesService.wpRta[EntidadesService.rutaActiva]){
                       if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                           EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lat().toFixed(6)+

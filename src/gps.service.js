@@ -78,6 +78,10 @@ function EntidadesService (){
    service.trackElegidoInicial=-1;
     service.trackElegidoFinalMarker;
    service.trackElegidoInicialMarker;
+    service.rutaElegidoFinal=-1;
+   service.rutaElegidoInicial=-1;
+    service.rutaElegidoFinalMarker;
+   service.rutaElegidoInicialMarker;
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,
@@ -740,15 +744,17 @@ service.importXMLWp = function () {
     return null;
   };
   //Metodo que une dos rutas
-  service.unirRuta = function (rutaElegida) {
+  service.unirRuta = function (rutaElegida,rutaElegidaFinal) {
+      console.log(rutaElegida);
+      console.log(rutaElegidaFinal);
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
     //Recorremos los puntos de la primera ruta
-    for (var item in service.rutas[service.rutaActiva].puntos) {
+    for (var item in service.rutas[rutaElegidaFinal].puntos) {
       //Guardamos los datos de los puntos
-      service.longitudPInv = service.rutas[service.rutaActiva].puntos[item].longitud;
-      service.latitudPInv = service.rutas[service.rutaActiva].puntos[item].latitud;
-      service.elevacionP = service.rutas[service.rutaActiva].puntos[item].elevacion;
+      service.longitudPInv = service.rutas[rutaElegidaFinal].puntos[item].longitud;
+      service.latitudPInv = service.rutas[rutaElegidaFinal].puntos[item].latitud;
+      service.elevacionP = service.rutas[rutaElegidaFinal].puntos[item].elevacion;
       //Activamos el modo segundo recorte
       service.modoRecorte2=true;
       //Simulamos el click para añadir los puntos a la nueva ruta y al mapa
@@ -770,6 +776,8 @@ service.importXMLWp = function () {
     //Desactivamos los modos activados durante el metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
+    service.rutaElegidoFinalMarker.setMap(null);
+    service.rutaElegidoInicialMarker.setMap(null);
   };
 
   //metodo que une dos tracks
@@ -1800,6 +1808,10 @@ service.actualizarPuntosR = function() {
 
     switch (id) {
       case 0:
+        if( service.trackElegidoFinalMarker!=null)
+        service.trackElegidoFinalMarker.setMap(null);
+        if( service.trackElegidoInicialMarker!=null)
+        service.trackElegidoInicialMarker.setMap(null);
       service.punto = {
         numero:0,
         latitud:latitud,
