@@ -18,7 +18,7 @@ function Mymap(EntidadesService,MapasService) {
     //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
         EntidadesService.ownerDo = ownerDocument;
-        
+       
         switch(zoom) {
             case 12:
                 if(EntidadesService.cuadricula==true) {
@@ -105,8 +105,10 @@ function Mymap(EntidadesService,MapasService) {
 
             var scale = Math.pow(2, map.getZoom());
             var coordinates = map.getProjection().fromPointToLatLng(new google.maps.Point((coord.x / scale * this.tileSize.width) , (coord.y / scale * this.tileSize.height) ));
-
-            div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+coordinates.lat().toFixed(6)+',\n'+coordinates.lng().toFixed(6)+'</p>';}
+            var latlng = new  LatLon(coordinates.lat(), coordinates.lng());
+            var utm = latlng.toUtm();
+      
+            div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+utm.easting.toFixed(0)+' N,\n'+utm.northing.toFixed(0)+' E</p>';}
         if(zoom>=12) {
         div.style.color = '#FFFFFF';
         div.style.width = this.tileSize.width + 'px';
