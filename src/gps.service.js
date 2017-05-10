@@ -82,6 +82,7 @@ function EntidadesService (){
    service.rutaElegidoInicial=-1;
     service.rutaElegidoFinalMarker;
    service.rutaElegidoInicialMarker;
+   service.polisCuadricula=[];
     service.coords = false;
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,

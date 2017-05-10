@@ -15,7 +15,7 @@ function Mymap(EntidadesService,MapasService) {
   this.tileSize = tileSize;
 }
 
-    //Creamos la cuadricula que se superpondra al mapa
+   //Creamos la cuadricula que se superpondra al mapa
     CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
         EntidadesService.ownerDo = ownerDocument;
        
@@ -140,6 +140,7 @@ function Mymap(EntidadesService,MapasService) {
             var mapOptions = {
                 center: {lat: 40.41, lng: -3.70},
                 zoom: 12,
+               
                 disableDefaultUI: true,
                 mapTypeControl: true,
                 scaleControl: true,
@@ -233,7 +234,8 @@ function Mymap(EntidadesService,MapasService) {
               //menu desplegable
               style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
               // por ultimo le añadimos los mapas que s epodran visualizar
-              mapTypeIds: nombre
+              mapTypeIds: nombre,
+              
 
               }
             }
@@ -345,8 +347,10 @@ function Mymap(EntidadesService,MapasService) {
             });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
+                    var latlng = new  LatLon(event.latLng.lat(), event.latLng.lng());
+                     var utm = latlng.toUtm();
                     $('#map').tooltip();
-                    $('#map').attr('title', "lat: " + event.latLng.lat().toFixed(6) + "\n" + "lng: " + event.latLng.lng().toFixed(6));
+                    $('#map').attr('title', "E: " + utm.easting.toFixed(0) + "\n" + "N: " + utm.northing.toFixed(0));
                     $('#map').tooltip();
                     $('#map').mouseover();
                 }else{
