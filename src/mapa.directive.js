@@ -218,8 +218,8 @@ function Mymap(EntidadesService,MapasService) {
             elevator = new google.maps.ElevationService;
 
            //Le pasamos al mapa la cuadricula que creamos anteriormente
-           map.overlayMapTypes.insertAt(
-             0, new CoordMapType(new google.maps.Size(256, 256)));
+         //  map.overlayMapTypes.insertAt(
+           //  0, new CoordMapType(new google.maps.Size(256, 256)));
            //Definimos los mapas creados como dos nuevos tipos de mapas
             for(var i in MapasService.mapas){
                 map.mapTypes.set(MapasService.mapas[i].nombre, getMps(MapasService.mapas[i].nombre,i));
@@ -331,6 +331,79 @@ function Mymap(EntidadesService,MapasService) {
             });
 
 
+//////////////Prueba de cuadricula nueva//////////////////////
+var spherical = google.maps.geometry.spherical;
+var lat= 43.637822;
+//var lng = -179.78059612730348;
+var lng = -179.78059612730348;
+while(lat>35){
+
+var punto1km = spherical.computeOffset(new google.maps.LatLng(lat,-179.78059612730348),1000,180);
+
+ var flightPlanCoordinates = [
+          {lat: punto1km.lat(), lng: -179.78059612730348},
+          {lat: punto1km.lat(), lng: 0.0000},
+          {lat: punto1km.lat(), lng: 179.78059612730348}
+        ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: false,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.5,
+          strokeWeight: 1
+        });
+        lat=punto1km.lat();
+        flightPath.setMap(map);
+}
+var lngp = -3.71;
+var flightPlanCoordinates3 = [
+          {lat: 84.637822, lng: lngp},
+          {lat: 0.0000, lng: lngp},
+          {lat: -84.637822, lng: lngp}
+        ];
+        var flightPath3 = new google.maps.Polyline({
+          path: flightPlanCoordinates3,
+          geodesic: false,
+          strokeColor: '#8F8F8F',
+          strokeOpacity: 0.5,
+          strokeWeight: 1
+        });
+        flightPath3.setMap(map);
+var punto1km2 = spherical.computeOffset(new google.maps.LatLng(84.637822,lngp),1000,90);
+ var flightPlanCoordinates2 = [
+          {lat: 84.637822, lng: punto1km2.lng()},
+          {lat: 0.0000, lng: punto1km2.lng()},
+          {lat: -84.637822, lng: punto1km2.lng()}
+        ];
+        var flightPath2 = new google.maps.Polyline({
+          path: flightPlanCoordinates2,
+          geodesic: false,
+          strokeColor: '#8F8F8F',
+          strokeOpacity: 0.5,
+          strokeWeight: 1
+        });
+        flightPath2.setMap(map);
+/*
+while(lng<178){
+
+var punto1km = spherical.computeOffset(new google.maps.LatLng(84.637822,lng),1000,90);
+
+ var flightPlanCoordinates = [
+          {lat: 84.637822, lng: punto1km.lng()},
+          {lat: 0.0000, lng: punto1km.lng()},
+          {lat: -84.637822, lng: punto1km.lng()}
+        ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: false,
+          strokeColor: '#8F8F8F',
+          strokeOpacity: 0.5,
+          strokeWeight: 1
+        });
+        lng=punto1km.lng();
+        flightPath.setMap(map);
+}*/
+/////////////////////////////////////////////////////////////
 
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
@@ -347,10 +420,8 @@ function Mymap(EntidadesService,MapasService) {
             });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
-                    var latlng = new  LatLon(event.latLng.lat(), event.latLng.lng());
-                     var utm = latlng.toUtm();
                     $('#map').tooltip();
-                    $('#map').attr('title', "E: " + utm.easting.toFixed(0) + "\n" + "N: " + utm.northing.toFixed(0));
+                    $('#map').attr('title', "E: " + event.latLng.lat().toFixed(6) + "\n" + "N: " + event.latLng.lng().toFixed(6));
                     $('#map').tooltip();
                     $('#map').mouseover();
                 }else{
