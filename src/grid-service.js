@@ -5,6 +5,12 @@ var dL = {};
     angular.module('GPS')
         .service('GridService',GridService);
 
+/*
+Esta cuadricula a sido implanta basandome en el codigo de un ejemplo de
+la pagina de gmap4, el ejemplo es el siguiente-->
+https://mappingsupport.com/p/gmap4.php?utm=14N,460555,4257618&tilt=off&z=5&t=t1
+ */
+
     function GridService() {
         var grid = this;
         grid.mapa;
