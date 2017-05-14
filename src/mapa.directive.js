@@ -4,7 +4,7 @@
 angular.module('GPS')
 .directive('myMap', Mymap);
 
-function Mymap(EntidadesService,MapasService) {
+function Mymap(EntidadesService,MapasService,GridService) {
     // directive link function
     var link = function(scope, element, attrs,controller) {
         var map;
@@ -16,7 +16,7 @@ function Mymap(EntidadesService,MapasService) {
 }
 
    //Creamos la cuadricula que se superpondra al mapa
-    CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+  /*  CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
         EntidadesService.ownerDo = ownerDocument;
        
         switch(zoom) {
@@ -123,7 +123,7 @@ function Mymap(EntidadesService,MapasService) {
     }
             return div;
 
-    };
+    };*/
 
 
 
@@ -331,80 +331,6 @@ function Mymap(EntidadesService,MapasService) {
             });
 
 
-//////////////Prueba de cuadricula nueva//////////////////////
-var spherical = google.maps.geometry.spherical;
-var lat= 43.637822;
-//var lng = -179.78059612730348;
-var lng = -179.78059612730348;
-while(lat>35){
-
-var punto1km = spherical.computeOffset(new google.maps.LatLng(lat,-179.78059612730348),1000,180);
-
- var flightPlanCoordinates = [
-          {lat: punto1km.lat(), lng: -179.78059612730348},
-          {lat: punto1km.lat(), lng: 0.0000},
-          {lat: punto1km.lat(), lng: 179.78059612730348}
-        ];
-        var flightPath = new google.maps.Polyline({
-          path: flightPlanCoordinates,
-          geodesic: false,
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.5,
-          strokeWeight: 1
-        });
-        lat=punto1km.lat();
-        flightPath.setMap(map);
-}
-var lngp = -3.71;
-var flightPlanCoordinates3 = [
-          {lat: 84.637822, lng: lngp},
-          {lat: 0.0000, lng: lngp},
-          {lat: -84.637822, lng: lngp}
-        ];
-        var flightPath3 = new google.maps.Polyline({
-          path: flightPlanCoordinates3,
-          geodesic: false,
-          strokeColor: '#8F8F8F',
-          strokeOpacity: 0.5,
-          strokeWeight: 1
-        });
-        flightPath3.setMap(map);
-var punto1km2 = spherical.computeOffset(new google.maps.LatLng(84.637822,lngp),1000,90);
- var flightPlanCoordinates2 = [
-          {lat: 84.637822, lng: punto1km2.lng()},
-          {lat: 0.0000, lng: punto1km2.lng()},
-          {lat: -84.637822, lng: punto1km2.lng()}
-        ];
-        var flightPath2 = new google.maps.Polyline({
-          path: flightPlanCoordinates2,
-          geodesic: false,
-          strokeColor: '#8F8F8F',
-          strokeOpacity: 0.5,
-          strokeWeight: 1
-        });
-        flightPath2.setMap(map);
-/*
-while(lng<178){
-
-var punto1km = spherical.computeOffset(new google.maps.LatLng(84.637822,lng),1000,90);
-
- var flightPlanCoordinates = [
-          {lat: 84.637822, lng: punto1km.lng()},
-          {lat: 0.0000, lng: punto1km.lng()},
-          {lat: -84.637822, lng: punto1km.lng()}
-        ];
-        var flightPath = new google.maps.Polyline({
-          path: flightPlanCoordinates,
-          geodesic: false,
-          strokeColor: '#8F8F8F',
-          strokeOpacity: 0.5,
-          strokeWeight: 1
-        });
-        lng=punto1km.lng();
-        flightPath.setMap(map);
-}*/
-/////////////////////////////////////////////////////////////
-
     map.addListener('click', addLatLng,elevator);
     map.addListener('zoom_changed', function() {
         if(EntidadesService.markersT[EntidadesService.trackActivo]!=undefined )
@@ -418,6 +344,11 @@ var punto1km = spherical.computeOffset(new google.maps.LatLng(84.637822,lng),100
         EntidadesService.cuadricula = true;
 
             });
+            google.maps.event.addListener(map, "idle", function() {
+
+                            GridService.draw("idle-0", 1);
+
+                });
             map.addListener('mousemove', function(event) {
                 if(EntidadesService.coords==false) {
                     $('#map').tooltip();
@@ -433,6 +364,7 @@ var punto1km = spherical.computeOffset(new google.maps.LatLng(84.637822,lng),100
 
 
     EntidadesService.mapa = map;
+    GridService.mapa = map;
 
         }
         //Calcula la distancia entre dos puntos del mapa para los recortes de una ruta
