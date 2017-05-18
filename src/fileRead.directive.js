@@ -64,7 +64,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
         scope: {
             fileread: "="
         },
-        controller: 'PruebaController',
+        controller: 'GPSController',
         link: link
 
     }

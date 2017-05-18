@@ -29,6 +29,7 @@ https://mappingsupport.com/p/gmap4.php?utm=14N,460555,4257618&tilt=off&z=5&t=t1
         dL.P = "utm";
         dL.ok = false;
        
+       //Funcion que controla la vida de la cuadricula
         grid.draw= function cd(K, action) {
              dL.map = grid.mapa;
             dL.R = dL.map.getZoom();
@@ -39,17 +40,19 @@ https://mappingsupport.com/p/gmap4.php?utm=14N,460555,4257618&tilt=off&z=5&t=t1
                     dL.R = dL.map.getZoom();
                     if (dL.dF == "utm" || dL.dF == "usng" || dL.dF == "mgrs") {
                         dL.dF = "";
+                        //Limpia la cuadricula y sus valores para que se peda volver a pintar cuando se produce un evento en el mapa
                         tM();
-						console.log("he pasau per aqui en primer lugar");
+						
                     }
                     if (action == 1) {
-					console.log("k--> "+K);
+                        //Hace los calculos necesarios para la cuadricula
                         ue();
                         if (dL.P == "utm") {
                             dL.dF = "utm";
                             if (dL.R >= 6) {
+                                //Pinta la cuadricula
                                 qx("utm");
-								console.log("he pasau per aqui y habia un 6");
+								
                             }
                             
 							
@@ -510,7 +513,7 @@ https://mappingsupport.com/p/gmap4.php?utm=14N,460555,4257618&tilt=off&z=5&t=t1
                                     dL.aS = "" + bK + "<span style='font-weight:bold; font-size: 15px;'>" + bJ + "</span>" + bN;
                                     dL.fo = dL.hC;
                                     dL.es++;
-                                    console.log(dL);
+                                 
                                     dL.eL[dL.es] = new cR({
                                         map: dL.map
                                     });

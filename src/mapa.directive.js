@@ -686,7 +686,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
                               if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                                   EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lat().toFixed(6)+
                                   EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lng().toFixed(6)){
-                                  controller.puntoSelec(i);
+                                  controller.puntoSelecR(i);
                               }
                           }
                       });
@@ -1109,7 +1109,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
                         if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                             EntidadesService.wpRta[rutaACortar][i].position.lat().toFixed(6)+
                             EntidadesService.wpRta[rutaACortar][i].position.lng().toFixed(6)){
-                            controller.puntoSelec(i);
+                            controller.puntoSelecR(i);
                         }
                     }
                 });
@@ -1564,7 +1564,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
                       if(marker.position.lat().toFixed(6)+marker.position.lng().toFixed(6) ==
                           EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lat().toFixed(6)+
                           EntidadesService.wpRta[EntidadesService.rutaActiva][i].position.lng().toFixed(6)){
-                          controller.puntoSelec(i);
+                          controller.puntoSelecR(i);
                       }
                   }
               });
@@ -1648,7 +1648,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
         restrict: 'E',
         template: '<div id="map"  title=""></div>',
         replace: true,
-        controller: 'PruebaController',
+        controller: 'GPSController',
         link: link
     };
 }

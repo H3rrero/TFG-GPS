@@ -2,9 +2,9 @@
 'use strict';
 
 angular.module('GPS')
-.controller('PruebaController',PruebaController);
+.controller('GPSController',GPSController);
 
-function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngDialog) {
+function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog) {
     var list1 = this;
     //track seleccionado por el usuario
     list1.trackActivo = 0;
@@ -94,7 +94,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             plain:true,
             showClose: true,
             controllerAs: 'list1',
-            controller: 'PruebaController'
+            controller: 'GPSController'
         });}
     };
 
@@ -123,7 +123,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 plain:true,
                 showClose: true,
                 controllerAs: 'list1',
-                controller: 'PruebaController'
+                controller: 'GPSController'
             });}
     };
 
@@ -153,7 +153,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 plain:true,
                 showClose: true,
                 controllerAs: 'list1',
-                controller: 'PruebaController'
+                controller: 'GPSController'
             });}
     };
 
@@ -169,7 +169,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
                 plain:true,
                 showClose: true,
                 controllerAs: 'list1',
-                controller: 'PruebaController'
+                controller: 'GPSController'
             });
     };
 
@@ -258,7 +258,6 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
            
             html2canvas($(".gm-style")[0].childNodes[0], {
                 useCORS: true,
-                logging:true,
                 onrendered: function(canvas) {
                     if( list1.isFirefox){
                         list1.pant = false;
@@ -689,6 +688,13 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
         EntidadesService.puntoBorrado = true;
     };
 
+     //Funcion que obtiene de la tabla el punto seleccionado por el usuario
+    list1.puntoSelecR = function (index) {
+
+        EntidadesService.puntoSelecR(index);
+        EntidadesService.puntoBorrado = true;
+    };
+
     list1.descripcion = function () {
         list1.error = false;
         list1.noError = false;
@@ -714,7 +720,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             list1.mensajeError = "No tienes ningun track creado";
         }
         if (list1.nombre != null && EntidadesService.tracks.length > 0) {
-            console.log( list1.trackNombre);
+         
             //Se llama al metodo del service para cambiar el nombre
             EntidadesService.renombrarT(list1.nombre);
         }
@@ -1016,7 +1022,7 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
             plain:true,
             showClose: true,
             controllerAs: 'list1',
-            controller: 'PruebaController'
+            controller: 'GPSController'
         });}
     };
 
@@ -1571,6 +1577,11 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     };
     //Mostar la lista de track
     list1.listaActiva = function () {
+         list1.noError = false;
+        list1.error = false;
+       
+            list1.noError = true;
+            list1.mensajeError = "Has creado un track, para añadir puntos por favor pincha en el mapa";
         list1.crear(0);
         list1.activarListaR = false;
         list1.activarListaW = false;
@@ -1595,6 +1606,11 @@ function PruebaController($scope,EntidadesService,$document,usSpinnerService,ngD
     };
     //Mostrar la lista de rutas
     list1.listaActivaR = function () {
+         list1.noError = false;
+        list1.error = false;
+       
+            list1.noError = true;
+            list1.mensajeError = "Has creado una ruta, para añadir puntos por favor pincha en el mapa";
         list1.crear(1);
         list1.activarLista = false;
         list1.activarListaW = false;

@@ -746,8 +746,7 @@ service.importXMLWp = function () {
   };
   //Metodo que une dos rutas
   service.unirRuta = function (rutaElegida,rutaElegidaFinal) {
-      console.log(rutaElegida);
-      console.log(rutaElegidaFinal);
+     
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
     //Recorremos los puntos de la primera ruta
@@ -897,22 +896,13 @@ service.fin = true;
     service.puntoElegido = null;
   }
 
-  //Metodo que guarda el punto seleccionado en la tabla de puntos
-  service.puntoSelec = function (index) {
+ //Metodo que guarda el punto seleccionado en la tabla de puntos
+  service.puntoSelecR = function (index) {
     //Guardamos el index del punto elegido
     service.puntoElegido = index;
     //Activamos el modo seleccion
     service.seleccion = true;
-    if(service.isTrack == true){
-      //Guardamos los datos del punto
-      service.latitudSelec = service.tracks[service.trackActivo].puntos[index].latitud;
-      service.longitudSelec = service.tracks[service.trackActivo].puntos[index].longitud;
-      //Simulamos un click el mapa para añadir el marcado del punto elegido
-      google.maps.event.trigger(service.mapa, 'click');
-        if(service.clicTabGraf){
-            service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
-            service.mapa.setZoom(17);}
-    }else{
+ 
       //Guardamos los datos del punto
       service.latitudSelec = service.rutas[service.rutaActiva].puntos[index].latitud;
       service.longitudSelec = service.rutas[service.rutaActiva].puntos[index].longitud;
@@ -922,7 +912,28 @@ service.fin = true;
         service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
         service.mapa.setZoom(17);}
 
-    }
+    
+    //Desactivamos el modo selecion
+    service.seleccion = false;
+      service.clicTabGraf = false;
+  };
+
+  //Metodo que guarda el punto seleccionado en la tabla de puntos
+  service.puntoSelec = function (index) {
+    //Guardamos el index del punto elegido
+    service.puntoElegido = index;
+    //Activamos el modo seleccion
+    service.seleccion = true;
+   
+      //Guardamos los datos del punto
+      service.latitudSelec = service.tracks[service.trackActivo].puntos[index].latitud;
+      service.longitudSelec = service.tracks[service.trackActivo].puntos[index].longitud;
+      //Simulamos un click el mapa para añadir el marcado del punto elegido
+      google.maps.event.trigger(service.mapa, 'click');
+        if(service.clicTabGraf){
+            service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
+            service.mapa.setZoom(17);}
+    
     //Desactivamos el modo selecion
     service.seleccion = false;
       service.clicTabGraf = false;
