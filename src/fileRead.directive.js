@@ -13,15 +13,20 @@ function ImportFunction(EntidadesService,usSpinnerService) {
     
         //Evento change del input de importacion
         element.bind("change", function (changeEvent) {
-             
+  if(!!window.chrome && !!window.chrome.webstore) {        
  usSpinnerService.spin('spinner-2');
-
+  }else if(typeof InstallTrigger !== 'undefined'){
+      console.log("hola1");
+     usSpinnerService.spin('spinner-2');  
+  }else{usSpinnerService.spin('spinner-2');  }
             scope.$apply(function () {
             
+                
+
                 scope.fileread = changeEvent.target.files[0];
                 var reader = new FileReader();
                 reader.onload = (function(theFile) {
-                    if(theFile.name.includes(".gpx"))
+     
                     return function(e) {
 
                         
@@ -53,9 +58,20 @@ function ImportFunction(EntidadesService,usSpinnerService) {
                 //Leemos el contendo del fichero
                 reader.readAsText(changeEvent.target.files[0],"UTF-8");
             });
+            if(!!window.chrome && !!window.chrome.webstore){
                setTimeout(function() {
  usSpinnerService.stop('spinner-2');
 }, 11);
+        }else if(typeof InstallTrigger !== 'undefined'){
+              setTimeout(function() {
+  console.log("hola2");
+            usSpinnerService.stop('spinner-2');
+}, 1001);
+            
+        }else{    setTimeout(function() {
+
+            usSpinnerService.stop('spinner-2');
+}, 3001);}
         });
        
     }
