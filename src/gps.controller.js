@@ -103,14 +103,17 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
              EntidadesService.trackNombre=track;
         ngDialog.open({
             template:
-            '<label for="nombre" class="prlabel">nombre:</label>'+
+            '<div>'+
+            '<label for="nombre" class="prlabel">Nombre:</label>'+
             '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarT()">'+
-            '<label for="grosor" class="prlabel">grosor:</label>'+
+            '<label for="grosor" class="prlabel" style="margin-top: 1%;">Grosor:</label>'+
             '<input type="number"   id="grosor" ng-model="list1.grosor" ng-change="list1.cambiarGrosor()">'+
-            '<label for="picker" class="prlabel">color:</label>'+
-            '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
+            '<label for="picker" class="prlabel" style="margin-top: 1%;">Color:</label>'+
+            '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>'+
+            '</div>',
             plain:true,
             showClose: true,
+            closeByEscape: true,
             controllerAs: 'list1',
             controller: 'GPSController'
         });}
@@ -132,11 +135,11 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             EntidadesService.rutaNombre = track;
             ngDialog.open({
                 template:
-                '<label for="nombre" class="prlabel">nombre:</label>'+
+                '<label for="nombre" class="prlabel">Nombre:</label>'+
                 '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarR()">'+
-                '<label for="grosor" class="prlabel">grosor:</label>'+
+                '<label for="grosor" class="prlabel" style="margin-top: 1%;">Grosor:</label>'+
                 '<input type="number"   id="grosor" ng-model="list1.grosor" ng-change="list1.cambiarGrosorR()">'+
-                '<label for="grosor" class="prlabel">color:</label>'+
+                '<label for="grosor" class="prlabel" style="margin-top: 1%;">Color:</label>'+
                 '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
                 plain:true,
                 showClose: true,
@@ -161,11 +164,11 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
              EntidadesService.wptNombre = track;
             ngDialog.open({
                 template:
-                '<label for="nombre" class="prlabel">nombre:</label>'+
+                '<label for="nombre" class="prlabel">Nombre:</label>'+
                 '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarW()">'+
-                '<label for="descripcion" class="prlabel">descripción:</label>'+
+                '<label for="descripcion" class="prlabel" style="margin-top: 1%;">Descripción:</label>'+
                 '<input type="text"   id="descripcion"  ng-model="list1.descrip" ng-change="list1.descripcion()">'+
-                '<label for="coord" class="prlabel">Latitud y longitud:</label>'+
+                '<label for="coord" class="prlabel" style="margin-top: 1%;">Latitud y longitud:</label>'+
                 '<input type="text"   id="coord"  ng-model="list1.lat" ng-change="list1.changeMarkerPosition()" >'+
                 '<input type="text"  style="margin-left: 2%"  id="coordlng" ng-model="list1.lng" ng-change="list1.changeMarkerPosition()" >',
                 plain:true,
@@ -1028,14 +1031,14 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         } else{
         ngDialog.open({
             template:
-            '<div>'+
+            '<div style="height: 180px;">'+
             '<label for="velocidad" class="prlabel">Velocidad:</label>'+
-            '<input type="number"   id="velocidad" ng-model="list1.velocidad">min/km'+
-            '<label for="fecha" class="prlabel">Fecha:</label>'+
+            '<input type="number"   id="velocidad" ng-model="list1.velocidad" style="margin-top: 1%">min/km'+
+            '<label for="fecha" class="prlabel" style="margin-top: 3%">Fecha:</label>'+
             '<datepicker>'+
             '<input ng-model="date" style="width:100%" type="text"/>'+
             '</datepicker>'+
-            '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>'
+            '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right;margin-top: 5% !important"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>'
                +'</div>',
             plain:true,
             showClose: true,
