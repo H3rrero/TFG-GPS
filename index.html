@@ -161,14 +161,14 @@
 			<div id="lista" class="radio" ng-click="list1.superponerLista()">
 				<ul ng-hide="!list1.activarLista">
 					<img  src="img/informacion.png" title="nombre del track, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo, duracion ida, duracion vuelta." height="5%" width="5%">
-				<li ng-repeat="item in list1.tracks" id="li{{$index}}" ng-dblclick="list1.openPopup($index);"><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()"><p id="pt{{$index}}" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</p></li>
+				<li ng-repeat="item in list1.tracks" id="li{{$index}}" ><input id="in{{$index}}" type="radio" name="track"  ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()"><p id="pt{{$index}}" ng-click="list1.openPopup($index);" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)" >{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m,->{{item["duracionIda"]}}h,<-{{item["duracionVuelta"]}}h</p></li>
 			</ul>
 			<ul ng-hide="!list1.activarListaR">
 			<img src="img/informacion.png" title="nombre de la ruta, desnivel positivo, desnivel negativo, distancia, punto más alto, punto más bajo." height="5%" width="5%">
-			<li ng-repeat="item in list1.rutas" id="lir{{$index}}" ng-dblclick="list1.openPopupR($index);" ><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()"><p  id="pr{{$index}}" ng-mouseleave="list1.desSubrayarr($index)" ng-mouseover="list1.subrayarr($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</p></li>
+			<li ng-repeat="item in list1.rutas" id="lir{{$index}}"  ><input id="inr{{$index}}" type="radio" name="track"  ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()"><p  id="pr{{$index}}"  ng-click="list1.openPopupR($index);" ng-mouseleave="list1.desSubrayarr($index)" ng-mouseover="list1.subrayarr($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,<{{item["elevMin"]}}m</p></li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
-		<li ng-repeat="item in list1.waypoints"  ng-dblclick="list1.openPopupW($index);"><input id="inw{{$index}}" type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" ><p id="pw{{$index}}" ng-mouseleave="list1.desSubrayarw($index)" ng-mouseover="list1.subrayarw($index)">{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</p></li>
+		<li ng-repeat="item in list1.waypoints"  ><input id="inw{{$index}}" type="radio"  name="track" ng-model="list1.wpActivo" ng-value="$index" value="track1" ng-change="list1.changedW()" ><p id="pw{{$index}}" ng-click="list1.openPopupW($index);" ng-mouseleave="list1.desSubrayarw($index)" ng-mouseover="list1.subrayarw($index)">{{item["nombre"]}}, {{item["latitud"]}}, {{item["longitud"]}}, {{item["elevacion"]}}m</p></li>
 		</ul>
 			</div>
 

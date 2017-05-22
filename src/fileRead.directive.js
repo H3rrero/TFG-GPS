@@ -39,6 +39,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
                             controller.listaActiva();
                             EntidadesService.importXML();
                             EntidadesService.centrarMapa();
+                             scope.$apply();
                         }else if (EntidadesService.isWpImport &&  EntidadesService.xmlImportado.getElementsByTagName("wpt").length>0) {
                             EntidadesService.importXMLWp();
                             EntidadesService.centrarWP();
@@ -73,7 +74,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
             usSpinnerService.stop('spinner-2');
 }, 3001);}
         });
-       
+      
     }
     
     return {

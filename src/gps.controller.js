@@ -74,19 +74,19 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         $("#pt"+i)[0].style = "";
     }
     list1.subrayar = function(i){
-        $("#pt"+i)[0].style = "text-decoration: underline;";
+        $("#pt"+i)[0].style = "text-decoration: underline; cursor:pointer;";
     }
      list1.desSubrayarr = function(i){
         $("#pr"+i)[0].style = "";
     }
     list1.subrayarr = function(i){
-        $("#pr"+i)[0].style = "text-decoration: underline;";
+        $("#pr"+i)[0].style = "text-decoration: underline; cursor:pointer;";
     }
       list1.desSubrayarw = function(i){
         $("#pw"+i)[0].style = "";
     }
     list1.subrayarw = function(i){
-        $("#pw"+i)[0].style = "text-decoration: underline;";
+        $("#pw"+i)[0].style = "text-decoration: underline; cursor:pointer;";
     }
     list1.openPopup = function (track) {
         list1.noError = false;
