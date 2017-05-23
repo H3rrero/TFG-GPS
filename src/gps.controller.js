@@ -103,16 +103,17 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
              EntidadesService.trackNombre=track;
         ngDialog.open({
             template:
-            '<div>'+
+            '<div style="height: 210px;">'+
             '<label for="nombre" class="prlabel">Nombre:</label>'+
-            '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarT()">'+
+            '<input type="text"   id="nombre" style="width: 100%;" placeholder="Nuevo nombre" ng-model="list1.nombre" ng-change="list1.renombrarT()">'+
             '<label for="grosor" class="prlabel" style="margin-top: 1%;">Grosor:</label>'+
-            '<input type="number"   id="grosor" ng-model="list1.grosor" ng-change="list1.cambiarGrosor()">'+
+            '<input type="number"   id="grosor" style="width: 100%;" ng-model="list1.grosor" ng-change="list1.cambiarGrosor()">'+
             '<label for="picker" class="prlabel" style="margin-top: 1%;">Color:</label>'+
             '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>'+
+             '<button id="botoncerrardialog" type="button"  style="right: 0 !important;position: absolute; bottom: 4%;" ' +
+                'ng-click="closeThisDialog(0)" class="bttn-unite bttn-xs bttn-primary stiloBtns">cerrar</button>'+
             '</div>',
             plain:true,
-            showClose: true,
             closeByEscape: true,
             controllerAs: 'list1',
             controller: 'GPSController'
@@ -135,14 +136,18 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             EntidadesService.rutaNombre = track;
             ngDialog.open({
                 template:
+                '<div style="height: 210px;">'+
                 '<label for="nombre" class="prlabel">Nombre:</label>'+
-                '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarR()">'+
+                '<input type="text"   id="nombre" style="width: 100%;" placeholder="Nuevo nombre" ng-model="list1.nombre" ng-change="list1.renombrarR()">'+
                 '<label for="grosor" class="prlabel" style="margin-top: 1%;">Grosor:</label>'+
-                '<input type="number"   id="grosor" ng-model="list1.grosor" ng-change="list1.cambiarGrosorR()">'+
+                '<input type="number"   id="grosor" style="width: 100%;" ng-model="list1.grosor" ng-change="list1.cambiarGrosorR()">'+
                 '<label for="grosor" class="prlabel" style="margin-top: 1%;">Color:</label>'+
-                '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>',
+                '<color-picker id="picker" ng-model="color" options="options"  event-api="eventApi" ></color-picker>'+
+                '<button id="botoncerrardialogR" type="button"  style="right: 0 !important;position: absolute; bottom: 4%;" ' +
+                'ng-click="closeThisDialog(0)" class="bttn-unite bttn-xs bttn-primary stiloBtns">cerrar</button>'+
+                '</div>',
                 plain:true,
-                showClose: true,
+               
                 controllerAs: 'list1',
                 controller: 'GPSController'
             });}
@@ -164,15 +169,19 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
              EntidadesService.wptNombre = track;
             ngDialog.open({
                 template:
+                '<div style="height: 215px;">'+
                 '<label for="nombre" class="prlabel">Nombre:</label>'+
-                '<input type="text"   id="nombre" ng-model="list1.nombre" ng-change="list1.renombrarW()">'+
+                '<input type="text"   id="nombre" style="width: 100%;" placeholder="Nuevo nombre" ng-model="list1.nombre" ng-change="list1.renombrarW()">'+
                 '<label for="descripcion" class="prlabel" style="margin-top: 1%;">Descripción:</label>'+
-                '<input type="text"   id="descripcion"  ng-model="list1.descrip" ng-change="list1.descripcion()">'+
+                '<input type="text"   id="descripcion" style="width: 100%;" placeholder="descripción del wpt"  ng-model="list1.descrip" ng-change="list1.descripcion()">'+
                 '<label for="coord" class="prlabel" style="margin-top: 1%;">Latitud y longitud:</label>'+
-                '<input type="text"   id="coord"  ng-model="list1.lat" ng-change="list1.changeMarkerPosition()" >'+
-                '<input type="text"  style="margin-left: 2%"  id="coordlng" ng-model="list1.lng" ng-change="list1.changeMarkerPosition()" >',
+                '<input type="text"   id="coord" style="width: 45%;" placeholder="43.324228"  ng-model="list1.lat" ng-change="list1.changeMarkerPosition()" >'+
+                '<input type="text"  style="margin-left: 2%;width: 45%;"  placeholder="-5.629051"   id="coordlng" ng-model="list1.lng" ng-change="list1.changeMarkerPosition()" >'+
+                 '<button id="cerrarwp" type="button" ng-click="closeThisDialog(0)" style="float:right;margin-top: 5% !important"  class="bttn-unite bttn-xs bttn-primary stiloBtns">cerrar</button>'+
+                 '</div>',
+               
                 plain:true,
-                showClose: true,
+               
                 controllerAs: 'list1',
                 controller: 'GPSController'
             });}
@@ -183,9 +192,9 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             ngDialog.open({
                 template:
                 '<label for="coord" class="prlabel">Latitud y longitud:</label>'+
-                '<input type="text"   id="coord"  ng-model="list1.latNW" >'+
-                '<input type="text"  style="margin-left: 2%"  id="coordlng" ng-model="list1.lngNW" >'+
-                '<button id="botonAnadirWp" type="button"  style="margin-left: 2%;margin-top: 2%" ' +
+                '<input type="text"   id="coord" style="width: 45%;"  placeholder="43.324228"   ng-model="list1.latNW" >'+
+                '<input type="text"  style="margin-left: 2%;width: 45%;"  placeholder="-5.629051"  id="coordlng" ng-model="list1.lngNW" >'+
+                '<button id="botonAnadirWp" type="button"  style="margin-top: 4% !important" ' +
                 'ng-click="list1.anadirWaypoint()" class="bttn-unite bttn-xs bttn-success stiloBtns">crear</button>',
                 plain:true,
                 showClose: true,
@@ -1036,7 +1045,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             '<input type="number"   id="velocidad" ng-model="list1.velocidad" style="margin-top: 1%">min/km'+
             '<label for="fecha" class="prlabel" style="margin-top: 3%">Fecha:</label>'+
             '<datepicker>'+
-            '<input ng-model="date" style="width:100%" type="text"/>'+
+            '<input ng-model="date" placeholder="Puedes cambiar la hora a mano tras elegir la fecha" style="width:100%" type="text"/>'+
             '</datepicker>'+
             '<button id="actTiem" type="button" ng-click="list1.cambiarTiempos()" style="float:right;margin-top: 5% !important"  class="bttn-unite bttn-xs bttn-primary stiloBtns">Actualizar datos</button>'
                +'</div>',
