@@ -2,7 +2,11 @@
 'use strict';
 
 angular.module('GPS')
-.controller('GPSController',GPSController);
+.controller('GPSController',GPSController)
+.config(function (ngDialogProvider) {
+    ngDialogProvider.setForceHtmlReload(true);
+     ngDialogProvider.setForceBodyReload(true);
+});;
 
 function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog) {
     var list1 = this;
@@ -52,7 +56,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.lat ="";
     list1.lngNW;
     list1.latNW ;
-    list1.velocidad = 4;
+    list1.velocidad;
     list1.fecha;
     $scope.options = {
         format:'hex'
@@ -91,6 +95,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.openPopup = function (track) {
         list1.noError = false;
         list1.error = false;
+         
         if (EntidadesService.isTrack == false
             || EntidadesService.tracks[EntidadesService.trackActivo] === undefined) {
             list1.error = true;
@@ -101,11 +106,14 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeError = "El track necesita tener al menos dos puntos para que exista una polilinea a la cual cambiar el color";
         }else{
              EntidadesService.trackNombre=track;
-        ngDialog.open({
+             $scope.myJSONObject={
+            name: EntidadesService.tracks[track].nombre,
+            };
+            setTimeout(function(){ngDialog.open({
             template:
             '<div style="height: 210px;">'+
             '<label for="nombre" class="prlabel">Nombre:</label>'+
-            '<input type="text"   id="nombre" style="width: 100%;" placeholder="Nuevo nombre" ng-model="list1.nombre" ng-change="list1.renombrarT()">'+
+            '<input type="text"   id="nombre" style="width: 100%;" placeholder="{{ngDialogData.name}}" ng-model="list1.nombre" ng-change="list1.renombrarT()">'+
             '<label for="grosor" class="prlabel" style="margin-top: 1%;">Grosor:</label>'+
             '<input type="number"   id="grosor" style="width: 100%;" ng-model="list1.grosor" ng-change="list1.cambiarGrosor()">'+
             '<label for="picker" class="prlabel" style="margin-top: 1%;">Color:</label>'+
@@ -116,8 +124,10 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             plain:true,
             closeByEscape: true,
             controllerAs: 'list1',
+            data: $scope.myJSONObject,
             controller: 'GPSController'
-        });}
+        });},10);
+        }
     };
 
     list1.openPopupR = function (track) {
@@ -134,11 +144,14 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeError = "La ruta necesita tener al menos dos puntos para que exista una polilinea a la cual cambiar las propiedades";
         }else{
             EntidadesService.rutaNombre = track;
+              $scope.myJSONObjectR={
+            name: EntidadesService.rutas[track].nombre,
+            };
             ngDialog.open({
                 template:
                 '<div style="height: 210px;">'+
                 '<label for="nombre" class="prlabel">Nombre:</label>'+
-                '<input type="text"   id="nombre" style="width: 100%;" placeholder="Nuevo nombre" ng-model="list1.nombre" ng-change="list1.renombrarR()">'+
+                '<input type="text"   id="nombre" style="width: 100%;" placeholder="{{ngDialogData.name}}" ng-model="list1.nombre" ng-change="list1.renombrarR()">'+
                 '<label for="grosor" class="prlabel" style="margin-top: 1%;">Grosor:</label>'+
                 '<input type="number"   id="grosor" style="width: 100%;" ng-model="list1.grosor" ng-change="list1.cambiarGrosorR()">'+
                 '<label for="grosor" class="prlabel" style="margin-top: 1%;">Color:</label>'+
@@ -147,7 +160,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
                 'ng-click="closeThisDialog(0)" class="bttn-unite bttn-xs bttn-primary stiloBtns">cerrar</button>'+
                 '</div>',
                 plain:true,
-               
+               data: $scope.myJSONObjectR,
                 controllerAs: 'list1',
                 controller: 'GPSController'
             });}
@@ -167,21 +180,27 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeError = "Necesitas tener waypoints creados para poder editarlos";
         }else{
              EntidadesService.wptNombre = track;
+              $scope.myJSONObjectW={
+            name: EntidadesService.waypoints[track].nombre,
+            desc: EntidadesService.waypoints[track].descripcion,
+             lat: EntidadesService.waypoints[track].latitud,
+              lng: EntidadesService.waypoints[track].longitud,
+            };
             ngDialog.open({
                 template:
                 '<div style="height: 215px;">'+
                 '<label for="nombre" class="prlabel">Nombre:</label>'+
-                '<input type="text"   id="nombre" style="width: 100%;" placeholder="Nuevo nombre" ng-model="list1.nombre" ng-change="list1.renombrarW()">'+
+                '<input type="text"   id="nombre" style="width: 100%;" placeholder="{{ngDialogData.name}}" ng-model="list1.nombre" ng-change="list1.renombrarW()">'+
                 '<label for="descripcion" class="prlabel" style="margin-top: 1%;">Descripción:</label>'+
-                '<input type="text"   id="descripcion" style="width: 100%;" placeholder="descripción del wpt"  ng-model="list1.descrip" ng-change="list1.descripcion()">'+
+                '<input type="text"   id="descripcion" style="width: 100%;" placeholder="{{ngDialogData.desc}}"  ng-model="list1.descrip" ng-change="list1.descripcion()">'+
                 '<label for="coord" class="prlabel" style="margin-top: 1%;">Latitud y longitud:</label>'+
-                '<input type="text"   id="coord" style="width: 45%;" placeholder="43.324228"  ng-model="list1.lat" ng-change="list1.changeMarkerPosition()" >'+
-                '<input type="text"  style="margin-left: 2%;width: 45%;"  placeholder="-5.629051"   id="coordlng" ng-model="list1.lng" ng-change="list1.changeMarkerPosition()" >'+
+                '<input type="text"   id="coord" style="width: 45%;" placeholder="{{ngDialogData.lat}}"  ng-model="list1.lat" ng-change="list1.changeMarkerPosition()" >'+
+                '<input type="text"  style="margin-left: 2%;width: 45%;"  placeholder="{{ngDialogData.lng}}"   id="coordlng" ng-model="list1.lng" ng-change="list1.changeMarkerPosition()" >'+
                  '<button id="cerrarwp" type="button" ng-click="closeThisDialog(0)" style="float:right;margin-top: 5% !important"  class="bttn-unite bttn-xs bttn-primary stiloBtns">cerrar</button>'+
                  '</div>',
                
                 plain:true,
-               
+                data: $scope.myJSONObjectW,
                 controllerAs: 'list1',
                 controller: 'GPSController'
             });}
@@ -1038,11 +1057,15 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeError = "Por favor selecciona un track";
             //Se comprueba que se haya selccionado un punto
         } else{
+             $scope.myJSONObjectTm={
+            velo: EntidadesService.tracks[EntidadesService.trackActivo]["puntos"][0].velocidad,
+           
+            };
         ngDialog.open({
             template:
             '<div style="height: 180px;">'+
             '<label for="velocidad" class="prlabel">Velocidad:</label>'+
-            '<input type="number"   id="velocidad" ng-model="list1.velocidad" style="margin-top: 1%">min/km'+
+            '<input type="number"   id="velocidad" placeholder="{{ngDialogData.velo}}" ng-model="list1.velocidad" style="margin-top: 1%">min/km'+
             '<label for="fecha" class="prlabel" style="margin-top: 3%">Fecha:</label>'+
             '<datepicker>'+
             '<input ng-model="date" placeholder="Puedes cambiar la hora a mano tras elegir la fecha" style="width:100%" type="text"/>'+
@@ -1051,6 +1074,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
                +'</div>',
             plain:true,
             showClose: true,
+            data: $scope.myJSONObjectTm,
             controllerAs: 'list1',
             controller: 'GPSController'
         });}
