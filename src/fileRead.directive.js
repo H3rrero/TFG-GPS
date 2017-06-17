@@ -16,7 +16,6 @@ function ImportFunction(EntidadesService,usSpinnerService) {
   if(!!window.chrome && !!window.chrome.webstore) {        
  usSpinnerService.spin('spinner-2');
   }else if(typeof InstallTrigger !== 'undefined'){
-      console.log("hola1");
      usSpinnerService.spin('spinner-2');  
   }else{usSpinnerService.spin('spinner-2');  }
             scope.$apply(function () {
@@ -65,7 +64,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
 }, 11);
         }else if(typeof InstallTrigger !== 'undefined'){
               setTimeout(function() {
-  console.log("hola2");
+ 
             usSpinnerService.stop('spinner-2');
 }, 1001);
             

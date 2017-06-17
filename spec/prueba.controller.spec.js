@@ -439,7 +439,7 @@ beforeEach(inject(function (_$controller_,$rootScope,EntidadesServiceErrorMock,$
   documentt = $document;
   spin = _usSpinnerService_;
   pruebaController =
-    $controller('PruebaController',
+    $controller('GPSController',
                 {$scope:scope,EntidadesService: service,$document:documentt,_usSpinnerService_:spin,ngDialog:ngDialogInstance});
 
 }));
