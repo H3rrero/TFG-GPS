@@ -66,11 +66,11 @@ overflow: auto;
 }
 #funciones{
 	display: inline;
-	vertical-align:bottom;;
+	vertical-align:bottom;
 	height: 50%;
 z-index: 2 !important;
-width: 8.5%;
-
+width: 130px;
+overflow-y: auto;
 }
 
  #lista{

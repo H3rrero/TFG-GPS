@@ -1526,16 +1526,16 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotones = false;
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
-        $("#funciones").css("width", "8.5%");
+        $("#funciones").css("width", "130px");
     };
     //Mostar botones de rutas
     list1.verBotonesR = function () {
         if (list1.mostrarBotonesR == true) {
             list1.mostrarBotonesR = false;
-            $("#funciones").css("width", "8.5%");
+            $("#funciones").css("width", "130px");
         } else {
             list1.mostrarBotonesR = true;
-            $("#funciones").css("width", "30%");
+            $("#funciones").css("width", "270px");
         }
 
     };
@@ -1543,10 +1543,10 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.verBotonesW = function () {
         if (list1.mostrarBotonesW == true) {
             list1.mostrarBotonesW = false;
-            $("#funciones").css("width", "8.5%");
+            $("#funciones").css("width", "130px");
         } else {
             list1.mostrarBotonesW = true;
-            $("#funciones").css("width", "30%");
+            $("#funciones").css("width", "270px");
         }
 
     };
@@ -1554,10 +1554,10 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.verBotones = function () {
         if (list1.mostrarBotones == true) {
             list1.mostrarBotones = false;
-            $("#funciones").css("width", "8.5%");
+            $("#funciones").css("width", "130px");
         } else {
             list1.mostrarBotones = true;
-            $("#funciones").css("width", "30%");
+            $("#funciones").css("width", "270px");
         }
 
     };
