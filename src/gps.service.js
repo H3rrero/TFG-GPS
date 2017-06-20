@@ -1056,7 +1056,7 @@ service.fin = true;
               path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
               strokeColor : service.getPoly().strokeColor,
               strokeOpacity : 0.7,
-              strokeWeight : 2.9,
+              strokeWeight :  service.getPoly().strokeWeight,
               scale : 2.7
           };
           arrow = {
@@ -1070,7 +1070,7 @@ service.fin = true;
               path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
               strokeColor : service.getPoly().strokeColor,
               strokeOpacity : 0.7,
-              strokeWeight : 2.9,
+              strokeWeight :  service.getPoly().strokeWeight,
               scale : 2.7
           };
           arrow = {
@@ -1087,7 +1087,7 @@ service.fin = true;
       poly.setOptions({
           strokeColor: service.getPoly().strokeColor,
           strokeOpacity: 1.0,
-          strokeWeight: 3,
+          strokeWeight:  service.getPoly().strokeWeight,
           icons : [arrow]
       });
       for (var i = service.rutas[service.rutaActiva]["puntos"].length-1; i >= 0; i--) {
@@ -1148,7 +1148,7 @@ service.fin = true;
                 path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                 strokeColor : service.getPoly().strokeColor,
                 strokeOpacity : 0.7,
-                strokeWeight : 2.9,
+                strokeWeight :  service.getPoly().strokeWeight,
                 scale : 2.7
             };
              arrow = {
@@ -1162,7 +1162,7 @@ service.fin = true;
                 path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                 strokeColor : service.getPoly().strokeColor,
                 strokeOpacity : 0.7,
-                strokeWeight : 2.9,
+                strokeWeight :  service.getPoly().strokeWeight,
                 scale : 2.7
             };
             arrow = {
@@ -1179,7 +1179,7 @@ service.fin = true;
       poly.setOptions({
           strokeColor: service.getPoly().strokeColor,
           strokeOpacity: 1.0,
-          strokeWeight: 3,
+          strokeWeight: service.getPoly().strokeWeight,
           icons : [arrow]
       });
       for (var i = service.tracks[service.trackActivo]["puntos"].length-1; i >= 0; i--) {

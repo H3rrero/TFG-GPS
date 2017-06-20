@@ -888,8 +888,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.noError = true;
             list1.mensajeError = "Has entrado en el modo insertar punto intermedio, " +
                 "para salir pulse otra vez insertar punto. " +
-                "Selecciona el punto de origen y después pincha donde " +
-                "quieras añadir el nuevo punto";
+                "Para insertar un punto haga clic en el mapa";
         }
 
     };
