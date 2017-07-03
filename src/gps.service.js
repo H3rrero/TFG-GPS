@@ -263,7 +263,7 @@ service.importXMLWp = function () {
   //Recorremos los puntos del primer track
   for (var item in puntos) {
     if(item <puntos.length){
-
+    
     //Guardamos los datos de los puntos
     service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
     service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
@@ -271,6 +271,16 @@ service.importXMLWp = function () {
 
     //Simulamos el click para que se añada el punto
     google.maps.event.trigger(service.mapa, 'click');
+    var name = puntos[item].getElementsByTagName("name")[0];
+     if(name == undefined)
+    {
+        name = "Nuevo Waypoint";
+    }
+    else
+    {
+        name = name.textContent;
+    }
+    service.waypoints[service.waypoints.length-1].nombre=name;
   }}
   //Desactivamos los modos activados durante este metodo
     service.modoImportWP = false;
@@ -278,6 +288,16 @@ service.importXMLWp = function () {
 
   service.importXML = function () {
     var puntos=service.xmlImportado.getElementsByTagName("trkpt");
+    var name = service.xmlImportado.getElementsByTagName("trk")[0].getElementsByTagName("name")[0];
+    if(name == undefined)
+    {
+        name = "Nuevo Track";
+    }
+    else
+    {
+        name = name.textContent;
+    }
+    console.log(name);
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
     //Recorremos los puntos del primer track
@@ -294,6 +314,7 @@ service.importXMLWp = function () {
       //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
       google.maps.event.trigger(service.mapa, 'click');
     }}
+    service.tracks[service.tracks.length-1].nombre=name;
     //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
@@ -318,6 +339,16 @@ service.importXMLWp = function () {
   };
     service.importXMLRuta = function () {
         var puntos=service.xmlImportado.getElementsByTagName("rtept");
+        var name = service.xmlImportado.getElementsByTagName("rte")[0].firstElementChild;
+        console.log(name);
+        if(name == undefined || name.tagName=="rtept")
+        {
+            name = "Nueva Ruta";
+        }
+        else
+        {
+            name = name.textContent;
+        }
         //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
         service.modoInvertir = true;
         //Recorremos los puntos del primer track
@@ -333,6 +364,7 @@ service.importXMLWp = function () {
                 //Simulamos el click para que se añada el punto al nuevo track y se pinte en el mapa
                 google.maps.event.trigger(service.mapa, 'click');
             }}
+            service.rutas[service.rutas.length-1].nombre=name;
         //Desactivamos los modos activados durante este metodo
         service.modoInvertir = false;
         service.modoRecorte2 = false;
