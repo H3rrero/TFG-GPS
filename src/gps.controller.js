@@ -58,6 +58,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.latNW ;
     list1.velocidad;
     list1.fecha;
+    list1.cuenta=2;
     $scope.options = {
         format:'hex'
     };
@@ -1047,6 +1048,39 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
 
     });
 
+    list1.cargarElevaciones = async function (){
+     
+       list1.cargarElevaciones1()
+     
+       
+    }
+    list1.cargarElevaciones1 = async function(){
+          list1.startSpin();
+         list1.noError = false;
+        list1.error = false;
+        if (EntidadesService.isTrack == false
+            || EntidadesService.tracks[EntidadesService.trackActivo] === undefined) {
+            list1.error = true;
+            list1.mensajeError = "Por favor selecciona un track";
+            //Se comprueba que el track tenga puntos creados
+           
+        } else if (EntidadesService.tracks[EntidadesService.trackActivo].puntos.length < 2) {
+            list1.error = true;
+            list1.mensajeError = "El track no dispone de puntos";
+            
+        } else {
+            EntidadesService.cargarElevaciones();
+            setTimeout(function() {
+                 list1.actualizarPuntosT();
+                 $scope.$apply();
+                  list1.stopSpin();
+            }, 2000);
+            
+            
+         
+        }
+        
+    }
      list1.openPopupTiempos = function () {
         list1.noError = false;
         list1.error = false;
@@ -1152,7 +1186,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         //llamamos al metodo del servicio que se encarga de añadir los puntos
         EntidadesService.anadirPunto(list1.numTrack, track, latitud, longitud);
         //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
-        list1.actualizarPuntosT();
+       // list1.actualizarPuntosT();
 
 
     };

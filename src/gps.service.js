@@ -84,6 +84,9 @@ function EntidadesService (){
    service.rutaElegidoInicialMarker;
    service.polisCuadricula=[];
     service.coords = false;
+    service.actuEle=false;
+    service.elevator;
+    service.puntos = new Array();
     service.myIcon = {
         path : google.maps.SymbolPath.CIRCLE,
         scale : 3,
@@ -307,6 +310,9 @@ service.importXMLWp = function () {
       service.longitudPInv =  puntos[item].attributes.lon.nodeValue;
       service.latitudPInv =  puntos[item].attributes.lat.nodeValue;
       service.elevacionP = parseFloat(puntos[item].firstElementChild.textContent);
+      if(service.elevacionP == undefined){
+          service.elevacionP=0;
+      }
       service.elevacionP = service.elevacionP.toFixed(2);
       //EL modo segundo recorte nos viene que ni pintado para esta situación
       service.modoRecorte2=true;
@@ -319,22 +325,7 @@ service.importXMLWp = function () {
     service.modoInvertir = false;
     service.modoRecorte2 = false;
 
-      var lineSymbolarrow = {
-          path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-          strokeColor : service.colorPoly(),
-          strokeOpacity : 0.7,
-          strokeWeight : 2.9,
-          scale : 2.7
-      };
-     var arrow = {
-          icon : lineSymbolarrow,
-          offset : '50%',
-          repeat : '80px'
-      };
-    service.getPoly().setOptions({
-        strokeColor:  lineSymbolarrow.strokeColor,
-        icons : [arrow]
-    });
+      
     
   };
     service.importXMLRuta = function () {
@@ -1705,6 +1696,59 @@ service.actualizarPuntosR = function() {
     }
     return service.elevaciones;
   };
+
+  //Vuelve a calcular las elevaciones a partir del server de google 
+  service.cargarElevaciones =  function(entrar){
+      var elevator = new google.maps.ElevationService;
+      service.puntos = new Array();
+     //if(entrar)
+       for (var item in service.tracks[service.trackActivo].puntos) {
+       var latlng = new google.maps.LatLng(service.tracks[service.trackActivo].puntos[item].latitud,service.tracks[service.trackActivo].puntos[item].longitud);
+      
+     elevator.getElevationForLocations({
+                              'locations': [latlng]
+                          }, function(results, status) {
+                              if (status === google.maps.ElevationStatus.OK) {
+                                  if (results[0]) {
+                                      console.log("item");
+                                      console.log(item);
+                                   console.log("Array de elevaciones");
+                                    console.log( service.puntos);
+                                   service.puntos.push(results[0].elevation.toFixed(2));
+                                   //service.tracks[service.trackActivo].puntos[item]["elevacion"] = 234567;
+                                  // service.puntosTrackActivo[item]=service.tracks[service.trackActivo].puntos[item];
+                                   
+                                  } else {
+                                     
+                                  }
+                              } else {
+                                 
+                              }
+                          });
+    }
+   setTimeout(function() {
+       for (var item in service.puntos) {
+             service.tracks[service.trackActivo].puntos[item]["elevacion"] = service.puntos[item];
+             if(item==0)
+              service.tracks[service.trackActivo].puntos[item]["desnivel"] = 0;
+             else{
+                service.tracks[service.trackActivo].puntos[item]["desnivel"]=
+                (service.tracks[service.trackActivo].puntos[item]["elevacion"]-service.tracks[service.trackActivo].puntos[item-1]["elevacion"]).toFixed(2);
+             }
+             service.puntosTrackActivo[item]=service.tracks[service.trackActivo].puntos[item];
+             console.log("Puntos del track normal");
+                                   console.log( service.tracks[service.trackActivo].puntos);
+                                   console.log("Puntos del track activo");
+                                   console.log(service.puntosTrackActivo);
+        }
+   }, 2000);
+        
+           
+         
+                        
+ 
+  }
+ 
 
   //LLama a las dos funciones anteriores
   service.actualizarPuntos= function () {

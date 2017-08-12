@@ -15,117 +15,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
   this.tileSize = tileSize;
 }
 
-   //Creamos la cuadricula que se superpondra al mapa
-  /*  CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
-        EntidadesService.ownerDo = ownerDocument;
-       
-        switch(zoom) {
-            case 12:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(32, 32)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 13:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(64, 64)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 14:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(128, 128)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 15:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(255, 255)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 16:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(510, 510)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 17:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(1020, 1020)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 18:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(2000, 2000)));
-                    EntidadesService.cuadricula = false;
-                };
-                break;
-            case 19:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(4000, 4000)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 20:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(8000, 8000)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 21:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(15000, 15000)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-            case 22:
-                if(EntidadesService.cuadricula==true) {
-                    map.overlayMapTypes.setAt(
-                        0, new CoordMapType(new google.maps.Size(33000, 33000)));
-                    EntidadesService.cuadricula = false;
-                }
-                break;
-
-        }
-            
-        var div = ownerDocument.createElement('div');
-        if(zoom >=15 && (coord.x % 2 == 0)){
-
-            var scale = Math.pow(2, map.getZoom());
-            var coordinates = map.getProjection().fromPointToLatLng(new google.maps.Point((coord.x / scale * this.tileSize.width) , (coord.y / scale * this.tileSize.height) ));
-            var latlng = new  LatLon(coordinates.lat(), coordinates.lng());
-            var utm = latlng.toUtm();
-      
-            div.innerHTML = '<p style="color: #000000;background: rgba(255,255,255, 0.85); width:22%; font-weight: bold;">'+utm.easting.toFixed(0)+' N,\n'+utm.northing.toFixed(0)+' E</p>';}
-        if(zoom>=12) {
-        div.style.color = '#FFFFFF';
-        div.style.width = this.tileSize.width + 'px';
-        div.style.height = this.tileSize.height + 'px';
-        div.style.fontSize = '10px';
-        div.style.borderStyle = 'solid';
-        div.style.borderWidth = '1px';
-        div.style.borderColor = '#AAAAAA';
-        div.id = "divTile";
-        div.className="tile";
-
-    }
-            return div;
-
-    };*/
-
-
+   
 
 
         // funcion que inicializa el mapa
@@ -362,7 +252,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
 
             });
 
-
+    EntidadesService.elevator = elevator;
     EntidadesService.mapa = map;
     GridService.mapa = map;
 
