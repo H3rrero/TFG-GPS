@@ -23,7 +23,6 @@
     -Cambiar posicion de un punto arrastrandolo sobre el mapa (para tracks y rutas)
     -Imprimir imagen del mapa
 ### Falta por implementar:
-    -Controlar errores
-    
-## Puedes ver el avance aquí
+    -Nada, disfrute de la aplicación! 
+## Puedes ver la aplicación aquí
   https://h3rrero.github.io/TFG-GPS/
