@@ -50,6 +50,8 @@ function Mymap(EntidadesService,MapasService,GridService) {
                                 }
                                 else if(MapasService.mapas[i].versionWMS == "1.1.1")
                                     return WMS1GetCoord(coord, zoom, MapasService.mapas[i].url);
+                                else if(MapasService.mapas[i].versionWMS == "topo")
+                                    return NoWMSGetCoordTopo(coord, zoom, MapasService.mapas[i].url);
                                 else
                                     return NoWMSGetCoord(coord, zoom, MapasService.mapas[i].url);
                              }},
@@ -101,7 +103,15 @@ function Mymap(EntidadesService,MapasService,GridService) {
 
             }
 
+            function NoWMSGetCoordTopo(coord, zoom,url) {
+                // "Wrap" x (logitude) at 180th meridian properly
+                var tilesPerGlobe = 1 << zoom;
+                var x = coord.x % tilesPerGlobe;
+                if (x < 0) x = tilesPerGlobe+x;
 
+                return "http://a"+url + zoom + "/" + x + "/" + coord.y + ".png";
+
+            }
             //Creamos el mapa y le pasamos las opciones que definimos anteriormente
             map = new google.maps.Map(element[0], mapOptions);
             //servicio de elevacion

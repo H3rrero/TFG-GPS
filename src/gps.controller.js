@@ -1048,13 +1048,13 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
 
     });
 
-    list1.cargarElevaciones = async function (){
+    list1.cargarElevaciones =  function (){
      
        list1.cargarElevaciones1()
      
        
     }
-    list1.cargarElevaciones1 = async function(){
+    list1.cargarElevaciones1 =  function(){
           list1.startSpin();
          list1.noError = false;
         list1.error = false;
