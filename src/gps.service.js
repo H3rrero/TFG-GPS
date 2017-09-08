@@ -1715,8 +1715,7 @@ service.actualizarPuntosR = function() {
                                    console.log("Array de elevaciones");
                                     console.log( service.puntos);
                                    service.puntos.push(results[0].elevation.toFixed(2));
-                                   //service.tracks[service.trackActivo].puntos[item]["elevacion"] = 234567;
-                                  // service.puntosTrackActivo[item]=service.tracks[service.trackActivo].puntos[item];
+                                   
                                    
                                   } else {
                                      
@@ -1741,7 +1740,7 @@ service.actualizarPuntosR = function() {
                                    console.log("Puntos del track activo");
                                    console.log(service.puntosTrackActivo);
         }
-   }, 2000);
+   }, 4000);
         
            
          

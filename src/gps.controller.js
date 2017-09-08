@@ -1074,7 +1074,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
                  list1.actualizarPuntosT();
                  $scope.$apply();
                   list1.stopSpin();
-            }, 2000);
+            }, 5000);
             
             
          
