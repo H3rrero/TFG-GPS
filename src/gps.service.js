@@ -324,7 +324,11 @@ service.importXMLWp = function () {
     //Desactivamos los modos activados durante este metodo
     service.modoInvertir = false;
     service.modoRecorte2 = false;
-
+    setTimeout(function(){
+        for(var i in service.tracks){
+            $("#li"+(i))[0].style.color = service.polyLineas[i].strokeColor;
+        }
+  },10);
       
     
   };
@@ -359,23 +363,12 @@ service.importXMLWp = function () {
         //Desactivamos los modos activados durante este metodo
         service.modoInvertir = false;
         service.modoRecorte2 = false;
-
-        var lineSymbolarrow = {
-            path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-            strokeColor : service.colorPoly(),
-            strokeOpacity : 0.7,
-            strokeWeight : 2.9,
-            scale : 2.7
-        };
-        var arrow = {
-            icon : lineSymbolarrow,
-            offset : '50%',
-            repeat : '80px'
-        };
-        service.getPoly().setOptions({
-            strokeColor: lineSymbolarrow.strokeColor,
-            icons : [arrow]
-        });
+        setTimeout(function(){
+            for(var i in service.rutas){
+                $("#lir"+(i))[0].style.color = service.polyLineasR[i].strokeColor;
+            }
+      },10);
+       
     };
 
   //Funcion que genera y devuelve un gpx con los waypoints
