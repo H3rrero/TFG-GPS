@@ -188,9 +188,9 @@
 				<li ng-repeat="item in list1.tracks" id="li{{$index}}">
 					<input id="in{{$index}}" type="radio" name="track" ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">
 					<p id="pt{{$index}}" ng-click="list1.openPopup($index);" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,
-						<{{item[
-						 "elevMin"]}}m,->{{item["duracionIda"]}}h,
-							<-{{item[ "duracionVuelta"]}}h</p>
+						&lt;{{item[
+						 "elevMin"]}}m,-&gt;{{item["duracionIda"]}}h,
+							&lt;-{{item[ "duracionVuelta"]}}h</p>
 				</li>
 			</ul>
 			<ul ng-hide="!list1.activarListaR">
@@ -199,7 +199,7 @@
 				<li ng-repeat="item in list1.rutas" id="lir{{$index}}">
 					<input id="inr{{$index}}" type="radio" name="track" ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">
 					<p id="pr{{$index}}" ng-click="list1.openPopupR($index);" ng-mouseleave="list1.desSubrayarr($index)" ng-mouseover="list1.subrayarr($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,
-						<{{item[
+						&lt;{{item[
 						 "elevMin"]}}m</p>
 				</li>
 			</ul>
@@ -210,7 +210,7 @@
 				</li>
 			</ul>
 		</div>
-
+		
 		<div id="on/Off">
 			<a ng-click="list1.capPant(true)" ng-hide="!(list1.isChrome)" id="btn-downloadT">
 				<button id="downPtC" type="button" class="bttn-material-circle bttn-xs bttn-primary" title="captura la imagen del mapa">
@@ -238,11 +238,13 @@
 			 ng-if="!list1.modoEdicion">Off</button>
 		</div>
 		<div id="prueba">
+		
 			<div id="botones">
 				<button id="boton-t" type="button" title="Edicion de tracks" ng-click="list1.listarFunciones();" class="bttn-material-circle bttn-xs bttn-primary">T</button>
 				<button id="boton-r" type="button" title="Edicion de rutas" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-royal">R</button>
 				<button id="boton-w" type="button" title="Edicion de waypoints" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-success">W</button>
 			</div>
+		
 			<div id="funciones">
 				<table id="tableSW" class="sample-show-hide tableS" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesW">
 					<tr>

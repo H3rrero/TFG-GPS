@@ -143,8 +143,10 @@ function Mymap(EntidadesService,MapasService,GridService) {
             var onOff = /** @type {!HTMLDivElement} */(
                 document.getElementById('on/Off'));
           //botones de seleccion de entidad (T,R,W)
-          var botont = /** @type {!HTMLDivElement} */(
+          var botones = /** @type {!HTMLDivElement} */(
           document.getElementById('botones'));
+          var prueba = /** @type {!HTMLDivElement} */(
+            document.getElementById('prueba'));
           //Botones de seleccion de función
           var funciones = /** @type {!HTMLDivElement} */(
           document.getElementById('funciones'));
@@ -169,9 +171,9 @@ function Mymap(EntidadesService,MapasService,GridService) {
 
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(types);
             map.controls[google.maps.ControlPosition.RIGHT_TOP].push(onOff);
-          map.controls[google.maps.ControlPosition.RIGHT_TOP].push(botones);
+          map.controls[google.maps.ControlPosition.RIGHT_TOP].push(prueba);
 
-          map.controls[google.maps.ControlPosition.RIGHT_TOP].push(funciones);
+          //map.controls[google.maps.ControlPosition.RIGHT_TOP].push(funciones);
 
           map.controls[google.maps.ControlPosition.TOP_LEFT].push(datos);
           map.controls[google.maps.ControlPosition.TOP_CENTER].push(lista);
