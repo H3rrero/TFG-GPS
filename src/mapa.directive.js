@@ -718,7 +718,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
               if (EntidadesService.tienePolyFR(puntoRecorte2)==false) {
                 var lineSymbolarrow = {
                        path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                       strokeColor : '#FF3399',
+                       strokeColor : EntidadesService.colorAleatorio(),
                        strokeOpacity : 0.7,
                        strokeWeight : 2.9,
                        scale : 2.7
@@ -729,7 +729,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
                     repeat : '80px'
                     };
                 poly = new google.maps.Polyline({
-                  strokeColor: '#FF3399',
+                  strokeColor: EntidadesService.colorAleatorio(),
                   strokeOpacity: 1.0,
                   strokeWeight: 3,
                     icons : [arrow]
