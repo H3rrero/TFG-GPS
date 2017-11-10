@@ -54,7 +54,7 @@ function EntidadesService (){
   service.xmlImportado;
   service.modoImportWP = false;
   service.puntoborrado = false;
-  service.isTrackImport = true;
+  service.isTrackImport = false;
   service.isRuteImport = false;
   service.isWpImport = false;
   service.puntosGrafico = [];
