@@ -68,9 +68,9 @@ overflow: auto;
 	display: inline;
 	vertical-align:bottom;
 	height: 50%;
-z-index: 2 !important;
-width: 150px;
-overflow-y: auto;
+	z-index: 2 !important;
+	width: 150px;
+	overflow-y: auto;
 }
 
  #lista{
@@ -325,3 +325,33 @@ li{
 	position:relative;
 	top:1px;
 }
+
+#prueba {
+	padding-left:50px !important;
+	position: absolute;
+    right: -200px!important;
+    top: 118px;
+    transition: all 0.25s ease-in;
+	width:250px !important;
+}
+#prueba:before {
+	background: url('../img/arrow.png') center;
+	background-size:contain;
+	content:'';
+	display:block;
+	height:50px;
+	left:0;
+	position:absolute;
+	top:50%;
+	transition: all 0.25s ease-in;
+	transform:translateY(-50%);
+	width:50px;
+}
+#prueba:hover {
+	right: 0 !important;
+}
+#prueba:hover:before {
+	opacity:0;
+}
+
+
