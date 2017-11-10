@@ -21,6 +21,7 @@
 	height: 100%;
 	width: 100%;
 	position: relative;
+	
 }
 
 .inputIESt{
@@ -330,17 +331,18 @@ li{
 #prueba {
 	padding-left:40px !important;
 	position: absolute;
-    right: -200px!important;
+    right: 0px!important;
     top: 118px;
 	transition: all 0.25s ease-in;
 	width:240px !important;
 	height: 375px;
 }
-#prueba:before {
+/* #prueba:before {
 	background: rgb(75, 78, 79);
 	content:'\f053';
-	/*border: solid 2px rgb(75,57,75);*/
-	border-radius:40px;
+	/*border: solid 2px rgb(75,57,75);
+	border-bottom-left-radius:40px;
+	border-top-left-radius:40px;
 	box-shadow: rgba(0, 0, 0, 0.5) -1px 0px 2px 0px;
 	color: white;
 	display:block;

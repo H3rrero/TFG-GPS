@@ -1534,7 +1534,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     };
 
     //Activar la funciones de los track
-    list1.funciones = true;
+    list1.funciones = false;
     //Activar la funciones de las rutas
     list1.funcionesR = false;
     //Activar la funciones de los waypoints
@@ -1837,10 +1837,8 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         if (list1.funciones == true) {
-            list1.funciones = true;
-            EntidadesService.isTrackImport = true;
-            EntidadesService.isRuteImport = false;
-            EntidadesService.isWpImport = false;
+            list1.funciones = false;
+            
         } else {
             list1.funciones = true;
             EntidadesService.isTrackImport = true;
@@ -1857,10 +1855,8 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         if (list1.funcionesR == true) {
-            list1.funcionesR = true;
-            EntidadesService.isTrackImport = false;
-            EntidadesService.isRuteImport = true;
-            EntidadesService.isWpImport = false;
+            list1.funcionesR = false;
+           
         } else {
             list1.funcionesR = true;
             EntidadesService.isTrackImport = false;
@@ -1877,10 +1873,8 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         if (list1.funcionesW == true) {
-            list1.funcionesW = true;
-            EntidadesService.isTrackImport = false;
-            EntidadesService.isRuteImport = false;
-            EntidadesService.isWpImport = true;
+            list1.funcionesW = false;
+            
         } else {
             list1.funcionesW = true;
             EntidadesService.isTrackImport = false;
