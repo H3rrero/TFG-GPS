@@ -275,13 +275,19 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     //Cuando el documento este listo aumentamos el tamaño de la escala
     angular.element(document).ready(function () {
         setTimeout(list1.actuTamano,500);
+        setTimeout(function() {
+            $(".gmnoprint.gm-style-mtc").eq(0).css("right",0);
+        }, 500);
+     
 
     });
     list1.actuTamano = function () {
         list1.gr =$('#map');
-        list1.gr.children().children().children()[16].style.right='220px';
-        list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontSize='16px';
-        list1.gr.children().children().children()[16].childNodes[1].childNodes[0].style.fontWeight='bold';
+        list1.gr.children().children().children()[14].style.right='220px';
+        list1.gr.children().children().children()[14].childNodes[1].childNodes[0].style.fontSize='160px';
+        $('.gm-style-cc').css('z-index', 10);
+        list1.gr.children().children().children()[14].childNodes[1].childNodes[0].style.fontWeight='bold';
+       
     };
     list1.vermarkers = function () {
         if(EntidadesService.ver){
@@ -309,7 +315,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             html2canvas($(".gm-style")[0].childNodes[0], {
                 useCORS: true,
                 onrendered: function(canvas) {
-                    if( list1.isFirefox){
+                    if( list1.isFirefox || list1.isChrome){
                         list1.pant = false;
                         
                     list1.capturaUrl = canvas.toDataURL("image/jpg");
@@ -342,11 +348,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
                        $('#btn-downloadTS').attr('href', list1.capturaUrl);
                         list1.stopSpin();
                     }
-                    if(list1.isChrome ){
-                        list1.capturaUrl = canvas.toDataURL("image/jpg");
-                         list1.stopSpin();
-                        window.open( list1.capturaUrl);
-                    }
+                   
                 }
             });
         for(var i in divs){
@@ -1451,9 +1453,11 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
 
     //Funcion para la descarga de la imagen de tabla
     list1.dowImage = function () {
+        console.log("hola");
         var isIE = /*@cc_on!@*/false || !!document.documentMode;
         //Si el navegador es explorer se hace de manera diferente ya que no es compatible con el atributo download de html5
         if (isIE || list1.isEdge) {
+            console.log("Soy IE");
             //Accedemos al canvas que tiene la imagen
             var canvas = document.getElementById("canvas");
             //Obtenemos su url
@@ -1469,6 +1473,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             //Usamos msSaveBlob para proporcionar la opción de descarga d ela imagen
             window.navigator.msSaveBlob(blob, 'prueba.png');
         } else if (list1.isSafari) {
+            console.log("Soy Safaru");
             var canvas = document.getElementById("canvas");
             var link = document.getElementById("btn-downloadSA");
             list1.dataUrl = canvas.toDataURL("image/png");
@@ -1476,6 +1481,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         else {
 
             var canvas = document.getElementById("canvas");
+            console.log(canvas.toDataURL("image/png"));
             list1.dataUrl = canvas.toDataURL("image/png");
         }
     };
@@ -1528,7 +1534,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     };
 
     //Activar la funciones de los track
-    list1.funciones = false;
+    list1.funciones = true;
     //Activar la funciones de las rutas
     list1.funcionesR = false;
     //Activar la funciones de los waypoints
@@ -1831,7 +1837,10 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         if (list1.funciones == true) {
-            list1.funciones = false;
+            list1.funciones = true;
+            EntidadesService.isTrackImport = true;
+            EntidadesService.isRuteImport = false;
+            EntidadesService.isWpImport = false;
         } else {
             list1.funciones = true;
             EntidadesService.isTrackImport = true;
@@ -1848,7 +1857,10 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         if (list1.funcionesR == true) {
-            list1.funcionesR = false;
+            list1.funcionesR = true;
+            EntidadesService.isTrackImport = false;
+            EntidadesService.isRuteImport = true;
+            EntidadesService.isWpImport = false;
         } else {
             list1.funcionesR = true;
             EntidadesService.isTrackImport = false;
@@ -1865,7 +1877,10 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.mostrarBotonesR = false;
         list1.mostrarBotonesW = false;
         if (list1.funcionesW == true) {
-            list1.funcionesW = false;
+            list1.funcionesW = true;
+            EntidadesService.isTrackImport = false;
+            EntidadesService.isRuteImport = false;
+            EntidadesService.isWpImport = true;
         } else {
             list1.funcionesW = true;
             EntidadesService.isTrackImport = false;

@@ -54,7 +54,7 @@ function EntidadesService (){
   service.xmlImportado;
   service.modoImportWP = false;
   service.puntoborrado = false;
-  service.isTrackImport = false;
+  service.isTrackImport = true;
   service.isRuteImport = false;
   service.isWpImport = false;
   service.puntosGrafico = [];
@@ -290,6 +290,7 @@ service.importXMLWp = function () {
 };
 
   service.importXML = function () {
+      console.log("Hola");
     var puntos=service.xmlImportado.getElementsByTagName("trkpt");
     var name = service.xmlImportado.getElementsByTagName("trk")[0].getElementsByTagName("name")[0];
     if(name == undefined)

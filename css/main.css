@@ -166,7 +166,8 @@ table th{
 
 #botones{
 	z-index: 1;
-
+	width: 102px;
+	margin-left: 100px;
 }
 
 .prlabel {
@@ -327,25 +328,36 @@ li{
 }
 
 #prueba {
-	padding-left:50px !important;
+	padding-left:40px !important;
 	position: absolute;
     right: -200px!important;
     top: 118px;
-    transition: all 0.25s ease-in;
-	width:250px !important;
+	transition: all 0.25s ease-in;
+	width:240px !important;
+	height: 375px;
 }
 #prueba:before {
-	background: url('../img/arrow.png') center;
-	background-size:contain;
-	content:'';
+	background: rgb(75, 78, 79);
+	content:'\f053';
+	/*border: solid 2px rgb(75,57,75);*/
+	border-radius:40px;
+	box-shadow: rgba(0, 0, 0, 0.5) -1px 0px 2px 0px;
+	color: white;
 	display:block;
-	height:50px;
+	font: normal normal normal 25px/1 FontAwesome;
+	height:80px;
 	left:0;
+	line-height:80px;
+	opacity:0.9;
+	padding-left:13px;
 	position:absolute;
+	text-align:left;
+	text-rendering: auto;
 	top:50%;
 	transition: all 0.25s ease-in;
 	transform:translateY(-50%);
-	width:50px;
+	width:80px;
+	-webkit-font-smoothing: antialiased;
 }
 #prueba:hover {
 	right: 0 !important;
@@ -353,5 +365,29 @@ li{
 #prueba:hover:before {
 	opacity:0;
 }
+#grafica{
+	margin-bottom: -14px;
+}
 
+/*body {
+	animation: rave 0.1s linear infinite;
+}
 
+@keyframes rave {
+	0% {
+		filter: hue-rotate(0deg) contrast(25%);
+	}
+	25% {
+		filter: hue-rotate(90deg) contrast(100%);
+	}
+	50% {
+		filter: hue-rotate(180deg) contrast(40%) brightness(25%);
+	}
+	75% {
+		filter: hue-rotate(270deg) contrast(40%) brightness(100%);
+	}
+	100% {
+		filter: hue-rotate(0deg) contrast(25%);
+	}
+}
+*/
