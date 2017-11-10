@@ -1214,7 +1214,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         EntidadesService.anadirPunto(list1.numTrack, EntidadesService.trackActivo, latitud, longitud);
         //Actualizamos los puntos para que la tabla y la grafica puedan actualizarse al momento
         list1.actualizarPuntosT();
-        
+        $scope.$apply();
 
 
     };
