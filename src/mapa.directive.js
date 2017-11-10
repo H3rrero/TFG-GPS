@@ -731,7 +731,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
                     repeat : '80px'
                     };
                 poly = new google.maps.Polyline({
-                  strokeColor: EntidadesService.colorAleatorio(),
+                  strokeColor: lineSymbolarrow.strokeColor,
                   strokeOpacity: 1.0,
                   strokeWeight: 3,
                     icons : [arrow]

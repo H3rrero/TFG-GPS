@@ -31,7 +31,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
                         
                        
                         var xml = $.parseXML( e.target.result);
-                        
+                        console.log(EntidadesService.isTrackImport);
                         //Guardamos el contenido del xml en el service
                         EntidadesService.xmlImportado = xml;
                         if (EntidadesService.isTrackImport && EntidadesService.xmlImportado.getElementsByTagName("trkpt").length>0) {
