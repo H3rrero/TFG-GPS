@@ -284,7 +284,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.actuTamano = function () {
         list1.gr =$('#map');
         list1.gr.children().children().children()[14].style.right='220px';
-        list1.gr.children().children().children()[14].childNodes[1].childNodes[0].style.fontSize='160px';
+        list1.gr.children().children().children()[14].childNodes[1].childNodes[0].style.fontSize='16px';
         $('.gm-style-cc').css('z-index', 10);
         list1.gr.children().children().children()[14].childNodes[1].childNodes[0].style.fontWeight='bold';
        
