@@ -25,4 +25,4 @@
 ### Falta por implementar:
     -Nada, disfrute de la aplicación! 
 ## Puedes ver la aplicación aquí
-  https://h3rrero.github.io/TFG-GPS/
+  http://herrero.ninja/TFG/index.html
