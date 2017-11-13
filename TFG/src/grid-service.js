@@ -196,13 +196,15 @@ https://mappingsupport.com/p/gmap4.php?utm=14N,460555,4257618&tilt=off&z=5&t=t1
                     strokeWeight: 4,
                     strokeColor: "#FFFFFF",
                     strokeOpacity: 0.7,
-                    zIndex: 99
+                    zIndex: 99,
+                    clickable:false
                 };
                 dL.sB = {
                     strokeWeight: 2,
                     strokeColor: "#572364",
                     strokeOpacity: 0.7,
-                    zIndex: 99
+                    zIndex: 99,
+                    clickable:false
                 };
 				///////////////////////////////////////////////////////////////////////////
                 dL.eL = [];
