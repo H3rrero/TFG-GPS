@@ -6,10 +6,15 @@
     list-style: none;
 }
 
+body{
+    overflow: hidden;
+}
 .fondo{
     background-image: linear-gradient(rgba(106, 205, 235, 0.8) 12%,rgba(243, 112, 116, 0.8));
     height: 100vh;
     width: 100vw;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .imagen{
