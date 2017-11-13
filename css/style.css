@@ -3,6 +3,7 @@
     margin: 0;
     border: none;
     outline: none;
+    list-style: none;
 }
 
 .fondo{
@@ -24,13 +25,61 @@
 }
 
 .cuadrado{
-    height: 100px;
-    width: 100px;
+    height: 150px;
+    width: 230px;
     border: 5px solid white;
-    line-height: 90px;
+    line-height: 140px;
     text-align:center;
-    text-decoration: none;
     display: block;
     text-decoration: none;
     color: white;
+    font-weight: 600;
+    transition:all 0.25s linear;
+    font-size: 24px;
+    font-family: 'Roboto', sans-serif;
+   
+}
+.cuadrado:hover{
+    background: #f37074cc;
+    border-color: #f37074cc;
+   transform:scale(1.1);
+    
+}
+.cuadrado:hover >ul > li{
+    height: 150px;
+    opacity: 1;
+}
+.cuadradoBottom{
+    height: 0px;
+    width: 230px;
+    border: 5px solid white;
+    line-height: 140px;
+    text-align:center;
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition:all 0.25s linear;
+    font-size: 24px;
+    font-family: 'Roboto', sans-serif;
+    margin-left: -5px;
+    margin-top: 6px;
+    opacity: 0;
+
+    
+}
+.cuadradoBottom:hover{
+    background: #6acdebcc;
+    border-color: #6acdebcc;
+    transform:scale(1.1);
+    
+}
+a{
+    text-decoration: none;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    display: block;
+    height: 100%;
+    width: 100%;
+    word-break:break-all;
 }
