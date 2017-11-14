@@ -863,8 +863,8 @@ service.importXMLWp = function () {
       }
     }
     setTimeout(function(){
-    $("#li"+(service.trackActivo+1))[0].style.color = '#00FF00';
-    $("#li"+(service.trackActivo+2))[0].style.color = '#FF3399';
+    $("#li"+(service.trackActivo+1))[0].style.color = service.getPolyR(service.trackActivo+1).strokeColor;;
+    $("#li"+(service.trackActivo+2))[0].style.color = service.getPolyR(service.trackActivo+2).strokeColor;
 },500);
 service.fin = true;
     //Desactivamos todos los modos y ponemos a null el punto elegido
@@ -955,6 +955,32 @@ service.fin = true;
     service.seleccion = false;
       service.clicTabGraf = false;
   };
+
+  service.hoverGraf = function(index){
+       
+ 
+    var symbolTwo = {
+        path: 'M4.286 4.684c0 0.489-0.321 0.887-0.713 0.887h-2.859c-0.392 0-0.713-0.398-0.713-0.887 0-0.881 0.218-1.898 1.095-1.898 0.271 0.265 0.64 0.429 1.048 0.429s0.777-0.164 1.048-0.429c0.877 0 1.095 1.018 1.095 1.898zM3.429 1.714c0 0.71-0.576 1.286-1.286 1.286s-1.286-0.576-1.286-1.286 0.576-1.286 1.286-1.286 1.286 0.576 1.286 1.286z',
+        strokeColor: '#000000',
+        rotation: 45
+      };
+    var position = (index / service.tracks[service.trackActivo].puntos.length)*100;
+var arrow = {
+      icon : symbolTwo,
+      offset : position+'%'
+   };
+
+
+      
+    var poly = service.getPolyR(service.trackActivo);
+    poly.setOptions({
+        strokeColor: service.getPolyR(service.trackActivo).strokeColor,
+        strokeOpacity: 1.0,
+        strokeWeight: service.getPolyR(service.trackActivo).strokeWeight,
+        icons :  [service.getPolyR(service.trackActivo).icons[0],arrow]
+    });
+    console.log( service.getPolyR(service.trackActivo));
+  }
 
     service.cambiarDescripcion = function (descripcion) {
         service.waypoints[service.wptNombre].descripcion = descripcion;

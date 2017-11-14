@@ -7,7 +7,7 @@
 	<title>Editor de tracks</title>
 	<link rel="icon" href="img/icono.ico">
 	<script src="angular/angular.min.js"></script>
-	<script src="chart.js/dist/Chart.min.js"></script>
+	<script src="chart.js/dist/Chart.js"></script>
 	<link href="angularjs-datepicker/src/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
 	<script src="angular-chart.js/dist/angular-chart.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -185,7 +185,7 @@
 			<img src="img/informacion.png" ng-hide="!list1.isSafari" title="Al usar Safari te saldrá una nueva ventana con la imagen, dale a boton derecho y a guardar como."
 			 height="6%" width="1%">
 			<canvas id="canvas" chart-colors="colors" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series"
-			 chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick" height="10%" width="75%">
+			 chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick" chart-hover="onMouseOver" height="10%" width="75%">
 			</canvas>
 
 		</div>

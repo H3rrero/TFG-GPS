@@ -25,10 +25,12 @@
         $scope.colors =  [{
             backgroundColor : '#3382FF',
             pointBackgroundColor: '#0062ff',
-            pointHoverBackgroundColor: '#0062ff',
+            pointHoverBackgroundColor: '#0ef734',
             borderColor: '#0062ff',
             pointBorderColor: '#0062ff',
-            pointHoverBorderColor: '#0062ff',
+            pointHoverBorderColor: '#0ef734',
+            pointHoverRadius: 10,
+            pointHitRadius:20,
             fill: true /* this option hide background-color */
         }, '#00ADF9', '#FDB45C', '#46BFBD'];
 
@@ -40,9 +42,16 @@
             }
         };
 
+        $scope.onMouseOver = function (points, evt) {
+            if(points.length>0){
+               EntidadesService.hoverGraf(points[0]._index);
+            }
+
+        }
+
         $scope.datasetOverride = [{ xAxisID: 'x-axis-1' }];
         $scope.options = {
-
+            responsive:true,
             scales: {
                 xAxes: [
                     {

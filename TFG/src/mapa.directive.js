@@ -684,7 +684,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
               if (EntidadesService.tienePolyFR(puntoRecorte1)==false) {
                 var lineSymbolarrow = {
                        path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                       strokeColor : '#00FF00',
+                       strokeColor :  EntidadesService.colorAleatorio(),
                        strokeOpacity : 0.7,
                        strokeWeight : 2.9,
                        scale : 2.7
@@ -695,7 +695,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
                     repeat : '80px'
                     };
                 poly = new google.maps.Polyline({
-                  strokeColor: '#00FF00',
+                  strokeColor:  lineSymbolarrow.strokeColor,
                   strokeOpacity: 1.0,
                   strokeWeight: 3,
                     icons : [arrow]
@@ -1264,6 +1264,7 @@ function Mymap(EntidadesService,MapasService,GridService) {
             else{
                 $("#lir"+EntidadesService.rutaActiva)[0].style.color = color;
             }
+            
             var lineSymbolarrow = {
 			             path : google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
 			             strokeColor : color,

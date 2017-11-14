@@ -3027,8 +3027,7 @@ module.exports = function(Chart) {
 			point._yScale = yScale;
 			point._datasetIndex = datasetIndex;
 			point._index = index;
-
-			// Desired view properties
+		// Desired view properties
 			point._model = {
 				x: x,
 				y: y,
@@ -3156,8 +3155,7 @@ module.exports = function(Chart) {
 			var index = point._index;
 			var custom = point.custom || {};
 			var model = point._model;
-
-			model.radius = custom.hoverRadius || helpers.getValueAtIndexOrDefault(dataset.pointHoverRadius, index, this.chart.options.elements.point.hoverRadius);
+		model.radius = custom.hoverRadius || helpers.getValueAtIndexOrDefault(dataset.pointHoverRadius, index, this.chart.options.elements.point.hoverRadius);
 			model.backgroundColor = custom.hoverBackgroundColor || helpers.getValueAtIndexOrDefault(dataset.pointHoverBackgroundColor, index, helpers.getHoverColor(model.backgroundColor));
 			model.borderColor = custom.hoverBorderColor || helpers.getValueAtIndexOrDefault(dataset.pointHoverBorderColor, index, helpers.getHoverColor(model.borderColor));
 			model.borderWidth = custom.hoverBorderWidth || helpers.getValueAtIndexOrDefault(dataset.pointHoverBorderWidth, index, model.borderWidth);
@@ -3492,7 +3490,6 @@ module.exports = function(Chart) {
 			var scale = me.chart.scale;
 			var pointElementOptions = me.chart.options.elements.point;
 			var pointPosition = scale.getPointPositionForValue(index, dataset.data[index]);
-
 			helpers.extend(point, {
 				// Utility
 				_datasetIndex: me.index,
@@ -3511,7 +3508,7 @@ module.exports = function(Chart) {
 					borderColor: custom.borderColor ? custom.borderColor : helpers.getValueAtIndexOrDefault(dataset.pointBorderColor, index, pointElementOptions.borderColor),
 					borderWidth: custom.borderWidth ? custom.borderWidth : helpers.getValueAtIndexOrDefault(dataset.pointBorderWidth, index, pointElementOptions.borderWidth),
 					pointStyle: custom.pointStyle ? custom.pointStyle : helpers.getValueAtIndexOrDefault(dataset.pointStyle, index, pointElementOptions.pointStyle),
-
+					
 					// Tooltip
 					hitRadius: custom.hitRadius ? custom.hitRadius : helpers.getValueAtIndexOrDefault(dataset.hitRadius, index, pointElementOptions.hitRadius)
 				}
@@ -4438,6 +4435,7 @@ module.exports = function(Chart) {
 				element = elements[i];
 				if (element) {
 					this.getDatasetMeta(element._datasetIndex).controller[method](element);
+					
 				}
 			}
 		},
@@ -4463,6 +4461,7 @@ module.exports = function(Chart) {
 
 			// On Hover hook
 			if (hoverOptions.onHover) {
+			
 				hoverOptions.onHover.call(me, me.active);
 			}
 
@@ -4483,6 +4482,7 @@ module.exports = function(Chart) {
 
 			// Built in hover styling
 			if (me.active.length && hoverOptions.mode) {
+				
 				me.updateHoverStyle(me.active, hoverOptions.mode, true);
 			}
 
@@ -8901,7 +8901,9 @@ module.exports = function(Chart) {
 	Chart.elements.Point = Chart.Element.extend({
 		inRange: function(mouseX, mouseY) {
 			var vm = this._view;
-			return vm ? ((Math.pow(mouseX - vm.x, 2) + Math.pow(mouseY - vm.y, 2)) < Math.pow(vm.hitRadius + vm.radius, 2)) : false;
+			return vm ? (Math.pow(mouseX - vm.x, 2) < Math.pow(vm.radius + vm.hitRadius, 2)) : false;
+			//return vm ? (mouseX<vm.x+vm.radius+vm.hitRadius ||mouseX>vm.x-vm.radius+vm.hitRadius ) : false;
+			//return vm ? ((Math.pow(mouseX - vm.x, 2) + Math.pow(mouseY - vm.y, 2)) < Math.pow(vm.hitRadius + vm.radius, 2)) : false;
 		},
 		inLabelRange: function(mouseX) {
 			var vm = this._view;
