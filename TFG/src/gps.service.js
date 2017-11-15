@@ -290,7 +290,7 @@ service.importXMLWp = function () {
 };
 
   service.importXML = function () {
-      console.log("Hola");
+     
     var puntos=service.xmlImportado.getElementsByTagName("trkpt");
     var name = service.xmlImportado.getElementsByTagName("trk")[0].getElementsByTagName("name")[0];
     if(name == undefined)
@@ -623,6 +623,7 @@ service.importXMLWp = function () {
           service.tracks[service.trackActivo].elevMin = 9999999;
           service.tracks[service.trackActivo].duracionIda = 0;
           service.tracks[service.trackActivo].duracionVuelta = 0;
+          
           for (var i in service.tracks[service.trackActivo]["puntos"]) {
               service.tracks[service.trackActivo]["puntos"][i].numero=i;
               service.calcularDatosTrack(0, service.tracks[service.trackActivo]["puntos"][i], service.trackActivo);
@@ -971,8 +972,10 @@ service.fin = true;
           
       }
     var position = ((km/1000) / parseFloat(service.tracks[service.trackActivo].distancia))*100;
-  
-var arrow = {
+  console.log(km/1000);
+  console.log(parseFloat(service.tracks[service.trackActivo].distancia));
+  console.log(((km/1000) / parseFloat(service.tracks[service.trackActivo].distancia))*100);
+  var arrow = {
       icon : symbolTwo,
       offset : position+'%'
    };
@@ -1495,7 +1498,9 @@ service.ordenarMinutosR = function () {
 //Calcula todos los datos del track que son mostrados en la lista al lado de su nombre
 service.calcularDatosTrack = function (id,punto,track) {
   if (id==0) {
-    service.tracks[track].distancia = (parseFloat(service.tracks[track].distancia)+(parseFloat(punto.distancia)/1000)).toFixed(2);
+    service.tracks[track].distancia = (parseFloat(service.tracks[track].distancia)+(parseFloat(punto.distancia)/1000));
+    console.log("Distancia: ");
+    console.log(service.tracks[track].distancia);
     if (parseFloat(punto.desnivel)>=0) {
         service.tracks[track].desnivelP = (parseFloat(punto.desnivel) + parseFloat(  service.tracks[track].desnivelP)).toFixed(2);
     }else {
