@@ -301,7 +301,7 @@ service.importXMLWp = function () {
     {
         name = name.textContent;
     }
-    console.log(name);
+   
     //Activamos el modo invertir (aunque sea el modo invertir nos vale tambien para esta situacion)
     service.modoInvertir = true;
     //Recorremos los puntos del primer track
@@ -336,7 +336,7 @@ service.importXMLWp = function () {
     service.importXMLRuta = function () {
         var puntos=service.xmlImportado.getElementsByTagName("rtept");
         var name = service.xmlImportado.getElementsByTagName("rte")[0].firstElementChild;
-        console.log(name);
+        
         if(name == undefined || name.tagName=="rtept")
         {
             name = "Nueva Ruta";
@@ -972,9 +972,7 @@ service.fin = true;
           
       }
     var position = ((km/1000) / parseFloat(service.tracks[service.trackActivo].distancia))*100;
-  console.log(km/1000);
-  console.log(parseFloat(service.tracks[service.trackActivo].distancia));
-  console.log(((km/1000) / parseFloat(service.tracks[service.trackActivo].distancia))*100);
+
   var arrow = {
       icon : symbolTwo,
       offset : position+'%'
@@ -1499,8 +1497,6 @@ service.ordenarMinutosR = function () {
 service.calcularDatosTrack = function (id,punto,track) {
   if (id==0) {
     service.tracks[track].distancia = (parseFloat(service.tracks[track].distancia)+(parseFloat(punto.distancia)/1000));
-    console.log("Distancia: ");
-    console.log(service.tracks[track].distancia);
     if (parseFloat(punto.desnivel)>=0) {
         service.tracks[track].desnivelP = (parseFloat(punto.desnivel) + parseFloat(  service.tracks[track].desnivelP)).toFixed(2);
     }else {
@@ -1735,45 +1731,54 @@ service.actualizarPuntosR = function() {
       var elevator = new google.maps.ElevationService;
       service.puntos = new Array();
      //if(entrar)
-       for (var item in service.tracks[service.trackActivo].puntos) {
-       var latlng = new google.maps.LatLng(service.tracks[service.trackActivo].puntos[item].latitud,service.tracks[service.trackActivo].puntos[item].longitud);
+
       
-     elevator.getElevationForLocations({
-                              'locations': [latlng]
-                          }, function(results, status) {
-                              if (status === google.maps.ElevationStatus.OK) {
-                                  if (results[0]) {
-                                      console.log("item");
-                                      console.log(item);
-                                   console.log("Array de elevaciones");
-                                    console.log( service.puntos);
-                                   service.puntos.push(results[0].elevation.toFixed(2));
-                                   
-                                   
-                                  } else {
-                                     
-                                  }
-                              } else {
-                                 
-                              }
-                          });
+
+       var puntosGoogle = service.tracks[service.trackActivo].puntos.map(function(punto) { return new google.maps.LatLng(punto.latitud, punto.longitud)});
+    
+    var max = puntosGoogle.length;
+    var maxPointsPerRequest = 250;
+    var elevaciones = [];
+    var cont = 0;
+    for(let i=0; i*maxPointsPerRequest <= max; i++) {
+        const index = i;
+        setTimeout(function() {
+                console.log(puntosGoogle.slice(i*maxPointsPerRequest, ((i+1)*maxPointsPerRequest)));
+                elevator.getElevationForLocations({
+                    'locations': puntosGoogle.slice(i*maxPointsPerRequest, ((i+1)*maxPointsPerRequest))
+                }, function(results, status) {
+                console.log(results);
+                console.log(status);
+                    if (status === google.maps.ElevationStatus.OK) {
+                        if (results[0]) {
+                        elevaciones[index] = results;
+                        if((index+1)*maxPointsPerRequest>=max){
+                            var results2 = [];
+        elevaciones.forEach(function(elev){results2.concat(elev)});
+        for (var item in results2) {
+         service.tracks[service.trackActivo].puntos[item]["elevacion"] = results2[item].elevation.toFixed(2);
+         if(item==0)
+          service.tracks[service.trackActivo].puntos[item]["desnivel"] = 0;
+         else{
+            service.tracks[service.trackActivo].puntos[item]["desnivel"]=
+            (service.tracks[service.trackActivo].puntos[item]["elevacion"]-service.tracks[service.trackActivo].puntos[item-1]["elevacion"]).toFixed(2);
+         }
+         service.puntosTrackActivo[item]=service.tracks[service.trackActivo].puntos[item];
     }
-   setTimeout(function() {
-       for (var item in service.puntos) {
-             service.tracks[service.trackActivo].puntos[item]["elevacion"] = service.puntos[item];
-             if(item==0)
-              service.tracks[service.trackActivo].puntos[item]["desnivel"] = 0;
-             else{
-                service.tracks[service.trackActivo].puntos[item]["desnivel"]=
-                (service.tracks[service.trackActivo].puntos[item]["elevacion"]-service.tracks[service.trackActivo].puntos[item-1]["elevacion"]).toFixed(2);
-             }
-             service.puntosTrackActivo[item]=service.tracks[service.trackActivo].puntos[item];
-             console.log("Puntos del track normal");
-                                   console.log( service.tracks[service.trackActivo].puntos);
-                                   console.log("Puntos del track activo");
-                                   console.log(service.puntosTrackActivo);
-        }
-   }, 4000);
+                        }
+                        } else {
+                        
+                        }
+                    } else {
+                    
+                    }
+                });
+        }, i*1500
+        )
+        
+        
+    }
+  
         
            
          
