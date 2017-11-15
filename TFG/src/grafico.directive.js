@@ -30,7 +30,7 @@
             pointBorderColor: '#0062ff',
             pointHoverBorderColor: '#0ef734',
             pointHoverRadius: 10,
-            pointHitRadius:20,
+            
             fill: true /* this option hide background-color */
         }, '#00ADF9', '#FDB45C', '#46BFBD'];
 
@@ -52,6 +52,16 @@
         $scope.datasetOverride = [{ xAxisID: 'x-axis-1' }];
         $scope.options = {
             responsive:true,
+            tooltips:{
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                      return 'Distancia: '+tooltipItem[0].xLabel + ' km'
+                    },
+                    label: function(tooltipItem, data) {
+                        return 'Elevación: '+tooltipItem.yLabel + ' m'
+                      }
+                    }
+            },
             scales: {
                 xAxes: [
                     {

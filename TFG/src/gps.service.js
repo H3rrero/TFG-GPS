@@ -949,7 +949,8 @@ service.fin = true;
       google.maps.event.trigger(service.mapa, 'click');
         if(service.clicTabGraf){
             service.mapa.setCenter(new google.maps.LatLng(service.latitudSelec,service.longitudSelec));
-            service.mapa.setZoom(17);}
+            service.mapa.setZoom(service.mapa.getZoom());
+        }
     
     //Desactivamos el modo selecion
     service.seleccion = false;
@@ -961,10 +962,16 @@ service.fin = true;
  
     var symbolTwo = {
         path: 'M4.286 4.684c0 0.489-0.321 0.887-0.713 0.887h-2.859c-0.392 0-0.713-0.398-0.713-0.887 0-0.881 0.218-1.898 1.095-1.898 0.271 0.265 0.64 0.429 1.048 0.429s0.777-0.164 1.048-0.429c0.877 0 1.095 1.018 1.095 1.898zM3.429 1.714c0 0.71-0.576 1.286-1.286 1.286s-1.286-0.576-1.286-1.286 0.576-1.286 1.286-1.286 1.286 0.576 1.286 1.286z',
-        strokeColor: '#000000',
+        strokeColor: '#460be7',
         rotation: 45
       };
-    var position = (index / service.tracks[service.trackActivo].puntos.length)*100;
+      var km =0;
+      for (let i = 0; i <=index; i++) {
+           km = parseFloat( km) + parseFloat( service.tracks[service.trackActivo].puntos[i].distancia);
+          
+      }
+    var position = ((km/1000) / parseFloat(service.tracks[service.trackActivo].distancia))*100;
+  
 var arrow = {
       icon : symbolTwo,
       offset : position+'%'
@@ -979,7 +986,8 @@ var arrow = {
         strokeWeight: service.getPolyR(service.trackActivo).strokeWeight,
         icons :  [service.getPolyR(service.trackActivo).icons[0],arrow]
     });
-    console.log( service.getPolyR(service.trackActivo));
+    service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.trackActivo].puntos[index].latitud,service.tracks[service.trackActivo].puntos[index].longitud));
+    service.mapa.setZoom(service.mapa.getZoom());
   }
 
     service.cambiarDescripcion = function (descripcion) {
