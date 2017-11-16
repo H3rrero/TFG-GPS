@@ -72,14 +72,14 @@
 	<script type="text/javascript" src="https://mappingsupport.com/p/js_utility_952_11.js">
 	</script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70766616-2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70766616-2"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
 
-  gtag('config', 'UA-70766616-2');
-</script>
+		gtag('config', 'UA-70766616-2');
+	</script>
 </head>
 
 <body ng-app='GPS'>
@@ -106,6 +106,18 @@
 					<div class="alert alert-success" ng-if="list1.noError" role="alert">{{list1.mensajeError}}</div>
 				</div>
 			</div>
+		</div>
+		<!-- The Modal -->
+		<div id="myModal" class="modales">
+
+			<!-- Modal content -->
+			<div class="modales-content">
+				<span ng-click="list1.closeModal();" class="closeModal">&times;</span>
+				<p>La representación visual de los puntos esta desactivada para favorecer el rendimiento de la aplicación,
+				si desea verlos para poder interactuar con ellos pulse el botón de ver puntos y aumente el zoom hasta que se visualicen.
+				</p>
+			</div>
+
 		</div>
 		<input id="pac-input" class="controls" type="text" placeholder="Enter a location">
 		<my-map></my-map>
@@ -185,7 +197,8 @@
 			<img src="img/informacion.png" ng-hide="!list1.isSafari" title="Al usar Safari te saldrá una nueva ventana con la imagen, dale a boton derecho y a guardar como."
 			 height="6%" width="1%">
 			<canvas id="canvas" chart-colors="colors" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series"
-			 chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick" chart-hover="onMouseOver" height="10%" width="75%">
+			 chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick" chart-hover="onMouseOver" height="10%"
+			 width="75%">
 			</canvas>
 
 		</div>
@@ -197,10 +210,8 @@
 				 height="5%" width="5%">
 				<li ng-repeat="item in list1.tracks" id="li{{$index}}">
 					<input id="in{{$index}}" type="radio" name="track" ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">
-					<p id="pt{{$index}}" ng-click="list1.openPopup($index);" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,
-						&lt;{{item[
-						 "elevMin"]}}m,-&gt;{{item["duracionIda"]}}h,
-							&lt;-{{item[ "duracionVuelta"]}}h</p>
+					<p id="pt{{$index}}" ng-click="list1.openPopup($index);" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m, &lt;{{item[
+						"elevMin"]}}m,-&gt;{{item["duracionIda"]}}h, &lt;-{{item[ "duracionVuelta"]}}h</p>
 				</li>
 			</ul>
 			<ul ng-hide="!list1.activarListaR">
@@ -208,9 +219,9 @@
 				 height="5%" width="5%">
 				<li ng-repeat="item in list1.rutas" id="lir{{$index}}">
 					<input id="inr{{$index}}" type="radio" name="track" ng-model="list1.rutaActiva" ng-value="$index" ng-change="list1.changedR()">
-					<p id="pr{{$index}}" ng-click="list1.openPopupR($index);" ng-mouseleave="list1.desSubrayarr($index)" ng-mouseover="list1.subrayarr($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m,
-						&lt;{{item[
-						 "elevMin"]}}m</p>
+					<p id="pr{{$index}}" ng-click="list1.openPopupR($index);" ng-mouseleave="list1.desSubrayarr($index)" ng-mouseover="list1.subrayarr($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m, &lt;{{item[
+						"elevMin"]}}m
+					</p>
 				</li>
 			</ul>
 			<ul ng-if="list1.activarListaW">
@@ -220,7 +231,7 @@
 				</li>
 			</ul>
 		</div>
-		
+
 		<div id="on/Off">
 			<a ng-click="list1.capPant(true)" ng-hide="!(list1.isChrome)" id="btn-downloadTC" ng-href="{{list1.capturaUrl}}">
 				<button id="downPtC" type="button" class="bttn-material-circle bttn-xs bttn-primary" title="captura la imagen del mapa">
@@ -248,25 +259,25 @@
 			 ng-if="!list1.modoEdicion">Off</button>
 		</div>
 		<div id="prueba">
-		
+
 			<div id="botones">
 				<button id="boton-t" type="button" title="Edicion de tracks" ng-click="list1.listarFunciones();" class="bttn-material-circle bttn-xs bttn-primary">T</button>
 				<button id="boton-r" type="button" title="Edicion de rutas" ng-click="list1.listarFuncionesR();" class="bttn-material-circle bttn-xs bttn-royal">R</button>
 				<button id="boton-w" type="button" title="Edicion de waypoints" ng-click="list1.listarFuncionesW();" class="bttn-material-circle bttn-xs bttn-success">W</button>
 			</div>
-		
+
 			<div id="funciones">
 				<table id="tableSW" class="sample-show-hide tableS" align="left" ng-mouseleave="list1.noVerBotones();" ng-show="list1.mostrarBotonesW">
 					<tr>
 						<td>
-							<button id="botonCrearW" type="button" title="activa/desactiva el modo de creación de waypoints" data-toggle="modal"
-							 data-target="#modalW" ng-click="list1.listaActivaW();" class="bttn-unite bttn-xs bttn-success stiloBtns">nuevo</button>
+							<button id="botonCrearW" type="button" title="activa/desactiva el modo de creación de waypoints" data-toggle="modal" data-target="#modalW"
+							 ng-click="list1.listaActivaW();" class="bttn-unite bttn-xs bttn-success stiloBtns">nuevo</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="inputBt" title="importa un fichero" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)"
-							 name="button" class="bttn-unite bttn-xs bttn-success stiloBtns">
+							<button id="inputBt" title="importa un fichero" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" name="button"
+							 class="bttn-unite bttn-xs bttn-success stiloBtns">
 								<input id='inputImport' ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt" type='file' fileread="list1.fichero">abrir</button>
 						</td>
 					</tr>
@@ -318,8 +329,8 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonBor" type="button" data-toggle="modal" title="borra el waypoint seleccionado" data-target="#modalMS"
-							 ng-click="  list1.borrarWp();" class="bttn-unite bttn-xs bttn-success stiloBtns">borrar</button>
+							<button id="botonBor" type="button" data-toggle="modal" title="borra el waypoint seleccionado" data-target="#modalMS" ng-click="  list1.borrarWp();"
+							 class="bttn-unite bttn-xs bttn-success stiloBtns">borrar</button>
 						</td>
 					</tr>
 				</table>
@@ -333,16 +344,16 @@
 					<tr>
 						<td>
 							<button id="inputBtR" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" name="button" class="bttn-unite bttn-xs bttn-royal stiloBtns">
-								<input id='inputImportRSF' ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt" type='file'
-								 fileread="list1.fichero" title="importar una ruta">abrir</button>
+								<input id='inputImportRSF' ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt" type='file' fileread="list1.fichero"
+								 title="importar una ruta">abrir</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<button id="inputBtRA" type="button" ng-if="!(list1.isChrome||list1.isFirefox||list1.isSafari||list1.esIE || list1.isEdge)"
 							 name="button" class="bttn-unite bttn-xs bttn-royal stiloBtns">
-								<input id='inputImportRSFA' ng-if="!(list1.isChrome||list1.isFirefox||list1.isSafari||list1.esIE || list1.isEdge)"
-								 class="inputImportSt" type='file' fileread="list1.fichero" title="importar una ruta">abrir</button>
+								<input id='inputImportRSFA' ng-if="!(list1.isChrome||list1.isFirefox||list1.isSafari||list1.esIE || list1.isEdge)" class="inputImportSt"
+								 type='file' fileread="list1.fichero" title="importar una ruta">abrir</button>
 						</td>
 					</tr>
 					<tr>
@@ -403,16 +414,16 @@
 					<tr>
 						<td>
 							<button id="inputBtT" type="button" ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" name="button" class="bttn-unite bttn-xs bttn-primary stiloBtns">
-								<input id='inputImportGT' ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt" type='file'
-								 fileread="list1.fichero" title="importa un track">abrir</button>
+								<input id='inputImportGT' ng-if="(list1.isChrome||list1.isEdge||list1.isSafari)" class="inputImportSt" type='file' fileread="list1.fichero"
+								 title="importa un track">abrir</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<button id="inputBtTA" type="button" ng-if="!(list1.isChrome||list1.isFirefox||list1.isSafari||list1.esIE || list1.isEdge)"
 							 name="button" class="bttn-unite bttn-xs bttn-primary stiloBtns">
-								<input id='inputImportGTA' ng-if="!(list1.isChrome||list1.isFirefox||list1.isSafari||list1.esIE || list1.isEdge)"
-								 class="inputImportSt" type='file' fileread="list1.fichero" title="importa un track">abrir</button>
+								<input id='inputImportGTA' ng-if="!(list1.isChrome||list1.isFirefox||list1.isSafari||list1.esIE || list1.isEdge)" class="inputImportSt"
+								 type='file' fileread="list1.fichero" title="importa un track">abrir</button>
 						</td>
 					</tr>
 					<tr>
@@ -472,20 +483,18 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonAnadirWp" data-toggle="modal" data-target="#modalMS" type="button" ng-click="list1.openPopupNW();"
-							 class="bttn-unite bttn-xs bttn-success stiloBtns" title="añade un waypoint manualmente">insertar waypoint</button>
+							<button id="botonAnadirWp" data-toggle="modal" data-target="#modalMS" type="button" ng-click="list1.openPopupNW();" class="bttn-unite bttn-xs bttn-success stiloBtns"
+							 title="añade un waypoint manualmente">insertar waypoint</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success stiloBtns"
-							 title="ver la lista de waypoints">{{list1.mensajeVerlistaW}}</button>
+							<button id="botonListar" type="button" ng-click="list1.listaW();" class="bttn-unite bttn-xs bttn-success stiloBtns" title="ver la lista de waypoints">{{list1.mensajeVerlistaW}}</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-success stiloBtns"
-							 title="activa/desactiva las coordenadas del puntero">{{list1.coordV}}</button>
+							<button id="botonCoord" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-success stiloBtns" title="activa/desactiva las coordenadas del puntero">{{list1.coordV}}</button>
 						</td>
 					</tr>
 				</table>
@@ -499,14 +508,14 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonEli" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.eliminarPuntoRuta();"
-							 title="elimin un punto de la ruta seleccionada" class="bttn-unite bttn-xs bttn-royal stiloBtns">eliminar punto</button>
+							<button id="botonEli" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.eliminarPuntoRuta();" title="elimin un punto de la ruta seleccionada"
+							 class="bttn-unite bttn-xs bttn-royal stiloBtns">eliminar punto</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="botonIns" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.anadirPuntoRuta();"
-							 title="inserta un punto en la ruta seleccionada" class="bttn-unite bttn-xs bttn-royal stiloBtns">insertar punto</button>
+							<button id="botonIns" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.anadirPuntoRuta();" title="inserta un punto en la ruta seleccionada"
+							 class="bttn-unite bttn-xs bttn-royal stiloBtns">insertar punto</button>
 						</td>
 					</tr>
 					<tr>
@@ -547,8 +556,7 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonCoordR" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-royal stiloBtns"
-							 title="ver/ocultar las coordenadas del puntero">{{list1.coordV}}</button>
+							<button id="botonCoordR" type="button" ng-click="list1.verCoord();" class="bttn-unite bttn-xs bttn-royal stiloBtns" title="ver/ocultar las coordenadas del puntero">{{list1.coordV}}</button>
 						</td>
 					</tr>
 				</table>
@@ -562,14 +570,14 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonEliT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.eliminarPuntoTrack();"
-							 title="eliminar un punto del track seleccionado" class="bttn-unite bttn-xs bttn-primary stiloBtns">eliminar punto</button>
+							<button id="botonEliT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.eliminarPuntoTrack();" title="eliminar un punto del track seleccionado"
+							 class="bttn-unite bttn-xs bttn-primary stiloBtns">eliminar punto</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="botonInsT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.anadirPuntoTrack();"
-							 title="insertar un punto en el track seleccionado" class="bttn-unite bttn-xs bttn-primary stiloBtns">insertar punto</button>
+							<button id="botonInsT" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.anadirPuntoTrack();" title="insertar un punto en el track seleccionado"
+							 class="bttn-unite bttn-xs bttn-primary stiloBtns">insertar punto</button>
 						</td>
 					</tr>
 					<tr>
@@ -592,14 +600,14 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonTim" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.openPopupTiempos();"
-							 title="cambia la velocidad y la fecha del track seleccionado" class="bttn-unite bttn-xs bttn-primary stiloBtns">reasignar tiempos</button>
+							<button id="botonTim" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.openPopupTiempos();" title="cambia la velocidad y la fecha del track seleccionado"
+							 class="bttn-unite bttn-xs bttn-primary stiloBtns">reasignar tiempos</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="botonEle" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.cargarElevaciones();"
-							 title="Vuelve a calcular las elevaciones de los puntos del track" class="bttn-unite bttn-xs bttn-primary stiloBtns">asignar elevaciones</button>
+							<button id="botonEle" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.cargarElevaciones();" title="Vuelve a calcular las elevaciones de los puntos del track"
+							 class="bttn-unite bttn-xs bttn-primary stiloBtns">asignar elevaciones</button>
 						</td>
 					</tr>
 					<tr>
@@ -622,13 +630,12 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="botonCoordT" type="button" ng-click="list1.verCoord();" title="ver/ocultar las coordenadas del puntero"
-							 class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.coordV}}</button>
+							<button id="botonCoordT" type="button" ng-click="list1.verCoord();" title="ver/ocultar las coordenadas del puntero" class="bttn-unite bttn-xs bttn-primary stiloBtns">{{list1.coordV}}</button>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<button id="botonVerMar" type="button" ng-click="list1.vermarkers();" class="bttn-unite bttn-xs bttn-primary stiloBtns"
+							<button id="botonVerMar" type="button" data-toggle="modal" data-target="#modalMS" ng-click="list1.vermarkers();" class="bttn-unite bttn-xs bttn-primary stiloBtns"
 							 title="muestra/oculta los puntos del track">{{list1.verMarker}}</button>
 						</td>
 					</tr>

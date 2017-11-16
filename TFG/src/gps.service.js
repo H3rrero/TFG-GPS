@@ -330,6 +330,8 @@
                 for (var i in service.tracks) {
                     $("#li" + (i))[0].style.color = service.polyLineas[i].strokeColor;
                 }
+                $("#botonVerMar").click();
+                document.getElementById('myModal').style.display = "block";
             }, 10);
 
 
@@ -866,7 +868,7 @@
                 }
             }
             setTimeout(function () {
-                $("#li" + (service.trackActivo + 1))[0].style.color = service.getPolyR(service.trackActivo + 1).strokeColor;;
+                $("#li" + (service.trackActivo + 1))[0].style.color = service.getPolyR(service.trackActivo + 1).strokeColor;
                 $("#li" + (service.trackActivo + 2))[0].style.color = service.getPolyR(service.trackActivo + 2).strokeColor;
             }, 500);
             service.fin = true;
@@ -906,8 +908,8 @@
                 }
             }
             setTimeout(function () {
-                $("#lir" + (service.rutaActiva + 1))[0].style.color = '#00FF00';
-                $("#lir" + (service.rutaActiva + 2))[0].style.color = '#FF3399';
+                $("#lir" + (service.rutaActiva + 1))[0].style.color = service.getPolyR(service.rutaActiva + 1).strokeColor;
+                $("#lir" + (service.rutaActiva + 2))[0].style.color = service.getPolyR(service.rutaActiva + 2).strokeColor;
             }, 500);
             //Deesactivamos todos los modos y ponemos el punto elegido como null
             service.modoInvertir = false;
@@ -960,7 +962,38 @@
             service.seleccion = false;
             service.clicTabGraf = false;
         };
-
+        service.hoverGrafR = function (index) {
+            
+            
+                        var symbolTwo = {
+                            path: 'M4.286 4.684c0 0.489-0.321 0.887-0.713 0.887h-2.859c-0.392 0-0.713-0.398-0.713-0.887 0-0.881 0.218-1.898 1.095-1.898 0.271 0.265 0.64 0.429 1.048 0.429s0.777-0.164 1.048-0.429c0.877 0 1.095 1.018 1.095 1.898zM3.429 1.714c0 0.71-0.576 1.286-1.286 1.286s-1.286-0.576-1.286-1.286 0.576-1.286 1.286-1.286 1.286 0.576 1.286 1.286z',
+                            strokeColor: '#460be7',
+                            rotation: 45
+                        };
+                        var km = 0;
+                        for (let i = 0; i <= index; i++) {
+                            km = parseFloat(km) + parseFloat(service.rutas[service.rutaActiva].puntos[i].distancia);
+            
+                        }
+                        var position = ((km / 1000) / parseFloat(service.rutas[service.rutaActiva].distancia)) * 100;
+            
+                        var arrow = {
+                            icon: symbolTwo,
+                            offset: position + '%'
+                        };
+            
+            
+            
+                        var poly = service.getPolyR(service.rutaActiva);
+                        poly.setOptions({
+                            strokeColor: service.getPolyR(service.rutaActiva).strokeColor,
+                            strokeOpacity: 1.0,
+                            strokeWeight: service.getPolyR(service.rutaActiva).strokeWeight,
+                            icons: [service.getPolyR(service.rutaActiva).icons[0], arrow]
+                        });
+                        service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.rutaActiva].puntos[index].latitud, service.tracks[service.rutaActiva].puntos[index].longitud));
+                        service.mapa.setZoom(service.mapa.getZoom());
+                    }
         service.hoverGraf = function (index) {
 
 
@@ -1642,8 +1675,12 @@
 
 
         };
-        service.actualizarMarkersR2 = function () {
+        service.actualizarMarkersR2 = function (forzarANo) {
             var hacerInvisible = -1;
+            if(forzarANo == undefined)
+            {
+                forzarANo=false;
+            }
             for (var i in service.rutas) {
                 if (service.wpRta[i] != undefined)
                     if (service.wpRta[i].length > 1)
@@ -1660,7 +1697,7 @@
             if (hacerInvisible != -1)
                 for (var i in service.wpRta[hacerInvisible]) {
 
-                    if (i != 0 && i != service.wpRta[hacerInvisible].length - 1)
+                    if (i != 0 && i != service.wpRta[hacerInvisible].length - 1 && forzarANo == false)
                         service.wpRta[hacerInvisible][i].setVisible(false);
                 }
 
@@ -1668,8 +1705,12 @@
         };
 
         //Actualiza los puntos del track activo
-        service.actualizarMarkers2 = function () {
+        service.actualizarMarkers2 = function (forzarANo) {
             var hacerInvisible = -1;
+            if(forzarANo == undefined)
+            {
+                forzarANo=false;
+            }
             for (var i in service.tracks) {
                 if (service.markersT[i] != undefined)
                     if (service.markersT[i].length > 1)
@@ -1687,7 +1728,7 @@
             if (hacerInvisible != -1)
                 for (var i in service.markersT[hacerInvisible]) {
 
-                    if (i != 0 && i != service.markersT[hacerInvisible].length - 1)
+                    if (i != 0 && i != service.markersT[hacerInvisible].length - 1 && forzarANo == false)
                         service.markersT[hacerInvisible][i].setVisible(false);
                 }
 
@@ -1734,10 +1775,7 @@
             var elevaciones = [];
             var results2 = [];
             service.puntos = new Array();
-            //if(entrar)
 
-
-            console.log(callback);
             var puntosGoogle = service.tracks[service.trackActivo].puntos.map(function (punto) { return new google.maps.LatLng(punto.latitud, punto.longitud) });
 
             var max = puntosGoogle.length;
@@ -1755,7 +1793,6 @@
 
         service.calculateElevations = function (i, puntosGoogle, intentos, maxPointsPerRequest, max, cont,elevaciones,results2,callback) {
             var elevator = new google.maps.ElevationService;
-            console.log(callback);
             setTimeout(function () {
                 const index = i;
                 elevator.getElevationForLocations({
@@ -1764,15 +1801,11 @@
 
                     // console.log(status);
                     if (status === google.maps.ElevationStatus.OK) {
-                        console.log(results);
                         if (results[0]) {
                             elevaciones[index] = results;
 
                             
                             elevaciones.forEach(function (elev) { results2 = results2.concat(elev) });
-                            console.log(puntosGoogle.length);
-                            console.log(elevaciones.length);
-                            console.log(results2.length);
                             if (puntosGoogle.length == results2.length) {
                                 service.actualizarGrafAlturas(results2);
                                 callback();

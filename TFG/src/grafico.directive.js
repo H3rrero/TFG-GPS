@@ -35,16 +35,22 @@
         }, '#00ADF9', '#FDB45C', '#46BFBD'];
 
         $scope.onClick = function (points, evt) {
-            if(points.length>0){
+            if(points.length>0 && EntidadesService.isTrack){
                 EntidadesService.clicTabGraf = true;
                 EntidadesService.puntoSelec(points[0]._index);
+                EntidadesService.puntoBorrado = true;
+            } else if(points.length>0 && !EntidadesService.isTrack){
+                EntidadesService.clicTabGraf = true;
+                EntidadesService.puntoSelecR(points[0]._index);
                 EntidadesService.puntoBorrado = true;
             }
         };
 
         $scope.onMouseOver = function (points, evt) {
-            if(points.length>0){
+            if(points.length>0 && EntidadesService.isTrack){
                EntidadesService.hoverGraf(points[0]._index);
+            }else if (points.length>0 && !EntidadesService.isTrack){
+                EntidadesService.hoverGrafR(points[0]._index);
             }
 
         }

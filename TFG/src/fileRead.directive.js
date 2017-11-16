@@ -35,6 +35,7 @@ function ImportFunction(EntidadesService,usSpinnerService) {
                         //Guardamos el contenido del xml en el service
                         EntidadesService.xmlImportado = xml;
                         if (EntidadesService.isTrackImport && EntidadesService.xmlImportado.getElementsByTagName("trkpt").length>0) {
+                           
                             controller.listaActiva();
                             EntidadesService.importXML();
                             EntidadesService.centrarMapa();

@@ -8,7 +8,7 @@ angular.module('GPS')
      ngDialogProvider.setForceBodyReload(true);
 });;
 
-function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog) {
+function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog,$window) {
     var list1 = this;
     //track seleccionado por el usuario
     list1.trackActivo = 0;
@@ -41,7 +41,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.apiMaps = true;
     list1.conection = false;
     list1.coordV ="ocultar coor";
-    list1.verMarker ="ocultar pts";
+    list1.verMarker ="ocultar puntos";
     list1.tablaT = false;
     list1.escala = "5km";
     list1.capturaUrl="";
@@ -62,6 +62,13 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     $scope.options = {
         format:'hex'
     };
+
+    $window.onclick = function(event) {
+        if (event.target == document.getElementById('myModal')) {
+            document.getElementById('myModal').style.display = "none";
+        }
+    }
+    
     $scope.eventApi = {
         onChange:  function (api, color, $event) {
             if(EntidadesService.isTrack){
@@ -289,14 +296,17 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
         list1.gr.children().children().children()[14].childNodes[1].childNodes[0].style.fontWeight='bold';
        
     };
+    list1.closeModal = function (params) {
+        document.getElementById('myModal').style.display = "none";
+    }
     list1.vermarkers = function () {
-        if(EntidadesService.ver){
+         if(EntidadesService.ver){
             EntidadesService.ver = false;
-            list1.verMarker ="ver pts";
+            list1.verMarker ="ver puntos";
             EntidadesService.vermarkers();
-        }else{
+             }else{
             EntidadesService.ver = true;
-            list1.verMarker ="ocultar pts";
+            list1.verMarker ="ocultar puntos";
             EntidadesService.vermarkers();
         }
     };
@@ -398,6 +408,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             EntidadesService.importXML();
         }
     };
+
     list1.activarImport = function () {
         list1.error = false;
         if (EntidadesService.xmlImportado == undefined) {
@@ -1757,7 +1768,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeVerlista = "ver lista";
             EntidadesService.isTrack = false;
             EntidadesService.actualizarMarkers2();
-            EntidadesService.actualizarMarkersR2();
+            EntidadesService.actualizarMarkersR2(true);
             EntidadesService.puntoElegido = null;
             EntidadesService.isWaypoint = false;
             if (list1.mostrarTabla == true)
@@ -1809,7 +1820,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeVerlistaW = "ver lista";
             EntidadesService.isTrack = true;
             EntidadesService.actualizarMarkersR2();
-            EntidadesService.actualizarMarkers2();
+            EntidadesService.actualizarMarkers2(true);
             EntidadesService.puntoElegido = null;
             EntidadesService.isWaypoint = false;
             list1.modoCreacion = false;
