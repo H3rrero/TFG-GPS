@@ -1071,12 +1071,12 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
             list1.mensajeError = "El track no dispone de puntos";
             
         } else {
-            EntidadesService.cargarElevaciones();
-            setTimeout(function() {
-                 list1.actualizarPuntosT();
-                 $scope.$apply();
-                  list1.stopSpin();
-            }, 5000);
+            EntidadesService.cargarElevaciones(function() {
+                list1.actualizarPuntosT();
+                $scope.$apply();
+                 list1.stopSpin();
+           });
+            
             
             
          
