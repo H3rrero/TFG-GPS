@@ -997,11 +997,21 @@
         service.hoverGraf = function (index) {
 
 
+            /*var symbolTwo = {
+                path: "M15.429 9c0 4.259-3.455 7.714-7.714 7.714s-7.714-3.455-7.714-7.714 3.455-7.714 7.714-7.714 7.714 3.455 7.714 7.714z",
+                fillColor: '#FF0000',
+                fillOpacity: 1,
+                strokeWeight: 0,
+                scale: 1
+            };*/
             var symbolTwo = {
-                path: 'M4.286 4.684c0 0.489-0.321 0.887-0.713 0.887h-2.859c-0.392 0-0.713-0.398-0.713-0.887 0-0.881 0.218-1.898 1.095-1.898 0.271 0.265 0.64 0.429 1.048 0.429s0.777-0.164 1.048-0.429c0.877 0 1.095 1.018 1.095 1.898zM3.429 1.714c0 0.71-0.576 1.286-1.286 1.286s-1.286-0.576-1.286-1.286 0.576-1.286 1.286-1.286 1.286 0.576 1.286 1.286z',
-                strokeColor: '#460be7',
-                rotation: 45
-            };
+                path : google.maps.SymbolPath.CIRCLE,
+                strokeColor : 'white',
+                fillColor: service.getPolyR(service.trackActivo).strokeColor,
+                fillOpacity: 1,
+                strokeWeight : 2,
+                scale : 8
+              };
             var km = 0;
             for (let i = 0; i <= index; i++) {
                 km = parseFloat(km) + parseFloat(service.tracks[service.trackActivo].puntos[i].distancia);
@@ -1011,8 +1021,8 @@
 
             var arrow = {
                 icon: symbolTwo,
-                offset: position + '%'
-            };
+                offset: position + '%',
+                 };
 
 
 
@@ -1023,7 +1033,7 @@
                 strokeWeight: service.getPolyR(service.trackActivo).strokeWeight,
                 icons: [service.getPolyR(service.trackActivo).icons[0], arrow]
             });
-            service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.trackActivo].puntos[index].latitud, service.tracks[service.trackActivo].puntos[index].longitud));
+          //  service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.trackActivo].puntos[index].latitud, service.tracks[service.trackActivo].puntos[index].longitud));
             service.mapa.setZoom(service.mapa.getZoom());
         }
 

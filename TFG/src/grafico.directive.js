@@ -25,10 +25,10 @@
         $scope.colors =  [{
             backgroundColor : '#3382FF',
             pointBackgroundColor: '#0062ff',
-            pointHoverBackgroundColor: '#0ef734',
+            pointHoverBackgroundColor: '#699eee',
             borderColor: '#0062ff',
             pointBorderColor: '#0062ff',
-            pointHoverBorderColor: '#0ef734',
+            pointHoverBorderColor: '#022558',
             pointHoverRadius: 10,
             
             fill: true /* this option hide background-color */
@@ -59,7 +59,7 @@
         $scope.options = {
             responsive:true,
             tooltips:{
-                callbacks: {
+                 callbacks: {
                     title: function(tooltipItem, data) {
                       return 'Distancia: '+tooltipItem[0].xLabel + ' km'
                     },
