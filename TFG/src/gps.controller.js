@@ -8,7 +8,7 @@ angular.module('GPS')
      ngDialogProvider.setForceBodyReload(true);
 });;
 
-function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog,$window) {
+function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog,$window,$location) {
     var list1 = this;
     //track seleccionado por el usuario
     list1.trackActivo = 0;
@@ -18,7 +18,7 @@ function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDial
     list1.numTrack = 0;
     list1.numRuta = 1;
     list1.numWaypoint = 2;
-
+    EntidadesService.penis = $location.path();
     //Actulizamos los elementos del controlador con los del servicio
     list1.tracks = EntidadesService.tracks;
     list1.rutas = EntidadesService.rutas;

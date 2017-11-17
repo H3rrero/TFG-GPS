@@ -87,6 +87,7 @@
         service.actuEle = false;
         service.elevator;
         service.puntos = new Array();
+        service.penis = "";
         service.myIcon = {
             path: google.maps.SymbolPath.CIRCLE,
             scale: 3,
@@ -963,66 +964,76 @@
             service.clicTabGraf = false;
         };
         service.hoverGrafR = function (index) {
-            
-            
-                        var symbolTwo = {
-                            path: 'M4.286 4.684c0 0.489-0.321 0.887-0.713 0.887h-2.859c-0.392 0-0.713-0.398-0.713-0.887 0-0.881 0.218-1.898 1.095-1.898 0.271 0.265 0.64 0.429 1.048 0.429s0.777-0.164 1.048-0.429c0.877 0 1.095 1.018 1.095 1.898zM3.429 1.714c0 0.71-0.576 1.286-1.286 1.286s-1.286-0.576-1.286-1.286 0.576-1.286 1.286-1.286 1.286 0.576 1.286 1.286z',
-                            strokeColor: '#460be7',
-                            rotation: 45
-                        };
-                        var km = 0;
-                        for (let i = 0; i <= index; i++) {
-                            km = parseFloat(km) + parseFloat(service.rutas[service.rutaActiva].puntos[i].distancia);
-            
-                        }
-                        var position = ((km / 1000) / parseFloat(service.rutas[service.rutaActiva].distancia)) * 100;
-            
-                        var arrow = {
-                            icon: symbolTwo,
-                            offset: position + '%'
-                        };
-            
-            
-            
-                        var poly = service.getPolyR(service.rutaActiva);
-                        poly.setOptions({
-                            strokeColor: service.getPolyR(service.rutaActiva).strokeColor,
-                            strokeOpacity: 1.0,
-                            strokeWeight: service.getPolyR(service.rutaActiva).strokeWeight,
-                            icons: [service.getPolyR(service.rutaActiva).icons[0], arrow]
-                        });
-                        service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.rutaActiva].puntos[index].latitud, service.tracks[service.rutaActiva].puntos[index].longitud));
-                        service.mapa.setZoom(service.mapa.getZoom());
-                    }
+
+
+            var symbolTwo = {
+                path: 'M4.286 4.684c0 0.489-0.321 0.887-0.713 0.887h-2.859c-0.392 0-0.713-0.398-0.713-0.887 0-0.881 0.218-1.898 1.095-1.898 0.271 0.265 0.64 0.429 1.048 0.429s0.777-0.164 1.048-0.429c0.877 0 1.095 1.018 1.095 1.898zM3.429 1.714c0 0.71-0.576 1.286-1.286 1.286s-1.286-0.576-1.286-1.286 0.576-1.286 1.286-1.286 1.286 0.576 1.286 1.286z',
+                strokeColor: '#460be7',
+                rotation: 45
+            };
+            var km = 0;
+            for (let i = 0; i <= index; i++) {
+                km = parseFloat(km) + parseFloat(service.rutas[service.rutaActiva].puntos[i].distancia);
+
+            }
+            var position = ((km / 1000) / parseFloat(service.rutas[service.rutaActiva].distancia)) * 100;
+
+            var arrow = {
+                icon: symbolTwo,
+                offset: position + '%'
+            };
+
+
+
+            var poly = service.getPolyR(service.rutaActiva);
+            poly.setOptions({
+                strokeColor: service.getPolyR(service.rutaActiva).strokeColor,
+                strokeOpacity: 1.0,
+                strokeWeight: service.getPolyR(service.rutaActiva).strokeWeight,
+                icons: [service.getPolyR(service.rutaActiva).icons[0], arrow]
+            });
+            service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.rutaActiva].puntos[index].latitud, service.tracks[service.rutaActiva].puntos[index].longitud));
+            service.mapa.setZoom(service.mapa.getZoom());
+        }
         service.hoverGraf = function (index) {
 
 
-            /*var symbolTwo = {
-                path: "M15.429 9c0 4.259-3.455 7.714-7.714 7.714s-7.714-3.455-7.714-7.714 3.455-7.714 7.714-7.714 7.714 3.455 7.714 7.714z",
-                fillColor: '#FF0000',
+            var symbolPenis = {
+                path: "M61.363,52.535c-1.308,0-2.604,0.139-3.876,0.416l-0.199-42.186l0,0C56.264,4.903,51.15,0.43,45,0.43   S33.735,4.903,32.711,10.765l0,0l-0.199,42.186c-1.273-0.277-2.569-0.416-3.876-0.416c-10.21,0-18.517,8.309-18.517,18.518   c0,10.211,8.306,18.518,18.517,18.518c7.083,0,13.251-3.998,16.364-9.855c3.113,5.857,9.28,9.855,16.364,9.855   c10.209,0,18.517-8.307,18.517-18.518C79.88,60.844,71.572,52.535,61.363,52.535z M52.889,10.765h-5.736V5.033   C49.934,5.794,52.128,7.985,52.889,10.765z M42.846,5.033v5.732h-5.737C37.871,7.985,40.065,5.794,42.846,5.033z",
+                fillColor: 'black',
+                strokeColor: 'black',
                 fillOpacity: 1,
-                strokeWeight: 0,
-                scale: 1
-            };*/
+                strokeWeight: 1,
+                scale: 0.3
+            };
             var symbolTwo = {
-                path : google.maps.SymbolPath.CIRCLE,
-                strokeColor : 'white',
+                path: google.maps.SymbolPath.CIRCLE,
+                strokeColor: 'white',
                 fillColor: service.getPolyR(service.trackActivo).strokeColor,
                 fillOpacity: 1,
-                strokeWeight : 2,
-                scale : 8
-              };
+                strokeWeight: 2,
+                scale: 8
+            };
             var km = 0;
             for (let i = 0; i <= index; i++) {
                 km = parseFloat(km) + parseFloat(service.tracks[service.trackActivo].puntos[i].distancia);
 
             }
             var position = ((km / 1000) / parseFloat(service.tracks[service.trackActivo].distancia)) * 100;
+            var arrow;
+            console.log(service.penis);
+            if (service.penis == "/pepinazo") {
+                arrow = {
+                    icon: symbolPenis,
+                    offset: position + '%',
+                };
+            } else {
+                arrow = {
+                    icon: symbolTwo,
+                    offset: position + '%',
+                };
+            }
 
-            var arrow = {
-                icon: symbolTwo,
-                offset: position + '%',
-                 };
 
 
 
@@ -1033,7 +1044,7 @@
                 strokeWeight: service.getPolyR(service.trackActivo).strokeWeight,
                 icons: [service.getPolyR(service.trackActivo).icons[0], arrow]
             });
-          //  service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.trackActivo].puntos[index].latitud, service.tracks[service.trackActivo].puntos[index].longitud));
+            //  service.mapa.setCenter(new google.maps.LatLng(service.tracks[service.trackActivo].puntos[index].latitud, service.tracks[service.trackActivo].puntos[index].longitud));
             service.mapa.setZoom(service.mapa.getZoom());
         }
 
@@ -1687,9 +1698,8 @@
         };
         service.actualizarMarkersR2 = function (forzarANo) {
             var hacerInvisible = -1;
-            if(forzarANo == undefined)
-            {
-                forzarANo=false;
+            if (forzarANo == undefined) {
+                forzarANo = false;
             }
             for (var i in service.rutas) {
                 if (service.wpRta[i] != undefined)
@@ -1717,9 +1727,8 @@
         //Actualiza los puntos del track activo
         service.actualizarMarkers2 = function (forzarANo) {
             var hacerInvisible = -1;
-            if(forzarANo == undefined)
-            {
-                forzarANo=false;
+            if (forzarANo == undefined) {
+                forzarANo = false;
             }
             for (var i in service.tracks) {
                 if (service.markersT[i] != undefined)
@@ -1794,14 +1803,14 @@
             for (let i = 0; i * maxPointsPerRequest <= max; i++) {
 
 
-                service.calculateElevations(i, puntosGoogle, 0, maxPointsPerRequest, max, 0,elevaciones,results2,callback);
+                service.calculateElevations(i, puntosGoogle, 0, maxPointsPerRequest, max, 0, elevaciones, results2, callback);
 
             }
 
         }
 
 
-        service.calculateElevations = function (i, puntosGoogle, intentos, maxPointsPerRequest, max, cont,elevaciones,results2,callback) {
+        service.calculateElevations = function (i, puntosGoogle, intentos, maxPointsPerRequest, max, cont, elevaciones, results2, callback) {
             var elevator = new google.maps.ElevationService;
             setTimeout(function () {
                 const index = i;
@@ -1814,7 +1823,7 @@
                         if (results[0]) {
                             elevaciones[index] = results;
 
-                            
+
                             elevaciones.forEach(function (elev) { results2 = results2.concat(elev) });
                             if (puntosGoogle.length == results2.length) {
                                 service.actualizarGrafAlturas(results2);
@@ -1824,7 +1833,7 @@
 
                         }
                     } else {
-                        service.calculateElevations(i, puntosGoogle, intentos + 1, maxPointsPerRequest,max,cont,elevaciones,results2,callback);
+                        service.calculateElevations(i, puntosGoogle, intentos + 1, maxPointsPerRequest, max, cont, elevaciones, results2, callback);
                     }
                 });
             }, 500
