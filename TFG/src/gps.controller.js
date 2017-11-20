@@ -7,7 +7,7 @@ angular.module('GPS')
     ngDialogProvider.setForceHtmlReload(true);
      ngDialogProvider.setForceBodyReload(true);
 });;
-
+GPSController.$inject = ['$scope','EntidadesService','$document','usSpinnerService','ngDialog','$window','$location'];
 function GPSController($scope,EntidadesService,$document,usSpinnerService,ngDialog,$window,$location) {
     var list1 = this;
     //track seleccionado por el usuario

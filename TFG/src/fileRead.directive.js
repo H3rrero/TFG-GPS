@@ -4,7 +4,7 @@
 angular.module('GPS')
 .directive("fileread", ImportFunction)
 
-
+ImportFunction.$inject = ['EntidadesService', 'usSpinnerService'];
 //Funcion de la directiva de importacion
 function ImportFunction(EntidadesService,usSpinnerService) {
     

@@ -10,6 +10,7 @@
     });
     angular.module('GPS') .controller('LineCtrl',LineCtrl);
 
+    LineCtrl.$inject = ['$scope','EntidadesService'];
     function LineCtrl($scope,EntidadesService) {
         var line = this;
 

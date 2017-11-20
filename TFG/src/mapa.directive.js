@@ -4,6 +4,7 @@
 angular.module('GPS')
 .directive('myMap', Mymap);
 
+Mymap.$inject = ['EntidadesService','MapasService','GridService'];
 function Mymap(EntidadesService,MapasService,GridService) {
     // directive link function
     var link = function(scope, element, attrs,controller) {
