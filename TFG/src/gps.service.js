@@ -828,7 +828,7 @@
                 google.maps.event.trigger(service.mapa, 'click');
             }
             setTimeout(function () {
-                $("#li" + (service.tracks.length - 1))[0].style.color = '#FF3399';
+                $("#li" + (service.tracks.length - 1))[0].style.color = service.getPolyR(service.tracks.length - 1).strokeColor;;
             }, 500);
             //Desactivamos los modos activados durante este metodo
             service.modoInvertir = false;
@@ -1551,7 +1551,7 @@
         //Calcula todos los datos del track que son mostrados en la lista al lado de su nombre
         service.calcularDatosTrack = function (id, punto, track) {
             if (id == 0) {
-                service.tracks[track].distancia = (parseFloat(service.tracks[track].distancia) + (parseFloat(punto.distancia) / 1000));
+                service.tracks[track].distancia = (parseFloat(service.tracks[track].distancia) + (parseFloat(punto.distancia) / 1000)).toFixed(2);
                 if (parseFloat(punto.desnivel) >= 0) {
                     service.tracks[track].desnivelP = (parseFloat(punto.desnivel) + parseFloat(service.tracks[track].desnivelP)).toFixed(2);
                 } else {
