@@ -201,7 +201,7 @@
 				 height="5%" width="5%">
 				<li ng-repeat="item in list1.tracks" id="li{{$index}}">
 					<input id="in{{$index}}" type="radio" name="track" ng-model="list1.trackActivo" ng-value="$index" ng-change="list1.changedT()">
-					<p id="pt{{$index}}" ng-click="list1.openPopup($index);" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"]}}Km,>{{item["elevMax"]}}m, &lt;{{item[
+					<p id="pt{{$index}}" ng-click="list1.openPopup($index);" ng-mouseleave="list1.desSubrayar($index)" ng-mouseover="list1.subrayar($index)">{{item["nombre"]}},+{{item["desnivelP"]}}m,{{item["desnivelN"]}}m,{{item["distancia"].toFixed(2)}}Km,>{{item["elevMax"]}}m, &lt;{{item[
 						"elevMin"]}}m,-&gt;{{item["duracionIda"]}}h, &lt;-{{item[ "duracionVuelta"]}}h</p>
 				</li>
 			</ul>
