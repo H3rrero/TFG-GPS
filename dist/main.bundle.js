@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sidenav\">\n    <app-select title=\"Lenguaje de entrada\" [leng]=\"['GPX','KML']\"  [selectedValue]=\"'From'\" (onSelect)=\"onSelectFrom($event)\"></app-select>\n    <app-select title=\"Lenguaje de salida\" [leng]=\"['GPX','KML']\" [selectedValue]=\"'To'\" (onSelect)=\"onSelectTo($event)\"></app-select>\n</div>\n<main class=\"editor\">\n   \n    <app-traductor class=\"traductor\" [from]=\"from\" [to]=\"to\"></app-traductor>\n</main>"
+module.exports = "<div class=\"sidenav\" >\n    <app-select title=\"Lenguaje de entrada\" [leng]=\"['GPX','KML']\"  [selectedValue]=\"'From'\" (onSelect)=\"onSelectFrom($event)\"></app-select>\n    <app-select title=\"Lenguaje de salida\" [leng]=\"['GPX','KML']\" [selectedValue]=\"'To'\" (onSelect)=\"onSelectTo($event)\"></app-select>\n</div>\n<main class=\"editor\">\n   \n    <app-traductor class=\"traductor\" [from]=\"from\" [to]=\"to\"></app-traductor>\n</main>"
 
 /***/ }),
 
@@ -130,7 +130,7 @@ var AppModule = (function () {
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormsModule"],
-                __WEBPACK_IMPORTED_MODULE_7_ng2_codemirror__["CodemirrorModule"]
+                __WEBPACK_IMPORTED_MODULE_7_ng2_codemirror__["CodemirrorModule"],
             ],
             providers: [],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
@@ -661,7 +661,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/traductor/traductor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<app-notificacion [isShown]=\"show\" [mensaje]=\"mensaje\"></app-notificacion>\n<codemirror [(ngModel)]=\"content\" [config]=\"config\" (ngModelChange)=\"importCode()\" ></codemirror>\n<codemirror [(ngModel)]=\"salida\" [config]=\"configSalida\" ></codemirror>\n"
+module.exports = "<app-notificacion [isShown]=\"show\" [mensaje]=\"mensaje\"></app-notificacion>\n<div (drop)=\"onDrop($event)\" (dragover)=\"onDragOver($event)\">\n<codemirror [(ngModel)]=\"content\" [config]=\"config\" (ngModelChange)=\"importCode()\" ></codemirror>\n</div>\n<codemirror [(ngModel)]=\"salida\" [config]=\"configSalida\" ></codemirror>\n"
 
 /***/ }),
 
@@ -701,7 +701,7 @@ var TraductorComponent = (function () {
         this.config = { lineNumbers: true, mode: 'text/xml', theme: "base16-light" };
         this.configSalida = { lineNumbers: true, mode: 'text/xml', theme: "base16-light", readOnly: true };
         this.content =
-            "    Selecciona un formato de entrada, uno de salida y luego pega aqu\u00ED la entrada.\n    Select an input format, an output format, and then paste the entry here.";
+            "    Selecciona un formato de entrada, uno de salida y luego pega aqu\u00ED la entrada \n      o arrastra y suelta el fichero.\n      \n    Select an input format, an output format,and then paste the entry here\n     or drag and drop the file.";
         this.salida =
             "    Aqu\u00ED veras la salida.\n    Here you will see the result.";
     }
@@ -746,6 +746,23 @@ var TraductorComponent = (function () {
                 this.notificacion.closeModal();
             }
         }
+    };
+    TraductorComponent.prototype.onDrop = function (event) {
+        var _this = this;
+        event.preventDefault();
+        event.stopPropagation();
+        console.log("onDrop", event.dataTransfer.files[0]);
+        var myReader = new FileReader();
+        myReader.readAsText(event.dataTransfer.files[0]);
+        myReader.onloadend = function (e) {
+            _this.content = myReader.result;
+            _this.importCode();
+        };
+    };
+    TraductorComponent.prototype.onDragOver = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        console.log("onDragOver", event);
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_4__notificacion_notificacion_component__["a" /* NotificacionComponent */]),
