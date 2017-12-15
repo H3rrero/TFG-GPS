@@ -50,25 +50,30 @@ body{
    transform:scale(1.1);
     
 }
-.cuadrado:hover >ul > li{
+.cuadrado > ul {
+    position:absolute;
+}
+.cuadrado:hover > ul > .cuadradoBottom {
+    margin-left: -5px;
+    margin-top: 6px;
     height: 150px;
     opacity: 1;
+    border-width:  5px;
 }
-.cuadradoBottom{
+.cuadradoBottom {
+    display:block;
     height: 0px;
+    overflow:hidden;
     width: 230px;
-    border: 5px solid white;
+    border: 0px solid white;
     line-height: 140px;
     text-align:center;
-    display: block;
     text-decoration: none;
     color: white;
     font-weight: 600;
     transition:all 0.25s linear;
     font-size: 24px;
     font-family: 'Roboto', sans-serif;
-    margin-left: -5px;
-    margin-top: 6px;
     opacity: 0;
 
     
@@ -87,4 +92,27 @@ a{
     height: 100%;
     width: 100%;
     word-break:break-all;
+}
+
+.links-list {
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.links-list > .cuadrado {
+
+}
+
+@media screen and (max-width:500px) {
+    .links-list {
+        flex-direction: column-reverse;
+    }
+    .cuadrado {
+        width:100%;
+    }
+    .cuadrado > ul > .cuadradoBottom,
+    .cuadrado > ul {
+        width:100%;
+    }
 }
