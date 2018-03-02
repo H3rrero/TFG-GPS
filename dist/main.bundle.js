@@ -25,7 +25,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "app-select {\r\n  color: #A2A1A1;\r\n  cursor: pointer;\r\n}\r\n\r\n.editor {\r\n  margin-left: 200px;\r\n  width: calc(100vw - 200px);\r\n}\r\n\r\n.sidenav {\r\n  background-color: rgb(255, 255, 255);\r\n  box-shadow: 3px 0 5px rgba(30, 30, 30, 0.35);\r\n  height: 100%;\r\n  left: 0;\r\n  overflow-x: hidden;\r\n  padding-top: 20px;\r\n  position: fixed;\r\n  top: 0;\r\n  width: 200px;\r\n  z-index: 9999999999;\r\n}\r\n\r\n.sidenav a:hover {\r\n  color: #f1f1f1;\r\n}\r\n\r\n.traductor {\r\n  float: left;\r\n  height: 100vh;\r\n  width: 87vw ;\r\n}\r\n\r\n@media screen and (max-height: 450px) {\r\n  .sidenav {\r\n    padding-top: 15px;\r\n  }\r\n  .sidenav a {\r\n    font-size: 18px;\r\n  }\r\n}\r\n", ""]);
+exports.push([module.i, "app-select {\r\n  color: #A2A1A1;\r\n  cursor: pointer;\r\n}\r\n\r\n.editor {\r\n  margin-left: 200px;\r\n  width: calc(100vw - 200px);\r\n}\r\n\r\n.sidenav {\r\n  background-color: rgb(255, 255, 255);\r\n  box-shadow: 3px 0 5px rgba(30, 30, 30, 0.35);\r\n  height: 100%;\r\n  overflow-x: hidden;\r\n  padding-top: 20px;\r\n  position: fixed;\r\n  top: 0;\r\n  width: 200px;\r\n  z-index: 9999999999;\r\n}\r\n\r\n.sidenav a:hover {\r\n  color: #f1f1f1;\r\n}\r\n\r\n.traductor {\r\n  float: left;\r\n  height: 100vh;\r\n  width: 87vw ;\r\n}\r\n.desk{\r\n  left:0px;\r\n}\r\n.oculta{\r\n  left:-210px !important;\r\n}\r\n.visible{\r\n  left:0 !important;\r\n}\r\n@media only screen and (max-width: 500px){\r\n  .sidenav{\r\n    left: -200px;\r\n  }\r\n  .editor{\r\n    margin-left: 0px;\r\n    width: 100%;\r\n  }\r\n  .traductor{\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n        -ms-flex-direction: column;\r\n            flex-direction: column;\r\n  }\r\n}\r\n@media screen and (max-height: 450px) {\r\n  .sidenav{\r\n    left: -200px;\r\n    padding-top: 15px;\r\n  }\r\n  .editor{\r\n    margin-left: 0px;\r\n    width: 100%;\r\n  }\r\n  .traductor{\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\r\n    -webkit-box-orient: vertical;\r\n    -webkit-box-direction: normal;\r\n        -ms-flex-direction: column;\r\n            flex-direction: column;\r\n  }\r\n  .sidenav a {\r\n    font-size: 18px;\r\n  }\r\n}\r\n", ""]);
 
 // exports
 
@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"sidenav\" >\n    <app-select title=\"Lenguaje de entrada\" [leng]=\"['GPX','KML']\"  [selectedValue]=\"'From'\" (onSelect)=\"onSelectFrom($event)\"></app-select>\n    <app-select title=\"Lenguaje de salida\" [leng]=\"['GPX','KML']\" [selectedValue]=\"'To'\" (onSelect)=\"onSelectTo($event)\"></app-select>\n</div>\n<main class=\"editor\">\n   \n    <app-traductor class=\"traductor\" [from]=\"from\" [to]=\"to\"></app-traductor>\n</main>"
+module.exports = "<div class=\"sidenav desk\" >\n    <app-select title=\"Lenguaje de entrada\" [leng]=\"['GPX','KML']\"  [selectedValue]=\"'From'\" (onSelect)=\"onSelectFrom($event)\"></app-select>\n    <app-select title=\"Lenguaje de salida\" [leng]=\"['GPX','KML']\" [selectedValue]=\"'To'\" (onSelect)=\"onSelectTo($event)\"></app-select>\n</div>\n<main class=\"editor\">\n    <app-traductor class=\"traductor\" [from]=\"from\" [to]=\"to\"></app-traductor>\n</main>"
 
 /***/ }),
 
@@ -100,14 +100,16 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__select_select_component__ = __webpack_require__("../../../../../src/app/select/select.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__traductor_traductor_component__ = __webpack_require__("../../../../../src/app/traductor/traductor.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__notificacion_notificacion_component__ = __webpack_require__("../../../../../src/app/notificacion/notificacion.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_codemirror__ = __webpack_require__("../../../../ng2-codemirror/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_codemirror___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_ng2_codemirror__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__responsiveMenu_openmenu_component__ = __webpack_require__("../../../../../src/app/responsiveMenu/openmenu.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_codemirror__ = __webpack_require__("../../../../ng2-codemirror/lib/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_codemirror___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_ng2_codemirror__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -125,12 +127,13 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
                 __WEBPACK_IMPORTED_MODULE_4__select_select_component__["a" /* SelectComponent */],
                 __WEBPACK_IMPORTED_MODULE_5__traductor_traductor_component__["a" /* TraductorComponent */],
-                __WEBPACK_IMPORTED_MODULE_6__notificacion_notificacion_component__["a" /* NotificacionComponent */]
+                __WEBPACK_IMPORTED_MODULE_6__notificacion_notificacion_component__["a" /* NotificacionComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__responsiveMenu_openmenu_component__["a" /* OpenMenuComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["FormsModule"],
-                __WEBPACK_IMPORTED_MODULE_7_ng2_codemirror__["CodemirrorModule"],
+                __WEBPACK_IMPORTED_MODULE_8_ng2_codemirror__["CodemirrorModule"],
             ],
             providers: [],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
@@ -557,6 +560,97 @@ var NotificacionComponent = (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/responsiveMenu/openmenu.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".notifica{\r\n\r\n    background: rgb(75, 78, 79);\r\n\tcontent:'\\F0A9';\r\n\tborder-bottom-right-radius: 40px;\r\n    border-top-right-radius: 40px;\r\n\tbox-shadow: rgba(0, 0, 0, 0.5) -1px 0px 2px 0px;\r\n\tcolor: white;\r\n\tfont: normal normal normal 25px/1 FontAwesome;\r\n\theight:80px;\r\n\tline-height:80px;\r\n\topacity:0.9;\r\n\tpadding-left:40px;\r\n    position: fixed;\r\n\ttext-align:left;\r\n\ttext-rendering: auto;\r\n    top: 45%;\r\n    width:80px;\r\n    -webkit-font-smoothing: antialiased;\r\n    z-index: 9;\r\n}\r\n.leftDesk{\r\n    left: -200px;\r\n}\r\n.leftOut{\r\n    left:-30px !important;\r\n}\r\n.leftIn{\r\n    left: 170px !important;\r\n}\r\n.icon{\r\n    line-height: 60px;\r\n    font-size: 30px;\r\n}\r\n@media only screen and (max-width: 500px){\r\n   .notifica{\r\n       left: -30px;\r\n   }\r\n    }", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/responsiveMenu/openmenu.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div title=\"Resultado de la traducción\" class=\"notifica {{leftClass}}\" [class.show]=\"isShown\" (click)=\"showMenu()\" >\r\n        <span class=\"fas {{arrowclass}}\" aria-hidden=\"true\"></span>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/responsiveMenu/openmenu.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OpenMenuComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var OpenMenuComponent = (function () {
+    function OpenMenuComponent() {
+        this.iconClass = "fa-exclamation";
+        this.leftClass = "leftDesk";
+        this.arrowclass = "fa-arrow-circle-right";
+        this.isShown = true;
+    }
+    OpenMenuComponent.prototype.ngOnInit = function () {
+    };
+    OpenMenuComponent.prototype.closeModal = function () {
+        this.isShown = false;
+        this.leftClass = "leftOut";
+        this.arrowclass = "fa-arrow-circle-right";
+        document.getElementsByClassName("sidenav")[0].classList.remove("visible");
+        document.getElementsByClassName("sidenav")[0].classList.add("oculta");
+    };
+    OpenMenuComponent.prototype.openModal = function () {
+        this.isShown = true;
+        this.leftClass = "leftIn";
+        this.arrowclass = "fa-arrow-circle-left";
+        if (document.getElementsByClassName("sidenav")[0].classList[1] == "desk")
+            document.getElementsByClassName("sidenav")[0].classList.remove("desk");
+        document.getElementsByClassName("sidenav")[0].classList.remove("oculta");
+        document.getElementsByClassName("sidenav")[0].classList.add("visible");
+    };
+    OpenMenuComponent.prototype.showMenu = function () {
+        if (this.isShown)
+            this.closeModal();
+        else
+            this.openModal();
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], OpenMenuComponent.prototype, "isShown", void 0);
+    OpenMenuComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-openmenu',
+            template: __webpack_require__("../../../../../src/app/responsiveMenu/openmenu.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/responsiveMenu/openmenu.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], OpenMenuComponent);
+    return OpenMenuComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/select/select.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -648,7 +742,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ":host ::ng-deep .CodeMirror {\r\n    float: left;\r\n    width: 50%;\r\n    height: 100vh;\r\n}\r\n", ""]);
+exports.push([module.i, ":host ::ng-deep .CodeMirror {\r\n    float: left;\r\n    width: 50%;\r\n    height: 100vh;\r\n}\r\n\r\n@media only screen and (max-width: 500px){\r\n    :host ::ng-deep .CodeMirror{\r\n        float: inherit;\r\n        width: 100vw;\r\n        height: 50vh;\r\n    }\r\n    \r\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -661,7 +755,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/traductor/traductor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<app-notificacion [isShown]=\"show\" [mensaje]=\"mensaje\"></app-notificacion>\n<div (drop)=\"onDrop($event)\" (dragover)=\"onDragOver($event)\">\n<codemirror [(ngModel)]=\"content\" [config]=\"config\" (ngModelChange)=\"importCode()\" ></codemirror>\n</div>\n<codemirror [(ngModel)]=\"salida\" [config]=\"configSalida\" ></codemirror>\n"
+module.exports = "<app-openmenu [isShown]=\"show\" ></app-openmenu>\n<app-notificacion [isShown]=\"show\" [mensaje]=\"mensaje\"></app-notificacion>\n<div (drop)=\"onDrop($event)\" (dragover)=\"onDragOver($event)\">\n<codemirror [(ngModel)]=\"content\" [config]=\"config\" (ngModelChange)=\"importCode()\" ></codemirror>\n</div>\n<codemirror [(ngModel)]=\"salida\" [config]=\"configSalida\" ></codemirror>\n"
 
 /***/ }),
 
