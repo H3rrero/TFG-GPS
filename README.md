@@ -2,6 +2,8 @@
 ## Aplicación de edición de tracks
   Se trata de una aplicación diseñada como trabajo final de grado en la escuela de ingeniería informática de la Universidad de Oviedo.
   El objetivo es diseñar una aplicación web para la edición de tracks, rutas y waypoints GPS.
+## Manual de usuario
+  http://herrero.ninja/TFG/documents/manual.pdf
 ## Estado actual
 ### Funciones implementadas:
     - Crear para Track,Ruta y Waypoint
